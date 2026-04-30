@@ -127,7 +127,7 @@ export function nasIssues(data) {
       : isImage
         ? [
             { t: now, level: "info", text: `[app] ${app.name}: upstream image updated` },
-            { t: now, level: "info", text: `[app] running: ${current}` },
+            { t: now, level: "info", text: `[app] image: ${image ?? current}` },
           ]
         : [{ t: now, level: "info", text: `[app] ${app.name}: update available · current ${current}` }];
 
