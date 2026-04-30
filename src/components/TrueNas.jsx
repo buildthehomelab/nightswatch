@@ -29,7 +29,24 @@ async function fetchData() {
     fetch(`${API}/pool`,        { headers: hdrs }).then(r => r.json()),
     fetch(`${API}/app`,         { headers: hdrs }).then(r => r.json()).catch(() => []),
   ]);
-  return { info, pools, apps: Array.isArray(apps) ? apps : [] };
+
+  const appList = Array.isArray(apps) ? apps : [];
+  const upgradeable = appList.filter(a => a.upgrade_available);
+  const summaries = await Promise.all(
+    upgradeable.map(a =>
+      fetch(`${API}/app/${encodeURIComponent(a.name)}/upgrade_summary`, {
+        method: "POST",
+        headers: { ...hdrs, "Content-Type": "application/json" },
+        body: "{}",
+      })
+        .then(r => r.json())
+        .then(s => [a.name, s])
+        .catch(() => [a.name, null])
+    )
+  );
+  const summaryMap = Object.fromEntries(summaries);
+
+  return { info, pools, apps: appList, summaryMap };
 }
 
 export function useTrueNas() {
