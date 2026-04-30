@@ -66,7 +66,7 @@ export function nasIssues(data) {
         logs: [
           { t: now, level: "err", text: `[zfs] pool ${pool.name} status: ${pool.status}` },
         ],
-        actions: [{ label: "open truenas ›", href: BASE }],
+        actions: [{ label: "open truenas ›", href: UI }],
       });
     }
 
@@ -85,7 +85,7 @@ export function nasIssues(data) {
         logs: [
           { t: now, level: "warn", text: `[zfs] ${pool.name} capacity: ${pct}% (${free} free / ${total})` },
         ],
-        actions: [{ label: "open truenas ›", href: BASE }],
+        actions: [{ label: "open truenas ›", href: UI }],
       });
     }
   }
