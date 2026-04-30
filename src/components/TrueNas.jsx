@@ -4,7 +4,7 @@ const BASE = "https://patronus.vaultrona.com:3443";
 const API  = "/truenas/api/v2.0";
 const KEY  = import.meta.env.VITE_TRUENAS_KEY ?? "";
 
-function fmtUptime(sec) {
+export function fmtUptime(sec) {
   if (sec == null) return "—";
   const d = Math.floor(sec / 86400);
   const h = Math.floor((sec % 86400) / 3600);
