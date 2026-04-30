@@ -31,13 +31,23 @@ async function fetchData() {
 
 export default function TrueNas() {
   const [data, setData] = useState(null);
+  const [err, setErr] = useState(null);
 
   useEffect(() => {
-    const refresh = () => fetchData().then(setData).catch(() => {});
+    const refresh = () => fetchData().then(d => { setData(d); setErr(null); }).catch(e => setErr(e?.message ?? "fetch failed"));
     refresh();
     const id = setInterval(refresh, 60_000);
     return () => clearInterval(id);
   }, []);
+
+  if (err) return (
+    <div className="nas-strip rise">
+      <span className="nas-item">
+        <span className="nas-k">nas</span>
+        <span className="nas-v nas-crit">{err}</span>
+      </span>
+    </div>
+  );
 
   if (!data) return null;
 
