@@ -93,12 +93,30 @@ const __TWEAKS_STYLE = `
   .twk-swatch::-moz-color-swatch{border:0;border-radius:5.5px}
 `;
 
+const TWEAKS_LS_KEY = 'dashboard:tweaks';
+
+function lsLoadTweaks(defaults) {
+  try {
+    const raw = localStorage.getItem(TWEAKS_LS_KEY);
+    if (!raw) return defaults;
+    return { ...defaults, ...JSON.parse(raw) };
+  } catch { return defaults; }
+}
+
+function lsSaveTweaks(values) {
+  try { localStorage.setItem(TWEAKS_LS_KEY, JSON.stringify(values)); } catch {}
+}
+
 export function useTweaks(defaults) {
-  const [values, setValues] = useState(defaults);
+  const [values, setValues] = useState(() => lsLoadTweaks(defaults));
   const setTweak = useCallback((keyOrEdits, val) => {
     const edits = typeof keyOrEdits === 'object' && keyOrEdits !== null
       ? keyOrEdits : { [keyOrEdits]: val };
-    setValues((prev) => ({ ...prev, ...edits }));
+    setValues((prev) => {
+      const next = { ...prev, ...edits };
+      lsSaveTweaks(next);
+      return next;
+    });
     window.parent.postMessage({ type: '__edit_mode_set_keys', edits }, '*');
   }, []);
   return [values, setTweak];
