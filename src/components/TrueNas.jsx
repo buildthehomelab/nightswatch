@@ -90,16 +90,18 @@ function fmtReleaseDate(iso) {
 function trimChangelog(body, maxLen = 400) {
   if (!body) return null;
 
-  // Jump to the Changes section if present
+  // Jump to Changes section if present
   const changesIdx = body.search(/^##?\s+changes/im);
   let text = changesIdx >= 0 ? body.slice(changesIdx) : body;
 
-  // Strip markdown: headers, bold, italic, inline code
   text = text
-    .replace(/^##?\s+/gm, '')
-    .replace(/\*\*(.+?)\*\*/g, '$1')
-    .replace(/\*(.+?)\*/g, '$1')
-    .replace(/`(.+?)`/g, '$1')
+    .replace(/^##?\s*/gm, '')                   // headers
+    .replace(/\*\*(.+?)\*\*/g, '$1')             // bold
+    .replace(/\*(.+?)\*/g, '$1')                 // italic
+    .replace(/`(.+?)`/g, '$1')                   // inline code
+    .replace(/\b[0-9a-f]{40}\b\s*/g, '')         // full git SHAs
+    .replace(/\*\s+/g, '\n• ')                   // list items → bullets
+    .replace(/\n{3,}/g, '\n\n')
     .trim();
 
   if (text.length <= maxLen) return text;
