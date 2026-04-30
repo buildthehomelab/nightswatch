@@ -369,11 +369,13 @@ export default function TrueNas({ data, err }) {
         {(Array.isArray(pools) ? pools : []).map(pool => {
           const ok  = pool.status === "ONLINE";
           const pct = pool.size ? Math.round((pool.allocated / pool.size) * 100) : null;
+          const dotCls = !ok ? " crit" : pct >= 90 ? " crit" : pct >= 80 ? " warn" : "";
+          const valCls = !ok ? " nas-crit" : pct >= 90 ? " nas-crit" : pct >= 80 ? " nas-warn" : "";
           return (
             <span key={pool.name} className="nas-item" title={`${fmtBytes(pool.allocated)} / ${fmtBytes(pool.size)}`}>
-              <span className={`nas-dot${ok ? "" : " crit"}`} />
+              <span className={`nas-dot${dotCls}`} />
               <span className="nas-k">{pool.name}</span>
-              <span className={`nas-v${ok ? "" : " nas-crit"}`}>
+              <span className={`nas-v${valCls}`}>
                 {pct != null ? `${pct}%` : "—"}
               </span>
             </span>
