@@ -119,9 +119,14 @@ export function nasIssues(data) {
       ? `${app.name}: ${current} → ${next}.`
       : `${app.name}: ${isImage ? "image update available." : "update available."}`;
 
-    const logText = next
-      ? `[app] ${app.name}: ${current} → ${next}`
-      : `[app] ${app.name}: ${isImage ? "newer image available (custom app)" : "update available"} · current ${current}`;
+    const logs = next
+      ? [{ t: now, level: "info", text: `[app] ${app.name}: ${current} → ${next}` }]
+      : isImage
+        ? [
+            { t: now, level: "info", text: `[app] ${app.name}: upstream image updated` },
+            { t: now, level: "info", text: `[app] running: ${current}` },
+          ]
+        : [{ t: now, level: "info", text: `[app] ${app.name}: update available · current ${current}` }];
 
     issues.push({
       id: `nas-app-update-${app.name}`,
@@ -132,8 +137,8 @@ export function nasIssues(data) {
       when: "now",
       description: next
         ? `${app.name} can be upgraded from ${current} to ${next}.`
-        : `${app.name} has a newer Docker image available. Current version: ${current}.`,
-      logs: [{ t: now, level: "info", text: logText }],
+        : `${app.name} has a newer Docker image available. Running ${current}.`,
+      logs,
       actions: [{ label: "open truenas apps ›", href: `${UI}/ui/apps/installed` }],
     });
   }
