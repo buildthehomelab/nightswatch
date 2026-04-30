@@ -126,7 +126,8 @@ export default function TrueNas({ data, err }) {
 
   if (!data) return null;
 
-  const { info, pools } = data;
+  const { info, pools, apps } = data;
+  const updateCount = (Array.isArray(apps) ? apps : []).filter(a => a.upgrade_available).length;
   const load1    = info?.loadavg?.[0]?.toFixed(2) ?? "—";
   const uptime   = fmtUptime(info?.uptime_seconds);
   const hostname = info?.hostname ?? "nas";
