@@ -24,10 +24,26 @@ export function fmtBytes(bytes) {
   return `${gb.toFixed(1)} GB`;
 }
 
+const LINUXSERVER_UPSTREAM = {
+  lidarr:      { owner: 'Lidarr',      repo: 'Lidarr' },
+  sonarr:      { owner: 'Sonarr',      repo: 'Sonarr' },
+  radarr:      { owner: 'Radarr',      repo: 'Radarr' },
+  prowlarr:    { owner: 'Prowlarr',    repo: 'Prowlarr' },
+  qbittorrent: { owner: 'qbittorrent', repo: 'qBittorrent' },
+  readarr:     { owner: 'Readarr',     repo: 'Readarr' },
+  bazarr:      { owner: 'morpheus65535', repo: 'bazarr' },
+};
+
 function imageToGithubRepo(image) {
   const name = image.split(':')[0];
-  if (name.startsWith('lscr.io/linuxserver/'))
-    return { owner: 'linuxserver', repo: name.slice('lscr.io/linuxserver/'.length) };
+  if (name.startsWith('lscr.io/linuxserver/')) {
+    const slug = name.slice('lscr.io/linuxserver/'.length);
+    return LINUXSERVER_UPSTREAM[slug] ?? { owner: 'linuxserver', repo: slug };
+  }
+  if (name.startsWith('linuxserver/')) {
+    const slug = name.slice('linuxserver/'.length);
+    return LINUXSERVER_UPSTREAM[slug] ?? { owner: 'linuxserver', repo: slug };
+  }
   if (name.startsWith('ghcr.io/')) {
     const parts = name.slice('ghcr.io/'.length).split('/');
     if (parts.length >= 2) return { owner: parts[0], repo: parts[1] };
@@ -37,17 +53,30 @@ function imageToGithubRepo(image) {
   return null;
 }
 
+async function ghFetch(owner, repo, path) {
+  const r = await fetch(`https://api.github.com/repos/${owner}/${repo}/${path}`);
+  if (!r.ok) return null;
+  return r.json();
+}
+
 async function fetchLatestRelease(image) {
   const cached = RELEASE_CACHE.get(image);
   if (cached && Date.now() - cached.fetchedAt < RELEASE_TTL) return cached.release;
+
   const repo = imageToGithubRepo(image);
   if (!repo) return null;
+
   try {
-    const r = await fetch(`https://api.github.com/repos/${repo.owner}/${repo.repo}/releases/latest`);
-    if (!r.ok) return null;
-    const release = await r.json();
-    RELEASE_CACHE.set(image, { release, fetchedAt: Date.now() });
-    return release;
+    // Try releases/latest first, fall back to first tag (linuxserver-style repos)
+    let release = await ghFetch(repo.owner, repo.repo, 'releases/latest');
+    if (!release) {
+      const tags = await ghFetch(repo.owner, repo.repo, 'tags');
+      if (Array.isArray(tags) && tags[0]) {
+        release = { tag_name: tags[0].name, body: null, published_at: null };
+      }
+    }
+    RELEASE_CACHE.set(image, { release: release ?? null, fetchedAt: Date.now() });
+    return release ?? null;
   } catch {
     return null;
   }
