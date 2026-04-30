@@ -114,7 +114,7 @@ export default function TrueNas({ data, err }) {
     <div className="nas-strip rise">
       <div className="nas-left">
         <span className="nas-item">
-          <a href={BASE} target="_blank" rel="noopener noreferrer" className="nas-link">
+          <a href={UI} target="_blank" rel="noopener noreferrer" className="nas-link">
             {hostname}
           </a>
         </span>
