@@ -116,6 +116,7 @@ body {
   background: var(--ok);
   transform: translateY(-1px);
 }
+.nas-dot.warn { background: var(--warn); }
 .nas-dot.crit { background: var(--crit); }
 .nas-link {
   color: var(--ink-2);
