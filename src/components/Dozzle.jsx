@@ -1,6 +1,8 @@
 import { useState, useEffect, useRef, useMemo } from 'react';
 
-const DOZZLE_CONTAINERS = [
+const DOZZLE_BASE = "http://dozzle.lan";
+
+const MOCK_CONTAINERS = [
   { id: "sonarr",       name: "sonarr",       group: "media",     status: "ok"   },
   { id: "radarr",       name: "radarr",       group: "media",     status: "ok"   },
   { id: "prowlarr",     name: "prowlarr",     group: "media",     status: "ok"   },
@@ -18,119 +20,147 @@ const DOZZLE_CONTAINERS = [
   { id: "uptime-kuma",  name: "uptime-kuma",  group: "tools",     status: "off"  },
 ];
 
-const LOG_TEMPLATES = {
-  sonarr: [
+const MOCK_LOGS = {
+  sonarr:      [
     { lvl: "info", msg: "[sonarr] Search: The Bear (2022) S03E08" },
     { lvl: "info", msg: "[sonarr] Indexer query: 1337x → 14 results" },
     { lvl: "info", msg: "[sonarr] Grabbed: The.Bear.S03E08.1080p.WEB.h264" },
     { lvl: "info", msg: "[sonarr] Sent to qbittorrent (category: tv-sonarr)" },
-    { lvl: "info", msg: "[sonarr] Backlog scan complete (172 series)" },
     { lvl: "warn", msg: "[sonarr] Indexer 'Nyaa' returned 503, backing off 5m" },
-    { lvl: "info", msg: "[sonarr] Import: /downloads/complete/tv → /mnt/media/tv" },
-    { lvl: "info", msg: "[sonarr] Refreshed metadata: Severance" },
   ],
-  jellyfin: [
+  jellyfin:    [
     { lvl: "info", msg: "[jellyfin] User 'sam' started session (Roku)" },
     { lvl: "info", msg: "[jellyfin] Direct Play: Andor S02E04" },
-    { lvl: "info", msg: "[jellyfin] Library scan: Movies (started)" },
     { lvl: "warn", msg: "[jellyfin] TLS cert valid 6 days — renewal needed" },
-    { lvl: "info", msg: "[jellyfin] Library scan: Movies (done, 4.2k items)" },
-    { lvl: "info", msg: "[jellyfin] Transcoding: hevc → h264 (hw)" },
-    { lvl: "info", msg: "[jellyfin] User 'kit' resumed playback at 00:24:11" },
   ],
-  nginx: [
+  nginx:       [
     { lvl: "info", msg: "GET /jellyfin/Items 200 14ms" },
-    { lvl: "info", msg: "GET /sonarr/api/v3/queue 200 8ms" },
     { lvl: "warn", msg: "[acme] cert jellyfin.lan expires in 6d" },
-    { lvl: "info", msg: "POST /jellyfin/Sessions/Playing 204 3ms" },
     { lvl: "err",  msg: "GET /jellyseerr/api/v1 502 upstream timeout" },
-    { lvl: "info", msg: "GET /pihole/admin 200 11ms" },
-    { lvl: "info", msg: "GET /homarr 200 6ms" },
   ],
-  pihole: [
-    { lvl: "info", msg: "[pihole] query: api.openai.com → forwarded → 1.1.1.1" },
-    { lvl: "info", msg: "[pihole] query: doubleclick.net → ✘ blocked (gravity)" },
+  pihole:      [
     { lvl: "info", msg: "[pihole] query: github.com → cache hit" },
-    { lvl: "info", msg: "[pihole] gravity update: 142,318 domains" },
-    { lvl: "info", msg: "[pihole] query: telemetry.microsoft.com → ✘ blocked" },
-    { lvl: "info", msg: "[pihole] DHCP lease: kit-iphone (192.168.1.42)" },
+    { lvl: "info", msg: "[pihole] query: doubleclick.net → ✘ blocked (gravity)" },
   ],
   qbittorrent: [
-    { lvl: "info", msg: "[qbit] added: The.Bear.S03E08.1080p.WEB.h264" },
     { lvl: "info", msg: "[qbit] peers: 24, dl: 8.4 MB/s, eta: 2m" },
     { lvl: "info", msg: "[qbit] completed: Severance.S02.Complete.1080p" },
-    { lvl: "info", msg: "[qbit] moved to /downloads/complete/tv" },
-    { lvl: "info", msg: "[qbit] seeding: 14 torrents · ratio 2.1" },
   ],
-  watchtower: [
-    { lvl: "info", msg: "[watchtower] checking 14 containers" },
-    { lvl: "info", msg: "[watchtower] sonarr: 4.0.10 → 4.0.12" },
-    { lvl: "info", msg: "[watchtower] radarr: 5.7.0 → 5.8.3" },
-    { lvl: "info", msg: "[watchtower] pihole: 2025.07 → 2026.04" },
-    { lvl: "info", msg: "[watchtower] 11 updates available" },
-    { lvl: "info", msg: "[watchtower] no auto-update (manual mode)" },
-  ],
-  default: [
+  default:     [
     { lvl: "info", msg: "service started" },
     { lvl: "info", msg: "healthcheck ok" },
-    { lvl: "info", msg: "tick" },
     { lvl: "info", msg: "idle" },
   ],
 };
 
-function makeTimestamp(secAgo) {
-  const d = new Date(Date.now() - secAgo * 1000);
+function normLevel(raw) {
+  if (typeof raw === "number") {
+    if (raw <= 3) return "err";
+    if (raw === 4) return "warn";
+    return "info";
+  }
+  if (raw === "error" || raw === "err") return "err";
+  if (raw === "warn" || raw === "warning") return "warn";
+  return "info";
+}
+
+function fmtTs(raw) {
+  const d = raw ? new Date(typeof raw === "number" ? raw * 1000 : raw) : new Date();
   const hh = String(d.getHours()).padStart(2, "0");
   const mm = String(d.getMinutes()).padStart(2, "0");
   const ss = String(d.getSeconds()).padStart(2, "0");
   return `${hh}:${mm}:${ss}`;
 }
 
-function buildInitialLines(containerId) {
-  const tpl = LOG_TEMPLATES[containerId] || LOG_TEMPLATES.default;
-  const lines = [];
-  for (let i = 0; i < 32; i++) {
+function buildMockLines(containerId) {
+  const tpl = MOCK_LOGS[containerId] || MOCK_LOGS.default;
+  return Array.from({ length: 24 }, (_, i) => {
     const t = tpl[i % tpl.length];
-    lines.push({
-      ts: makeTimestamp(60 * 60 - i * 80),
-      lvl: t.lvl,
-      msg: t.msg,
-      id: `init-${containerId}-${i}`,
-    });
-  }
-  return lines;
+    const d = new Date(Date.now() - (3600 - i * 90) * 1000);
+    return { ts: fmtTs(d), lvl: t.lvl, msg: t.msg, id: `mock-${i}` };
+  });
 }
 
 export default function Dozzle({ open, onClose, initialContainer }) {
-  const [active, setActive] = useState(initialContainer || "sonarr");
-  const [filter, setFilter] = useState("");
-  const [showInfo, setShowInfo] = useState(true);
-  const [showWarn, setShowWarn] = useState(true);
-  const [showErr,  setShowErr]  = useState(true);
-  const [lines, setLines] = useState(() => buildInitialLines(active));
-  const streamRef = useRef(null);
+  const [containers, setContainers] = useState(MOCK_CONTAINERS);
+  const [active, setActive]         = useState(initialContainer || "sonarr");
+  const [filter, setFilter]         = useState("");
+  const [showInfo, setShowInfo]     = useState(true);
+  const [showWarn, setShowWarn]     = useState(true);
+  const [showErr,  setShowErr]      = useState(true);
+  const [lines, setLines]           = useState(() => buildMockLines(active));
+  const [live, setLive]             = useState(false);
+  const streamRef                   = useRef(null);
+  const esRef                       = useRef(null);
 
   useEffect(() => {
     if (initialContainer && open) setActive(initialContainer);
   }, [initialContainer, open]);
 
-  useEffect(() => {
-    setLines(buildInitialLines(active));
-  }, [active]);
-
+  // Fetch real container list when overlay opens
   useEffect(() => {
     if (!open) return;
-    const tpl = LOG_TEMPLATES[active] || LOG_TEMPLATES.default;
-    let i = 0;
-    const id = setInterval(() => {
-      const t = tpl[Math.floor(Math.random() * tpl.length)];
+    fetch(`${DOZZLE_BASE}/api/containers`)
+      .then((r) => r.json())
+      .then((data) => {
+        const mapped = data.map((c) => ({
+          id:     c.id,
+          name:   c.name.replace(/^\//, ""),
+          group:  c.group || "containers",
+          status: c.state === "running" ? "ok" : "off",
+        }));
+        setContainers(mapped);
+      })
+      .catch(() => {});
+  }, [open]);
+
+  // Stream logs via EventSource; fall back to mock on error
+  useEffect(() => {
+    if (esRef.current) { esRef.current.close(); esRef.current = null; }
+    setLines([]);
+    setLive(false);
+
+    const container = containers.find((c) => c.id === active || c.name === active);
+    const id = container?.id ?? active;
+
+    const es = new EventSource(`${DOZZLE_BASE}/api/logs/stream?id=${encodeURIComponent(id)}`);
+    esRef.current = es;
+
+    let seq = 0;
+
+    es.addEventListener("container-logs", (e) => {
+      try {
+        const data = JSON.parse(e.data);
+        setLive(true);
+        setLines((prev) => {
+          const next = [...prev, {
+            ts:  fmtTs(data.ts),
+            lvl: normLevel(data.level ?? data.lvl),
+            msg: data.m ?? data.message ?? "",
+            id:  `live-${seq++}`,
+          }];
+          return next.slice(-500);
+        });
+      } catch {}
+    });
+
+    es.onmessage = (e) => {
+      setLive(true);
       setLines((prev) => {
-        const next = [...prev, { ts: makeTimestamp(0), lvl: t.lvl, msg: t.msg, id: `live-${Date.now()}-${i++}` }];
-        return next.slice(-200);
+        const next = [...prev, { ts: fmtTs(null), lvl: "info", msg: e.data, id: `live-${seq++}` }];
+        return next.slice(-500);
       });
-    }, 1400);
-    return () => clearInterval(id);
-  }, [open, active]);
+    };
+
+    es.onerror = () => {
+      es.close();
+      esRef.current = null;
+      setLive(false);
+      setLines(buildMockLines(active));
+    };
+
+    return () => { es.close(); esRef.current = null; };
+  }, [active, containers]);
 
   useEffect(() => {
     const el = streamRef.current;
@@ -146,12 +176,14 @@ export default function Dozzle({ open, onClose, initialContainer }) {
 
   const groups = useMemo(() => {
     const g = {};
-    DOZZLE_CONTAINERS.forEach((c) => {
+    containers.forEach((c) => {
       g[c.group] = g[c.group] || [];
       g[c.group].push(c);
     });
     return g;
-  }, []);
+  }, [containers]);
+
+  const activeContainer = containers.find((c) => c.id === active || c.name === active);
 
   const visible = lines.filter((l) => {
     if (l.lvl === "info" && !showInfo) return false;
@@ -161,8 +193,6 @@ export default function Dozzle({ open, onClose, initialContainer }) {
     return true;
   });
 
-  const activeContainer = DOZZLE_CONTAINERS.find((c) => c.id === active);
-
   return (
     <>
       <div className={`dozzle-scrim ${open ? "open" : ""}`} onClick={onClose}></div>
@@ -170,8 +200,8 @@ export default function Dozzle({ open, onClose, initialContainer }) {
         <div className="dozzle-hd">
           <div className="title">
             <b>dozzle</b>
-            <span>· {activeContainer?.name || ""}</span>
-            <span className="url">http://dozzle.lan</span>
+            <span>· {activeContainer?.name || active}</span>
+            <span className="url">{DOZZLE_BASE}</span>
           </div>
           <button className="dozzle-close" onClick={onClose}>close · esc</button>
         </div>
@@ -184,7 +214,7 @@ export default function Dozzle({ open, onClose, initialContainer }) {
                 {items.map((c) => (
                   <button
                     key={c.id}
-                    className={active === c.id ? "active" : ""}
+                    className={active === c.id || active === c.name ? "active" : ""}
                     onClick={() => setActive(c.id)}
                   >
                     <span className={`dot ${c.status}`}></span>
@@ -223,9 +253,9 @@ export default function Dozzle({ open, onClose, initialContainer }) {
             <div className="dozzle-foot">
               <span className="live">
                 <span className="pulse"></span>
-                tailing · {visible.length} lines
+                {live ? "live" : "mock"} · {visible.length} lines
               </span>
-              <span>{activeContainer?.name} · live</span>
+              <span>{activeContainer?.name ?? active} · {live ? "tailing" : "offline"}</span>
             </div>
           </div>
         </div>

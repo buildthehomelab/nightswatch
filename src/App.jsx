@@ -1,4 +1,4 @@
-import { useState, useEffect, useMemo } from 'react';
+import { useState, useEffect, useRef, useMemo } from 'react';
 import Dozzle from './components/Dozzle';
 import {
   useTweaks, TweaksPanel, TweakSection, TweakRadio, TweakToggle,
@@ -16,7 +16,7 @@ const ISSUE_TO_CONTAINER = {
 
 const TWEAK_DEFAULTS = {
   state: "warnings",
-  theme: "paper",
+  theme: "ink",
   density: "regular",
   showAmbient: true,
   showWeather: true,
@@ -40,7 +40,7 @@ function fmtTime(d) {
   return d.toLocaleTimeString(undefined, { hour: "2-digit", minute: "2-digit", hour12: false });
 }
 
-function Ambient({ now, wanUp, uptimeDays, weather, lastCheck, showWeather }) {
+function Ambient({ now, wanUp, uptime, weather, lastCheck, showWeather }) {
   return (
     <header className="ambient rise">
       <div className="left">
@@ -63,7 +63,7 @@ function Ambient({ now, wanUp, uptimeDays, weather, lastCheck, showWeather }) {
         </span>
         <span className="item">
           <span className="k">uptime</span>
-          <span className="v">{uptimeDays}d</span>
+          <span className="v">{uptime}</span>
         </span>
         <span className="item">
           <span className="k">last check</span>
@@ -74,7 +74,7 @@ function Ambient({ now, wanUp, uptimeDays, weather, lastCheck, showWeather }) {
   );
 }
 
-function Healthy({ now, uptimeDays }) {
+function Healthy({ now, uptime }) {
   const phrases = [
     "Nothing needs your attention.",
     "All quiet.",
@@ -95,7 +95,7 @@ function Healthy({ now, uptimeDays }) {
       <div className="sub rise rise-d2">
         <span>14 services healthy</span>
         <span className="sep">·</span>
-        <span>{uptimeDays} days uptime</span>
+        <span>{uptime} uptime</span>
         <span className="sep">·</span>
         <span>last incident 19 days ago</span>
       </div>
@@ -119,8 +119,20 @@ function Logs({ lines }) {
 }
 
 function Issue({ issue, isOpen, isFocused, onToggle, index, onOpenLogs }) {
+  const ref = useRef(null);
+  useEffect(() => {
+    if (isFocused) ref.current?.scrollIntoView({ block: "nearest", behavior: "smooth" });
+  }, [isFocused]);
+
+  useEffect(() => {
+    if (!isFocused) return;
+    const id = setTimeout(() => ref.current?.scrollIntoView({ block: "nearest", behavior: "smooth" }), 360);
+    return () => clearTimeout(id);
+  }, [isOpen]);
+
   return (
     <div
+      ref={ref}
       className={`issue ${issue.severity} ${isOpen ? "open" : ""} ${isFocused ? "focused" : ""} rise`}
       style={{ animationDelay: `${0.05 + index * 0.04}s` }}
       onClick={onToggle}
@@ -167,10 +179,10 @@ function IssueList({ issues, onOpenLogs }) {
       if (["INPUT", "TEXTAREA"].includes(document.activeElement?.tagName)) return;
       if (e.key === "j" || e.key === "J") {
         e.preventDefault();
-        setFocusedIndex((i) => (i === null ? 0 : Math.min(i + 1, issues.length - 1)));
+        setFocusedIndex((i) => (i === null ? issues.length - 1 : Math.max(i - 1, 0)));
       } else if (e.key === "k" || e.key === "K") {
         e.preventDefault();
-        setFocusedIndex((i) => (i === null ? issues.length - 1 : Math.max(i - 1, 0)));
+        setFocusedIndex((i) => (i === null ? 0 : Math.min(i + 1, issues.length - 1)));
       } else if (e.key === "Enter" && focusedIndex !== null) {
         e.preventDefault();
         const id = issues[focusedIndex]?.id;
@@ -217,6 +229,7 @@ const SHORTCUTS = [
   { key: "h  or  ?", desc: "show this help" },
   { key: "l",        desc: "open log viewer" },
   { key: "r",        desc: "refresh status" },
+  { key: "t",        desc: "toggle theme" },
   { key: "`",        desc: "toggle tweaks panel" },
   { key: "esc",      desc: "close overlay" },
 ];
@@ -254,10 +267,16 @@ function HelpOverlay({ open, onClose }) {
 
 export default function App() {
   const [t, setTweak] = useTweaks(TWEAK_DEFAULTS);
+  const themeRef = useRef(t.theme);
+  const startTime = useRef(Date.now());
+  useEffect(() => { themeRef.current = t.theme; }, [t.theme]);
   const [now, setNow] = useState(new Date());
   const [dozzleOpen, setDozzleOpen] = useState(false);
   const [dozzleContainer, setDozzleContainer] = useState("sonarr");
   const [helpOpen, setHelpOpen] = useState(false);
+  const [wanUp, setWanUp] = useState(true);
+  const [wanDownSince, setWanDownSince] = useState(null);
+  const [lastChecked, setLastChecked] = useState(null);
 
   const openLogs = (container) => {
     setDozzleContainer(container || "sonarr");
@@ -277,6 +296,9 @@ export default function App() {
       } else if (e.key === "r" || e.key === "R") {
         e.preventDefault();
         setNow(new Date());
+      } else if (e.key === "t" || e.key === "T") {
+        e.preventDefault();
+        setTweak("theme", themeRef.current === "paper" ? "ink" : "paper");
       } else if (e.key === "Escape") {
         setHelpOpen(false);
       }
@@ -291,19 +313,79 @@ export default function App() {
   }, []);
 
   useEffect(() => {
+    const check = async () => {
+      try {
+        await fetch("https://1.1.1.1", { mode: "no-cors", cache: "no-store" });
+        setWanUp(true);
+        setWanDownSince(null);
+      } catch {
+        setWanUp((prev) => {
+          if (prev) setWanDownSince(new Date());
+          return false;
+        });
+      }
+      setLastChecked(new Date());
+    };
+    check();
+    const id = setInterval(check, 30_000);
+    return () => clearInterval(id);
+  }, []);
+
+  useEffect(() => {
     document.documentElement.setAttribute("data-theme", t.theme === "ink" ? "dark" : "light");
     document.body.className = `density-${t.density}`;
   }, [t.theme, t.density]);
 
   const issues = useMemo(() => {
-    if (t.state === "healthy")  return [];
-    if (t.state === "warnings") return ISSUE_FIXTURES.warnings;
-    if (t.state === "critical") return ISSUE_FIXTURES.all;
-    return [];
-  }, [t.state]);
+    const fixtureIssues = (() => {
+      if (t.state === "healthy")  return [];
+      if (t.state === "warnings") return ISSUE_FIXTURES.warnings;
+      if (t.state === "critical") return ISSUE_FIXTURES.all;
+      return [];
+    })().filter((i) => i.id !== "wan-down");
 
-  const wanUp = !issues.some((i) => i.id === "wan-down");
-  const lastCheck = useMemo(() => "just now", [now]);
+    if (!wanUp) {
+      const since = wanDownSince
+        ? wanDownSince.toLocaleTimeString(undefined, { hour: "2-digit", minute: "2-digit", hour12: false })
+        : "unknown";
+      const wanIssue = {
+        id: "wan-down",
+        severity: "crit",
+        label: "wan down",
+        headline: "Internet connection is offline.",
+        source: "connectivity check · 1.1.1.1",
+        when: `since ${since}`,
+        description: "Active connectivity check failed. Cannot reach 1.1.1.1 (Cloudflare). Outbound services are unreachable.",
+        logs: [
+          { t: since, level: "err", text: "[wan] fetch https://1.1.1.1 failed — network unreachable" },
+        ],
+        actions: ["restart pppoe", "ping ISP gateway", "ssh edgerouter"],
+      };
+      return [wanIssue, ...fixtureIssues];
+    }
+
+    return fixtureIssues;
+  }, [t.state, wanUp, wanDownSince]);
+
+  const lastCheck = useMemo(() => {
+    if (!lastChecked) return "never";
+    const secs = Math.floor((now - lastChecked) / 1000);
+    if (secs < 60) return "just now";
+    const mins = Math.floor(secs / 60);
+    return `${mins}m ago`;
+  }, [now, lastChecked]);
+
+  const uptime = useMemo(() => {
+    const secs = Math.floor((now - startTime.current) / 1000);
+    if (secs < 60) return `${secs}s`;
+    const mins = Math.floor(secs / 60);
+    if (mins < 60) return `${mins}m`;
+    const hours = Math.floor(mins / 60);
+    if (hours < 24) return `${hours}h`;
+    const days = Math.floor(hours / 24);
+    return `${days}d`;
+  }, [now]);
+
   const isHealthy = issues.length === 0;
 
   return (
@@ -313,7 +395,7 @@ export default function App() {
           <Ambient
             now={now}
             wanUp={wanUp}
-            uptimeDays={42}
+            uptime={uptime}
             weather="14° · clear"
             lastCheck={lastCheck}
             showWeather={t.showWeather}
@@ -321,7 +403,7 @@ export default function App() {
         )}
 
         {isHealthy ? (
-          <Healthy now={now} uptimeDays={42} />
+          <Healthy now={now} uptime={uptime} />
         ) : (
           <>
             <div className="masthead">
