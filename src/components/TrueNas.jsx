@@ -87,13 +87,25 @@ function fmtReleaseDate(iso) {
   return new Date(iso).toLocaleDateString(undefined, { month: 'short', day: 'numeric' });
 }
 
-function trimChangelog(body, maxLen = 500) {
+function trimChangelog(body, maxLen = 400) {
   if (!body) return null;
-  let text = body.trim();
+
+  // Jump to the Changes section if present
+  const changesIdx = body.search(/^##?\s+changes/im);
+  let text = changesIdx >= 0 ? body.slice(changesIdx) : body;
+
+  // Strip markdown: headers, bold, italic, inline code
+  text = text
+    .replace(/^##?\s+/gm, '')
+    .replace(/\*\*(.+?)\*\*/g, '$1')
+    .replace(/\*(.+?)\*/g, '$1')
+    .replace(/`(.+?)`/g, '$1')
+    .trim();
+
   if (text.length <= maxLen) return text;
   text = text.slice(0, maxLen);
   const lastNl = text.lastIndexOf('\n');
-  return (lastNl > 100 ? text.slice(0, lastNl) : text) + '…';
+  return (lastNl > 80 ? text.slice(0, lastNl) : text) + '…';
 }
 
 async function fetchData() {
