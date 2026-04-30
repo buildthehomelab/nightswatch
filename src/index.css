@@ -362,6 +362,24 @@ body {
   background: var(--paper);
   border-color: var(--ink-3);
 }
+.action-link {
+  font-family: var(--mono);
+  font-size: 11px;
+  letter-spacing: 0.04em;
+  text-transform: lowercase;
+  color: var(--ink);
+  background: transparent;
+  border: 0.5px solid var(--rule);
+  padding: 6px 12px;
+  border-radius: 999px;
+  cursor: pointer;
+  text-decoration: none;
+  transition: background-color .15s ease, border-color .15s ease;
+}
+.action-link:hover {
+  background: var(--paper);
+  border-color: var(--ink-3);
+}
 
 /* ── Footer note ─────────────────────────────────────── */
 .footnote {
