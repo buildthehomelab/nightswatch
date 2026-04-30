@@ -121,12 +121,27 @@ function trimChangelog(body, maxLen = 400) {
   return (lastNl > 80 ? text.slice(0, lastNl) : text) + '…';
 }
 
+async function fetchStopTimes(hdrs) {
+  const f = encodeURIComponent('[["method","=","app.stop"]]');
+  const jobs = await fetch(`${API}/core/get_jobs?filters=${f}&order_by=-id&limit=200`, { headers: hdrs })
+    .then(r => r.json()).catch(() => []);
+  const stopTimes = new Map();
+  for (const job of (Array.isArray(jobs) ? jobs : [])) {
+    const name = job.arguments?.[0];
+    if (!name || typeof name !== 'string' || stopTimes.has(name)) continue;
+    const t = job.time_finished ?? job.time_started;
+    if (t) stopTimes.set(name, new Date(t));
+  }
+  return stopTimes;
+}
+
 async function fetchData() {
   const hdrs = { Authorization: `Bearer ${KEY}` };
-  const [info, pools, apps] = await Promise.all([
+  const [info, pools, apps, stoppedSince] = await Promise.all([
     fetch(`${API}/system/info`, { headers: hdrs }).then(r => r.json()),
     fetch(`${API}/pool`,        { headers: hdrs }).then(r => r.json()),
     fetch(`${API}/app`,         { headers: hdrs }).then(r => r.json()).catch(() => []),
+    fetchStopTimes(hdrs),
   ]);
 
   const appList = Array.isArray(apps) ? apps : [];
@@ -143,7 +158,7 @@ async function fetchData() {
       })
   );
 
-  return { info, pools, apps: appList, releaseMap };
+  return { info, pools, apps: appList, releaseMap, stoppedSince };
 }
 
 export function useTrueNas() {
