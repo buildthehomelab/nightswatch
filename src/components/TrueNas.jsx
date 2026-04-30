@@ -377,6 +377,7 @@ export default function TrueNas({ data, err }) {
               <span className="nas-k">{pool.name}</span>
               <span className={`nas-v${valCls}`}>
                 {pct != null ? `${pct}%` : "—"}
+                {!ok && <span className="nas-crit"> · {pool.status.toLowerCase()}</span>}
               </span>
             </span>
           );
