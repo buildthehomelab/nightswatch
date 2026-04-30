@@ -1,10 +1,13 @@
-import { useEffect } from 'react';
+import { useEffect, useRef } from 'react';
 
 const DOZZLE_BASE = "https://logs.vaultrona.com";
 
 export default function Dozzle({ open, onClose }) {
+  const closeRef = useRef(null);
+
   useEffect(() => {
     if (!open) return;
+    closeRef.current?.focus();
     const onKey = (e) => { if (e.key === "Escape") onClose(); };
     window.addEventListener("keydown", onKey);
     return () => window.removeEventListener("keydown", onKey);
@@ -19,7 +22,7 @@ export default function Dozzle({ open, onClose }) {
             <b>dozzle</b>
             <span className="url">{DOZZLE_BASE}</span>
           </div>
-          <button className="dozzle-close" onClick={onClose}>close · esc</button>
+          <button ref={closeRef} className="dozzle-close" onClick={onClose}>close · esc</button>
         </div>
         <iframe
           src={open ? DOZZLE_BASE : undefined}
