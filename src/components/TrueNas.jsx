@@ -169,6 +169,14 @@ export default function TrueNas({ data, err }) {
           <span className="nas-k">up</span>
           <span className="nas-v">{uptime}</span>
         </span>
+        {appList.length > 0 && (
+          <span className="nas-item">
+            <span className="nas-k">apps</span>
+            <span className={`nas-v${hasAppIssue ? " nas-warn" : ""}`}>
+              {runningCount} / {appList.length}
+            </span>
+          </span>
+        )}
         {updateCount > 0 && (
           <span className="nas-item">
             <span className="nas-k">updates</span>
