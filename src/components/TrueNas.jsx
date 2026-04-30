@@ -127,8 +127,8 @@ async function fetchStopTimes(hdrs) {
     .then(r => r.json()).catch(() => []);
   if (!Array.isArray(jobs) || jobs.length === 0) return new Map();
   const methods = [...new Set(jobs.map(j => j.method))];
-  console.debug('[TrueNas] recent job methods:', methods);
-  console.debug('[TrueNas] sample job:', jobs[0]);
+  console.warn('[TrueNas] recent job methods:', methods);
+  console.warn('[TrueNas] sample job:', jobs[0]);
   return new Map();
 }
 
