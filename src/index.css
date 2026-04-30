@@ -83,6 +83,46 @@ body {
 .ambient .dot.warn { background: var(--warn); }
 .ambient .dot.crit { background: var(--crit); }
 
+/* ── TrueNAS strip ───────────────────────────────────── */
+.nas-strip {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 24px;
+  padding: 12px 0;
+  border-bottom: 0.5px solid var(--rule-soft);
+  font-family: var(--mono);
+  font-size: 11.5px;
+  letter-spacing: 0.02em;
+  color: var(--ink-3);
+  text-transform: lowercase;
+}
+.nas-left,
+.nas-right {
+  display: flex;
+  gap: 20px;
+  align-items: baseline;
+  flex-wrap: wrap;
+}
+.nas-right { justify-content: flex-end; }
+.nas-item { display: inline-flex; gap: 6px; align-items: baseline; }
+.nas-k { color: var(--ink-3); }
+.nas-v { color: var(--ink-2); font-variant-numeric: tabular-nums; }
+.nas-crit { color: var(--crit); }
+.nas-dot {
+  display: inline-block;
+  width: 6px; height: 6px; border-radius: 50%;
+  background: var(--ok);
+  transform: translateY(-1px);
+}
+.nas-dot.crit { background: var(--crit); }
+.nas-link {
+  color: var(--ink-2);
+  text-decoration: none;
+  font-weight: 500;
+}
+.nas-link:hover { color: var(--ink); }
+
 /* ── Masthead ────────────────────────────────────────── */
 .masthead {
   padding: 96px 0 24px;
