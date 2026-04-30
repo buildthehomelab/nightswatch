@@ -24,8 +24,8 @@ function fmtBytes(bytes) {
 async function fetchData() {
   const hdrs = { Authorization: `Bearer ${KEY}` };
   const [info, pools] = await Promise.all([
-    fetch(`${BASE}/api/v2.0/system/info`, { headers: hdrs }).then(r => r.json()),
-    fetch(`${BASE}/api/v2.0/pool`, { headers: hdrs }).then(r => r.json()),
+    fetch(`${API}/system/info`, { headers: hdrs }).then(r => r.json()),
+    fetch(`${API}/pool`, { headers: hdrs }).then(r => r.json()),
   ]);
   return { info, pools };
 }
