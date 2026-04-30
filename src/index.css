@@ -109,6 +109,7 @@ body {
 .nas-k { color: var(--ink-3); }
 .nas-v { color: var(--ink-2); font-variant-numeric: tabular-nums; }
 .nas-crit { color: var(--crit); }
+.nas-warn { color: var(--warn); }
 .nas-dot {
   display: inline-block;
   width: 6px; height: 6px; border-radius: 50%;
