@@ -411,7 +411,7 @@ export default function App() {
           />
         )}
 
-        {t.showNas && <TrueNas />}
+        {t.showNas && <TrueNas data={nasData} err={nasErr} />}
 
         {isHealthy ? (
           <Healthy now={now} uptime={uptime} />
