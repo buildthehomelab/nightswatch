@@ -368,7 +368,7 @@ body {
 .dozzle {
   position: fixed;
   top: 0; right: 0; bottom: 0;
-  width: min(1100px, 92vw);
+  width: min(1300px, 96vw);
   background: #0e0d0b;
   color: #d8d3c4;
   z-index: 101;
