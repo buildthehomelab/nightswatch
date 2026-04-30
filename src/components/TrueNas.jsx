@@ -1,7 +1,8 @@
 import { useState, useEffect } from 'react';
 
 const BASE = "https://patronus.vaultrona.com:3443";
-const KEY = import.meta.env.VITE_TRUENAS_KEY ?? "";
+const API  = "/truenas/api/v2.0";
+const KEY  = import.meta.env.VITE_TRUENAS_KEY ?? "";
 
 function fmtUptime(sec) {
   if (sec == null) return "—";
