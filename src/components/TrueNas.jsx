@@ -370,12 +370,11 @@ export default function TrueNas({ data, err }) {
           const ok  = pool.status === "ONLINE";
           const pct = pool.size ? Math.round((pool.allocated / pool.size) * 100) : null;
           return (
-            <span key={pool.name} className="nas-item">
+            <span key={pool.name} className="nas-item" title={`${fmtBytes(pool.allocated)} / ${fmtBytes(pool.size)}`}>
               <span className={`nas-dot${ok ? "" : " crit"}`} />
               <span className="nas-k">{pool.name}</span>
               <span className={`nas-v${ok ? "" : " nas-crit"}`}>
-                {fmtBytes(pool.allocated)} / {fmtBytes(pool.size)}
-                {pct != null ? ` · ${pct}%` : ""}
+                {pct != null ? `${pct}%` : "—"}
               </span>
             </span>
           );
