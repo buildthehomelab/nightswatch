@@ -143,17 +143,31 @@ async function fetchData() {
       })
   );
 
-  return { info, pools, apps: appList, releaseMap, stoppedSince };
+  return { info, pools, apps: appList, releaseMap };
 }
 
 export function useTrueNas() {
   const [data, setData] = useState(null);
   const [err, setErr]   = useState(null);
+  const stoppedSince    = useRef(new Map());
 
   useEffect(() => {
     const refresh = () =>
       fetchData()
-        .then(d => { setData(d); setErr(null); })
+        .then(d => {
+          const now = new Date();
+          for (const app of (d.apps ?? [])) {
+            if (app.state !== "RUNNING") {
+              if (!stoppedSince.current.has(app.name)) {
+                stoppedSince.current.set(app.name, now);
+              }
+            } else {
+              stoppedSince.current.delete(app.name);
+            }
+          }
+          setData({ ...d, stoppedSince: new Map(stoppedSince.current) });
+          setErr(null);
+        })
         .catch(e => setErr(e?.message ?? "fetch failed"));
     refresh();
     const id = setInterval(refresh, 60_000);
