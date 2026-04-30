@@ -325,13 +325,17 @@ export default function App() {
     const check = async () => {
       try {
         await fetch("https://1.1.1.1", { mode: "no-cors", cache: "no-store" });
+        wanFailCount.current = 0;
         setWanUp(true);
         setWanDownSince(null);
       } catch {
-        setWanUp((prev) => {
-          if (prev) setWanDownSince(new Date());
-          return false;
-        });
+        wanFailCount.current += 1;
+        if (wanFailCount.current >= 3) {
+          setWanUp((prev) => {
+            if (prev) setWanDownSince(new Date());
+            return false;
+          });
+        }
       }
       setLastChecked(new Date());
     };
