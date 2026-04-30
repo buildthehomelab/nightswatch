@@ -324,6 +324,7 @@ body {
   color: var(--ink-2);
   text-wrap: pretty;
   max-width: 60ch;
+  white-space: pre-wrap;
 }
 .issue .logs {
   font-family: var(--mono);
