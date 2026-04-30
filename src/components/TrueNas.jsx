@@ -1,9 +1,11 @@
 import { useState, useEffect } from 'react';
 
-const UI   = "https://patronus.vaultrona.com";
-const BASE = "https://patronus.vaultrona.com:3443";
-const API  = "/truenas/api/v2.0";
-const KEY  = import.meta.env.VITE_TRUENAS_KEY ?? "";
+const UI  = "https://patronus.vaultrona.com";
+const API = "/truenas/api/v2.0";
+const KEY = import.meta.env.VITE_TRUENAS_KEY ?? "";
+
+const RELEASE_CACHE = new Map(); // image → { release, fetchedAt }
+const RELEASE_TTL   = 10 * 60 * 1000;
 
 export function fmtUptime(sec) {
   if (sec == null) return "—";
@@ -22,6 +24,49 @@ export function fmtBytes(bytes) {
   return `${gb.toFixed(1)} GB`;
 }
 
+function imageToGithubRepo(image) {
+  const name = image.split(':')[0];
+  if (name.startsWith('lscr.io/linuxserver/'))
+    return { owner: 'linuxserver', repo: name.slice('lscr.io/linuxserver/'.length) };
+  if (name.startsWith('ghcr.io/')) {
+    const parts = name.slice('ghcr.io/'.length).split('/');
+    if (parts.length >= 2) return { owner: parts[0], repo: parts[1] };
+  }
+  const parts = name.split('/');
+  if (parts.length === 2) return { owner: parts[0], repo: parts[1] };
+  return null;
+}
+
+async function fetchLatestRelease(image) {
+  const cached = RELEASE_CACHE.get(image);
+  if (cached && Date.now() - cached.fetchedAt < RELEASE_TTL) return cached.release;
+  const repo = imageToGithubRepo(image);
+  if (!repo) return null;
+  try {
+    const r = await fetch(`https://api.github.com/repos/${repo.owner}/${repo.repo}/releases/latest`);
+    if (!r.ok) return null;
+    const release = await r.json();
+    RELEASE_CACHE.set(image, { release, fetchedAt: Date.now() });
+    return release;
+  } catch {
+    return null;
+  }
+}
+
+function fmtReleaseDate(iso) {
+  if (!iso) return null;
+  return new Date(iso).toLocaleDateString(undefined, { month: 'short', day: 'numeric' });
+}
+
+function trimChangelog(body, maxLen = 500) {
+  if (!body) return null;
+  let text = body.trim();
+  if (text.length <= maxLen) return text;
+  text = text.slice(0, maxLen);
+  const lastNl = text.lastIndexOf('\n');
+  return (lastNl > 100 ? text.slice(0, lastNl) : text) + '…';
+}
+
 async function fetchData() {
   const hdrs = { Authorization: `Bearer ${KEY}` };
   const [info, pools, apps] = await Promise.all([
@@ -30,7 +75,21 @@ async function fetchData() {
     fetch(`${API}/app`,         { headers: hdrs }).then(r => r.json()).catch(() => []),
   ]);
 
-  return { info, pools, apps: Array.isArray(apps) ? apps : [] };
+  const appList = Array.isArray(apps) ? apps : [];
+
+  const releaseMap = {};
+  await Promise.all(
+    appList
+      .filter(a => a.upgrade_available && a.image_updates_available)
+      .map(async a => {
+        const image = a.active_workloads?.container_details?.[0]?.image;
+        if (!image) return;
+        const release = await fetchLatestRelease(image);
+        if (release) releaseMap[a.id] = release;
+      })
+  );
+
+  return { info, pools, apps: appList, releaseMap };
 }
 
 export function useTrueNas() {
@@ -73,7 +132,7 @@ export function nasIssues(data) {
     }
 
     if (pool.size && pool.allocated / pool.size > 0.9) {
-      const pct  = Math.round((pool.allocated / pool.size) * 100);
+      const pct   = Math.round((pool.allocated / pool.size) * 100);
       const free  = fmtBytes(pool.size - pool.allocated);
       const total = fmtBytes(pool.size);
       issues.push({
@@ -112,24 +171,30 @@ export function nasIssues(data) {
 
   for (const app of (data.apps ?? []).filter(a => a.upgrade_available)) {
     const image   = app.active_workloads?.container_details?.[0]?.image ?? null;
-    const ver     = app.version ?? null;
-    const appVer  = app.app_version && app.app_version !== ver ? app.app_version : null;
-    const current = ver ? (appVer ? `${ver} (${appVer})` : ver) : (app.human_version ?? "unknown");
     const next    = app.latest_version ?? null;
     const isImage = app.image_updates_available && !next;
+    const release = data.releaseMap?.[app.id] ?? null;
+    const tag     = release?.tag_name ?? null;
+    const relDate = fmtReleaseDate(release?.published_at);
+    const changelog = trimChangelog(release?.body);
 
     const headline = next
-      ? `${app.name}: ${current} → ${next}.`
-      : `${app.name}: ${isImage ? "image update available." : "update available."}`;
+      ? `${app.name}: update available → ${next}.`
+      : tag
+        ? `${app.name}: ${tag} is available.`
+        : `${app.name}: ${isImage ? "image update available." : "update available."}`;
 
-    const logs = next
-      ? [{ t: now, level: "info", text: `[app] ${app.name}: ${current} → ${next}` }]
-      : isImage
-        ? [
-            { t: now, level: "info", text: `[app] ${app.name}: upstream image updated` },
-            { t: now, level: "info", text: `[app] image: ${image ?? current}` },
-          ]
-        : [{ t: now, level: "info", text: `[app] ${app.name}: update available · current ${current}` }];
+    const logs = [
+      { t: now, level: "info", text: `[app] ${app.name}: upstream image updated` },
+      ...(image ? [{ t: now, level: "info", text: `[app] image: ${image}` }] : []),
+      ...(tag    ? [{ t: now, level: "info", text: `[app] latest: ${tag}${relDate ? ` · released ${relDate}` : ""}` }] : []),
+    ];
+
+    const description = changelog
+      ? `New release available for ${app.name}.\n\n${changelog}`
+      : next
+        ? `${app.name} can be upgraded to ${next}.`
+        : `${app.name} has a newer Docker image available.`;
 
     issues.push({
       id: `nas-app-update-${app.name}`,
@@ -137,10 +202,8 @@ export function nasIssues(data) {
       label: "app update",
       headline,
       source: "truenas · apps",
-      when: "now",
-      description: next
-        ? `${app.name} can be upgraded from ${current} to ${next}.`
-        : `${app.name} has a newer Docker image available. Running ${current}.`,
+      when: relDate ? `released ${relDate}` : "now",
+      description,
       logs,
       actions: [{ label: "open truenas apps ›", href: `${UI}/ui/apps/installed` }],
     });
@@ -162,7 +225,7 @@ export default function TrueNas({ data, err }) {
   if (!data) return null;
 
   const { info, pools, apps } = data;
-  const appList     = Array.isArray(apps) ? apps : [];
+  const appList      = Array.isArray(apps) ? apps : [];
   const runningCount = appList.filter(a => a.state === "RUNNING").length;
   const updateCount  = appList.filter(a => a.upgrade_available).length;
   const hasAppIssue  = appList.some(a => a.state !== "RUNNING");
