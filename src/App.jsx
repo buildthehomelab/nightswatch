@@ -385,6 +385,7 @@ export default function App() {
   }, [now, lastChecked]);
 
   const uptime = useMemo(() => {
+    if (nasData?.info?.uptime_seconds != null) return fmtUptime(nasData.info.uptime_seconds);
     const secs = Math.floor((now - startTime.current) / 1000);
     if (secs < 60) return `${secs}s`;
     const mins = Math.floor(secs / 60);
@@ -393,7 +394,7 @@ export default function App() {
     if (hours < 24) return `${hours}h`;
     const days = Math.floor(hours / 24);
     return `${days}d`;
-  }, [now]);
+  }, [now, nasData]);
 
   const isHealthy = issues.length === 0;
 
