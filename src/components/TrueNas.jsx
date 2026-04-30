@@ -91,6 +91,26 @@ export function nasIssues(data) {
     }
   }
 
+  const updatable = (data.apps ?? []).filter(a => a.upgrade_available);
+  if (updatable.length > 0) {
+    const names = updatable.map(a => a.name).join(", ");
+    issues.push({
+      id: "nas-docker-updates",
+      severity: "info",
+      label: "app updates",
+      headline: `${updatable.length} app${updatable.length > 1 ? "s" : ""} ready to update.`,
+      source: "truenas · apps",
+      when: "now",
+      description: `${updatable.length} TrueNAS app${updatable.length > 1 ? "s have" : " has"} upgrades available: ${names}.`,
+      logs: updatable.map(a => ({
+        t: now,
+        level: "info",
+        text: `[app] ${a.name}: upgrade available${a.human_version ? ` (current: ${a.human_version})` : ""}`,
+      })),
+      actions: [{ label: "open truenas apps ›", href: `${UI}/ui/apps/installed` }],
+    });
+  }
+
   return issues;
 }
 
