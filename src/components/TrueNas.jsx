@@ -91,6 +91,24 @@ export function nasIssues(data) {
     }
   }
 
+  for (const app of (data.apps ?? [])) {
+    if (app.state === "RUNNING") continue;
+    const severity = app.state === "CRASHED" ? "crit" : "warn";
+    issues.push({
+      id: `nas-app-${app.name}`,
+      severity,
+      label: `app ${app.state?.toLowerCase() ?? "not running"}`,
+      headline: `${app.name} is ${app.state?.toLowerCase() ?? "not running"}.`,
+      source: `truenas · apps`,
+      when: "now",
+      description: `TrueNAS app "${app.name}" is in state ${app.state}${app.human_version ? ` (version ${app.human_version})` : ""}.`,
+      logs: [
+        { t: now, level: severity === "crit" ? "err" : "warn", text: `[app] ${app.name}: state=${app.state}` },
+      ],
+      actions: [{ label: "open truenas apps ›", href: `${UI}/ui/apps/installed` }],
+    });
+  }
+
   const updatable = (data.apps ?? []).filter(a => a.upgrade_available);
   if (updatable.length > 0) {
     const names = updatable.map(a => a.name).join(", ");
