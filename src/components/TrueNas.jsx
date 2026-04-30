@@ -31,6 +31,7 @@ async function fetchData() {
   ]);
 
   const appList = Array.isArray(apps) ? apps : [];
+  if (appList.length > 0) console.log("[truenas] app sample", appList[0]);
   const upgradeable = appList.filter(a => a.upgrade_available);
   const summaries = await Promise.all(
     upgradeable.map(a =>
