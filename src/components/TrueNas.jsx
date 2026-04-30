@@ -148,6 +148,12 @@ export default function TrueNas({ data, err }) {
           <span className="nas-k">up</span>
           <span className="nas-v">{uptime}</span>
         </span>
+        {updateCount > 0 && (
+          <span className="nas-item">
+            <span className="nas-k">updates</span>
+            <span className="nas-v nas-warn">{updateCount}</span>
+          </span>
+        )}
       </div>
       <div className="nas-right">
         {(Array.isArray(pools) ? pools : []).map(pool => {
