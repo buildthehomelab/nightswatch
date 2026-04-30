@@ -82,6 +82,17 @@ async function fetchLatestRelease(image) {
   }
 }
 
+function fmtStoppedAgo(since) {
+  const secs = Math.floor((Date.now() - since) / 1000);
+  if (secs < 60) return "just now";
+  const mins = Math.floor(secs / 60);
+  if (mins < 60) return `${mins}m ago`;
+  const hours = Math.floor(mins / 60);
+  if (hours < 24) return `${hours}h ${mins % 60}m ago`;
+  const days = Math.floor(hours / 24);
+  return `${days}d ${hours % 24}h ago`;
+}
+
 function fmtReleaseDate(iso) {
   if (!iso) return null;
   return new Date(iso).toLocaleDateString(undefined, { month: 'short', day: 'numeric' });
