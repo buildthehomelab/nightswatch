@@ -156,15 +156,25 @@ function Issue({ issue, isOpen, isFocused, onToggle, index, onOpenLogs }) {
           <div className="description">{issue.description}</div>
           <Logs lines={issue.logs} />
           <div className="actions">
-            {issue.actions.map((a) => (
-              <button key={a} onClick={(e) => e.stopPropagation()}>{a}</button>
-            ))}
-            <button
-              onClick={(e) => { e.stopPropagation(); onOpenLogs(ISSUE_TO_CONTAINER[issue.id] || "sonarr"); }}
-              style={{ marginLeft: "auto" }}
-            >
-              open in dozzle ›
-            </button>
+            {issue.actions.map((a) => {
+              if (typeof a === "object" && a.href) {
+                return (
+                  <a key={a.label} href={a.href} target="_blank" rel="noopener noreferrer"
+                     className="action-link" onClick={(e) => e.stopPropagation()}>
+                    {a.label}
+                  </a>
+                );
+              }
+              return <button key={a} onClick={(e) => e.stopPropagation()}>{a}</button>;
+            })}
+            {ISSUE_TO_CONTAINER[issue.id] && (
+              <button
+                onClick={(e) => { e.stopPropagation(); onOpenLogs(ISSUE_TO_CONTAINER[issue.id]); }}
+                style={{ marginLeft: "auto" }}
+              >
+                open in dozzle ›
+              </button>
+            )}
           </div>
         </div>
       </div>
