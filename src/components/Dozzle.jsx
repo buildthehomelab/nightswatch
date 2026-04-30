@@ -90,6 +90,7 @@ export default function Dozzle({ open, onClose, initialContainer }) {
   const [showErr,  setShowErr]      = useState(true);
   const [lines, setLines]           = useState(() => buildMockLines(active));
   const [live, setLive]             = useState(false);
+  const [hostId, setHostId]         = useState(null);
   const streamRef                   = useRef(null);
   const esRef                       = useRef(null);
 
@@ -97,21 +98,47 @@ export default function Dozzle({ open, onClose, initialContainer }) {
     if (initialContainer && open) setActive(initialContainer);
   }, [initialContainer, open]);
 
-  // Fetch real container list when overlay opens
+  // Fetch real container list when overlay opens — try v8 API, fall back to legacy
   useEffect(() => {
     if (!open) return;
-    fetch(`${DOZZLE_BASE}/api/containers`)
-      .then((r) => r.json())
-      .then((data) => {
-        const mapped = data.map((c) => ({
-          id:     c.id,
-          name:   c.name.replace(/^\//, ""),
-          group:  c.group || "containers",
-          status: c.state === "running" ? "ok" : "off",
-        }));
-        setContainers(mapped);
-      })
-      .catch(() => {});
+
+    const mapContainers = (data, hId) =>
+      data.map((c) => ({
+        id:     c.id,
+        name:   (c.name || c.Names?.[0] || "").replace(/^\//, ""),
+        group:  c.group || "containers",
+        status: (c.state || c.State) === "running" ? "ok" : "off",
+        hostId: hId,
+      }));
+
+    const load = async () => {
+      // v8: GET /api/hosts → [{id, name, ...}], then GET /api/hosts/:id/containers
+      try {
+        const hostsRes = await fetch(`${DOZZLE_BASE}/api/hosts`);
+        const hostsData = await hostsRes.json();
+        const hosts = Array.isArray(hostsData) ? hostsData : [hostsData];
+        const hId = hosts[0]?.id ?? "localhost";
+        setHostId(hId);
+
+        const cRes = await fetch(`${DOZZLE_BASE}/api/hosts/${hId}/containers`);
+        const cData = await cRes.json();
+        setContainers(mapContainers(Array.isArray(cData) ? cData : cData.containers ?? [], hId));
+        return;
+      } catch (e) {
+        console.warn("[dozzle] v8 API failed, trying legacy:", e);
+      }
+
+      // legacy: GET /api/containers
+      try {
+        const res = await fetch(`${DOZZLE_BASE}/api/containers`);
+        const data = await res.json();
+        setContainers(mapContainers(data, null));
+      } catch (e) {
+        console.error("[dozzle] could not fetch containers:", e);
+      }
+    };
+
+    load();
   }, [open]);
 
   // Stream logs via EventSource; fall back to mock on error
@@ -122,8 +149,13 @@ export default function Dozzle({ open, onClose, initialContainer }) {
 
     const container = containers.find((c) => c.id === active || c.name === active);
     const id = container?.id ?? active;
+    const hId = container?.hostId ?? hostId;
 
-    const es = new EventSource(`${DOZZLE_BASE}/api/logs/stream?id=${encodeURIComponent(id)}`);
+    const streamUrl = hId
+      ? `${DOZZLE_BASE}/api/hosts/${hId}/containers/${encodeURIComponent(id)}/logs/stream`
+      : `${DOZZLE_BASE}/api/logs/stream?id=${encodeURIComponent(id)}`;
+
+    const es = new EventSource(streamUrl);
     esRef.current = es;
 
     let seq = 0;
@@ -152,7 +184,8 @@ export default function Dozzle({ open, onClose, initialContainer }) {
       });
     };
 
-    es.onerror = () => {
+    es.onerror = (e) => {
+      console.error("[dozzle] stream error:", streamUrl, e);
       es.close();
       esRef.current = null;
       setLive(false);
@@ -160,7 +193,7 @@ export default function Dozzle({ open, onClose, initialContainer }) {
     };
 
     return () => { es.close(); esRef.current = null; };
-  }, [active, containers]);
+  }, [active, containers, hostId]);
 
   useEffect(() => {
     const el = streamRef.current;
