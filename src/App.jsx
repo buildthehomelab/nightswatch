@@ -272,16 +272,12 @@ export default function App() {
   useEffect(() => { themeRef.current = t.theme; }, [t.theme]);
   const [now, setNow] = useState(new Date());
   const [dozzleOpen, setDozzleOpen] = useState(false);
-  const [dozzleContainer, setDozzleContainer] = useState("sonarr");
   const [helpOpen, setHelpOpen] = useState(false);
   const [wanUp, setWanUp] = useState(true);
   const [wanDownSince, setWanDownSince] = useState(null);
   const [lastChecked, setLastChecked] = useState(null);
 
-  const openLogs = (container) => {
-    setDozzleContainer(container || "sonarr");
-    setDozzleOpen(true);
-  };
+  const openLogs = () => setDozzleOpen(true);
 
   useEffect(() => {
     const onKey = (e) => {
@@ -289,7 +285,7 @@ export default function App() {
       if (e.key === "l" || e.key === "L") {
         if (dozzleOpen) return;
         e.preventDefault();
-        openLogs("sonarr");
+        openLogs();
       } else if (e.key === "h" || e.key === "H" || e.key === "?") {
         e.preventDefault();
         setHelpOpen((v) => !v);
@@ -421,7 +417,7 @@ export default function App() {
           <span>
             <a href="#" onClick={(e) => e.preventDefault()}>all services</a>
             {"   "}
-            <a href="#" onClick={(e) => { e.preventDefault(); openLogs("sonarr"); }}>logs</a>
+            <a href="#" onClick={(e) => { e.preventDefault(); openLogs(); }}>logs</a>
             {"   "}
             <a href="#" onClick={(e) => e.preventDefault()}>history</a>
           </span>
@@ -431,7 +427,6 @@ export default function App() {
       <Dozzle
         open={dozzleOpen}
         onClose={() => setDozzleOpen(false)}
-        initialContainer={dozzleContainer}
       />
 
       <HelpOverlay open={helpOpen} onClose={() => setHelpOpen(false)} />
