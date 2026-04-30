@@ -1,4 +1,4 @@
-import { useState, useEffect, useRef } from 'react';
+import { useState, useEffect } from 'react';
 
 const UI  = "https://patronus.vaultrona.com";
 const API = "/truenas/api/v2.0";
