@@ -8,8 +8,7 @@ import { ISSUE_FIXTURES } from './data/fixtures';
 
 const ISSUE_TO_CONTAINER = {
   "certs-jellyfin": "nginx",
-  "updates-docker": "watchtower",
-  "wan-down":       "pihole",
+"wan-down":       "pihole",
   "smart-tank":     "jellyfin",
   "disk-media":     "sonarr",
   "ups":            "watchtower",
