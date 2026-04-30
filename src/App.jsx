@@ -7,7 +7,6 @@ import {
 import { ISSUE_FIXTURES } from './data/fixtures';
 
 const ISSUE_TO_CONTAINER = {
-  "certs-jellyfin": "nginx",
 "wan-down":       "pihole",
   "smart-tank":     "jellyfin",
   "disk-media":     "sonarr",
