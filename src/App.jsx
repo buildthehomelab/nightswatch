@@ -17,9 +17,9 @@ const TWEAK_DEFAULTS = {
   state: "warnings",
   theme: "ink",
   density: "regular",
-  showAmbient: true,
-  showWeather: true,
-  showNas: true,
+  showAmbient: false,
+  showWeather: false,
+  showNas: false,
 };
 
 function greeting(d) {
