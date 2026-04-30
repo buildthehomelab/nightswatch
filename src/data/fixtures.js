@@ -1,24 +1,7 @@
 export const ISSUE_FIXTURES = {
   healthy: [],
 
-  warnings: [
-    {
-      id: "certs-jellyfin",
-      severity: "warn",
-      label: "cert expiring",
-      headline: "Jellyfin certificate renews in 6 days.",
-      source: "nginx · jellyfin.lan",
-      when: "checked 2m ago",
-      description:
-        "Let's Encrypt auto-renewal is configured but hasn't fired in this window. Worth verifying the cron hook before it lapses.",
-      logs: [
-        { t: "13:42:02", level: "info", text: "[acme] checking certificate jellyfin.lan" },
-        { t: "13:42:02", level: "warn", text: "[acme] expires 2026-05-06 (in 6d 04h)" },
-        { t: "13:42:02", level: "info", text: "[acme] next renewal attempt: 2026-05-04 03:00" },
-      ],
-      actions: ["renew now", "view nginx logs", "silence 24h"],
-    },
-  ],
+  warnings: [],
 
   critical: [
     {
