@@ -21,6 +21,7 @@ const TWEAK_DEFAULTS = {
   density: "regular",
   showAmbient: true,
   showWeather: true,
+  showNas: true,
 };
 
 function greeting(d) {
