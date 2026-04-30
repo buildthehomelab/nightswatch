@@ -243,6 +243,7 @@ export function nasIssues(data) {
     if (app.state === "RUNNING") continue;
     const severity  = app.state === "CRASHED" ? "crit" : "warn";
     const since     = data.stoppedSince?.get(app.name);
+    if (STOPPED_HIDE_MINUTES > 0 && since && (Date.now() - since) > STOPPED_HIDE_MINUTES * 60_000) continue;
     const stoppedAt = since
       ? since.toLocaleTimeString(undefined, { hour: "2-digit", minute: "2-digit", hour12: false })
       : null;
