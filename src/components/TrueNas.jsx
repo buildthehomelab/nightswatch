@@ -111,6 +111,7 @@ export function nasIssues(data) {
   }
 
   for (const app of (data.apps ?? []).filter(a => a.upgrade_available)) {
+    const image   = app.active_workloads?.container_details?.[0]?.image ?? null;
     const ver     = app.version ?? null;
     const appVer  = app.app_version && app.app_version !== ver ? app.app_version : null;
     const current = ver ? (appVer ? `${ver} (${appVer})` : ver) : (app.human_version ?? "unknown");
