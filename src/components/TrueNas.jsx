@@ -121,25 +121,12 @@ function trimChangelog(body, maxLen = 400) {
   return (lastNl > 80 ? text.slice(0, lastNl) : text) + '…';
 }
 
-async function fetchStopTimes(hdrs) {
-  const qo = encodeURIComponent(JSON.stringify({ order_by: ["-id"], limit: 50 }));
-  const jobs = await fetch(`${API}/core/get_jobs?query-options=${qo}`, { headers: hdrs })
-    .then(r => r.json()).catch(() => []);
-  console.warn('[TrueNas] get_jobs raw:', jobs);
-  if (!Array.isArray(jobs) || jobs.length === 0) return new Map();
-  const methods = [...new Set(jobs.map(j => j.method))];
-  console.warn('[TrueNas] recent job methods:', methods);
-  console.warn('[TrueNas] sample job:', jobs[0]);
-  return new Map();
-}
-
 async function fetchData() {
   const hdrs = { Authorization: `Bearer ${KEY}` };
-  const [info, pools, apps, stoppedSince] = await Promise.all([
+  const [info, pools, apps] = await Promise.all([
     fetch(`${API}/system/info`, { headers: hdrs }).then(r => r.json()),
     fetch(`${API}/pool`,        { headers: hdrs }).then(r => r.json()),
     fetch(`${API}/app`,         { headers: hdrs }).then(r => r.json()).catch(() => []),
-    fetchStopTimes(hdrs),
   ]);
 
   const appList = Array.isArray(apps) ? apps : [];
