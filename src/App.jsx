@@ -400,6 +400,8 @@ export default function App() {
           />
         )}
 
+        {t.showNas && <TrueNas />}
+
         {isHealthy ? (
           <Healthy now={now} uptime={uptime} />
         ) : (
