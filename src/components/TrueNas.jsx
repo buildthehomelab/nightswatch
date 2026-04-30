@@ -122,20 +122,14 @@ function trimChangelog(body, maxLen = 400) {
 }
 
 async function fetchStopTimes(hdrs) {
-  const qf = encodeURIComponent(JSON.stringify([["method", "=", "app.stop"]]));
-  const qo = encodeURIComponent(JSON.stringify({ order_by: ["-id"], limit: 200 }));
-  const jobs = await fetch(`${API}/core/get_jobs?query-filters=${qf}&query-options=${qo}`, { headers: hdrs })
+  const qo = encodeURIComponent(JSON.stringify({ order_by: ["-id"], limit: 50 }));
+  const jobs = await fetch(`${API}/core/get_jobs?query-options=${qo}`, { headers: hdrs })
     .then(r => r.json()).catch(() => []);
   if (!Array.isArray(jobs) || jobs.length === 0) return new Map();
-  const stopTimes = new Map();
-  for (const job of jobs) {
-    const arg  = job.arguments?.[0];
-    const name = typeof arg === 'string' ? arg : (arg?.app_name ?? arg?.name ?? null);
-    if (!name || stopTimes.has(name)) continue;
-    const t = job.time_finished ?? job.time_started;
-    if (t) stopTimes.set(name, new Date(t));
-  }
-  return stopTimes;
+  const methods = [...new Set(jobs.map(j => j.method))];
+  console.debug('[TrueNas] recent job methods:', methods);
+  console.debug('[TrueNas] sample job:', jobs[0]);
+  return new Map();
 }
 
 async function fetchData() {
