@@ -110,30 +110,30 @@ export function nasIssues(data) {
     });
   }
 
-  const summaryMap = data.summaryMap ?? {};
   for (const app of (data.apps ?? []).filter(a => a.upgrade_available)) {
-    const s        = summaryMap[app.name];
-    const current  = app.human_version ?? "unknown";
-    const next     = s?.latest_human_version ?? s?.latest_version ?? "?";
-    const changelog = s?.changelog ?? "";
-    const changelogLines = changelog
-      .split("\n")
-      .map(l => l.trim())
-      .filter(Boolean)
-      .slice(0, 8);
+    const current = app.human_version ?? app.version ?? "unknown";
+    const next    = app.latest_version ?? null;
+    const isImage = app.image_updates_available && !next;
+
+    const headline = next
+      ? `${app.name}: ${current} → ${next}.`
+      : `${app.name}: ${isImage ? "image update available." : "update available."}`;
+
+    const logText = next
+      ? `[app] ${app.name}: ${current} → ${next}`
+      : `[app] ${app.name}: ${isImage ? "newer image available (custom app)" : "update available"} · current ${current}`;
 
     issues.push({
       id: `nas-app-update-${app.name}`,
       severity: "info",
       label: "app update",
-      headline: `${app.name}: ${current} → ${next}.`,
+      headline,
       source: "truenas · apps",
       when: "now",
-      description: changelog || `${app.name} has an upgrade available.`,
-      logs: [
-        { t: now, level: "info", text: `[app] ${app.name}: ${current} → ${next}` },
-        ...changelogLines.map(l => ({ t: now, level: "info", text: l })),
-      ],
+      description: next
+        ? `${app.name} can be upgraded from ${current} to ${next}.`
+        : `${app.name} has a newer Docker image available. Current version: ${current}.`,
+      logs: [{ t: now, level: "info", text: logText }],
       actions: [{ label: "open truenas apps ›", href: `${UI}/ui/apps/installed` }],
     });
   }
