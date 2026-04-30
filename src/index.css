@@ -89,8 +89,7 @@ body {
   align-items: baseline;
   justify-content: space-between;
   gap: 24px;
-  padding: 12px 0;
-  border-bottom: 0.5px solid var(--rule-soft);
+  padding: 12px 0 10px;
   font-family: var(--mono);
   font-size: 11.5px;
   letter-spacing: 0.02em;
