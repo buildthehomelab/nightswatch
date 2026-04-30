@@ -118,10 +118,10 @@ function Logs({ lines }) {
   );
 }
 
-function Issue({ issue, isOpen, onToggle, index, onOpenLogs }) {
+function Issue({ issue, isOpen, isFocused, onToggle, index, onOpenLogs }) {
   return (
     <div
-      className={`issue ${issue.severity} ${isOpen ? "open" : ""} rise`}
+      className={`issue ${issue.severity} ${isOpen ? "open" : ""} ${isFocused ? "focused" : ""} rise`}
       style={{ animationDelay: `${0.05 + index * 0.04}s` }}
       onClick={onToggle}
     >
@@ -160,6 +160,26 @@ function Issue({ issue, isOpen, onToggle, index, onOpenLogs }) {
 
 function IssueList({ issues, onOpenLogs }) {
   const [openId, setOpenId] = useState(issues[0]?.id ?? null);
+  const [focusedIndex, setFocusedIndex] = useState(null);
+
+  useEffect(() => {
+    const onKey = (e) => {
+      if (["INPUT", "TEXTAREA"].includes(document.activeElement?.tagName)) return;
+      if (e.key === "j" || e.key === "J") {
+        e.preventDefault();
+        setFocusedIndex((i) => (i === null ? 0 : Math.min(i + 1, issues.length - 1)));
+      } else if (e.key === "k" || e.key === "K") {
+        e.preventDefault();
+        setFocusedIndex((i) => (i === null ? issues.length - 1 : Math.max(i - 1, 0)));
+      } else if (e.key === "Enter" && focusedIndex !== null) {
+        e.preventDefault();
+        const id = issues[focusedIndex]?.id;
+        if (id) setOpenId((cur) => (cur === id ? null : id));
+      }
+    };
+    window.addEventListener("keydown", onKey);
+    return () => window.removeEventListener("keydown", onKey);
+  }, [issues, focusedIndex]);
 
   const crits = issues.filter((i) => i.severity === "crit").length;
   const warns = issues.filter((i) => i.severity === "warn").length;
@@ -182,11 +202,53 @@ function IssueList({ issues, onOpenLogs }) {
           issue={issue}
           index={i}
           isOpen={openId === issue.id}
-          onToggle={() => setOpenId(openId === issue.id ? null : issue.id)}
+          isFocused={focusedIndex === i}
+          onToggle={() => { setFocusedIndex(i); setOpenId(openId === issue.id ? null : issue.id); }}
           onOpenLogs={onOpenLogs}
         />
       ))}
     </section>
+  );
+}
+
+const SHORTCUTS = [
+  { key: "j / k",    desc: "navigate issues" },
+  { key: "enter",    desc: "expand / collapse issue" },
+  { key: "h  or  ?", desc: "show this help" },
+  { key: "l",        desc: "open log viewer" },
+  { key: "r",        desc: "refresh status" },
+  { key: "`",        desc: "toggle tweaks panel" },
+  { key: "esc",      desc: "close overlay" },
+];
+
+function HelpOverlay({ open, onClose }) {
+  useEffect(() => {
+    if (!open) return;
+    const onKey = (e) => { if (e.key === "Escape") onClose(); };
+    window.addEventListener("keydown", onKey);
+    return () => window.removeEventListener("keydown", onKey);
+  }, [open, onClose]);
+
+  return (
+    <>
+      <div className={`dozzle-scrim ${open ? "open" : ""}`} onClick={onClose} />
+      <div className="help-overlay" style={{ display: open ? "flex" : "none" }}>
+        <div className="help-inner">
+          <div className="help-title">keyboard shortcuts</div>
+          <table className="help-table">
+            <tbody>
+              {SHORTCUTS.map(({ key, desc }) => (
+                <tr key={key}>
+                  <td className="help-key">{key}</td>
+                  <td className="help-desc">{desc}</td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
+          <div className="help-dismiss" onClick={onClose}>press esc or click to close</div>
+        </div>
+      </div>
+    </>
   );
 }
 
@@ -195,6 +257,7 @@ export default function App() {
   const [now, setNow] = useState(new Date());
   const [dozzleOpen, setDozzleOpen] = useState(false);
   const [dozzleContainer, setDozzleContainer] = useState("sonarr");
+  const [helpOpen, setHelpOpen] = useState(false);
 
   const openLogs = (container) => {
     setDozzleContainer(container || "sonarr");
@@ -203,10 +266,19 @@ export default function App() {
 
   useEffect(() => {
     const onKey = (e) => {
-      if ((e.key === "l" || e.key === "L") && !dozzleOpen &&
-          !["INPUT","TEXTAREA"].includes(document.activeElement?.tagName)) {
+      if (["INPUT", "TEXTAREA"].includes(document.activeElement?.tagName)) return;
+      if (e.key === "l" || e.key === "L") {
+        if (dozzleOpen) return;
         e.preventDefault();
         openLogs("sonarr");
+      } else if (e.key === "h" || e.key === "H" || e.key === "?") {
+        e.preventDefault();
+        setHelpOpen((v) => !v);
+      } else if (e.key === "r" || e.key === "R") {
+        e.preventDefault();
+        setNow(new Date());
+      } else if (e.key === "Escape") {
+        setHelpOpen(false);
       }
     };
     window.addEventListener("keydown", onKey);
@@ -279,6 +351,8 @@ export default function App() {
         onClose={() => setDozzleOpen(false)}
         initialContainer={dozzleContainer}
       />
+
+      <HelpOverlay open={helpOpen} onClose={() => setHelpOpen(false)} />
 
       <TweaksPanel>
         <TweakSection label="State (demo)" />
