@@ -102,7 +102,7 @@ body {
   display: flex;
   gap: 20px;
   align-items: baseline;
-  flex-wrap: wrap;
+  min-width: 0;
 }
 .nas-right { justify-content: flex-end; }
 .nas-item { display: inline-flex; gap: 6px; align-items: baseline; }
