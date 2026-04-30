@@ -1,6 +1,6 @@
 import { useState, useEffect, useRef, useMemo } from 'react';
 
-const DOZZLE_BASE = "http://dozzle.lan";
+const DOZZLE_BASE = "https://logs.vaultrona.com";
 
 const MOCK_CONTAINERS = [
   { id: "sonarr",       name: "sonarr",       group: "media",     status: "ok"   },
