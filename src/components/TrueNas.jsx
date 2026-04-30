@@ -248,7 +248,10 @@ export function nasIssues(data) {
       when: relDate ? `released ${relDate}` : "now",
       description,
       logs,
-      actions: [{ label: "open truenas apps ›", href: `${UI}/ui/apps/installed` }],
+      actions: [
+        { label: "open truenas apps ›", href: `${UI}/ui/apps/installed` },
+        ...(release?.html_url ? [{ label: "view release ›", href: release.html_url }] : []),
+      ],
     });
   }
 
