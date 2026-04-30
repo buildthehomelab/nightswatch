@@ -95,13 +95,13 @@ function trimChangelog(body, maxLen = 400) {
   let text = changesIdx >= 0 ? body.slice(changesIdx) : body;
 
   text = text
-    .replace(/^##?\s*/gm, '')                   // headers
+    .replace(/^##?\s*.+$/gm, '')                 // strip entire header lines
     .replace(/\*\*(.+?)\*\*/g, '$1')             // bold
     .replace(/\*(.+?)\*/g, '$1')                 // italic
     .replace(/`(.+?)`/g, '$1')                   // inline code
     .replace(/\b[0-9a-f]{40}\b\s*/g, '')         // full git SHAs
     .replace(/\*\s+/g, '\n• ')                   // list items → bullets
-    .replace(/\n{3,}/g, '\n\n')
+    .replace(/\n{2,}/g, '\n')                    // collapse blank lines
     .trim();
 
   if (text.length <= maxLen) return text;
