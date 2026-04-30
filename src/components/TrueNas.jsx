@@ -24,11 +24,12 @@ export function fmtBytes(bytes) {
 
 async function fetchData() {
   const hdrs = { Authorization: `Bearer ${KEY}` };
-  const [info, pools] = await Promise.all([
+  const [info, pools, apps] = await Promise.all([
     fetch(`${API}/system/info`, { headers: hdrs }).then(r => r.json()),
     fetch(`${API}/pool`,        { headers: hdrs }).then(r => r.json()),
+    fetch(`${API}/app`,         { headers: hdrs }).then(r => r.json()).catch(() => []),
   ]);
-  return { info, pools };
+  return { info, pools, apps: Array.isArray(apps) ? apps : [] };
 }
 
 export function useTrueNas() {
