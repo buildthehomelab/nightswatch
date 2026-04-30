@@ -221,17 +221,26 @@ export function nasIssues(data) {
 
   for (const app of (data.apps ?? [])) {
     if (app.state === "RUNNING") continue;
-    const severity = app.state === "CRASHED" ? "crit" : "warn";
+    const severity  = app.state === "CRASHED" ? "crit" : "warn";
+    const since     = data.stoppedSince?.get(app.name);
+    const stoppedAt = since
+      ? since.toLocaleTimeString(undefined, { hour: "2-digit", minute: "2-digit", hour12: false })
+      : null;
+    const duration  = since ? fmtStoppedAgo(since) : null;
+    const whenStr   = duration ? `stopped ${duration}` : "now";
+    const descExtra = stoppedAt && duration
+      ? ` Detected stopped at ${stoppedAt} (${duration}).`
+      : "";
     issues.push({
       id: `nas-app-${app.name}`,
       severity,
       label: `app ${app.state?.toLowerCase() ?? "not running"}`,
       headline: `${app.name} is ${app.state?.toLowerCase() ?? "not running"}.`,
       source: `truenas · apps`,
-      when: "now",
-      description: `TrueNAS app "${app.name}" is in state ${app.state}${app.human_version ? ` (version ${app.human_version})` : ""}.`,
+      when: whenStr,
+      description: `TrueNAS app "${app.name}" is in state ${app.state}${app.human_version ? ` (version ${app.human_version})` : ""}.${descExtra}`,
       logs: [
-        { t: now, level: severity === "crit" ? "err" : "warn", text: `[app] ${app.name}: state=${app.state}` },
+        { t: stoppedAt ?? now, level: severity === "crit" ? "err" : "warn", text: `[app] ${app.name}: state=${app.state}` },
       ],
       actions: [{ label: "open truenas apps ›", href: `${UI}/ui/apps/installed` }],
     });
