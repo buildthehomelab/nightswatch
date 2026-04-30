@@ -146,10 +146,28 @@ async function fetchData() {
   return { info, pools, apps: appList, releaseMap };
 }
 
+const LS_KEY = 'truenas:stoppedSince';
+
+function lsLoad() {
+  try {
+    const raw = localStorage.getItem(LS_KEY);
+    if (!raw) return new Map();
+    return new Map(Object.entries(JSON.parse(raw)).map(([k, v]) => [k, new Date(v)]));
+  } catch { return new Map(); }
+}
+
+function lsSave(map) {
+  try {
+    localStorage.setItem(LS_KEY, JSON.stringify(
+      Object.fromEntries([...map].map(([k, v]) => [k, v.toISOString()]))
+    ));
+  } catch {}
+}
+
 export function useTrueNas() {
   const [data, setData] = useState(null);
   const [err, setErr]   = useState(null);
-  const stoppedSince    = useRef(new Map());
+  const stoppedSince    = useRef(lsLoad());
 
   useEffect(() => {
     const refresh = () =>
@@ -165,6 +183,7 @@ export function useTrueNas() {
               stoppedSince.current.delete(app.name);
             }
           }
+          lsSave(stoppedSince.current);
           setData({ ...d, stoppedSince: new Map(stoppedSince.current) });
           setErr(null);
         })
