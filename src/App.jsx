@@ -1,6 +1,6 @@
 import { useState, useEffect, useRef, useMemo } from 'react';
 import Dozzle from './components/Dozzle';
-import TrueNas from './components/TrueNas';
+import TrueNas, { useTrueNas, nasIssues } from './components/TrueNas';
 import {
   useTweaks, TweaksPanel, TweakSection, TweakRadio, TweakToggle,
 } from './components/TweaksPanel';
