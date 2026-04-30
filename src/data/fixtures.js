@@ -18,23 +18,6 @@ export const ISSUE_FIXTURES = {
       ],
       actions: ["renew now", "view nginx logs", "silence 24h"],
     },
-    {
-      id: "updates-docker",
-      severity: "info",
-      label: "updates pending",
-      headline: "11 container images have newer tags.",
-      source: "watchtower · 7 stacks",
-      when: "checked 14m ago",
-      description:
-        "Watchtower found newer images for sonarr, radarr, prowlarr, bazarr, jellyseerr, qbittorrent, gluetun, homarr, pihole, unbound, and tailscale.",
-      logs: [
-        { t: "13:30:11", level: "info", text: "[watchtower] sonarr: 4.0.10 → 4.0.12" },
-        { t: "13:30:11", level: "info", text: "[watchtower] radarr: 5.7.0 → 5.8.3" },
-        { t: "13:30:11", level: "info", text: "[watchtower] pihole: 2025.07 → 2026.04" },
-        { t: "13:30:11", level: "info", text: "[watchtower] +8 more" },
-      ],
-      actions: ["pull all", "review changes", "snooze 7 days"],
-    },
   ],
 
   critical: [
