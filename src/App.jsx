@@ -373,8 +373,8 @@ export default function App() {
       return [wanIssue, ...fixtureIssues];
     }
 
-    return fixtureIssues;
-  }, [t.state, wanUp, wanDownSince]);
+    return [...fixtureIssues, ...nasIssues(nasData)];
+  }, [t.state, wanUp, wanDownSince, nasData]);
 
   const lastCheck = useMemo(() => {
     if (!lastChecked) return "never";
