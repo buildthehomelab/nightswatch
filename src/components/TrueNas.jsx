@@ -125,6 +125,7 @@ async function fetchStopTimes(hdrs) {
   const qo = encodeURIComponent(JSON.stringify({ order_by: ["-id"], limit: 50 }));
   const jobs = await fetch(`${API}/core/get_jobs?query-options=${qo}`, { headers: hdrs })
     .then(r => r.json()).catch(() => []);
+  console.warn('[TrueNas] get_jobs raw:', jobs);
   if (!Array.isArray(jobs) || jobs.length === 0) return new Map();
   const methods = [...new Set(jobs.map(j => j.method))];
   console.warn('[TrueNas] recent job methods:', methods);
