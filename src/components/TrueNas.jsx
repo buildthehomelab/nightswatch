@@ -1,5 +1,6 @@
 import { useState, useEffect } from 'react';
 
+const UI   = "https://patronus.vaultrona.com";
 const BASE = "https://patronus.vaultrona.com:3443";
 const API  = "/truenas/api/v2.0";
 const KEY  = import.meta.env.VITE_TRUENAS_KEY ?? "";
