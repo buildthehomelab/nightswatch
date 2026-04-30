@@ -471,6 +471,7 @@ export default function App() {
         <TweakSection label="Ambient strip" />
         <TweakToggle label="Show ambient bar" value={t.showAmbient} onChange={(v) => setTweak("showAmbient", v)} />
         <TweakToggle label="Show weather"     value={t.showWeather} onChange={(v) => setTweak("showWeather", v)} />
+        <TweakToggle label="Show NAS strip"   value={t.showNas}     onChange={(v) => setTweak("showNas", v)} />
       </TweaksPanel>
     </>
   );
