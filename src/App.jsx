@@ -285,6 +285,7 @@ export default function App() {
   const [now, setNow] = useState(new Date());
   const [dozzleOpen, setDozzleOpen] = useState(false);
   const [helpOpen, setHelpOpen] = useState(false);
+  const { data: nasData, err: nasErr } = useTrueNas();
   const [wanUp, setWanUp] = useState(true);
   const [wanDownSince, setWanDownSince] = useState(null);
   const [lastChecked, setLastChecked] = useState(null);
