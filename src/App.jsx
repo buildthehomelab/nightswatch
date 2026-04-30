@@ -404,6 +404,8 @@ export default function App() {
   return (
     <>
       <div className="page">
+        {t.showNas && <TrueNas data={nasData} err={nasErr} />}
+
         {t.showAmbient && (
           <Ambient
             now={now}
@@ -414,8 +416,6 @@ export default function App() {
             showWeather={t.showWeather}
           />
         )}
-
-        {t.showNas && <TrueNas data={nasData} err={nasErr} />}
 
         {isHealthy ? (
           <Healthy now={now} uptime={uptime} />
