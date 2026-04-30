@@ -111,7 +111,9 @@ export function nasIssues(data) {
   }
 
   for (const app of (data.apps ?? []).filter(a => a.upgrade_available)) {
-    const current = app.human_version ?? app.version ?? "unknown";
+    const ver     = app.version ?? null;
+    const appVer  = app.app_version && app.app_version !== ver ? app.app_version : null;
+    const current = ver ? (appVer ? `${ver} (${appVer})` : ver) : (app.human_version ?? "unknown");
     const next    = app.latest_version ?? null;
     const isImage = app.image_updates_available && !next;
 
