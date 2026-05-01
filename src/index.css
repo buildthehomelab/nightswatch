@@ -177,6 +177,8 @@ body {
   display: flex;
   flex-direction: column;
   justify-content: center;
+  align-items: center;
+  text-align: center;
   padding: 80px 0;
   gap: 28px;
 }
