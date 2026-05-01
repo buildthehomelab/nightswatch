@@ -28,6 +28,7 @@ const CUSTOMIZE_DEFAULTS = {
   showWeather: false,
   showWan: true,
   showUptime: true,
+  enableTruenas: false,
   showNas: false,
   showNasName: true,
   showNasLoad: true,
