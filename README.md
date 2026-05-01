@@ -2,6 +2,26 @@
 
 *the order that mans the wall, speaks only when the threat is real*
 
+## Development
+
+```sh
+npm install
+npm run setup   # installs git hooks
+npm run dev
+```
+
+**Scripts**
+
+| Command | Description |
+|---------|-------------|
+| `npm run dev` | Start Vite dev server |
+| `npm run build` | Production build |
+| `npm run lint` | ESLint (React + hooks rules) |
+| `npm run test` | Vitest |
+| `npm run setup` | Install git hooks (run once after cloning) |
+
+**Git hooks** — `scripts/setup-hooks.sh` copies `scripts/pre-commit.sh` into `.git/hooks/pre-commit`. The pre-commit hook runs `npm run lint` and blocks the commit on any errors.
+
 ## Overview
 
 A minimal, attention-driven homelab status dashboard. The guiding principle is **silence is the default** — the UI shows only what needs the operator's attention. When everything is healthy, the page is mostly empty. When something is wrong, it appears as a ranked list of incidents, like a newspaper's corrections column. An embedded **Dozzle** log viewer is reachable on demand (per-issue link, footer link, or `L` keyboard shortcut) but never persistent UI.
