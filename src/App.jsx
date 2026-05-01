@@ -42,7 +42,13 @@ function fmtTime(d) {
   return d.toLocaleTimeString(undefined, { hour: "2-digit", minute: "2-digit", hour12: false });
 }
 
-function Ambient({ now, wanUp, uptime, weather, lastCheck, showWeather }) {
+function Ambient({ now, wanUp, uptime, weather, lastCheck, showWeather, showNas, nasData }) {
+  const pools   = Array.isArray(nasData?.pools) ? nasData.pools : [];
+  const apps    = Array.isArray(nasData?.apps)  ? nasData.apps  : [];
+  const running = apps.filter(a => a.state === 'RUNNING').length;
+  const load1   = nasData?.info?.loadavg?.[0]?.toFixed(2);
+  const hostname = nasData?.info?.hostname ?? 'nas';
+
   return (
     <footer className="ambient rise">
       <div className="left">
@@ -51,6 +57,37 @@ function Ambient({ now, wanUp, uptime, weather, lastCheck, showWeather }) {
           <span className="k">· {fmtDate(now).toLowerCase()}</span>
         </span>
       </div>
+
+      {showNas && nasData && (
+        <div className="mid">
+          <span className="item">
+            <a href={NAS_UI} target="_blank" rel="noopener noreferrer" className="nas-link">{hostname}</a>
+          </span>
+          {load1 && (
+            <span className="item"><span className="k">load</span><span className="v">{load1}</span></span>
+          )}
+          {apps.length > 0 && (
+            <span className="item">
+              <span className="k">apps</span>
+              <span className="v">{running}/{apps.length}</span>
+            </span>
+          )}
+          {pools.map(pool => {
+            const pct    = pool.size ? Math.round((pool.allocated / pool.size) * 100) : null;
+            const ok     = pool.status === 'ONLINE';
+            const dotCls = !ok || pct >= 90 ? ' crit' : pct >= 80 ? ' warn' : '';
+            const valCls = !ok || pct >= 90 ? ' crit' : pct >= 80 ? ' warn' : '';
+            return (
+              <span key={pool.name} className="item">
+                <span className={`dot${dotCls}`} />
+                <span className="k">{pool.name}</span>
+                <span className={`v${valCls}`}>{pct != null ? `${pct}%` : '—'}</span>
+              </span>
+            );
+          })}
+        </div>
+      )}
+
       <div className="right">
         {showWeather && (
           <span className="item">
