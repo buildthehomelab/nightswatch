@@ -491,6 +491,7 @@ export function nasIssues(data) {
         logs: [
           { t: whenStr, level: "warn", text: `[zfs] ${pool.name} capacity: ${pct}% (${free} free / ${total})` },
         ],
+        ignoreKey: `nas-cap-${pool.name}:${firstTs}`,
         actions: [{ label: "open truenas ›", href: UI }],
       });
     } else {
