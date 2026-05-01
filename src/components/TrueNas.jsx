@@ -386,6 +386,7 @@ export function nasIssues(data) {
     const memId   = 'nas-mem';
     const firstTs = lsMarkFirstSeen(memId);
     const memAge  = Date.now() - firstTs;
+    const firstStr = new Date(firstTs).toLocaleTimeString(undefined, { hour: "2-digit", minute: "2-digit", hour12: false });
     issues.push({
       id: memId,
       severity: memPct >= MEM_CRIT_PCT ? 'crit' : 'warn',
@@ -396,7 +397,7 @@ export function nasIssues(data) {
       when: memAge >= 60000 ? `${fmtAge(memAge)} unresolved` : 'now',
       description: `TrueNAS services are using ${fmtBytes(memServices)} of ${fmtBytes(physmem)} RAM (${memPct}%). ZFS ARC: ${fmtBytes(arcSize)}. Warn ≥${MEM_WARN_PCT}%, crit ≥${MEM_CRIT_PCT}%.`,
       logs: [
-        { t: now, level: memPct >= MEM_CRIT_PCT ? 'err' : 'warn', text: `[mem] services: ${fmtBytes(memServices)} · arc: ${fmtBytes(arcSize)} · free: ${fmtBytes(memFree)}` },
+        { t: firstStr, level: memPct >= MEM_CRIT_PCT ? 'err' : 'warn', text: `[mem] services: ${fmtBytes(memServices)} · arc: ${fmtBytes(arcSize)} · free: ${fmtBytes(memFree)}` },
       ],
       actions: [{ label: 'open truenas ›', href: UI }],
     });
