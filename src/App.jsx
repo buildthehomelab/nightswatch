@@ -363,7 +363,7 @@ const SHORTCUTS = [
   { key: "h  or  ?", desc: "toggle this panel" },
   { key: "l",        desc: "open log viewer" },
   { key: "r",        desc: "refresh status" },
-  { key: "`",        desc: "toggle customize" },
+  { key: "`",        desc: "toggle this panel" },
   { key: "esc",      desc: "close overlay" },
 ];
 
