@@ -83,6 +83,12 @@ function Ambient({ now, wanUp, uptime, weather, showWeather, showNas, nasData })
   return (
     <footer className="ambient rise">
       <div className="left">
+        {showWeather && (
+          <span className="item">
+            <span className="k">outside</span>
+            <span className="v">{weather}</span>
+          </span>
+        )}
         <span className="item">
           <span className="k">wan</span>
           <span className={`dot ${wanUp ? "" : "crit"}`}></span>
