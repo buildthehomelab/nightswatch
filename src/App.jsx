@@ -317,7 +317,7 @@ const SHORTCUTS = [
   { key: "h  or  ?", desc: "show this help" },
   { key: "l",        desc: "open log viewer" },
   { key: "r",        desc: "refresh status" },
-{ key: "`",        desc: "toggle tweaks panel" },
+{ key: "`",        desc: "toggle customize" },
   { key: "esc",      desc: "close overlay" },
 ];
 
