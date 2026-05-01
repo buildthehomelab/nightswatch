@@ -176,14 +176,8 @@ function Ambient({ now, wanUp, uptime, weather, showWeather, showWan, showUptime
   );
 }
 
-function Healthy({ now, uptime, nasData }) {
-  const phrases = [
-    "Nothing needs your attention.",
-    "All quiet.",
-    "Everything is as it should be.",
-    "Nothing to report.",
-  ];
-  const phrase = phrases[now.getDate() % phrases.length];
+function Healthy({ uptime, nasData }) {
+  const phrase = pickPhrase(PHRASES.healthy);
   const apps = Array.isArray(nasData?.apps) ? nasData.apps : [];
   const running = apps.filter(a => a.state === 'RUNNING').length;
   return (
