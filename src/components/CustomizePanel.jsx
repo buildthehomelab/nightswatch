@@ -46,11 +46,17 @@ const __CUSTOMIZE_STYLE = `
   .twk-x:hover { color: var(--ink); }
 
   .twk-body {
-    padding: 20px 20px 28px; flex: 1;
-    display: flex; flex-direction: column;
-    overflow-y: auto; overflow-x: hidden;
+    padding: 16px 28px 20px;
+    display: flex; flex-direction: row;
+    gap: 32px; align-items: start;
+    overflow-x: auto; overflow-y: hidden;
     scrollbar-width: thin; scrollbar-color: var(--rule) transparent;
   }
+  .twk-col {
+    display: flex; flex-direction: column;
+    min-width: 160px; flex-shrink: 0;
+  }
+  .twk-col-wide { min-width: 220px; }
 
   .twk-sect {
     font-family: var(--mono);
