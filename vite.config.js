@@ -20,7 +20,7 @@ function truenasProxyPlugin(key, host, port) {
       method:   req.method,
       headers: {
         ...fwdHeaders,
-        host:          TRUENAS_TARGET,
+        host:          target,
         authorization: `Bearer ${key ?? ''}`,
       },
       rejectUnauthorized: false,
