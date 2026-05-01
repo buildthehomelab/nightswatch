@@ -343,8 +343,10 @@ body {
   line-height: 1.6;
   color: var(--ink-2);
   background: transparent;
-  padding: 0;
   white-space: pre-wrap;
+  border-top: 0.5px solid var(--rule);
+  border-bottom: 0.5px solid var(--rule);
+  padding: 12px 0;
 }
 .issue .logs .ts { color: var(--ink-3); }
 .issue .logs .err { color: var(--crit); }
