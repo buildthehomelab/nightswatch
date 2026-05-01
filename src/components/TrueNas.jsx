@@ -317,6 +317,41 @@ export function nasIssues(data) {
     lsClearFirstSeen('nas-cpu-temp');
   }
 
+  const newVer = data.updateStatus?.status?.new_version;
+  if (newVer?.version) {
+    const updateId  = 'nas-sys-update';
+    const firstTs   = lsMarkFirstSeen(updateId);
+    const updateAge = Date.now() - firstTs;
+    const profile   = newVer.manifest?.profile ?? newVer.manifest?.train ?? "";
+    const isBeta    = /EARLY|BETA/i.test(profile) || /BETA/i.test(newVer.version);
+    const relDate   = fmtReleaseDate(newVer.manifest?.date);
+    const notesUrl  = newVer.release_notes_url ?? null;
+    const changelog = trimChangelog(newVer.release_notes);
+    const downloaded = data.updateStatus?.update_download_progress?.percent === 100;
+    const description = (changelog ? `${changelog}\n\n` : "")
+      + (downloaded ? "Update already downloaded — ready to install." : "");
+    issues.push({
+      id: updateId,
+      severity: isBeta ? "warn" : "info",
+      label: "system update",
+      headline: `TrueNAS update available: ${newVer.version}.`,
+      source: "truenas · system",
+      firstSeenTs: firstTs,
+      when: updateAge >= 60000 ? `${fmtAge(updateAge)} unresolved` : relDate ? `released ${relDate}` : now,
+      description: description || `TrueNAS ${newVer.version} is available.`,
+      logs: [
+        { t: now, level: isBeta ? "warn" : "info", text: `[update] ${newVer.version} available (${profile || "general"})` },
+        ...(downloaded ? [{ t: now, level: "info", text: "[update] download complete — ready to install" }] : []),
+      ],
+      actions: [
+        { label: "open truenas ›", href: `${UI}/ui/system/update` },
+        ...(notesUrl ? [{ label: "release notes ›", href: notesUrl }] : []),
+      ],
+    });
+  } else {
+    lsClearFirstSeen('nas-sys-update');
+  }
+
   for (const pool of data.pools) {
     if (pool.status !== "ONLINE") {
       const poolId  = `nas-pool-${pool.name}`;
