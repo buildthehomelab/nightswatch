@@ -1,6 +1,6 @@
 import { useState, useEffect, useRef, useMemo } from 'react';
 import Dozzle from './components/Dozzle';
-import { useTrueNas, nasIssues, fmtUptime, UI as NAS_UI } from './components/TrueNas';
+import { useTrueNas, nasIssues, fmtUptime, UI as NAS_UI, POOL_WARN_PCT, POOL_CRIT_PCT } from './components/TrueNas';
 import {
   useTweaks, TweaksPanel, TweakSection, TweakRadio, TweakToggle,
 } from './components/TweaksPanel';
