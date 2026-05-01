@@ -499,66 +499,27 @@ body {
   background: var(--paper-2);
 }
 
-/* ── Help overlay ────────────────────────────────────── */
-.help-overlay {
-  position: fixed;
-  inset: 0;
-  z-index: 102;
-  align-items: center;
-  justify-content: center;
-  pointer-events: none;
-}
-.help-inner {
-  background: var(--paper);
-  border: 0.5px solid var(--rule);
-  border-radius: 4px;
-  padding: 28px 32px;
-  min-width: 320px;
-  pointer-events: auto;
-  display: flex;
-  flex-direction: column;
-  gap: 20px;
-  box-shadow: 0 8px 40px rgba(0, 0, 0, 0.12);
-}
-.help-title {
-  font-family: var(--mono);
-  font-size: 10px;
-  letter-spacing: 0.16em;
-  text-transform: uppercase;
-  color: var(--ink-3);
-}
+/* ── Shortcuts table (in CustomizePanel) ─────────────── */
 .help-table {
   border-collapse: collapse;
   width: 100%;
+  margin-bottom: 8px;
 }
-.help-table tr + tr td {
-  padding-top: 10px;
-}
+.help-table tr + tr td { padding-top: 10px; }
 .help-key {
   font-family: var(--mono);
-  font-size: 12px;
+  font-size: 11px;
   color: var(--ink);
   white-space: nowrap;
-  padding-right: 28px;
+  padding-right: 20px;
   letter-spacing: 0.04em;
 }
 .help-desc {
   font-family: var(--mono);
-  font-size: 12px;
+  font-size: 11px;
   color: var(--ink-3);
   letter-spacing: 0.02em;
 }
-.help-dismiss {
-  font-family: var(--mono);
-  font-size: 10.5px;
-  color: var(--ink-3);
-  letter-spacing: 0.04em;
-  cursor: pointer;
-  text-align: center;
-  border-top: 0.5px solid var(--rule);
-  padding-top: 16px;
-}
-.help-dismiss:hover { color: var(--ink-2); }
 
 /* subtle entry */
 @keyframes rise {
