@@ -74,7 +74,7 @@ function fmtTime(d) {
   return d.toLocaleTimeString(undefined, { hour: "2-digit", minute: "2-digit", hour12: false });
 }
 
-function Ambient({ now, wanUp, uptime, weather, showWeather, showWan, showUptime, showNas, showDate, nasData }) {
+function Ambient({ now, wanUp, uptime, weather, showWeather, showWan, showUptime, showNas, showDate, placement, nasData }) {
   const pools    = Array.isArray(nasData?.pools) ? nasData.pools : [];
   const apps     = Array.isArray(nasData?.apps)  ? nasData.apps  : [];
   const running  = apps.filter(a => a.state === 'RUNNING').length;
