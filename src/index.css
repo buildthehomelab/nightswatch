@@ -282,7 +282,7 @@ body {
   flex-shrink: 0;
 }
 .issue.crit .severity {
-  background: rgba(192,57,43,0.1);
+  background: rgba(176,53,32,0.1);
   color: var(--crit);
 }
 .issue.warn .severity {
