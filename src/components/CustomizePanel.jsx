@@ -57,6 +57,7 @@ const __CUSTOMIZE_STYLE = `
     min-width: 160px; flex-shrink: 0;
   }
   .twk-col-wide { min-width: 220px; }
+  .twk-col-push { margin-left: auto; }
 
   .twk-sect {
     font-family: var(--sans);
