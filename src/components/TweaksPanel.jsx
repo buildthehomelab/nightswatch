@@ -94,6 +94,18 @@ const __TWEAKS_STYLE = `
 `;
 
 const TWEAKS_LS_KEY = 'dashboard:tweaks';
+const TWEAKS_POS_KEY = 'dashboard:tweaks:pos';
+
+function lsLoadPos() {
+  try {
+    const raw = localStorage.getItem(TWEAKS_POS_KEY);
+    return raw ? JSON.parse(raw) : null;
+  } catch { return null; }
+}
+
+function lsSavePos(pos) {
+  try { localStorage.setItem(TWEAKS_POS_KEY, JSON.stringify(pos)); } catch {}
+}
 
 function lsLoadTweaks(defaults) {
   try {
