@@ -402,8 +402,8 @@ export default function App() {
     const onKey = (e) => {
       if (["INPUT", "TEXTAREA"].includes(document.activeElement?.tagName)) return;
       if (e.key === "l" || e.key === "L") {
-        if (dozzleOpen) return;
         e.preventDefault();
+        if (dozzleOpen) { setDozzleOpen(false); return; }
         openLogs();
       } else if (e.key === "r" || e.key === "R") {
         e.preventDefault();
