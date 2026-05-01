@@ -139,7 +139,7 @@ function Ambient({ now, wanUp, uptime, weather, showWeather, showNas, nasData })
         )}
         <span className="item">
           <span className="v">{fmtTime(now)}</span>
-          <span className="k">· {fmtDate(now)}</span>
+          <span className="k">· {fmtDate(now).toLowerCase()}</span>
         </span>
       </div>
     </footer>
