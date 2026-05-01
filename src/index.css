@@ -458,7 +458,8 @@ body {
   .page { padding: 32px 24px 64px; }
   .masthead h1 { font-size: 40px; letter-spacing: -1.2px; }
   .healthy .hero { font-size: 32px; letter-spacing: -0.8px; }
-  .issue { grid-template-columns: 1fr; gap: 8px; }
+  .issues { grid-template-columns: 1fr; }
+  .issue { gap: 8px; }
   .issue .when { display: none; }
   .ambient { font-size: 11px; gap: 12px; padding: 10px 24px; }
   .ambient .left, .ambient .right { gap: 14px; }
