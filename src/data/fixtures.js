@@ -105,3 +105,38 @@ export const ISSUE_FIXTURES = {
 };
 
 ISSUE_FIXTURES.all = [...ISSUE_FIXTURES.critical, ...ISSUE_FIXTURES.warnings];
+
+export const CVE_FIXTURES = [
+  {
+    id:          "cve-CVE-2025-32463",
+    severity:    "crit",
+    label:       "cve critical",
+    headline:    "CVE-2025-32463: sudo privilege escalation via crafted environment variable.",
+    source:      "nvd · sudo",
+    when:        "published Apr 24",
+    description: "A local privilege escalation vulnerability in sudo allows an attacker with local user access to gain root privileges by manipulating environment variables passed to sudoedit. Affects sudo < 1.9.17p1. CVSS 9.3.",
+    firstSeenTs: Date.now() - 2 * 60 * 60 * 1000,
+    logs: [
+      { t: "Apr 24", level: "err",  text: "[nvd] CVE-2025-32463: score=9.3 (CRITICAL)" },
+      { t: "Apr 24", level: "warn", text: "[nvd] affected: sudo < 1.9.17p1" },
+    ],
+    ignoreKey: "cve:CVE-2025-32463",
+    actions:   [{ label: "view on nvd ›", href: "https://nvd.nist.gov/vuln/detail/CVE-2025-32463" }],
+  },
+  {
+    id:          "cve-CVE-2025-29824",
+    severity:    "warn",
+    label:       "cve",
+    headline:    "CVE-2025-29824: OpenSSH use-after-free in async signal handler.",
+    source:      "nvd · openssh",
+    when:        "published Apr 11",
+    description: "A use-after-free vulnerability in the OpenSSH server async signal handler may allow remote code execution under certain race conditions. Affects OpenSSH < 10.0p2. CVSS 7.4.",
+    firstSeenTs: Date.now() - 18 * 60 * 60 * 1000,
+    logs: [
+      { t: "Apr 11", level: "warn", text: "[nvd] CVE-2025-29824: score=7.4 (HIGH)" },
+      { t: "Apr 11", level: "info", text: "[nvd] affected: openssh < 10.0p2" },
+    ],
+    ignoreKey: "cve:CVE-2025-29824",
+    actions:   [{ label: "view on nvd ›", href: "https://nvd.nist.gov/vuln/detail/CVE-2025-29824" }],
+  },
+];
