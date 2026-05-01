@@ -196,7 +196,6 @@ function Healthy({ now, uptime, nasData }) {
   return (
     <section className="healthy">
       <div className="rise rise-d1">
-        <div className="masthead" style={{ padding: "0 0 28px" }} />
         <p className="hero">
           <em>{phrase}</em>
         </p>
