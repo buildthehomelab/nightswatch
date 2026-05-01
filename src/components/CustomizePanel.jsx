@@ -265,10 +265,6 @@ export function CustomizePanel({ title = 'Options', side = 'top', children }) {
       <style>{__CUSTOMIZE_STYLE}</style>
       {open && <div className="twk-scrim" onClick={dismiss} />}
       <div className={`twk-drawer${open ? ' open' : ''}`} data-side={side} data-noncommentable="">
-        <div className="twk-hd">
-          <span className="twk-title">{title}</span>
-          <button className="twk-x" aria-label="Close customize" onClick={dismiss}>esc</button>
-        </div>
         <div className="twk-body">{children}</div>
       </div>
     </>
