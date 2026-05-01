@@ -109,7 +109,7 @@ function Ambient({ now, wanUp, uptime, weather, showWeather, showNas, nasData })
   );
 }
 
-function Healthy({ now, uptime }) {
+function Healthy({ now, uptime, nasData }) {
   const phrases = [
     "Nothing needs your attention.",
     "All quiet.",
@@ -117,6 +117,8 @@ function Healthy({ now, uptime }) {
     "Nothing to report.",
   ];
   const phrase = phrases[now.getDate() % phrases.length];
+  const apps = Array.isArray(nasData?.apps) ? nasData.apps : [];
+  const running = apps.filter(a => a.state === 'RUNNING').length;
   return (
     <section className="healthy">
       <div className="rise rise-d1">
@@ -128,11 +130,8 @@ function Healthy({ now, uptime }) {
         </p>
       </div>
       <div className="sub rise rise-d2">
-        <span>14 services healthy</span>
-        <span className="sep">·</span>
+        {running > 0 && <><span>{running} services healthy</span><span className="sep">·</span></>}
         <span>{uptime} uptime</span>
-        <span className="sep">·</span>
-        <span>last incident 19 days ago</span>
       </div>
     </section>
   );
