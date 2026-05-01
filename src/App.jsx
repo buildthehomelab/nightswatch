@@ -121,6 +121,28 @@ function Ambient({ now, wanUp, uptime, weather, showWeather, showWan, showUptime
         </div>
       )}
 
+      <div className="mid">
+        {showWeather && (
+          <span className="item">
+            <span className="k">outside</span>
+            <span className="v">{weather}</span>
+          </span>
+        )}
+        {showWan && (
+          <span className="item">
+            <span className="k">wan</span>
+            <span className={`dot ${wanUp ? "" : "crit"}`}></span>
+            <span className="v">{wanUp ? "up" : "down"}</span>
+          </span>
+        )}
+        {showUptime && (
+          <span className="item">
+            <span className="k">uptime</span>
+            <span className="v">{uptime}</span>
+          </span>
+        )}
+      </div>
+
       {showDate && (
         <div className="right">
           <span className="item">
