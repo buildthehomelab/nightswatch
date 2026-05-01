@@ -357,36 +357,6 @@ const SHORTCUTS = [
   { key: "esc",      desc: "close overlay" },
 ];
 
-function HelpOverlay({ open, onClose }) {
-  useEffect(() => {
-    if (!open) return;
-    const onKey = (e) => { if (e.key === "Escape") onClose(); };
-    window.addEventListener("keydown", onKey);
-    return () => window.removeEventListener("keydown", onKey);
-  }, [open, onClose]);
-
-  return (
-    <>
-      <div className={`dozzle-scrim ${open ? "open" : ""}`} onClick={onClose} />
-      <div className="help-overlay" style={{ display: open ? "flex" : "none" }}>
-        <div className="help-inner">
-          <div className="help-title">keyboard shortcuts</div>
-          <table className="help-table">
-            <tbody>
-              {SHORTCUTS.map(({ key, desc }) => (
-                <tr key={key}>
-                  <td className="help-key">{key}</td>
-                  <td className="help-desc">{desc}</td>
-                </tr>
-              ))}
-            </tbody>
-          </table>
-          <div className="help-dismiss" onClick={onClose}>press esc or click to close</div>
-        </div>
-      </div>
-    </>
-  );
-}
 
 export default function App() {
   const [t, setTweak] = useCustomize(CUSTOMIZE_DEFAULTS);
