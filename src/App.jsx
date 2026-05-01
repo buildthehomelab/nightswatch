@@ -80,7 +80,7 @@ function fmtTime(d) {
   return d.toLocaleTimeString(undefined, { hour: "2-digit", minute: "2-digit", hour12: false });
 }
 
-function Ambient({ now, wanUp, uptime, weather, showWeather, showWan, showUptime, showNas, showNasName, showNasLoad, showNasCpuTemp, showNasApps, showNasPools, showDate, placement, nasData }) {
+function Ambient({ now, wanUp, uptime, weather, showWeather, showWan, showUptime, showNas, showNasName, showNasLoad, showNasCpuTemp, showNasMemory, showNasApps, showNasPools, showDate, placement, nasData }) {
   const pools    = Array.isArray(nasData?.pools) ? nasData.pools : [];
   const apps     = Array.isArray(nasData?.apps)  ? nasData.apps  : [];
   const running  = apps.filter(a => a.state === 'RUNNING').length;
@@ -88,6 +88,10 @@ function Ambient({ now, wanUp, uptime, weather, showWeather, showWan, showUptime
   const hostname = nasData?.info?.hostname ?? 'nas';
   const cpuTemp  = nasData?.cpuTemp ?? null;
   const cpuCls   = cpuTemp == null ? '' : cpuTemp >= CPU_CRIT_C ? ' crit' : cpuTemp >= CPU_WARN_C ? ' warn' : '';
+  const memUsed  = nasData?.memUsed ?? null;
+  const memTotal = nasData?.info?.physmem ?? null;
+  const memPct   = memUsed != null && memTotal ? Math.round((memUsed / memTotal) * 100) : null;
+  const memCls   = memPct == null ? '' : memPct >= MEM_CRIT_PCT ? ' crit' : memPct >= MEM_WARN_PCT ? ' warn' : '';
 
   return (
     <footer className="ambient rise" data-placement={placement}>
