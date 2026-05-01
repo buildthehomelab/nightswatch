@@ -296,10 +296,11 @@ export default function App() {
     if (!WEATHER_LOCATION) return;
     const poll = async () => {
       try {
-        const r = await fetch(`/wttr/${encodeURIComponent(WEATHER_LOCATION)}?format=%t+%C`);
+        const r = await fetch(`/wttr/${encodeURIComponent(WEATHER_LOCATION)}?format=1`);
         const text = (await r.text()).trim();
-        // "+14°C Partly cloudy" → "14°c · partly cloudy"
-        setWeather(text.replace(/^\+/, '').replace(/\s+/, ' · ').toLowerCase());
+        // "⛅ +12°C" → strip emoji, strip leading +, lowercase → "12°c"
+        const clean = text.replace(/[^\x20-\x7E°]/g, '').replace(/^\+/, '').trim().toLowerCase();
+        setWeather(clean || '—');
       } catch {}
     };
     poll();
