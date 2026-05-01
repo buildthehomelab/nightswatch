@@ -465,7 +465,7 @@ export default function App() {
         ) : (
           <>
             <div className="masthead">
-
+              <div className="eyebrow rise">{mastheadEyebrow(issues)}</div>
               <h1 className="rise rise-d1">
                 {mastheadPhrase(issues)}
               </h1>
