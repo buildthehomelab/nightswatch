@@ -268,10 +268,18 @@ function Issue({ issue, isOpen, isFocused, onToggle, index, onOpenLogs, onIgnore
               }
               return <button key={a} onClick={(e) => e.stopPropagation()}>{a}</button>;
             })}
+            {issue.ignoreKey && (
+              <button
+                className="action-ignore"
+                onClick={(e) => { e.stopPropagation(); onIgnore(issue.ignoreKey); }}
+                style={{ marginLeft: "auto" }}
+              >
+                ignore ›
+              </button>
+            )}
             {ISSUE_TO_CONTAINER[issue.id] && (
               <button
                 onClick={(e) => { e.stopPropagation(); onOpenLogs(ISSUE_TO_CONTAINER[issue.id]); }}
-                style={{ marginLeft: "auto" }}
               >
                 open in dozzle ›
               </button>
