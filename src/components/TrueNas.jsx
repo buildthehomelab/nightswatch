@@ -364,7 +364,6 @@ export function nasIssues(data) {
       ],
       actions: [
         { label: "open truenas ›", href: `${UI}/ui/system/update` },
-        ...(notesUrl ? [{ label: "release notes ›", href: notesUrl }] : []),
       ],
     });
   } else {
