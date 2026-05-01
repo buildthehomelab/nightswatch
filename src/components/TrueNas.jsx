@@ -236,6 +236,32 @@ async function fetchCpuTemp(hdrs) {
   } catch { return null; }
 }
 
+async function fetchMemUsed(hdrs) {
+  try {
+    const res = await fetch(`${API}/reporting/get_data`, {
+      method: 'POST',
+      headers: { ...hdrs, 'Content-Type': 'application/json' },
+      body: JSON.stringify({ graphs: [{ name: 'memory' }] }),
+    });
+    if (!res.ok) return null;
+    const json = await res.json();
+    if (!Array.isArray(json) || !json[0]) return null;
+    const { legend, data, aggregations } = json[0];
+    // legend[0] = "time"; find "used" among the rest
+    const legIdx = Array.isArray(legend)
+      ? legend.findIndex((l, i) => i > 0 && /used/i.test(l))
+      : -1;
+    const aggIdx = legIdx > 0 ? legIdx - 1 : -1;
+    if (aggIdx >= 0 && Array.isArray(aggregations?.mean) && aggregations.mean[aggIdx] != null)
+      return aggregations.mean[aggIdx];
+    if (Array.isArray(data) && data.length > 0) {
+      const last = data[data.length - 1];
+      if (Array.isArray(last) && legIdx > 0 && last[legIdx] != null) return last[legIdx];
+    }
+    return null;
+  } catch { return null; }
+}
+
 async function fetchUpdateStatus(hdrs) {
   try {
     const r = await fetch(`${API}/update/status`, { headers: hdrs });
