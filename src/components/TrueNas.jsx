@@ -295,13 +295,18 @@ export function nasIssues(data) {
       const capId    = `nas-cap-${pool.name}`;
       const firstTs  = lsMarkFirstSeen(capId);
       const firstDt  = new Date(firstTs);
-      const whenStr  = firstDt.toLocaleTimeString(undefined, { hour: "2-digit", minute: "2-digit", hour12: false });
+      const capAge   = Date.now() - firstTs;
+      const capStale = capAge >= AGE_WARN_TO_CRIT_MS;
+      const whenStr  = capStale
+        ? `${fmtAge(capAge)} unresolved`
+        : firstDt.toLocaleTimeString(undefined, { hour: "2-digit", minute: "2-digit", hour12: false });
       issues.push({
         id: capId,
-        severity: pct >= POOL_CRIT_PCT ? "crit" : "warn",
+        severity: pct >= POOL_CRIT_PCT || capStale ? "crit" : "warn",
         label: "disk space low",
         headline: `${pool.name} is at ${pct}%.`,
         source: `truenas · pool ${pool.name}`,
+        firstSeenTs: firstTs,
         when: whenStr,
         description: `${pool.name} is ${pct}% full with ${free} free of ${total}.\nZFS performance degrades above 80%; dataset writes may stall above 95%.`,
         logs: [
