@@ -6,6 +6,8 @@ import {
 } from './components/TweaksPanel';
 import { ISSUE_FIXTURES } from './data/fixtures';
 
+const WEATHER_LOCATION = import.meta.env.VITE_WEATHER_LOCATION ?? "";
+
 const ISSUE_TO_CONTAINER = {
 "wan-down":       "pihole",
   "smart-tank":     "jellyfin",
