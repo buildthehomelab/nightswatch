@@ -89,6 +89,8 @@ body {
 }
 .ambient .dot.warn { background: var(--warn); }
 .ambient .dot.crit { background: var(--crit); }
+.ambient .item .v.warn { color: var(--warn); }
+.ambient .item .v.crit { color: var(--crit); }
 
 /* ── TrueNAS strip ───────────────────────────────────── */
 .nas-strip {
