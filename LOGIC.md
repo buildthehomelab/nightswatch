@@ -205,7 +205,9 @@ Configured in `vite.config.js`. Applies to both dev and preview servers.
 | Var | Where | Effect |
 |-----|-------|--------|
 | `TRUENAS_KEY` | `.env.local` (no `VITE_` prefix) | Injected as Bearer token at proxy layer; never exposed to browser |
-| `VITE_TRUENAS_URL` | `.env.local` | TrueNAS UI base URL for hostname link in NAS strip |
+| `TRUENAS_HOST` | `.env.local` (no `VITE_` prefix) | Proxy target hostname (e.g. `nas.local`) |
+| `TRUENAS_PORT` | `.env.local` (no `VITE_` prefix) | Proxy target port (e.g. `443`) |
+| `VITE_TRUENAS_URL` | `.env.local` | TrueNAS UI base URL for hostname link in ambient strip |
 | `VITE_DOZZLE_URL` | `.env.local` | Dozzle iframe base URL; empty = blank iframe (mock mode) |
 | `VITE_STOPPED_APP_HIDE_MINUTES` | `.env.local` | Minutes before stopped apps hidden from NAS strip (default 60) |
 
