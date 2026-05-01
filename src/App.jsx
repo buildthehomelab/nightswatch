@@ -468,7 +468,7 @@ export default function App() {
 
   const issues = useMemo(() => {
     const liveIssues = nasIssues(nasData);
-    if (t.enableTruenas && nasErr && !nasData) {
+    if (t.enableTruenas && nasErr) {
       liveIssues.unshift({
         id: "nas-unreachable",
         severity: "warn",
