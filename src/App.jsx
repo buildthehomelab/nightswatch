@@ -397,13 +397,7 @@ export default function App() {
   }, [t.theme, t.density]);
 
   const issues = useMemo(() => {
-    const fixtureIssues = (() => {
-      if (t.state === "healthy")  return [];
-      if (t.state === "warnings") return ISSUE_FIXTURES.warnings;
-      if (t.state === "critical") return ISSUE_FIXTURES.all;
-      return [];
-    })().filter((i) => i.id !== "wan-down");
-
+    const liveIssues = nasIssues(nasData);
     if (!wanUp) {
       const since = wanDownSince
         ? wanDownSince.toLocaleTimeString(undefined, { hour: "2-digit", minute: "2-digit", hour12: false })
@@ -422,11 +416,10 @@ export default function App() {
         ],
         actions: ["restart pppoe", "ping ISP gateway", "ssh edgerouter"],
       };
-      return [wanIssue, ...fixtureIssues];
+      return [wanIssue, ...liveIssues];
     }
-
-    return [...fixtureIssues, ...nasIssues(nasData)];
-  }, [t.state, wanUp, wanDownSince, nasData]);
+    return liveIssues;
+  }, [wanUp, wanDownSince, nasData]);
 
 
   const uptime = useMemo(() => {
