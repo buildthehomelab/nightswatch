@@ -214,14 +214,15 @@ async function fetchCpuTemp(hdrs) {
       headers: { ...hdrs, 'Content-Type': 'application/json' },
       body: JSON.stringify({ graphs: [{ name: 'cputemp' }], unit: 'CELSIUS' }),
     });
-    if (!res.ok) return null;
+    if (!res.ok) { console.log('[cpuTemp] get_data status:', res.status); return null; }
     const json = await res.json();
+    console.log('[cpuTemp] raw response:', JSON.stringify(json).slice(0, 500));
     if (!Array.isArray(json) || !json[0]) return null;
     const agg = json[0].aggregations?.mean;
     if (!Array.isArray(agg) || agg.length === 0) return null;
     const valid = agg.filter(v => v != null && !isNaN(v));
     return valid.length > 0 ? Math.round(Math.max(...valid)) : null;
-  } catch { return null; }
+  } catch (e) { console.log('[cpuTemp] error:', e); return null; }
 }
 
 async function fetchUpdateStatus(hdrs) {
