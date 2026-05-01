@@ -255,6 +255,7 @@ function IssueList({ issues, onOpenLogs }) {
     return () => window.removeEventListener("keydown", onKey);
   }, [issues, focusedIndex]);
 
+  const crits = issues.filter((i) => i.severity === "crit").length;
   const warns = issues.filter((i) => i.severity === "warn").length;
   const infos = issues.filter((i) => i.severity === "info").length;
 
