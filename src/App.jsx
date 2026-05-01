@@ -277,42 +277,62 @@ function Issue({ issue, isOpen, isFocused, onToggle, index, onOpenLogs }) {
 function IssueList({ issues, onOpenLogs }) {
   const [openId, setOpenId] = useState(null);
   const [focusedIndex, setFocusedIndex] = useState(null);
+  const [filterSev, setFilterSev] = useState(null);
+
+  const filtered = filterSev ? issues.filter(i => i.severity === filterSev) : issues;
+
+  useEffect(() => {
+    setFocusedIndex(null);
+    setOpenId(null);
+  }, [filterSev]);
 
   useEffect(() => {
     const onKey = (e) => {
       if (["INPUT", "TEXTAREA"].includes(document.activeElement?.tagName)) return;
       if (e.key === "j" || e.key === "J") {
         e.preventDefault();
-        setFocusedIndex((i) => (i === null ? issues.length - 1 : Math.max(i - 1, 0)));
+        setFocusedIndex((i) => (i === null ? filtered.length - 1 : Math.max(i - 1, 0)));
       } else if (e.key === "k" || e.key === "K") {
         e.preventDefault();
-        setFocusedIndex((i) => (i === null ? 0 : Math.min(i + 1, issues.length - 1)));
+        setFocusedIndex((i) => (i === null ? 0 : Math.min(i + 1, filtered.length - 1)));
       } else if (e.key === "Enter" && focusedIndex !== null) {
         e.preventDefault();
-        const id = issues[focusedIndex]?.id;
+        const id = filtered[focusedIndex]?.id;
         if (id) setOpenId((cur) => (cur === id ? null : id));
       }
     };
     window.addEventListener("keydown", onKey);
     return () => window.removeEventListener("keydown", onKey);
-  }, [issues, focusedIndex]);
+  }, [filtered, focusedIndex]);
 
   const crits = issues.filter((i) => i.severity === "crit").length;
   const warns = issues.filter((i) => i.severity === "warn").length;
   const infos = issues.filter((i) => i.severity === "info").length;
 
-  const summary = [];
-  if (crits) summary.push(`${crits} critical`);
-  if (warns) summary.push(`${warns} warning${warns > 1 ? "s" : ""}`);
-  if (infos) summary.push(`${infos} advisor${infos > 1 ? "ies" : "y"}`);
+  const toggle = (sev) => setFilterSev(f => f === sev ? null : sev);
+
+  const chips = [];
+  if (crits) chips.push({ sev: "crit", label: `${crits} critical` });
+  if (warns) chips.push({ sev: "warn", label: `${warns} warning${warns > 1 ? "s" : ""}` });
+  if (infos) chips.push({ sev: "info", label: `${infos} advisor${infos > 1 ? "ies" : "y"}` });
 
   return (
     <section className="issues">
       <div className="section-label rise">
         <span>Needs attention</span>
-        <span className="count">{summary.join(" · ")}</span>
+        <span className="count">
+          {chips.map((c, i) => (
+            <span key={c.sev}>
+              {i > 0 && <span className="sep"> · </span>}
+              <span
+                className={`filter-chip filter-chip-${c.sev}${filterSev === c.sev ? " active" : ""}`}
+                onClick={() => toggle(c.sev)}
+              >{c.label}</span>
+            </span>
+          ))}
+        </span>
       </div>
-      {issues.map((issue, i) => (
+      {filtered.map((issue, i) => (
         <Issue
           key={issue.id}
           issue={issue}
