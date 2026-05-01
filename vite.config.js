@@ -15,7 +15,11 @@ export default defineConfig({
         target: 'https://wttr.in',
         changeOrigin: true,
         rewrite: path => path.replace(/^\/wttr/, ''),
-        headers: { 'User-Agent': 'curl/7.88.1' },
+        configure: (proxy) => {
+          proxy.on('proxyReq', (proxyReq) => {
+            proxyReq.setHeader('User-Agent', 'curl/7.88.1');
+          });
+        },
       },
     },
   },
