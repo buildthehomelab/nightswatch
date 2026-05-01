@@ -299,6 +299,15 @@ function IssueList({ issues, onOpenLogs }) {
         e.preventDefault();
         const id = filtered[focusedIndex]?.id;
         if (id) setOpenId((cur) => (cur === id ? null : id));
+      } else if (e.key === "1") {
+        e.preventDefault();
+        setFilterSev(f => f === "crit" ? null : "crit");
+      } else if (e.key === "2") {
+        e.preventDefault();
+        setFilterSev(f => f === "warn" ? null : "warn");
+      } else if (e.key === "3") {
+        e.preventDefault();
+        setFilterSev(f => f === "info" ? null : "info");
       }
     };
     window.addEventListener("keydown", onKey);
