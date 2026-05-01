@@ -271,22 +271,28 @@ export function nasIssues(data) {
     }
 
     if (pool.size && pool.allocated / pool.size * 100 >= POOL_WARN_PCT) {
-      const pct   = Math.round((pool.allocated / pool.size) * 100);
-      const free  = fmtBytes(pool.size - pool.allocated);
-      const total = fmtBytes(pool.size);
+      const pct      = Math.round((pool.allocated / pool.size) * 100);
+      const free     = fmtBytes(pool.size - pool.allocated);
+      const total    = fmtBytes(pool.size);
+      const capId    = `nas-cap-${pool.name}`;
+      const firstTs  = lsMarkFirstSeen(capId);
+      const firstDt  = new Date(firstTs);
+      const whenStr  = firstDt.toLocaleTimeString(undefined, { hour: "2-digit", minute: "2-digit", hour12: false });
       issues.push({
-        id: `nas-cap-${pool.name}`,
+        id: capId,
         severity: pct >= POOL_CRIT_PCT ? "crit" : "warn",
         label: "disk space low",
         headline: `${pool.name} is at ${pct}%.`,
         source: `truenas · pool ${pool.name}`,
-        when: "now",
+        when: whenStr,
         description: `${pool.name} is ${pct}% full with ${free} free of ${total}.\nZFS performance degrades above 80%; dataset writes may stall above 95%.`,
         logs: [
           { t: now, level: "warn", text: `[zfs] ${pool.name} capacity: ${pct}% (${free} free / ${total})` },
         ],
         actions: [{ label: "open truenas ›", href: UI }],
       });
+    } else {
+      lsClearFirstSeen(`nas-cap-${pool.name}`);
     }
   }
 
