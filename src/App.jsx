@@ -503,7 +503,8 @@ export default function App() {
 
       </div>
 
-      <Ambient
+      {(t.showWeather || t.showWan || t.showUptime || t.showNas || t.showDate) && (
+        <Ambient
           now={now}
           wanUp={wanUp}
           uptime={uptime}
@@ -515,6 +516,7 @@ export default function App() {
           showDate={t.showDate}
           nasData={nasData}
         />
+      )}
 
       <Dozzle
         open={dozzleOpen}
