@@ -72,7 +72,7 @@ function Ambient({ now, wanUp, uptime, weather, lastCheck, showWeather }) {
           <span className="v">{lastCheck}</span>
         </span>
       </div>
-    </header>
+    </footer>
   );
 }
 
