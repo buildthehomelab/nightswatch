@@ -468,6 +468,23 @@ export default function App() {
 
   const issues = useMemo(() => {
     const liveIssues = nasIssues(nasData);
+    if (t.enableTruenas && nasErr && !nasData) {
+      liveIssues.unshift({
+        id: "nas-unreachable",
+        severity: "warn",
+        label: "nas offline",
+        headline: "Cannot reach TrueNAS.",
+        source: "truenas · api",
+        firstSeenTs: null,
+        when: "now",
+        description: `TrueNAS API is unreachable. Check that TRUENAS_HOST and TRUENAS_KEY are set correctly.\n\nError: ${nasErr}`,
+        logs: [
+          { t: "—", level: "err", text: `[truenas] fetch failed: ${nasErr}` },
+        ],
+        ignoreKey: null,
+        actions: [{ label: "open truenas ›", href: NAS_UI }],
+      });
+    }
     if (!wanUp) {
       const since = wanDownSince
         ? wanDownSince.toLocaleTimeString(undefined, { hour: "2-digit", minute: "2-digit", hour12: false })
