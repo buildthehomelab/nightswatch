@@ -267,19 +267,25 @@ export function nasIssues(data) {
 
   for (const pool of data.pools) {
     if (pool.status !== "ONLINE") {
+      const poolId  = `nas-pool-${pool.name}`;
+      const poolTs  = lsMarkFirstSeen(poolId);
+      const poolAge = Date.now() - poolTs;
       issues.push({
-        id: `nas-pool-${pool.name}`,
+        id: poolId,
         severity: "crit",
         label: "pool degraded",
         headline: `${pool.name}: pool status is ${pool.status.toLowerCase()}.`,
         source: `truenas · pool ${pool.name}`,
-        when: "now",
+        firstSeenTs: poolTs,
+        when: poolAge >= 60000 ? `${fmtAge(poolAge)} unresolved` : "now",
         description: `ZFS pool "${pool.name}" is reporting status ${pool.status}. Data may be at risk. Check TrueNAS for failed drives or scrub errors.`,
         logs: [
           { t: now, level: "err", text: `[zfs] pool ${pool.name} status: ${pool.status}` },
         ],
         actions: [{ label: "open truenas ›", href: UI }],
       });
+    } else {
+      lsClearFirstSeen(`nas-pool-${pool.name}`);
     }
 
     if (pool.size && pool.allocated / pool.size * 100 >= POOL_WARN_PCT) {
