@@ -515,6 +515,7 @@ export default function App() {
           showUptime={t.showUptime}
           showNas={t.showNas}
           showDate={t.showDate}
+          placement={t.ambientPlacement}
           nasData={nasData}
         />
       )}
