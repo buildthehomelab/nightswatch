@@ -515,7 +515,6 @@ export default function App() {
           showDate={t.showDate}
           nasData={nasData}
         />
-      )}
 
       <Dozzle
         open={dozzleOpen}
