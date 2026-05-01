@@ -1,7 +1,11 @@
 import { useState, useEffect, useRef, useMemo } from 'react';
 import Dozzle from './components/Dozzle';
 import { useTrueNas, nasIssues, fmtUptime, fmtAge, fmtBytes, UI as NAS_UI, POOL_WARN_PCT, POOL_CRIT_PCT, CPU_WARN_C, CPU_CRIT_C } from './services/truenas';
-import { useCve, cveIssues } from './services/cve';
+import { useCve, cveIssues, BASE_CVE_KEYWORDS } from './services/cve';
+
+const SERVICE_CVE_KEYWORDS = {
+  enableTruenas: 'truenas',
+};
 import { CVE_FIXTURES } from './data/fixtures';
 
 const DEMO = import.meta.env.DEMO === 'true';
@@ -419,7 +423,14 @@ export default function App() {
     });
   };
   const { data: nasData, err: nasErr } = useTrueNas(t.enableTruenas);
-  const { data: cveData, err: cveErr } = useCve(t.enableCve);
+  const cveKeywords = useMemo(() => {
+    const extras = Object.entries(SERVICE_CVE_KEYWORDS)
+      .filter(([flag]) => t[flag])
+      .map(([, kw]) => kw);
+    const all = [...BASE_CVE_KEYWORDS, ...extras];
+    return [...new Set(all)];
+  }, [t.enableTruenas]);
+  const { data: cveData, err: cveErr } = useCve(t.enableCve, cveKeywords);
   const [wanUp, setWanUp] = useState(true);
   const [wanDownSince, setWanDownSince] = useState(null);
   const wanFailCount = useRef(0);
