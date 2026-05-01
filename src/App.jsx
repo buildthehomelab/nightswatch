@@ -534,16 +534,6 @@ export default function App() {
           ]}
           onChange={(v) => setTweak("theme", v)}
         />
-        <TweakRadio
-          label="Density"
-          value={t.density}
-          options={[
-            { value: "compact", label: "compact" },
-            { value: "regular", label: "regular" },
-          ]}
-          onChange={(v) => setTweak("density", v)}
-        />
-
         <TweakSection label="Ambient strip" />
         <TweakRadio
           label="Placement"
