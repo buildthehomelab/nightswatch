@@ -185,6 +185,25 @@ function trimChangelog(body, maxLen = 400) {
   return (lastNl > 80 ? text.slice(0, lastNl) : text) + '…';
 }
 
+function formatSysReleaseNotes(body, maxLen = 1400) {
+  if (!body) return null;
+  let text = body
+    .replace(/={2,}(.+?)={2,}/g, '[$1]')          // ===foo=== / ==foo== → [foo]
+    .replace(/^##?\s+(.+)$/gm, '\n$1')             // ## Header → Header (keep as section title)
+    .replace(/\*\*(.+?)\*\*/g, '$1')               // bold
+    .replace(/\*(.+?)\*/g, '$1')                   // italic
+    .replace(/`(.+?)`/g, '$1')                     // inline code
+    .replace(/\[(.+?)\]\(.+?\)/g, '$1')            // [text](url) → text
+    .replace(/^\s*-\s+/gm, '• ')                   // - item → • item
+    .replace(/\n{3,}/g, '\n\n')                    // collapse excess blank lines
+    .trim();
+
+  if (text.length <= maxLen) return text;
+  text = text.slice(0, maxLen);
+  const lastNl = text.lastIndexOf('\n');
+  return (lastNl > 100 ? text.slice(0, lastNl) : text) + '…';
+}
+
 export const CPU_WARN_C = Number(import.meta.env.VITE_CPU_WARN_C ?? 70) || 70;
 export const CPU_CRIT_C = Number(import.meta.env.VITE_CPU_CRIT_C ?? 85) || 85;
 
