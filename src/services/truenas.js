@@ -278,7 +278,22 @@ export function useTrueNas(enabled = true) {
   const stoppedSince    = useRef(lsLoad());
 
   useEffect(() => {
-    if (DEMO) { setData(enabled ? MOCK_NAS_DATA : null); return; }
+    if (DEMO) {
+      if (!enabled) { setData(null); return; }
+      const apps = MOCK_NAS_DATA.apps ?? [];
+      for (const app of apps) {
+        if (app.state !== "RUNNING") {
+          if (!stoppedSince.current.has(app.name)) {
+            stoppedSince.current.set(app.name, MOCK_NAS_DATA.stoppedSince?.get(app.name) ?? new Date());
+          }
+        } else {
+          stoppedSince.current.delete(app.name);
+        }
+      }
+      lsSave(stoppedSince.current);
+      setData({ ...MOCK_NAS_DATA, stoppedSince: new Map(stoppedSince.current) });
+      return;
+    }
     if (!enabled) { setData(null); setErr(null); return; }
     const refresh = () =>
       fetchData()
