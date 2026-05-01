@@ -236,33 +236,29 @@ async function fetchCpuTemp(hdrs) {
   } catch { return null; }
 }
 
-async function fetchMemUsed(hdrs) {
+function lastVal(json) {
+  if (!Array.isArray(json) || !json[0]) return null;
+  const { data, aggregations } = json[0];
+  const agg = aggregations?.mean;
+  if (Array.isArray(agg) && agg[0] != null) return agg[0];
+  if (Array.isArray(data) && data.length > 0) {
+    const last = data[data.length - 1];
+    if (Array.isArray(last) && last[1] != null) return last[1];
+  }
+  return null;
+}
+
+async function fetchMemStats(hdrs) {
   try {
-    const res = await fetch(`${API}/reporting/get_data`, {
+    const post = (name) => fetch(`${API}/reporting/get_data`, {
       method: 'POST',
       headers: { ...hdrs, 'Content-Type': 'application/json' },
-      body: JSON.stringify({ graphs: [{ name: 'memory' }] }),
-    });
-    if (!res.ok) return null;
-    const json = await res.json();
-    if (!Array.isArray(json) || !json[0]) return null;
-    const { legend, data, aggregations } = json[0];
-    // prefer aggregations.mean if present
-    const agg = aggregations?.mean;
-    if (Array.isArray(agg) && agg.length > 0) {
-      const legIdx = Array.isArray(legend)
-        ? legend.findIndex((l, i) => i > 0 && /used/i.test(l)) - 1
-        : -1;
-      const idx = legIdx >= 0 ? legIdx : 0;
-      if (agg[idx] != null) return agg[idx];
-    }
-    // fallback: data is [[ts, usedBytes], ...] — take last row
-    if (Array.isArray(data) && data.length > 0) {
-      const last = data[data.length - 1];
-      if (Array.isArray(last) && last[1] != null) return last[1];
-    }
-    return null;
-  } catch { return null; }
+      body: JSON.stringify({ graphs: [{ name }] }),
+    }).then(r => r.ok ? r.json() : null).catch(() => null);
+
+    const [memJson, arcJson] = await Promise.all([post('memory'), post('arc_size')]);
+    return { memFree: lastVal(memJson), arcSize: lastVal(arcJson) };
+  } catch { return { memFree: null, arcSize: null }; }
 }
 
 async function fetchUpdateStatus(hdrs) {
