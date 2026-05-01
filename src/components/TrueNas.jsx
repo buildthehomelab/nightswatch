@@ -212,17 +212,26 @@ async function fetchCpuTemp(hdrs) {
     const res = await fetch(`${API}/reporting/get_data`, {
       method: 'POST',
       headers: { ...hdrs, 'Content-Type': 'application/json' },
-      body: JSON.stringify({ graphs: [{ name: 'cputemp' }], unit: 'CELSIUS' }),
+      body: JSON.stringify({ graphs: [{ name: 'cputemp' }] }),
     });
-    if (!res.ok) { console.log('[cpuTemp] get_data status:', res.status); return null; }
+    if (!res.ok) return null;
     const json = await res.json();
-    console.log('[cpuTemp] raw response:', JSON.stringify(json).slice(0, 500));
     if (!Array.isArray(json) || !json[0]) return null;
     const agg = json[0].aggregations?.mean;
-    if (!Array.isArray(agg) || agg.length === 0) return null;
-    const valid = agg.filter(v => v != null && !isNaN(v));
-    return valid.length > 0 ? Math.round(Math.max(...valid)) : null;
-  } catch (e) { console.log('[cpuTemp] error:', e); return null; }
+    if (Array.isArray(agg) && agg.length > 0) {
+      const valid = agg.filter(v => v != null && !isNaN(v));
+      if (valid.length > 0) return Math.round(Math.max(...valid));
+    }
+    const rows = json[0].data;
+    if (Array.isArray(rows) && rows.length > 0) {
+      const last = rows[rows.length - 1];
+      if (Array.isArray(last)) {
+        const vals = last.slice(1).filter(v => v != null && !isNaN(v));
+        if (vals.length > 0) return Math.round(Math.max(...vals));
+      }
+    }
+    return null;
+  } catch { return null; }
 }
 
 async function fetchUpdateStatus(hdrs) {
