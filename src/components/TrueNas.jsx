@@ -255,7 +255,7 @@ export function nasIssues(data) {
         headline: `${pool.name} is at ${pct}%.`,
         source: `truenas · pool ${pool.name}`,
         when: "now",
-        description: `Pool "${pool.name}" is ${pct}% full with ${free} free of ${total}. ZFS performance degrades above 80%; dataset writes may stall above 95%.`,
+        description: `${pool.name} is ${pct}% full with ${free} free of ${total}. ZFS performance degrades above 80%; dataset writes may stall above 95%.`,
         logs: [
           { t: now, level: "warn", text: `[zfs] ${pool.name} capacity: ${pct}% (${free} free / ${total})` },
         ],
