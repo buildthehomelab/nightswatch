@@ -503,8 +503,9 @@ export default function App() {
           wanUp={wanUp}
           uptime={uptime}
           weather={weather}
-
           showWeather={t.showWeather}
+          showWan={t.showWan}
+          showUptime={t.showUptime}
           showNas={t.showNas}
           nasData={nasData}
         />
