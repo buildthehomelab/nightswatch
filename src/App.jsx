@@ -559,8 +559,9 @@ export default function App() {
         <CustomizeToggle label="TrueNAS" value={t.showNas} onChange={(v) => setTweak("showNas", v)} />
         <div className="twk-sub">
           <CustomizeToggle label="Name"  value={t.showNasName}  onChange={(v) => setTweak("showNasName", v)} />
-          <CustomizeToggle label="Load"  value={t.showNasLoad}  onChange={(v) => setTweak("showNasLoad", v)} />
-          <CustomizeToggle label="Apps"  value={t.showNasApps}  onChange={(v) => setTweak("showNasApps", v)} />
+          <CustomizeToggle label="Load"    value={t.showNasLoad}    onChange={(v) => setTweak("showNasLoad", v)} />
+          <CustomizeToggle label="CPU Temp" value={t.showNasCpuTemp} onChange={(v) => setTweak("showNasCpuTemp", v)} />
+          <CustomizeToggle label="Apps"    value={t.showNasApps}    onChange={(v) => setTweak("showNasApps", v)} />
           <CustomizeToggle label="Pools" value={t.showNasPools} onChange={(v) => setTweak("showNasPools", v)} />
         </div>
         <CustomizeToggle label="Uptime"   value={t.showUptime}  onChange={(v) => setTweak("showUptime", v)} />
