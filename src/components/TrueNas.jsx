@@ -368,6 +368,7 @@ export function nasIssues(data) {
       logs: [
         { t: firstStr, level: data.cpuTemp >= CPU_CRIT_C ? 'err' : 'warn', text: `[thermal] cpu temp: ${data.cpuTemp}°C` },
       ],
+      ignoreKey: `nas-cpu-temp:${firstTs}`,
       actions: [{ label: 'open truenas ›', href: UI }],
     });
   } else {
