@@ -259,7 +259,7 @@ function Issue({ issue, isOpen, isFocused, onToggle, index, onOpenLogs }) {
 }
 
 function IssueList({ issues, onOpenLogs }) {
-  const [openId, setOpenId] = useState(issues[0]?.id ?? null);
+  const [openId, setOpenId] = useState(null);
   const [focusedIndex, setFocusedIndex] = useState(null);
 
   useEffect(() => {
