@@ -89,6 +89,7 @@ function Ambient({ now, wanUp, uptime, weather, showWeather, showWan, showUptime
   const cpuTemp  = nasData?.cpuTemp ?? null;
   const cpuCls   = cpuTemp == null ? '' : cpuTemp >= CPU_CRIT_C ? ' crit' : cpuTemp >= CPU_WARN_C ? ' warn' : '';
   const physmem = nasData?.info?.physmem ?? null;
+  const memFree = nasData?.memFree ?? null;
 
   return (
     <footer className="ambient rise" data-placement={placement}>
