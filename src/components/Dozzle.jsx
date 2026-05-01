@@ -25,7 +25,8 @@ export default function Dozzle({ open, onClose }) {
           src={open ? DOZZLE_BASE : undefined}
           title="Dozzle log viewer"
           className="dozzle-frame"
-          allow="fullscreen"
+          sandbox="allow-scripts allow-same-origin allow-forms"
+          referrerPolicy="no-referrer"
         />
       </aside>
     </>
