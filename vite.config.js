@@ -56,7 +56,12 @@ export default defineConfig(({ mode }) => {
     ? `https://${env.TRUENAS_HOST}${env.TRUENAS_PORT && env.TRUENAS_PORT !== '443' ? `:${env.TRUENAS_PORT}` : ''}`
     : (env.VITE_TRUENAS_URL ?? '')
   return {
-    define: { 'import.meta.env.VITE_TRUENAS_URL': JSON.stringify(truenasUrl) },
+    define: {
+      'import.meta.env.VITE_TRUENAS_URL':              JSON.stringify(truenasUrl),
+      'import.meta.env.VITE_POOL_WARN_PCT':            JSON.stringify(env.TRUENAS_POOL_WARN_PCT ?? ''),
+      'import.meta.env.VITE_POOL_CRIT_PCT':            JSON.stringify(env.TRUENAS_POOL_CRIT_PCT ?? ''),
+      'import.meta.env.VITE_STOPPED_APP_HIDE_MINUTES': JSON.stringify(env.TRUENAS_STOPPED_APP_HIDE_MINUTES ?? ''),
+    },
     plugins: [react(), basicSsl(), truenasProxyPlugin(env.TRUENAS_KEY, env.TRUENAS_HOST, env.TRUENAS_PORT)],
     server: {
       proxy: {
