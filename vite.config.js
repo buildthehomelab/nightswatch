@@ -24,10 +24,13 @@ function truenasProxyPlugin(key, host, port) {
         authorization: `Bearer ${key ?? ''}`,
       },
       rejectUnauthorized: false,
+      timeout: 8000,
     }, (proxyRes) => {
       res.writeHead(proxyRes.statusCode, proxyRes.headers)
       proxyRes.pipe(res)
     })
+
+    proxyReq.on('timeout', () => proxyReq.destroy(new Error('upstream timeout')))
 
     proxyReq.on('error', (err) => {
       console.error('[truenas-proxy] upstream error:', err.message)
