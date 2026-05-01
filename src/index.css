@@ -521,6 +521,11 @@ body {
   display: flex;
   overflow: hidden;
 }
+.dozzle-frame {
+  flex: 1;
+  border: none;
+  background: var(--paper-2);
+}
 
 .dozzle-side {
   width: 160px;
