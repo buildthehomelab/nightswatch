@@ -61,6 +61,13 @@ body {
   z-index: 50;
   background: var(--paper);
   border-top: 0.5px solid var(--rule);
+  border-bottom: none;
+}
+.ambient[data-placement="top"] {
+  top: 0;
+  bottom: auto;
+  border-top: none;
+  border-bottom: 0.5px solid var(--rule);
   padding: 10px 48px;
   display: flex;
   align-items: baseline;
