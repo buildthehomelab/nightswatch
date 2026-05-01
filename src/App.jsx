@@ -19,6 +19,8 @@ const TWEAK_DEFAULTS = {
   density: "regular",
   showAmbient: true,
   showWeather: false,
+  showWan: true,
+  showUptime: true,
   showNas: false,
 };
 
