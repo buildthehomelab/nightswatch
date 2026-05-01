@@ -46,7 +46,7 @@ body {
 .page {
   max-width: 880px;
   margin: 0 auto;
-  padding: 56px 48px 96px;
+  padding: 56px 48px 72px;
   min-height: 100vh;
   display: flex;
   flex-direction: column;
