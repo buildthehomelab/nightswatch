@@ -1,7 +1,37 @@
 export const ISSUE_FIXTURES = {
   healthy: [],
 
-  warnings: [],
+  warnings: [
+    {
+      id: "disk-media",
+      severity: "warn",
+      label: "disk space low",
+      headline: "/mnt/media is at 84%.",
+      source: "truenas · pool tank",
+      when: "checked 5m ago",
+      description:
+        "Sonarr import queue has been growing. 1.9 TB free of 12 TB. Performance will degrade above 90%; recommend pruning watched content.",
+      logs: [
+        { t: "09:10:00", level: "info", text: "[df] /mnt/media 10.1T used / 12.0T (84%)" },
+        { t: "09:10:00", level: "warn", text: "[zfs] capacity approaching warn threshold (80%)" },
+      ],
+      actions: ["open sonarr", "run prune", "expand pool"],
+    },
+    {
+      id: "updates-docker",
+      severity: "info",
+      label: "app update",
+      headline: "sonarr: v4.0.13 is available.",
+      source: "truenas · apps",
+      when: "released Apr 28",
+      description: "New release available for sonarr.\n\n• Fixed import list sync issue\n• Improved series search performance\n• Bug fixes for Plex integration",
+      logs: [
+        { t: "09:00:00", level: "info", text: "[app] sonarr: upstream image updated" },
+        { t: "09:00:00", level: "info", text: "[app] latest: v4.0.13 · released Apr 28" },
+      ],
+      actions: ["open truenas apps ›", "view release ›"],
+    },
+  ],
 
   critical: [
     {
