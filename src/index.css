@@ -172,8 +172,11 @@ body {
 /* ── Issue list ──────────────────────────────────────── */
 .issues {
   margin-top: 48px;
-  display: flex;
-  flex-direction: column;
+  display: grid;
+  grid-template-columns: min-content 1fr auto;
+}
+.issues .section-label {
+  grid-column: 1 / -1;
 }
 .section-label {
   font-family: var(--sans);
