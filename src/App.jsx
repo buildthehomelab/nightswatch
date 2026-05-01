@@ -21,6 +21,10 @@ const CUSTOMIZE_DEFAULTS = {
   showWan: true,
   showUptime: true,
   showNas: false,
+  showNasName: true,
+  showNasLoad: true,
+  showNasApps: true,
+  showNasPools: true,
   showDate: true,
   ambientPlacement: "bottom",
 };
