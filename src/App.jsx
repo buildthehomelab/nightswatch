@@ -510,7 +510,7 @@ export default function App() {
       return [wanIssue, ...liveIssues];
     }
     return liveIssues;
-  }, [wanUp, wanDownSince, nasData]);
+  }, [wanUp, wanDownSince, nasData, nasErr, t.enableTruenas]);
 
   const visibleIssues = useMemo(
     () => issues.filter(i => !i.ignoreKey || !ignored.has(i.ignoreKey)),
