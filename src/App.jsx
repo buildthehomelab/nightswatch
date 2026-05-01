@@ -359,10 +359,11 @@ function IssueList({ issues, onOpenLogs }) {
 const SHORTCUTS = [
   { key: "j / k",    desc: "navigate issues" },
   { key: "enter",    desc: "expand / collapse issue" },
-  { key: "h  or  ?", desc: "show this help" },
+  { key: "1 / 2 / 3", desc: "filter critical / warning / advisory" },
+  { key: "h  or  ?", desc: "toggle this panel" },
   { key: "l",        desc: "open log viewer" },
   { key: "r",        desc: "refresh status" },
-{ key: "`",        desc: "toggle customize" },
+  { key: "`",        desc: "toggle customize" },
   { key: "esc",      desc: "close overlay" },
 ];
 
