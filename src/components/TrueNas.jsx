@@ -487,6 +487,12 @@ export default function TrueNas({ data, err }) {
           <span className="nas-k">load</span>
           <span className="nas-v">{load1}</span>
         </span>
+        {cpuTemp != null && (
+          <span className="nas-item">
+            <span className="nas-k">cpu</span>
+            <span className={`nas-v${cpuTempCls}`}>{cpuTemp}°C</span>
+          </span>
+        )}
         <span className="nas-item">
           <span className="nas-k">up</span>
           <span className="nas-v">{uptime}</span>
