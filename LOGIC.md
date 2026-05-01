@@ -185,9 +185,8 @@ Opens automatically if URL contains `?dev`. Toggle with backtick.
 | Issue ID | Dozzle Container |
 |----------|-----------------|
 | `wan-down` | `pihole` |
-| `smart-tank` | `jellyfin` |
-| `disk-media` | `sonarr` |
-| `ups` | `watchtower` |
+
+Only `wan-down` is wired — it's the only live issue ID that matches. All `nasIssues()` IDs (`nas-app-*`, `nas-pool-*`, etc.) are unmapped; the button won't appear for TrueNAS issues until entries are added.
 
 ---
 
