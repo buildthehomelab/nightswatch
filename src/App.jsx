@@ -84,7 +84,7 @@ function Ambient({ now, wanUp, uptime, weather, showWeather, showWan, showUptime
   const cpuCls   = cpuTemp == null ? '' : cpuTemp >= CPU_CRIT_C ? ' crit' : cpuTemp >= CPU_WARN_C ? ' warn' : '';
 
   return (
-    <footer className="ambient rise">
+    <footer className="ambient rise" data-placement={placement}>
       <div className="left">
         {showWeather && (
           <span className="item">
