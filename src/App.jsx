@@ -17,7 +17,7 @@ const TWEAK_DEFAULTS = {
   state: "warnings",
   theme: "ink",
   density: "regular",
-  showAmbient: false,
+  showAmbient: true,
   showWeather: false,
   showNas: false,
 };
