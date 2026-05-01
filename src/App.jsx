@@ -431,13 +431,16 @@ export default function App() {
       const since = wanDownSince
         ? wanDownSince.toLocaleTimeString(undefined, { hour: "2-digit", minute: "2-digit", hour12: false })
         : "unknown";
+      const wanAge = wanDownSince ? Date.now() - wanDownSince.getTime() : 0;
+      const wanWhen = wanAge >= 60 * 60 * 1000 ? `${fmtAge(wanAge)} down` : `since ${since}`;
       const wanIssue = {
         id: "wan-down",
         severity: "crit",
         label: "wan down",
         headline: "Internet connection is offline.",
         source: "connectivity check · 1.1.1.1 · 8.8.8.8",
-        when: `since ${since}`,
+        firstSeenTs: wanDownSince?.getTime() ?? null,
+        when: wanWhen,
         description: "Active connectivity checks failed. Cannot reach 1.1.1.1 (Cloudflare) or 8.8.8.8 (Google). Outbound services are unreachable.",
         logs: [
           { t: since, level: "err", text: "[wan] probe 1.1.1.1 failed — network unreachable" },
