@@ -270,7 +270,7 @@ function lsSave(map) {
 
 // ── Hook ──────────────────────────────────────────────────
 
-const DEMO = import.meta.env.VITE_DEMO === 'true';
+const DEMO = import.meta.env.DEMO === 'true';
 
 export function useTrueNas(enabled = true) {
   const [data, setData] = useState(DEMO ? MOCK_NAS_DATA : null);
