@@ -212,7 +212,7 @@ export function useCustomize(defaults) {
   return [values, setCustomize];
 }
 
-export function CustomizePanel({ title = 'Customize', children }) {
+export function CustomizePanel({ title = 'Options', children }) {
   const devMode = new URLSearchParams(window.location.search).has('dev');
   const [open, setOpen] = useState(devMode);
 
