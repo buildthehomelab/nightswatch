@@ -75,8 +75,8 @@ function Ambient({ now, wanUp, uptime, weather, showWeather, showNas, nasData })
           {pools.map(pool => {
             const pct    = pool.size ? Math.round((pool.allocated / pool.size) * 100) : null;
             const ok     = pool.status === 'ONLINE';
-            const dotCls = !ok || pct >= 90 ? ' crit' : pct >= 80 ? ' warn' : '';
-            const valCls = !ok || pct >= 90 ? ' crit' : pct >= 80 ? ' warn' : '';
+            const dotCls = !ok || pct >= POOL_CRIT_PCT ? ' crit' : pct >= POOL_WARN_PCT ? ' warn' : '';
+            const valCls = !ok || pct >= POOL_CRIT_PCT ? ' crit' : pct >= POOL_WARN_PCT ? ' warn' : '';
             return (
               <span key={pool.name} className="item">
                 <span className={`dot${dotCls}`} />
