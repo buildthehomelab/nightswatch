@@ -664,6 +664,10 @@ export default function App() {
           </>}
         </CustomizeColumn>
         <CustomizeColumn>
+          <CustomizeSection label="Security advisories" />
+          <CustomizeToggle label="CVE feed" value={t.enableCve} onChange={(v) => setTweak("enableCve", v)} />
+        </CustomizeColumn>
+        <CustomizeColumn>
           <CustomizeSection label="Ignored" />
           {(() => {
             const activeKeys = new Set(issues.map(i => i.ignoreKey).filter(Boolean));
