@@ -11,6 +11,11 @@ export default defineConfig({
         rewrite: path => path.replace(/^\/truenas/, ''),
         secure: false,
       },
+      '/wttr': {
+        target: 'https://wttr.in',
+        changeOrigin: true,
+        rewrite: path => path.replace(/^\/wttr/, ''),
+      },
     },
   },
 })
