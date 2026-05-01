@@ -24,6 +24,7 @@ const CUSTOMIZE_DEFAULTS = {
   showNasName: true,
   showNasLoad: true,
   showNasCpuTemp: true,
+  showNasMemory: true,
   showNasApps: true,
   showNasPools: true,
   showDate: true,
