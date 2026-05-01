@@ -435,8 +435,8 @@ export default function App() {
 
   useEffect(() => {
     document.documentElement.setAttribute("data-theme", t.theme === "ink" ? "dark" : "light");
-    document.body.className = `density-${t.density}`;
-  }, [t.theme, t.density]);
+    document.body.className = "density-compact";
+  }, [t.theme]);
 
   const issues = useMemo(() => {
     const liveIssues = nasIssues(nasData);
