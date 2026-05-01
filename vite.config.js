@@ -3,13 +3,11 @@ import react from '@vitejs/plugin-react'
 import basicSsl from '@vitejs/plugin-basic-ssl'
 import https from 'node:https'
 
-const TRUENAS_TARGET = 'patronus.vaultrona.com'
-const TRUENAS_PORT   = 3443
-
-function truenasProxyPlugin(key) {
-  if (!key) {
-    console.warn('[truenas-proxy] WARNING: TRUENAS_KEY is not set — requests will 401')
-  }
+function truenasProxyPlugin(key, host, port) {
+  if (!key)  console.warn('[truenas-proxy] WARNING: TRUENAS_KEY is not set — requests will 401')
+  if (!host) console.warn('[truenas-proxy] WARNING: TRUENAS_HOST is not set — proxy will fail')
+  const target = host ?? 'localhost'
+  const targetPort = Number(port ?? 443)
 
   function middleware(req, res) {
     const upstreamPath = req.url.replace(/^\/truenas/, '')
