@@ -269,7 +269,7 @@ async function fetchUpdateStatus(hdrs) {
 }
 
 async function fetchData() {
-  const hdrs = { Authorization: `Bearer ${KEY}` };
+  const hdrs = {};
   const [info, pools, apps, cpuTemp, { memFree, arcSize }, updateStatus] = await Promise.all([
     fetch(`${API}/system/info`, { headers: hdrs }).then(r => r.json()),
     fetch(`${API}/pool`,        { headers: hdrs }).then(r => r.json()),
