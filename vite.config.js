@@ -50,7 +50,7 @@ function truenasProxyPlugin(key, host, port) {
 export default defineConfig(({ mode }) => {
   const env = loadEnv(mode, process.cwd(), '')
   return {
-    plugins: [react(), basicSsl(), truenasProxyPlugin(env.TRUENAS_KEY)],
+    plugins: [react(), basicSsl(), truenasProxyPlugin(env.TRUENAS_KEY, env.TRUENAS_HOST, env.TRUENAS_PORT)],
     server: {
       proxy: {
         '/wttr': {
