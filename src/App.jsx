@@ -639,15 +639,18 @@ export default function App() {
         </CustomizeColumn>
         <CustomizeColumn>
           <CustomizeSection label="Ignored" />
-          {ignored.size === 0
-            ? <span className="twk-empty">nothing ignored</span>
-            : [...ignored.entries()].map(([key, label]) => (
-                <div key={key} className="twk-ignored-row">
-                  <span className="twk-ignored-label" title={key}>{label || key}</span>
-                  <button className="action-ignore" onClick={() => handleUnignore(key)}>unignore ›</button>
-                </div>
-              ))
-          }
+          {(() => {
+            const activeKeys = new Set(issues.map(i => i.ignoreKey).filter(Boolean));
+            const active = [...ignored.entries()].filter(([k]) => activeKeys.has(k));
+            return active.length === 0
+              ? <span className="twk-empty">nothing ignored</span>
+              : active.map(([key, label]) => (
+                  <div key={key} className="twk-ignored-row">
+                    <span className="twk-ignored-label" title={key}>{label || key}</span>
+                    <button className="action-ignore" onClick={() => handleUnignore(key)}>unignore ›</button>
+                  </div>
+                ));
+          })()}
         </CustomizeColumn>
         <CustomizeColumn wide push>
           <CustomizeSection label="Keyboard shortcuts" />
