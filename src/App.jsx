@@ -451,6 +451,17 @@ export default function App() {
         </footer>
       </div>
 
+      {t.showAmbient && (
+        <Ambient
+          now={now}
+          wanUp={wanUp}
+          uptime={uptime}
+          weather={weather}
+          lastCheck={lastCheck}
+          showWeather={t.showWeather}
+        />
+      )}
+
       <Dozzle
         open={dozzleOpen}
         onClose={() => setDozzleOpen(false)}
