@@ -465,7 +465,7 @@ export default function TrueNas({ data, err }) {
 
   if (!data) return null;
 
-  const { info, pools, apps } = data;
+  const { info, pools, apps, cpuTemp } = data;
   const appList      = Array.isArray(apps) ? apps : [];
   const runningCount = appList.filter(a => a.state === "RUNNING").length;
   const updateCount  = appList.filter(a => a.upgrade_available).length;
@@ -473,6 +473,7 @@ export default function TrueNas({ data, err }) {
   const load1    = info?.loadavg?.[0]?.toFixed(2) ?? "—";
   const uptime   = fmtUptime(info?.uptime_seconds);
   const hostname = info?.hostname ?? "nas";
+  const cpuTempCls = cpuTemp == null ? "" : cpuTemp >= CPU_CRIT_C ? " nas-crit" : cpuTemp >= CPU_WARN_C ? " nas-warn" : "";
 
   return (
     <div className="nas-strip rise">
