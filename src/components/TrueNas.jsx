@@ -433,6 +433,7 @@ export function nasIssues(data) {
         { t: firstStr, level: isBeta ? "warn" : "info", text: `[update] ${newVer.version} available (${profile || "general"})` },
         ...(downloaded ? [{ t: firstStr, level: "info", text: "[update] download complete — ready to install" }] : []),
       ],
+      ignoreKey: `nas-sys-update:${newVer.version}`,
       actions: [
         { label: "open truenas ›", href: `${UI}/ui/system/update` },
       ],
