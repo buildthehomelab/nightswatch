@@ -5,7 +5,7 @@ const API = "/truenas/api/v2.0";
 const KEY                  = import.meta.env.VITE_TRUENAS_KEY ?? "";
 const STOPPED_HIDE_MINUTES = Number(import.meta.env.VITE_STOPPED_APP_HIDE_MINUTES ?? 0) || 0;
 
-const RELEASE_TTL     = 10 * 60 * 1000;
+const RELEASE_TTL     = 4 * 60 * 60 * 1000;
 const LS_RELEASE_KEY  = 'truenas:releaseCache';
 
 function lsLoadRelease() {
