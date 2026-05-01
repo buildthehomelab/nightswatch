@@ -79,12 +79,19 @@ Font: `--sans` Inter (headlines, body, UI); `--mono` JetBrains Mono (log output 
 Borders: `1px solid var(--rule)` — whisper weight (`rgba(0,0,0,0.1)` light / `rgba(255,255,255,0.1)` dark).
 Severity badges: pill (9999px radius) with tinted background. Action buttons: 4px radius. Detail cards: 12px radius with 4-layer card shadow.
 
+## Phrases
+
+`PHRASES` object in App.jsx, 9 named buckets. `pickPhrase(arr)` picks randomly, localStorage-backed per bucket (`nightswatch:phrase:{arr[0]}`), 1-min TTL — phrase stable across re-renders, rotates on next call after 60s, always different from previous pick.
+
+Masthead phrase selection is priority-ordered (see LOGIC.md §1).
+
 ## Issue-to-container mapping
 
 `ISSUE_TO_CONTAINER` in App.jsx maps issue IDs → Dozzle container names for "open in dozzle ›" button:
 ```
-wan-down → pihole, smart-tank → jellyfin, disk-media → sonarr, ups → watchtower
+wan-down → pihole
 ```
+(Only `wan-down` is currently wired. TrueNAS issue IDs like `nas-app-*` / `nas-pool-*` are unmapped.)
 
 ## WAN check
 
