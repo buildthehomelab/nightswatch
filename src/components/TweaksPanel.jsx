@@ -1,111 +1,180 @@
 import { useState, useRef, useEffect, useCallback } from 'react';
 
 const __TWEAKS_STYLE = `
-  .twk-panel{position:fixed;right:16px;bottom:16px;z-index:2147483646;width:280px;
-    max-height:calc(100vh - 32px);display:flex;flex-direction:column;
-    background:rgba(250,249,247,.78);color:#29261b;
-    -webkit-backdrop-filter:blur(24px) saturate(160%);backdrop-filter:blur(24px) saturate(160%);
-    border:.5px solid rgba(255,255,255,.6);border-radius:14px;
-    box-shadow:0 1px 0 rgba(255,255,255,.5) inset,0 12px 40px rgba(0,0,0,.18);
-    font:11.5px/1.4 ui-sans-serif,system-ui,-apple-system,sans-serif;overflow:hidden}
-  .twk-hd{display:flex;align-items:center;justify-content:space-between;
-    padding:10px 8px 10px 14px;cursor:move;user-select:none}
-  .twk-hd b{font-size:12px;font-weight:600;letter-spacing:.01em}
-  .twk-x{appearance:none;border:0;background:transparent;color:rgba(41,38,27,.55);
-    width:22px;height:22px;border-radius:6px;cursor:default;font-size:13px;line-height:1}
-  .twk-x:hover{background:rgba(0,0,0,.06);color:#29261b}
-  .twk-body{padding:2px 14px 14px;display:flex;flex-direction:column;gap:10px;
-    overflow-y:auto;overflow-x:hidden;min-height:0;
-    scrollbar-width:thin;scrollbar-color:rgba(0,0,0,.15) transparent}
-  .twk-body::-webkit-scrollbar{width:8px}
-  .twk-body::-webkit-scrollbar-track{background:transparent;margin:2px}
-  .twk-body::-webkit-scrollbar-thumb{background:rgba(0,0,0,.15);border-radius:4px;
-    border:2px solid transparent;background-clip:content-box}
-  .twk-body::-webkit-scrollbar-thumb:hover{background:rgba(0,0,0,.25);
-    border:2px solid transparent;background-clip:content-box}
-  .twk-row{display:flex;flex-direction:column;gap:5px}
-  .twk-row-h{flex-direction:row;align-items:center;justify-content:space-between;gap:10px}
-  .twk-lbl{display:flex;justify-content:space-between;align-items:baseline;
-    color:rgba(41,38,27,.72)}
-  .twk-lbl>span:first-child{font-weight:500}
-  .twk-val{color:rgba(41,38,27,.5);font-variant-numeric:tabular-nums}
+  .twk-scrim {
+    position: fixed; inset: 0; z-index: 2147483644;
+  }
 
-  .twk-sect{font-size:10px;font-weight:600;letter-spacing:.06em;text-transform:uppercase;
-    color:rgba(41,38,27,.45);padding:10px 0 0}
-  .twk-sect:first-child{padding-top:0}
+  .twk-drawer {
+    position: fixed; left: 0; top: 0; height: 100vh; width: 256px;
+    z-index: 2147483645;
+    background: var(--paper);
+    border-right: 0.5px solid var(--rule);
+    display: flex; flex-direction: column;
+    transform: translateX(-100%);
+    transition: transform 0.22s cubic-bezier(0.4, 0, 0.2, 1);
+    will-change: transform;
+    overflow: hidden;
+  }
+  .twk-drawer.open { transform: translateX(0); }
 
-  .twk-field{appearance:none;width:100%;height:26px;padding:0 8px;
-    border:.5px solid rgba(0,0,0,.1);border-radius:7px;
-    background:rgba(255,255,255,.6);color:inherit;font:inherit;outline:none}
-  .twk-field:focus{border-color:rgba(0,0,0,.25);background:rgba(255,255,255,.85)}
-  select.twk-field{padding-right:22px;
-    background-image:url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='10' height='6' viewBox='0 0 10 6'><path fill='rgba(0,0,0,.5)' d='M0 0h10L5 6z'/></svg>");
-    background-repeat:no-repeat;background-position:right 8px center}
+  .twk-hd {
+    display: flex; align-items: center; justify-content: space-between;
+    padding: 20px 20px 16px;
+    border-bottom: 0.5px solid var(--rule);
+    flex-shrink: 0;
+  }
+  .twk-title {
+    font-family: var(--mono);
+    font-size: 10px; font-weight: 500;
+    letter-spacing: 0.12em; text-transform: uppercase;
+    color: var(--ink-3);
+  }
+  .twk-x {
+    appearance: none; border: 0; background: transparent;
+    color: var(--ink-3); cursor: default;
+    font-family: var(--mono); font-size: 9.5px;
+    letter-spacing: 0.08em; text-transform: uppercase;
+    padding: 0; line-height: 1; transition: color 0.12s;
+  }
+  .twk-x:hover { color: var(--ink); }
 
-  .twk-slider{appearance:none;-webkit-appearance:none;width:100%;height:4px;margin:6px 0;
-    border-radius:999px;background:rgba(0,0,0,.12);outline:none}
-  .twk-slider::-webkit-slider-thumb{-webkit-appearance:none;appearance:none;
-    width:14px;height:14px;border-radius:50%;background:#fff;
-    border:.5px solid rgba(0,0,0,.12);box-shadow:0 1px 3px rgba(0,0,0,.2);cursor:default}
-  .twk-slider::-moz-range-thumb{width:14px;height:14px;border-radius:50%;
-    background:#fff;border:.5px solid rgba(0,0,0,.12);box-shadow:0 1px 3px rgba(0,0,0,.2);cursor:default}
+  .twk-body {
+    padding: 0 20px 28px; flex: 1;
+    display: flex; flex-direction: column;
+    overflow-y: auto; overflow-x: hidden;
+    scrollbar-width: thin; scrollbar-color: var(--rule) transparent;
+  }
 
-  .twk-seg{position:relative;display:flex;padding:2px;border-radius:8px;
-    background:rgba(0,0,0,.06);user-select:none}
-  .twk-seg-thumb{position:absolute;top:2px;bottom:2px;border-radius:6px;
-    background:rgba(255,255,255,.9);box-shadow:0 1px 2px rgba(0,0,0,.12);
-    transition:left .15s cubic-bezier(.3,.7,.4,1),width .15s}
-  .twk-seg.dragging .twk-seg-thumb{transition:none}
-  .twk-seg button{appearance:none;position:relative;z-index:1;flex:1;border:0;
-    background:transparent;color:inherit;font:inherit;font-weight:500;min-height:22px;
-    border-radius:6px;cursor:default;padding:4px 6px;line-height:1.2;
-    overflow-wrap:anywhere}
+  .twk-sect {
+    font-family: var(--mono);
+    font-size: 9px; font-weight: 500;
+    letter-spacing: 0.1em; text-transform: uppercase;
+    color: var(--ink-3);
+    padding: 20px 0 8px;
+    border-bottom: 0.5px solid var(--rule);
+    margin-bottom: 14px;
+  }
 
-  .twk-toggle{position:relative;width:32px;height:18px;border:0;border-radius:999px;
-    background:rgba(0,0,0,.15);transition:background .15s;cursor:default;padding:0}
-  .twk-toggle[data-on="1"]{background:#34c759}
-  .twk-toggle i{position:absolute;top:2px;left:2px;width:14px;height:14px;border-radius:50%;
-    background:#fff;box-shadow:0 1px 2px rgba(0,0,0,.25);transition:transform .15s}
-  .twk-toggle[data-on="1"] i{transform:translateX(14px)}
+  .twk-row { display: flex; flex-direction: column; gap: 6px; margin-bottom: 14px; }
+  .twk-row-h {
+    flex-direction: row; align-items: center;
+    justify-content: space-between; gap: 10px; margin-bottom: 10px;
+  }
+  .twk-lbl {
+    display: flex; justify-content: space-between; align-items: baseline;
+    font-family: var(--mono); font-size: 11px; letter-spacing: 0.02em;
+    color: var(--ink);
+  }
+  .twk-val { color: var(--ink-3); font-variant-numeric: tabular-nums; }
 
-  .twk-num{display:flex;align-items:center;height:26px;padding:0 0 0 8px;
-    border:.5px solid rgba(0,0,0,.1);border-radius:7px;background:rgba(255,255,255,.6)}
-  .twk-num-lbl{font-weight:500;color:rgba(41,38,27,.6);cursor:ew-resize;
-    user-select:none;padding-right:8px}
-  .twk-num input{flex:1;min-width:0;height:100%;border:0;background:transparent;
-    font:inherit;font-variant-numeric:tabular-nums;text-align:right;padding:0 8px 0 0;
-    outline:none;color:inherit;-moz-appearance:textfield}
-  .twk-num input::-webkit-inner-spin-button,.twk-num input::-webkit-outer-spin-button{
-    -webkit-appearance:none;margin:0}
-  .twk-num-unit{padding-right:8px;color:rgba(41,38,27,.45)}
+  .twk-seg {
+    position: relative; display: flex; padding: 2px;
+    border-radius: 3px;
+    background: var(--paper-2);
+    border: 0.5px solid var(--rule);
+    user-select: none;
+  }
+  .twk-seg-thumb {
+    position: absolute; top: 2px; bottom: 2px; border-radius: 2px;
+    background: var(--ink);
+    transition: left 0.15s cubic-bezier(.3,.7,.4,1), width 0.15s;
+  }
+  .twk-seg.dragging .twk-seg-thumb { transition: none; }
+  .twk-seg button {
+    appearance: none; position: relative; z-index: 1;
+    flex: 1; border: 0; background: transparent;
+    color: var(--ink-3);
+    font-family: var(--mono); font-size: 11px; letter-spacing: 0.02em;
+    font-weight: 400; min-height: 26px;
+    border-radius: 2px; cursor: default; padding: 4px 8px;
+    line-height: 1.2; transition: color 0.12s;
+  }
+  .twk-seg button[aria-checked="true"] { color: var(--paper); }
 
-  .twk-btn{appearance:none;height:26px;padding:0 12px;border:0;border-radius:7px;
-    background:rgba(0,0,0,.78);color:#fff;font:inherit;font-weight:500;cursor:default}
-  .twk-btn:hover{background:rgba(0,0,0,.88)}
-  .twk-btn.secondary{background:rgba(0,0,0,.06);color:inherit}
-  .twk-btn.secondary:hover{background:rgba(0,0,0,.1)}
+  .twk-toggle {
+    position: relative; width: 34px; height: 20px;
+    border: 0.5px solid var(--rule); border-radius: 999px;
+    background: var(--paper-2);
+    transition: background 0.15s, border-color 0.15s;
+    cursor: default; padding: 0; flex-shrink: 0;
+  }
+  .twk-toggle[data-on="1"] { background: var(--ok); border-color: transparent; }
+  .twk-toggle i {
+    position: absolute; top: 2px; left: 2px;
+    width: 14px; height: 14px; border-radius: 50%;
+    background: var(--ink-3); display: block;
+    transition: transform 0.15s, background 0.15s;
+  }
+  .twk-toggle[data-on="1"] i { transform: translateX(14px); background: var(--paper); }
 
-  .twk-swatch{appearance:none;-webkit-appearance:none;width:56px;height:22px;
-    border:.5px solid rgba(0,0,0,.1);border-radius:6px;padding:0;cursor:default;
-    background:transparent;flex-shrink:0}
-  .twk-swatch::-webkit-color-swatch-wrapper{padding:0}
-  .twk-swatch::-webkit-color-swatch{border:0;border-radius:5.5px}
-  .twk-swatch::-moz-color-swatch{border:0;border-radius:5.5px}
+  .twk-field {
+    appearance: none; width: 100%; height: 28px; padding: 0 8px;
+    border: 0.5px solid var(--rule); border-radius: 3px;
+    background: var(--paper-2); color: var(--ink);
+    font-family: var(--mono); font-size: 11px; outline: none;
+  }
+  .twk-field:focus { border-color: var(--ink-3); }
+  select.twk-field {
+    padding-right: 22px;
+    background-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='10' height='6' viewBox='0 0 10 6'><path fill='rgba(128,128,128,.5)' d='M0 0h10L5 6z'/></svg>");
+    background-repeat: no-repeat; background-position: right 8px center;
+  }
+
+  .twk-slider {
+    appearance: none; -webkit-appearance: none;
+    width: 100%; height: 2px; margin: 8px 0;
+    border-radius: 999px; background: var(--rule); outline: none;
+  }
+  .twk-slider::-webkit-slider-thumb {
+    -webkit-appearance: none; width: 14px; height: 14px;
+    border-radius: 50%; background: var(--ink); cursor: default;
+  }
+  .twk-slider::-moz-range-thumb {
+    width: 14px; height: 14px; border-radius: 50%;
+    background: var(--ink); border: 0; cursor: default;
+  }
+
+  .twk-num {
+    display: flex; align-items: center; height: 28px; padding: 0 0 0 8px;
+    border: 0.5px solid var(--rule); border-radius: 3px;
+    background: var(--paper-2);
+  }
+  .twk-num-lbl {
+    font-family: var(--mono); font-size: 11px;
+    color: var(--ink-2); cursor: ew-resize; user-select: none; padding-right: 8px;
+  }
+  .twk-num input {
+    flex: 1; min-width: 0; height: 100%; border: 0;
+    background: transparent; font-family: var(--mono); font-size: 11px;
+    font-variant-numeric: tabular-nums; text-align: right; padding: 0 8px 0 0;
+    outline: none; color: var(--ink); -moz-appearance: textfield;
+  }
+  .twk-num input::-webkit-inner-spin-button,
+  .twk-num input::-webkit-outer-spin-button { -webkit-appearance: none; margin: 0; }
+  .twk-num-unit { padding-right: 8px; color: var(--ink-3); font-family: var(--mono); font-size: 11px; }
+
+  .twk-btn {
+    appearance: none; height: 28px; padding: 0 12px;
+    border: 0.5px solid var(--rule); border-radius: 3px;
+    background: var(--ink); color: var(--paper);
+    font-family: var(--mono); font-size: 11px; letter-spacing: 0.02em;
+    cursor: default; transition: opacity 0.12s;
+  }
+  .twk-btn:hover { opacity: 0.75; }
+  .twk-btn.secondary { background: var(--paper-2); color: var(--ink); }
+
+  .twk-swatch {
+    appearance: none; -webkit-appearance: none; width: 56px; height: 24px;
+    border: 0.5px solid var(--rule); border-radius: 3px; padding: 0;
+    cursor: default; background: transparent; flex-shrink: 0;
+  }
+  .twk-swatch::-webkit-color-swatch-wrapper { padding: 0; }
+  .twk-swatch::-webkit-color-swatch { border: 0; border-radius: 2.5px; }
+  .twk-swatch::-moz-color-swatch { border: 0; border-radius: 2.5px; }
 `;
 
 const TWEAKS_LS_KEY = 'dashboard:tweaks';
-const TWEAKS_POS_KEY = 'dashboard:tweaks:pos';
-
-function lsLoadPos() {
-  try {
-    const raw = localStorage.getItem(TWEAKS_POS_KEY);
-    return raw ? JSON.parse(raw) : null;
-  } catch { return null; }
-}
-
-function lsSavePos(pos) {
-  try { localStorage.setItem(TWEAKS_POS_KEY, JSON.stringify(pos)); } catch {}
-}
 
 function lsLoadTweaks(defaults) {
   try {
@@ -137,35 +206,6 @@ export function useTweaks(defaults) {
 export function TweaksPanel({ title = 'Tweaks', children }) {
   const devMode = new URLSearchParams(window.location.search).has('dev');
   const [open, setOpen] = useState(devMode);
-  const dragRef = useRef(null);
-  const offsetRef = useRef(lsLoadPos() ?? { x: 16, y: 16 });
-  const PAD = 16;
-
-  const clampToViewport = useCallback(() => {
-    const panel = dragRef.current;
-    if (!panel) return;
-    const w = panel.offsetWidth, h = panel.offsetHeight;
-    const maxRight = Math.max(PAD, window.innerWidth - w - PAD);
-    const maxBottom = Math.max(PAD, window.innerHeight - h - PAD);
-    offsetRef.current = {
-      x: Math.min(maxRight, Math.max(PAD, offsetRef.current.x)),
-      y: Math.min(maxBottom, Math.max(PAD, offsetRef.current.y)),
-    };
-    panel.style.right = offsetRef.current.x + 'px';
-    panel.style.bottom = offsetRef.current.y + 'px';
-  }, []);
-
-  useEffect(() => {
-    if (!open) return;
-    clampToViewport();
-    if (typeof ResizeObserver === 'undefined') {
-      window.addEventListener('resize', clampToViewport);
-      return () => window.removeEventListener('resize', clampToViewport);
-    }
-    const ro = new ResizeObserver(clampToViewport);
-    ro.observe(document.documentElement);
-    return () => ro.disconnect();
-  }, [open, clampToViewport]);
 
   useEffect(() => {
     const onMsg = (e) => {
@@ -178,12 +218,11 @@ export function TweaksPanel({ title = 'Tweaks', children }) {
     return () => window.removeEventListener('message', onMsg);
   }, []);
 
-  // Backtick shortcut toggles the panel in local dev
   useEffect(() => {
     const onKey = (e) => {
-      if (e.key === '`' && !['INPUT', 'TEXTAREA'].includes(document.activeElement?.tagName)) {
-        setOpen((v) => !v);
-      }
+      if (['INPUT', 'TEXTAREA'].includes(document.activeElement?.tagName)) return;
+      if (e.key === '`') setOpen(v => !v);
+      else if (e.key === 'Escape') setOpen(false);
     };
     window.addEventListener('keydown', onKey);
     return () => window.removeEventListener('keydown', onKey);
@@ -194,40 +233,14 @@ export function TweaksPanel({ title = 'Tweaks', children }) {
     window.parent.postMessage({ type: '__edit_mode_dismissed' }, '*');
   };
 
-  const onDragStart = (e) => {
-    const panel = dragRef.current;
-    if (!panel) return;
-    const r = panel.getBoundingClientRect();
-    const sx = e.clientX, sy = e.clientY;
-    const startRight = window.innerWidth - r.right;
-    const startBottom = window.innerHeight - r.bottom;
-    const move = (ev) => {
-      offsetRef.current = {
-        x: startRight - (ev.clientX - sx),
-        y: startBottom - (ev.clientY - sy),
-      };
-      clampToViewport();
-    };
-    const up = () => {
-      lsSavePos(offsetRef.current);
-      window.removeEventListener('mousemove', move);
-      window.removeEventListener('mouseup', up);
-    };
-    window.addEventListener('mousemove', move);
-    window.addEventListener('mouseup', up);
-  };
-
-  if (!open) return null;
   return (
     <>
       <style>{__TWEAKS_STYLE}</style>
-      <div ref={dragRef} className="twk-panel" data-noncommentable=""
-           style={{ right: offsetRef.current.x, bottom: offsetRef.current.y }}>
-        <div className="twk-hd" onMouseDown={onDragStart}>
-          <b>{title}</b>
-          <button className="twk-x" aria-label="Close tweaks"
-                  onMouseDown={(e) => e.stopPropagation()}
-                  onClick={dismiss}>✕</button>
+      {open && <div className="twk-scrim" onClick={dismiss} />}
+      <div className={`twk-drawer${open ? ' open' : ''}`} data-noncommentable="">
+        <div className="twk-hd">
+          <span className="twk-title">{title}</span>
+          <button className="twk-x" aria-label="Close tweaks" onClick={dismiss}>esc</button>
         </div>
         <div className="twk-body">{children}</div>
       </div>
