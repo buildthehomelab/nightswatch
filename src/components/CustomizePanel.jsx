@@ -134,7 +134,7 @@ const __CUSTOMIZE_STYLE = `
 
 `;
 
-const CUSTOMIZE_LS_KEY = 'dashboard:customize';
+const CUSTOMIZE_LS_KEY = 'nightswatch:customize';
 
 function lsLoad(defaults) {
   try {
