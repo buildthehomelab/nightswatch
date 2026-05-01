@@ -6,7 +6,7 @@ const __CUSTOMIZE_STYLE = `
   }
 
   .twk-drawer {
-    position: fixed; left: 0; top: 0; height: 100vh; width: 400px;
+    position: fixed; left: 0; top: 0; height: 100vh; width: 350px;
     z-index: 2147483645;
     background: var(--paper);
     border-right: 0.5px solid var(--rule);
