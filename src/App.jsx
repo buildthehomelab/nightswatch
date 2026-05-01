@@ -371,13 +371,14 @@ export default function App() {
   }, []);
 
   useEffect(() => {
+    const probe = (url) => fetch(url, { mode: "no-cors", cache: "no-store" }).then(() => true).catch(() => false);
     const check = async () => {
-      try {
-        await fetch("https://1.1.1.1", { mode: "no-cors", cache: "no-store" });
+      const [cf, google] = await Promise.all([probe("https://1.1.1.1"), probe("https://8.8.8.8")]);
+      if (cf || google) {
         wanFailCount.current = 0;
         setWanUp(true);
         setWanDownSince(null);
-      } catch {
+      } else {
         wanFailCount.current += 1;
         if (wanFailCount.current >= 3) {
           setWanUp((prev) => {
