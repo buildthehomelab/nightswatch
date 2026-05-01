@@ -246,18 +246,20 @@ async function fetchMemUsed(hdrs) {
     if (!res.ok) return null;
     const json = await res.json();
     if (!Array.isArray(json) || !json[0]) return null;
-    console.log('[mem] raw:', JSON.stringify(json[0]).slice(0, 600));
     const { legend, data, aggregations } = json[0];
-    // legend[0] = "time"; find "used" among the rest
-    const legIdx = Array.isArray(legend)
-      ? legend.findIndex((l, i) => i > 0 && /used/i.test(l))
-      : -1;
-    const aggIdx = legIdx > 0 ? legIdx - 1 : -1;
-    if (aggIdx >= 0 && Array.isArray(aggregations?.mean) && aggregations.mean[aggIdx] != null)
-      return aggregations.mean[aggIdx];
+    // prefer aggregations.mean if present
+    const agg = aggregations?.mean;
+    if (Array.isArray(agg) && agg.length > 0) {
+      const legIdx = Array.isArray(legend)
+        ? legend.findIndex((l, i) => i > 0 && /used/i.test(l)) - 1
+        : -1;
+      const idx = legIdx >= 0 ? legIdx : 0;
+      if (agg[idx] != null) return agg[idx];
+    }
+    // fallback: data is [[ts, usedBytes], ...] — take last row
     if (Array.isArray(data) && data.length > 0) {
       const last = data[data.length - 1];
-      if (Array.isArray(last) && legIdx > 0 && last[legIdx] != null) return last[legIdx];
+      if (Array.isArray(last) && last[1] != null) return last[1];
     }
     return null;
   } catch { return null; }
