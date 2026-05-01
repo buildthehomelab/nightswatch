@@ -174,8 +174,8 @@ All handlers skip when an INPUT or TEXTAREA is focused.
 
 ## 6. CustomizePanel Settings
 
-localStorage key: `dashboard:customize`  
-Opens automatically if URL contains `?dev`. Toggle with backtick.
+localStorage key: `nightswatch:customize`  
+Opens automatically if URL contains `?dev`. Toggle with backtick / `h` / `?`.
 
 | Key | Default | Effect |
 |-----|---------|--------|
@@ -184,7 +184,8 @@ Opens automatically if URL contains `?dev`. Toggle with backtick.
 | `showWan` | `true` | WAN up/down in ambient strip |
 | `showUptime` | `true` | system uptime in ambient strip |
 | `showDate` | `true` | current date in ambient strip |
-| `showNas` | `false` | TrueNAS data strip (hidden by default) |
+| `enableTruenas` | `false` | enables TrueNAS API polling (useTrueNas hook); controls issue derivation |
+| `showNas` | `false` | TrueNAS data strip (hidden by default; independent of enableTruenas) |
 | `showNasName` | `true` | NAS hostname as link |
 | `showNasLoad` | `true` | load average |
 | `showNasCpuTemp` | `true` | CPU temp, colored at warn/crit thresholds |
@@ -192,6 +193,8 @@ Opens automatically if URL contains `?dev`. Toggle with backtick.
 | `showNasApps` | `true` | running / total app count |
 | `showNasPools` | `true` | pool % used, colored dots at warn/crit |
 | `ambientPlacement` | `"bottom"` | ambient strip position: `bottom` or `top` |
+
+**Ignored panel** shows only currently active ignored issues — ones whose `ignoreKey` exists in the current `issues` array. Historical/stale ignored keys are silently filtered out of the display (but remain in localStorage until manually cleared).
 
 ---
 
