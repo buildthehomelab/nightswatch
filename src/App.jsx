@@ -524,7 +524,6 @@ export default function App() {
       <HelpOverlay open={helpOpen} onClose={() => setHelpOpen(false)} />
 
       <CustomizePanel>
-        <CustomizeSection label="Appearance" />
         <CustomizeRadio
           label="Theme"
           value={t.theme}
