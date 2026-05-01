@@ -463,8 +463,7 @@ export default function App() {
         )}
 
         <footer className="footnote rise rise-d3">
-          <span>homelab · {fmtDate(now).toLowerCase()}</span>
-          <span>
+<span>
             <a href="#" onClick={(e) => e.preventDefault()}>all services</a>
             {"   "}
             <a href="#" onClick={(e) => { e.preventDefault(); openLogs(); }}>logs</a>
