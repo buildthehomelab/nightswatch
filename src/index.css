@@ -73,6 +73,7 @@ body {
   text-transform: lowercase;
 }
 .ambient .left,
+.ambient .mid,
 .ambient .right {
   display: flex;
   gap: 22px;
