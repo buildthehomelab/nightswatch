@@ -399,6 +399,7 @@ export function nasIssues(data) {
       logs: [
         { t: firstStr, level: memPct >= MEM_CRIT_PCT ? 'err' : 'warn', text: `[mem] services: ${fmtBytes(memServices)} · arc: ${fmtBytes(arcSize)} · free: ${fmtBytes(memFree)}` },
       ],
+      ignoreKey: `nas-mem:${firstTs}`,
       actions: [{ label: 'open truenas ›', href: UI }],
     });
   } else {
