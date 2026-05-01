@@ -243,7 +243,7 @@ body {
   padding: 18px 0;
   cursor: pointer;
   display: grid;
-  grid-template-columns: 160px 1fr auto;
+  grid-template-columns: 130px 1fr auto;
   gap: 16px;
   align-items: start;
   transition: background-color .15s ease;
