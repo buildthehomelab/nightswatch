@@ -71,7 +71,7 @@ export const ISSUE_FIXTURES = {
       actions: ["run long test", "order replacement", "view pool"],
     },
     {
-      id: "disk-media",
+      id: "disk-media-crit",
       severity: "warn",
       label: "disk space low",
       headline: "/mnt/media is at 94%.",
