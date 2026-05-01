@@ -212,8 +212,8 @@ function Issue({ issue, isOpen, isFocused, onToggle, index, onOpenLogs }) {
 
       <div className="details">
         <div className="details-inner" onClick={(e) => e.stopPropagation()}>
-          <div className="description">{issue.description}</div>
           <Logs lines={issue.logs} />
+          <div className="description">{issue.description}</div>
           <div className="actions">
             {issue.actions.map((a) => {
               if (typeof a === "object" && a.href) {
