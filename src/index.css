@@ -413,7 +413,7 @@ body {
   .healthy .hero { font-size: 32px; }
   .issue { grid-template-columns: 1fr; gap: 8px; }
   .issue .when { display: none; }
-  .ambient { font-size: 10.5px; gap: 12px; }
+  .ambient { font-size: 10.5px; gap: 12px; padding: 10px 24px; }
   .ambient .left, .ambient .right { gap: 14px; }
 }
 
