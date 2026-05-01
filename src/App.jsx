@@ -73,18 +73,31 @@ function fmtTime(d) {
 }
 
 function Ambient({ now, wanUp, uptime, weather, showWeather, showNas, nasData }) {
-  const pools   = Array.isArray(nasData?.pools) ? nasData.pools : [];
-  const apps    = Array.isArray(nasData?.apps)  ? nasData.apps  : [];
-  const running = apps.filter(a => a.state === 'RUNNING').length;
-  const load1   = nasData?.info?.loadavg?.[0]?.toFixed(2);
+  const pools    = Array.isArray(nasData?.pools) ? nasData.pools : [];
+  const apps     = Array.isArray(nasData?.apps)  ? nasData.apps  : [];
+  const running  = apps.filter(a => a.state === 'RUNNING').length;
+  const load1    = nasData?.info?.loadavg?.[0]?.toFixed(2);
   const hostname = nasData?.info?.hostname ?? 'nas';
+  const cpuTemp  = nasData?.cpuTemp ?? null;
+  const cpuCls   = cpuTemp == null ? '' : cpuTemp >= CPU_CRIT_C ? ' crit' : cpuTemp >= CPU_WARN_C ? ' warn' : '';
 
   return (
     <footer className="ambient rise">
       <div className="left">
+        {cpuTemp != null && (
+          <span className="item">
+            <span className="k">cpu</span>
+            <span className={`v${cpuCls}`}>{cpuTemp}°C</span>
+          </span>
+        )}
         <span className="item">
-          <span className="v">{fmtTime(now)}</span>
-          <span className="k">· {fmtDate(now).toLowerCase()}</span>
+          <span className="k">wan</span>
+          <span className={`dot ${wanUp ? "" : "crit"}`}></span>
+          <span className="v">{wanUp ? "up" : "down"}</span>
+        </span>
+        <span className="item">
+          <span className="k">uptime</span>
+          <span className="v">{uptime}</span>
         </span>
       </div>
 
@@ -126,13 +139,8 @@ function Ambient({ now, wanUp, uptime, weather, showWeather, showNas, nasData })
           </span>
         )}
         <span className="item">
-          <span className="k">wan</span>
-          <span className={`dot ${wanUp ? "" : "crit"}`}></span>
-          <span className="v">{wanUp ? "up" : "down"}</span>
-        </span>
-        <span className="item">
-          <span className="k">uptime</span>
-          <span className="v">{uptime}</span>
+          <span className="v">{fmtTime(now)}</span>
+          <span className="k">· {fmtDate(now)}</span>
         </span>
       </div>
     </footer>
