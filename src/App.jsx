@@ -22,6 +22,26 @@ const TWEAK_DEFAULTS = {
   showNas: false,
 };
 
+function mastheadPhrase(issues) {
+  const crits = issues.filter(i => i.severity === 'crit');
+  const warns = issues.filter(i => i.severity === 'warn');
+
+  if (crits.length === 1 && warns.length === 0) {
+    if (crits[0].id === 'wan-down') return <>Internet is <em>down.</em></>;
+    return <>One critical issue <em>needs attention.</em></>;
+  }
+  if (crits.length > 1 && warns.length === 0) {
+    return <>{crits.length} critical issues <em>need attention.</em></>;
+  }
+  if (crits.length === 0 && warns.length === 1) {
+    return <>One thing <em>needs a look.</em></>;
+  }
+  if (crits.length === 0) {
+    return <>A few things <em>need a look.</em></>;
+  }
+  return <>{issues.length} things <em>need attention.</em></>;
+}
+
 function greeting(d) {
   const h = d.getHours();
   if (h < 5)  return "Late night.";
