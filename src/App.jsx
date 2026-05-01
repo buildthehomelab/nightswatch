@@ -376,6 +376,7 @@ export default function App() {
   const startTime = useRef(Date.now());
   const [now, setNow] = useState(new Date());
   const [dozzleOpen, setDozzleOpen] = useState(false);
+  const [dozzleContainer, setDozzleContainer] = useState(null);
   const [ignored, setIgnored] = useState(() => loadIgnored());
 
   const handleIgnore = (key, label) => {
@@ -416,7 +417,7 @@ export default function App() {
     return () => clearInterval(id);
   }, []);
 
-  const openLogs = () => setDozzleOpen(true);
+  const openLogs = (container) => { setDozzleContainer(container || null); setDozzleOpen(true); };
 
   useEffect(() => {
     const onKey = (e) => {
@@ -576,6 +577,7 @@ export default function App() {
       <Dozzle
         open={dozzleOpen}
         onClose={() => setDozzleOpen(false)}
+        initialContainer={dozzleContainer}
       />
 
       <CustomizePanel side={t.ambientPlacement === "bottom" ? "top" : "bottom"}>
