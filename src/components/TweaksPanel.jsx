@@ -209,6 +209,7 @@ export function TweaksPanel({ title = 'Tweaks', children }) {
       clampToViewport();
     };
     const up = () => {
+      lsSavePos(offsetRef.current);
       window.removeEventListener('mousemove', move);
       window.removeEventListener('mouseup', up);
     };
