@@ -9,11 +9,14 @@ const WEATHER_LOCATION = import.meta.env.VITE_WEATHER_LOCATION ?? "";
 
 const LS_IGNORED_KEY = 'dashboard:ignored';
 function loadIgnored() {
-  try { return new Set(JSON.parse(localStorage.getItem(LS_IGNORED_KEY) ?? '[]')); }
-  catch { return new Set(); }
+  try {
+    const raw = JSON.parse(localStorage.getItem(LS_IGNORED_KEY) ?? '[]');
+    if (raw.length && typeof raw[0] === 'string') return new Map(raw.map(k => [k, k]));
+    return new Map(raw);
+  } catch { return new Map(); }
 }
-function saveIgnored(set) {
-  try { localStorage.setItem(LS_IGNORED_KEY, JSON.stringify([...set])); } catch {}
+function saveIgnored(map) {
+  try { localStorage.setItem(LS_IGNORED_KEY, JSON.stringify([...map])); } catch {}
 }
 
 const ISSUE_TO_CONTAINER = {
