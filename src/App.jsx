@@ -95,7 +95,7 @@ function Ambient({ now, wanUp, uptime, weather, showWeather, showWan, showUptime
         <div className="left">
           {showNasName && (
             <span className="item">
-              <a href={NAS_UI} target="_blank" rel="noopener noreferrer" className="nas-link">{hostname}</a>
+              <a href={NAS_UI} target="_blank" rel="noopener noreferrer" className="ambient-link">{hostname}</a>
             </span>
           )}
           {showNasLoad && load1 && (
