@@ -204,8 +204,10 @@ function formatSysReleaseNotes(body, maxLen = 1400) {
   return (lastNl > 100 ? text.slice(0, lastNl) : text) + '…';
 }
 
-export const CPU_WARN_C = Number(import.meta.env.VITE_CPU_WARN_C ?? 70) || 70;
-export const CPU_CRIT_C = Number(import.meta.env.VITE_CPU_CRIT_C ?? 85) || 85;
+export const CPU_WARN_C  = Number(import.meta.env.VITE_CPU_WARN_C  ?? 70) || 70;
+export const CPU_CRIT_C  = Number(import.meta.env.VITE_CPU_CRIT_C  ?? 85) || 85;
+export const MEM_WARN_PCT = Number(import.meta.env.VITE_MEM_WARN_PCT ?? 80) || 80;
+export const MEM_CRIT_PCT = Number(import.meta.env.VITE_MEM_CRIT_PCT ?? 90) || 90;
 
 async function fetchCpuTemp(hdrs) {
   try {
