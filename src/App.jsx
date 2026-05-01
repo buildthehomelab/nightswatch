@@ -274,7 +274,7 @@ function Issue({ issue, isOpen, isFocused, onToggle, index, onOpenLogs, onIgnore
             {issue.ignoreKey && (
               <button
                 className="action-ignore"
-                onClick={(e) => { e.stopPropagation(); onIgnore(issue.ignoreKey); }}
+                onClick={(e) => { e.stopPropagation(); onIgnore(issue.ignoreKey, issue.headline); }}
                 style={{ marginLeft: "auto" }}
               >
                 ignore ›
