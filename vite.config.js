@@ -61,6 +61,7 @@ export default defineConfig(({ mode }) => {
       'import.meta.env.VITE_POOL_WARN_PCT':            JSON.stringify(env.TRUENAS_POOL_WARN_PCT ?? ''),
       'import.meta.env.VITE_POOL_CRIT_PCT':            JSON.stringify(env.TRUENAS_POOL_CRIT_PCT ?? ''),
       'import.meta.env.VITE_STOPPED_APP_HIDE_MINUTES': JSON.stringify(env.TRUENAS_STOPPED_APP_HIDE_MINUTES ?? ''),
+      'import.meta.env.VITE_DOZZLE_URL':               JSON.stringify(env.DOZZLE_URL ?? ''),
     },
     plugins: [react(), basicSsl(), truenasProxyPlugin(env.TRUENAS_KEY, env.TRUENAS_HOST, env.TRUENAS_PORT)],
     server: {
