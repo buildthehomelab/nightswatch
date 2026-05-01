@@ -152,8 +152,9 @@ export function useCustomize(defaults) {
   return [values, setCustomize];
 }
 
-export function CustomizeColumn({ wide, children }) {
-  return <div className={wide ? 'twk-col twk-col-wide' : 'twk-col'}>{children}</div>;
+export function CustomizeColumn({ wide, push, children }) {
+  const cls = ['twk-col', wide && 'twk-col-wide', push && 'twk-col-push'].filter(Boolean).join(' ');
+  return <div className={cls}>{children}</div>;
 }
 
 export function CustomizePanel({ title = 'Options', side = 'top', children }) {
