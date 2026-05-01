@@ -576,8 +576,8 @@ export default function App() {
             label="Theme"
             value={t.theme}
             options={[
-              { value: "paper", label: "paper" },
-              { value: "ink",   label: "ink" },
+              { value: "light", label: "light" },
+              { value: "dark",  label: "dark" },
             ]}
             onChange={(v) => setTweak("theme", v)}
           />
