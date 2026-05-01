@@ -40,6 +40,7 @@ const SKIP_ALERT_KLASSES = new Set([
   'ZpoolStatusWarning', 'ZpoolStatusCritical',
   'ZpoolCapacityWarning', 'ZpoolCapacityError',
   'ScrubFinished', 'ScrubStarted',
+  'AppUpdate', 'ApplicationUpdate', 'ApplicationsUpdatesAvailable',
 ]);
 
 // ── Formatters ────────────────────────────────────────────
