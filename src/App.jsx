@@ -359,6 +359,7 @@ function IssueList({ issues, onOpenLogs, onIgnore }) {
           isFocused={focusedIndex === i}
           onToggle={() => { setFocusedIndex(i); setOpenId(openId === issue.id ? null : issue.id); }}
           onOpenLogs={onOpenLogs}
+          onIgnore={onIgnore}
         />
       ))}
     </section>
