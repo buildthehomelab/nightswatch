@@ -114,10 +114,10 @@ function Ambient({ now, wanUp, uptime, weather, showWeather, showWan, showUptime
               <span className={`v${cpuCls}`}>{cpuTemp}°C</span>
             </span>
           )}
-          {showNasMemory && memPct != null && (
+          {showNasMemory && memServices != null && (
             <span className="item">
               <span className="k">mem</span>
-              <span className={`v${memCls}`}>{memPct}%</span>
+              <span className={`v${memCls}`}>{fmtBytes(memServices)}</span>
             </span>
           )}
           {showNasApps && apps.length > 0 && (
