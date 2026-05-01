@@ -526,6 +526,18 @@ export default function App() {
     return liveIssues;
   }, [wanUp, wanDownSince, nasData, nasErr, t.enableTruenas]);
 
+  useEffect(() => {
+    const activeKeys = new Set(issues.map(i => i.ignoreKey).filter(Boolean));
+    setIgnored(prev => {
+      const stale = [...prev.keys()].filter(k => !activeKeys.has(k));
+      if (!stale.length) return prev;
+      const next = new Map(prev);
+      stale.forEach(k => next.delete(k));
+      saveIgnored(next);
+      return next;
+    });
+  }, [issues]);
+
   const visibleIssues = useMemo(
     () => issues.filter(i => !i.ignoreKey || !ignored.has(i.ignoreKey)),
     [issues, ignored]
