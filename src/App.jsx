@@ -73,15 +73,6 @@ function mastheadPhrase(issues) {
   return <>{issues.length} things <em className={ec}>need attention.</em></>;
 }
 
-function mastheadEyebrow(issues) {
-  const crits = issues.filter(i => i.severity === 'crit').length;
-  const warns = issues.filter(i => i.severity === 'warn').length;
-  const parts = [];
-  if (crits) parts.push(`${crits} critical`);
-  if (warns) parts.push(`${warns} warning${warns > 1 ? 's' : ''}`);
-  return parts.join(' · ');
-}
-
 
 function fmtDate(d) {
   return d.toLocaleDateString(undefined, {
