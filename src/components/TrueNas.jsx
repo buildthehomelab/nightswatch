@@ -460,6 +460,7 @@ export function nasIssues(data) {
         logs: [
           { t: poolStr, level: "err", text: `[zfs] pool ${pool.name} status: ${pool.status}` },
         ],
+        ignoreKey: `nas-pool-${pool.name}:${poolTs}`,
         actions: [{ label: "open truenas ›", href: UI }],
       });
     } else {
