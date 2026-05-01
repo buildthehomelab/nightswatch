@@ -445,6 +445,7 @@ export function nasIssues(data) {
       const poolId  = `nas-pool-${pool.name}`;
       const poolTs  = lsMarkFirstSeen(poolId);
       const poolAge = Date.now() - poolTs;
+      const poolStr = new Date(poolTs).toLocaleTimeString(undefined, { hour: "2-digit", minute: "2-digit", hour12: false });
       issues.push({
         id: poolId,
         severity: "crit",
@@ -455,7 +456,7 @@ export function nasIssues(data) {
         when: poolAge >= 60000 ? `${fmtAge(poolAge)} unresolved` : "now",
         description: `ZFS pool "${pool.name}" is reporting status ${pool.status}. Data may be at risk. Check TrueNAS for failed drives or scrub errors.`,
         logs: [
-          { t: now, level: "err", text: `[zfs] pool ${pool.name} status: ${pool.status}` },
+          { t: poolStr, level: "err", text: `[zfs] pool ${pool.name} status: ${pool.status}` },
         ],
         actions: [{ label: "open truenas ›", href: UI }],
       });
