@@ -324,6 +324,11 @@ export function nasIssues(data) {
     });
   }
 
+  const upgradeableIds = new Set((data.apps ?? []).filter(a => a.upgrade_available).map(a => `nas-app-update-${a.name}`));
+  for (const app of (data.apps ?? []).filter(a => !a.upgrade_available)) {
+    lsClearFirstSeen(`nas-app-update-${app.name}`);
+  }
+
   for (const app of (data.apps ?? []).filter(a => a.upgrade_available)) {
     const image   = app.active_workloads?.container_details?.[0]?.image ?? null;
     const next    = app.latest_version ?? null;
@@ -332,6 +337,10 @@ export function nasIssues(data) {
     const tag     = release?.tag_name ?? null;
     const relDate = fmtReleaseDate(release?.published_at);
     const changelog = trimChangelog(release?.body);
+    const updateId  = `nas-app-update-${app.name}`;
+    const firstTs   = lsMarkFirstSeen(updateId);
+    const firstDt   = new Date(firstTs);
+    const firstStr  = firstDt.toLocaleTimeString(undefined, { hour: "2-digit", minute: "2-digit", hour12: false });
 
     const headline = next
       ? `${app.name}: update available → ${next}.`
@@ -352,12 +361,12 @@ export function nasIssues(data) {
         : `${app.name} has a newer Docker image available.`;
 
     issues.push({
-      id: `nas-app-update-${app.name}`,
+      id: updateId,
       severity: "info",
       label: "app update",
       headline,
       source: "truenas · apps",
-      when: relDate ? `released ${relDate}` : "now",
+      when: relDate ? `released ${relDate}` : firstStr,
       description,
       logs,
       actions: [
