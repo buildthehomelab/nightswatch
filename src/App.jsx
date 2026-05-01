@@ -394,7 +394,7 @@ export default function App() {
       return next;
     });
   };
-  const { data: nasData, err: nasErr } = useTrueNas();
+  const { data: nasData, err: nasErr } = useTrueNas(t.enableTruenas);
   const [wanUp, setWanUp] = useState(true);
   const [wanDownSince, setWanDownSince] = useState(null);
   const wanFailCount = useRef(0);
