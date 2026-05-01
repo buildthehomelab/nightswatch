@@ -2,8 +2,8 @@ import { useState, useEffect, useRef, useMemo } from 'react';
 import Dozzle from './components/Dozzle';
 import { useTrueNas, nasIssues, fmtUptime, fmtAge, UI as NAS_UI, POOL_WARN_PCT, POOL_CRIT_PCT, CPU_WARN_C, CPU_CRIT_C } from './components/TrueNas';
 import {
-  useTweaks, TweaksPanel, TweakSection, TweakRadio, TweakToggle,
-} from './components/TweaksPanel';
+  useCustomize, CustomizePanel, CustomizeSection, CustomizeRadio, CustomizeToggle,
+} from './components/CustomizePanel';
 
 const WEATHER_LOCATION = import.meta.env.VITE_WEATHER_LOCATION ?? "";
 
