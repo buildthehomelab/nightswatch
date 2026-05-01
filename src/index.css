@@ -307,7 +307,7 @@ body {
 .issue.open .chev { transform: rotate(90deg); }
 
 .issue .details {
-  grid-column: 1 / 4;
+  grid-column: 1 / -1;
   overflow: hidden;
   max-height: 0;
   opacity: 0;
