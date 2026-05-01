@@ -480,12 +480,13 @@ body {
     row-gap: 0;
   }
   .ambient .left {
-    width: 100%;
+    flex: 0 0 100%;
     flex-wrap: wrap;
     padding-bottom: 8px;
-    margin-bottom: 8px;
     border-bottom: 1px solid var(--rule);
+    margin-bottom: 8px;
   }
+  .ambient .mid { flex: 1; }
 }
 @media (max-width: 640px) {
   .page { padding: 32px 24px 64px; }
