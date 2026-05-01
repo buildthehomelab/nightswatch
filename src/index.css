@@ -474,6 +474,19 @@ body {
 .footnote a:hover { color: var(--ink); border-color: var(--ink); }
 
 /* responsive */
+@media (max-width: 860px) {
+  .ambient {
+    flex-wrap: wrap;
+    row-gap: 0;
+  }
+  .ambient .left {
+    width: 100%;
+    flex-wrap: wrap;
+    padding-bottom: 8px;
+    margin-bottom: 8px;
+    border-bottom: 1px solid var(--rule);
+  }
+}
 @media (max-width: 640px) {
   .page { padding: 32px 24px 64px; }
   .masthead h1 { font-size: 40px; letter-spacing: -1.2px; }
