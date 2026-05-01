@@ -43,15 +43,15 @@ const CUSTOMIZE_DEFAULTS = {
 const MASTHEAD_STALE_MS = 4 * 60 * 60 * 1000;
 
 const PHRASES = {
-  healthy:        ["Live Laugh Lab.", "live, laugh, love."],
-  wanDown:        ["The System is Down."],
-  ignoredDays:    ["You're cordially invited to go fuck yourself.", "Down with the System."],
-  stale:          ["SNAFU: Situation normal, all fucked up."],
-  multiCrit:      ["everything is on fire. As it should be."],
-  critIgnored:    ["oh goodness."],
-  crit:           ["What in the Claude??!", "This is fine."],
-  multiIssue:     ["everything is on fire."],
-  singleWarn:     ["One thing needs a look."],
+  healthy:        ["Live Laugh Lab.", "live, laugh, love.", "Serenity now.", "Boring is beautiful.", "Vibes: nominal.", "Touch grass.", "It's giving stable.", "No news is good news."],
+  wanDown:        ["The System is Down.", "404: Internet not found.", "The internet called in sick.", "Unplugged from the matrix."],
+  ignoredDays:    ["You're cordially invited to go fuck yourself.", "Down with the System.", "We've been trying to reach you about your server's extended warranty.", "Outstanding. Truly outstanding.", "Cool cool cool cool cool.", "No thoughts, head empty, alerts ignored."],
+  stale:          ["SNAFU: Situation normal, all fucked up.", "FUBAR.", "This is not a drill. (It hasn't been a drill for days.)", "We've been here before."],
+  multiCrit:      ["everything is on fire. As it should be.", "Chaos reigns.", "Absolutely cooked.", "Full send.", "We're in the bad place."],
+  critIgnored:    ["oh goodness.", "Yikes on bikes.", "Oh honey.", "Bless your heart.", "Sir, this is a Wendy's."],
+  crit:           ["What in the Claude??!", "This is fine.", "Sending thoughts and prayers.", "Spicy.", "Please advise.", "RIP bozo.", "Red alert."],
+  multiIssue:     ["everything is on fire.", "Yikes.", "Welp.", "Concerning.", "It do be like that.", "Vibes: off."],
+  singleWarn:     ["One thing needs a look.", "Minor turbulence.", "A wrinkle.", "Noted."],
 };
 
 function pickPhrase(arr, seed = Date.now()) {
