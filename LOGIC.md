@@ -196,7 +196,7 @@ Configured in `vite.config.js`. Applies to both dev and preview servers.
 
 | Route | Target | Notes |
 |-------|--------|-------|
-| `/truenas/*` | `https://patronus.vaultrona.com:3443` | Injects `Authorization: Bearer $TRUENAS_KEY`; strips hop-by-hop headers; `rejectUnauthorized: false` |
+| `/truenas/*` | `$TRUENAS_HOST:$TRUENAS_PORT` | Injects `Authorization: Bearer $TRUENAS_KEY`; strips hop-by-hop headers; `rejectUnauthorized: false` |
 | `/wttr/*` | `https://wttr.in` | Rewrites path; User-Agent spoofed to `curl/7.88.1` |
 | GitHub API | `https://api.github.com` | Direct (public, no proxy) |
 
