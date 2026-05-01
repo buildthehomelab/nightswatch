@@ -486,7 +486,8 @@ body {
     border-bottom: 1px solid var(--rule);
     margin-bottom: 8px;
   }
-  .ambient .mid { flex: 1; }
+  .ambient .right { order: 1; margin-left: auto; }
+  .ambient .mid   { order: 2; }
 }
 @media (max-width: 640px) {
   .page { padding: 32px 24px 64px; }
