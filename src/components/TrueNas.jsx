@@ -99,6 +99,7 @@ async function fetchLatestRelease(image) {
       }
     }
     RELEASE_CACHE.set(image, { release: release ?? null, fetchedAt: Date.now() });
+    lsSaveRelease(RELEASE_CACHE);
     return release ?? null;
   } catch {
     return null;
