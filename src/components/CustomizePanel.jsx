@@ -174,7 +174,7 @@ const __CUSTOMIZE_STYLE = `
   .twk-swatch::-moz-color-swatch { border: 0; border-radius: 2.5px; }
 `;
 
-const CUSTOMIZE_LS_KEY = 'dashboard:tweaks';
+const CUSTOMIZE_LS_KEY = 'dashboard:customize';
 
 function lsLoad(defaults) {
   try {
