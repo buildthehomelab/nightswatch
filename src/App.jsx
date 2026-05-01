@@ -353,7 +353,7 @@ function HelpOverlay({ open, onClose }) {
 }
 
 export default function App() {
-  const [t, setTweak] = useTweaks(TWEAK_DEFAULTS);
+  const [t, setTweak] = useCustomize(CUSTOMIZE_DEFAULTS);
   const themeRef = useRef(t.theme);
   const startTime = useRef(Date.now());
   useEffect(() => { themeRef.current = t.theme; }, [t.theme]);
