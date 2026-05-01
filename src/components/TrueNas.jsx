@@ -356,6 +356,7 @@ export function nasIssues(data) {
     const tempId  = 'nas-cpu-temp';
     const firstTs = lsMarkFirstSeen(tempId);
     const tempAge = Date.now() - firstTs;
+    const firstStr = new Date(firstTs).toLocaleTimeString(undefined, { hour: "2-digit", minute: "2-digit", hour12: false });
     issues.push({
       id: tempId,
       severity: data.cpuTemp >= CPU_CRIT_C ? 'crit' : 'warn',
@@ -366,7 +367,7 @@ export function nasIssues(data) {
       when: tempAge >= 60000 ? `${fmtAge(tempAge)} unresolved` : 'now',
       description: `TrueNAS CPU is at ${data.cpuTemp}°C (warn ≥${CPU_WARN_C}°C, crit ≥${CPU_CRIT_C}°C). Check airflow or fan health.`,
       logs: [
-        { t: now, level: data.cpuTemp >= CPU_CRIT_C ? 'err' : 'warn', text: `[thermal] cpu temp: ${data.cpuTemp}°C` },
+        { t: firstStr, level: data.cpuTemp >= CPU_CRIT_C ? 'err' : 'warn', text: `[thermal] cpu temp: ${data.cpuTemp}°C` },
       ],
       actions: [{ label: 'open truenas ›', href: UI }],
     });
