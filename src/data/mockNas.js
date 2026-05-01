@@ -7,9 +7,9 @@ export const MOCK_NAS_DATA = {
     physmem: 32 * 1e9,
   },
   pools: [
-    { name: 'tank',   status: 'ONLINE', size: 12 * 1e12, allocated: 10.1 * 1e12 },
-    { name: 'nvme',   status: 'ONLINE', size: 2  * 1e12, allocated: 0.6  * 1e12 },
-    { name: 'backup', status: 'ONLINE', size: 16 * 1e12, allocated: 9.4  * 1e12 },
+    { name: 'tank',   status: 'DEGRADED', size: 12 * 1e12, allocated: 10.1 * 1e12 },
+    { name: 'nvme',   status: 'ONLINE',   size: 2  * 1e12, allocated: 0.6  * 1e12 },
+    { name: 'backup', status: 'ONLINE',   size: 16 * 1e12, allocated: 9.4  * 1e12 },
   ],
   apps: [
     { name: 'plex',        state: 'RUNNING' },
