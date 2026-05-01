@@ -154,6 +154,15 @@ const __CUSTOMIZE_STYLE = `
   .twk-num input::-webkit-outer-spin-button { -webkit-appearance: none; margin: 0; }
   .twk-num-unit { padding-right: 8px; color: var(--ink-3); font-family: var(--mono); font-size: 11px; }
 
+  .twk-sub {
+    padding-left: 12px;
+    border-left: 0.5px solid var(--rule);
+    margin-left: 4px;
+    display: flex;
+    flex-direction: column;
+  }
+  .twk-sub .twk-lbl { color: var(--ink-3); }
+
   .twk-btn {
     appearance: none; height: 28px; padding: 0 12px;
     border: 0.5px solid var(--rule); border-radius: 3px;
