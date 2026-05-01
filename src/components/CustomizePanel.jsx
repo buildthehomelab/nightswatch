@@ -224,7 +224,11 @@ export function useCustomize(defaults) {
   return [values, setCustomize];
 }
 
-export function CustomizePanel({ title = 'Options', children }) {
+export function CustomizeColumn({ wide, children }) {
+  return <div className={wide ? 'twk-col twk-col-wide' : 'twk-col'}>{children}</div>;
+}
+
+export function CustomizePanel({ title = 'Options', side = 'top', children }) {
   const devMode = new URLSearchParams(window.location.search).has('dev');
   const [open, setOpen] = useState(devMode);
 
