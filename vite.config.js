@@ -56,7 +56,7 @@ export default defineConfig(({ mode }) => {
     ? `https://${env.TRUENAS_HOST}${env.TRUENAS_PORT && env.TRUENAS_PORT !== '443' ? `:${env.TRUENAS_PORT}` : ''}`
     : (env.VITE_TRUENAS_URL ?? '')
   return {
-    test: { environment: 'jsdom' },
+    test: { setupFiles: ['./src/test-setup.js'] },
     define: {
       'import.meta.env.VITE_TRUENAS_URL':              JSON.stringify(truenasUrl),
       'import.meta.env.VITE_POOL_WARN_PCT':            JSON.stringify(env.TRUENAS_POOL_WARN_PCT ?? ''),
