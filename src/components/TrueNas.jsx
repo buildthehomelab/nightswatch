@@ -348,9 +348,9 @@ export function nasIssues(data) {
         : `${app.name}: ${isImage ? "image update available." : "update available."}`;
 
     const logs = [
-      { t: now, level: "info", text: `[app] ${app.name}: upstream image updated` },
-      ...(image ? [{ t: now, level: "info", text: `[app] image: ${image}` }] : []),
-      ...(tag    ? [{ t: now, level: "info", text: `[app] latest: ${tag}${relDate ? ` · released ${relDate}` : ""}` }] : []),
+      { t: firstStr, level: "info", text: `[app] ${app.name}: upstream image updated` },
+      ...(image ? [{ t: firstStr, level: "info", text: `[app] image: ${image}` }] : []),
+      ...(tag    ? [{ t: firstStr, level: "info", text: `[app] latest: ${tag}${relDate ? ` · released ${relDate}` : ""}` }] : []),
     ];
 
     const description = changelog
