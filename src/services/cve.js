@@ -6,7 +6,7 @@ const CACHE_TTL     = 60 * 60 * 1000;
 const LS_CACHE_KEY  = 'cve:cache';
 const LS_FIRST_SEEN = 'cve:firstSeen';
 
-export const CVE_KEYWORDS  = (import.meta.env.VITE_CVE_KEYWORDS ?? '').split(',').map(s => s.trim()).filter(Boolean);
+export const BASE_CVE_KEYWORDS = (import.meta.env.VITE_CVE_KEYWORDS ?? '').split(',').map(s => s.trim()).filter(Boolean);
 const CVE_DAYS_BACK = Number(import.meta.env.VITE_CVE_DAYS_BACK ?? 30) || 30;
 const CVE_MIN_CVSS  = Number(import.meta.env.VITE_CVE_MIN_CVSS  ?? 4.0) || 4.0;
 
@@ -81,12 +81,14 @@ async function fetchCvesForKeyword(keyword, cache) {
 
 // ── Hook ──────────────────────────────────────────────────
 
-export function useCve(enabled = false) {
+export function useCve(enabled = false, keywords = BASE_CVE_KEYWORDS) {
   const [data, setData] = useState(null);
   const [err, setErr]   = useState(null);
 
+  const kwKey = keywords.join(',');
+
   useEffect(() => {
-    if (!enabled || CVE_KEYWORDS.length === 0) {
+    if (!enabled || keywords.length === 0) {
       setData(null);
       setErr(null);
       return;
@@ -95,17 +97,17 @@ export function useCve(enabled = false) {
     const refresh = async () => {
       try {
         const cache    = lsLoadCache();
-        const uncached = CVE_KEYWORDS.filter(kw => {
+        const uncached = keywords.filter(kw => {
           const slot = cache[kw];
           return !slot || Date.now() - slot.fetchedAt >= CACHE_TTL;
         });
 
         let results;
         if (uncached.length <= 4) {
-          results = await Promise.all(CVE_KEYWORDS.map(kw => fetchCvesForKeyword(kw, cache)));
+          results = await Promise.all(keywords.map(kw => fetchCvesForKeyword(kw, cache)));
         } else {
           results = [];
-          for (const kw of CVE_KEYWORDS) {
+          for (const kw of keywords) {
             results.push(await fetchCvesForKeyword(kw, cache));
           }
         }
@@ -125,7 +127,8 @@ export function useCve(enabled = false) {
     refresh();
     const id = setInterval(refresh, POLL_INTERVAL);
     return () => clearInterval(id);
-  }, [enabled]);
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [enabled, kwKey]);
 
   return { data, err };
 }
@@ -139,7 +142,7 @@ function cvssToSeverity(score) {
   return 'info';
 }
 
-export function cveIssues(data) {
+export function cveIssues(data, keywords = BASE_CVE_KEYWORDS) {
   if (!Array.isArray(data)) return [];
 
   const sorted = [...data].sort((a, b) => {
@@ -149,7 +152,7 @@ export function cveIssues(data) {
     return (b.published ?? '').localeCompare(a.published ?? '');
   });
 
-  const sourceLabel = `nvd · ${CVE_KEYWORDS.join(', ')}`;
+  const sourceLabel = `nvd · ${keywords.join(', ')}`;
   const issues      = [];
 
   for (const vuln of sorted) {
