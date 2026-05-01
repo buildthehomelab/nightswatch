@@ -6,17 +6,23 @@ const __CUSTOMIZE_STYLE = `
   }
 
   .twk-drawer {
-    position: fixed; left: 0; top: 0; height: 100vh; width: 390px;
+    position: fixed; left: 0; right: 0;
     z-index: 2147483645;
     background: var(--paper);
-    border-right: 0.5px solid var(--rule);
     display: flex; flex-direction: column;
-    transform: translateX(-100%);
     transition: transform 0.22s cubic-bezier(0.4, 0, 0.2, 1);
     will-change: transform;
     overflow: hidden;
   }
-  .twk-drawer.open { transform: translateX(0); }
+  .twk-drawer[data-side="top"] {
+    top: 0; border-bottom: 0.5px solid var(--rule);
+    transform: translateY(-100%);
+  }
+  .twk-drawer[data-side="bottom"] {
+    bottom: 0; border-top: 0.5px solid var(--rule);
+    transform: translateY(100%);
+  }
+  .twk-drawer.open { transform: translateY(0); }
 
   .twk-hd {
     display: flex; align-items: center; justify-content: space-between;
