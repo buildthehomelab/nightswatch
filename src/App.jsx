@@ -516,6 +516,10 @@ export default function App() {
           showWan={t.showWan}
           showUptime={t.showUptime}
           showNas={t.showNas}
+          showNasName={t.showNasName}
+          showNasLoad={t.showNasLoad}
+          showNasApps={t.showNasApps}
+          showNasPools={t.showNasPools}
           showDate={t.showDate}
           placement={t.ambientPlacement}
           nasData={nasData}
