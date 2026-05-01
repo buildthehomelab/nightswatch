@@ -560,6 +560,17 @@ export default function App() {
         <CustomizeToggle label="Uptime"   value={t.showUptime}  onChange={(v) => setTweak("showUptime", v)} />
         <CustomizeToggle label="WAN"      value={t.showWan}     onChange={(v) => setTweak("showWan", v)} />
         <CustomizeToggle label="Weather"  value={t.showWeather} onChange={(v) => setTweak("showWeather", v)} />
+        <CustomizeSection label="Keyboard shortcuts" />
+        <table className="help-table">
+          <tbody>
+            {SHORTCUTS.map(({ key, desc }) => (
+              <tr key={key}>
+                <td className="help-key">{key}</td>
+                <td className="help-desc">{desc}</td>
+              </tr>
+            ))}
+          </tbody>
+        </table>
       </CustomizePanel>
     </>
   );
