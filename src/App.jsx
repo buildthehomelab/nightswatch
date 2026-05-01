@@ -283,7 +283,7 @@ function Issue({ issue, isOpen, isFocused, onToggle, index, onOpenLogs }) {
   );
 }
 
-function IssueList({ issues, onOpenLogs }) {
+function IssueList({ issues, onOpenLogs, onIgnore }) {
   const [openId, setOpenId] = useState(null);
   const [focusedIndex, setFocusedIndex] = useState(null);
   const [filterSev, setFilterSev] = useState(null);
