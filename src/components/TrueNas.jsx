@@ -287,7 +287,7 @@ export function nasIssues(data) {
         when: whenStr,
         description: `${pool.name} is ${pct}% full with ${free} free of ${total}.\nZFS performance degrades above 80%; dataset writes may stall above 95%.`,
         logs: [
-          { t: now, level: "warn", text: `[zfs] ${pool.name} capacity: ${pct}% (${free} free / ${total})` },
+          { t: firstStr, level: "warn", text: `[zfs] ${pool.name} capacity: ${pct}% (${free} free / ${total})` },
         ],
         actions: [{ label: "open truenas ›", href: UI }],
       });
