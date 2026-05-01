@@ -528,7 +528,7 @@ export default function App() {
                 {mastheadPhrase(issues)}
               </h1>
             </div>
-            <IssueList issues={issues} onOpenLogs={openLogs} />
+            <IssueList issues={visibleIssues} onOpenLogs={openLogs} onIgnore={handleIgnore} />
           </>
         )}
 
