@@ -91,25 +91,27 @@ function Ambient({ now, wanUp, uptime, weather, showWeather, showWan, showUptime
     <footer className="ambient rise" data-placement={placement}>
       {showNas && nasData && (
         <div className="left">
-          <span className="item">
-            <a href={NAS_UI} target="_blank" rel="noopener noreferrer" className="nas-link">{hostname}</a>
-          </span>
-          {load1 && (
+          {showNasName && (
+            <span className="item">
+              <a href={NAS_UI} target="_blank" rel="noopener noreferrer" className="nas-link">{hostname}</a>
+            </span>
+          )}
+          {showNasLoad && load1 && (
             <span className="item"><span className="k">load</span><span className="v">{load1}</span></span>
           )}
-          {cpuTemp != null && (
+          {showNasLoad && cpuTemp != null && (
             <span className="item">
               <span className="k">cpu</span>
               <span className={`v${cpuCls}`}>{cpuTemp}°C</span>
             </span>
           )}
-          {apps.length > 0 && (
+          {showNasApps && apps.length > 0 && (
             <span className="item">
               <span className="k">apps</span>
               <span className="v">{running}/{apps.length}</span>
             </span>
           )}
-          {pools.map(pool => {
+          {showNasPools && pools.map(pool => {
             const pct    = pool.size ? Math.round((pool.allocated / pool.size) * 100) : null;
             const ok     = pool.status === 'ONLINE';
             const dotCls = !ok || pct >= POOL_CRIT_PCT ? ' crit' : pct >= POOL_WARN_PCT ? ' warn' : '';
