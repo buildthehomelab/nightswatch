@@ -429,13 +429,6 @@ export default function App() {
     return [...fixtureIssues, ...nasIssues(nasData)];
   }, [t.state, wanUp, wanDownSince, nasData]);
 
-  const lastCheck = useMemo(() => {
-    if (!lastChecked) return "never";
-    const secs = Math.floor((now - lastChecked) / 1000);
-    if (secs < 60) return "just now";
-    const mins = Math.floor(secs / 60);
-    return `${mins}m ago`;
-  }, [now, lastChecked]);
 
   const uptime = useMemo(() => {
     if (nasData?.info?.uptime_seconds != null) return fmtUptime(nasData.info.uptime_seconds);
