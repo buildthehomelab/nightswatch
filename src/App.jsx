@@ -321,7 +321,6 @@ export default function App() {
   const { data: nasData, err: nasErr } = useTrueNas();
   const [wanUp, setWanUp] = useState(true);
   const [wanDownSince, setWanDownSince] = useState(null);
-  const [lastChecked, setLastChecked] = useState(null);
   const wanFailCount = useRef(0);
   const [weather, setWeather] = useState("—");
 
