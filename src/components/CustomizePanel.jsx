@@ -168,7 +168,7 @@ export function CustomizeColumn({ wide, push, children }) {
   return <div className={cls}>{children}</div>;
 }
 
-export function CustomizePanel({ title = 'Options', side = 'top', children }) {
+export function CustomizePanel({ side = 'top', children }) {
   const devMode = new URLSearchParams(window.location.search).has('dev');
   const [open, setOpen] = useState(devMode);
 
