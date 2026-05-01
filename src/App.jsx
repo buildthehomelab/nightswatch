@@ -480,7 +480,7 @@ export default function App() {
           wanUp={wanUp}
           uptime={uptime}
           weather={weather}
-          lastCheck={lastCheck}
+
           showWeather={t.showWeather}
           showNas={t.showNas}
           nasData={nasData}
