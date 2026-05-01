@@ -531,6 +531,7 @@ export default function App() {
           showNasName={t.showNasName}
           showNasLoad={t.showNasLoad}
           showNasCpuTemp={t.showNasCpuTemp}
+          showNasMemory={t.showNasMemory}
           showNasApps={t.showNasApps}
           showNasPools={t.showNasPools}
           showDate={t.showDate}
