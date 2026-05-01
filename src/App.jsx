@@ -396,14 +396,9 @@ export default function App() {
         if (dozzleOpen) return;
         e.preventDefault();
         openLogs();
-      } else if (e.key === "h" || e.key === "H" || e.key === "?") {
-        e.preventDefault();
-        setHelpOpen((v) => !v);
       } else if (e.key === "r" || e.key === "R") {
         e.preventDefault();
         setNow(new Date());
-      } else if (e.key === "Escape") {
-        setHelpOpen(false);
       }
     };
     window.addEventListener("keydown", onKey);
