@@ -260,6 +260,7 @@ function IssueList({ issues, onOpenLogs }) {
   const infos = issues.filter((i) => i.severity === "info").length;
 
   const summary = [];
+  if (crits) summary.push(`${crits} critical`);
   if (warns) summary.push(`${warns} warning${warns > 1 ? "s" : ""}`);
   if (infos) summary.push(`${infos} advisor${infos > 1 ? "ies" : "y"}`);
 
