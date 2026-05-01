@@ -374,11 +374,15 @@ export function nasIssues(data) {
     lsClearFirstSeen('nas-cpu-temp');
   }
 
-  const memTotal = data.info?.physmem ?? null;
-  const memUsed  = data.memUsed ?? null;
-  const memPct   = memUsed != null && memTotal ? Math.round((memUsed / memTotal) * 100) : null;
+  const physmem     = data.info?.physmem ?? null;
+  const memFree     = data.memFree ?? null;
+  const arcSize     = data.arcSize ?? null;
+  const memServices = physmem != null && memFree != null && arcSize != null
+    ? Math.max(0, physmem - memFree - arcSize) : null;
+  const memPct = memServices != null && physmem
+    ? Math.round((memServices / physmem) * 100) : null;
   if (memPct != null && memPct >= MEM_WARN_PCT) {
-    const memId  = 'nas-mem';
+    const memId   = 'nas-mem';
     const firstTs = lsMarkFirstSeen(memId);
     const memAge  = Date.now() - firstTs;
     issues.push({
@@ -389,9 +393,9 @@ export function nasIssues(data) {
       source: 'truenas · system',
       firstSeenTs: firstTs,
       when: memAge >= 60000 ? `${fmtAge(memAge)} unresolved` : 'now',
-      description: `TrueNAS memory is ${memPct}% used (warn ≥${MEM_WARN_PCT}%, crit ≥${MEM_CRIT_PCT}%). ${fmtBytes(memUsed)} used of ${fmtBytes(memTotal)}.`,
+      description: `TrueNAS services are using ${fmtBytes(memServices)} of ${fmtBytes(physmem)} RAM (${memPct}%). ZFS ARC: ${fmtBytes(arcSize)}. Warn ≥${MEM_WARN_PCT}%, crit ≥${MEM_CRIT_PCT}%.`,
       logs: [
-        { t: now, level: memPct >= MEM_CRIT_PCT ? 'err' : 'warn', text: `[mem] usage: ${memPct}% (${fmtBytes(memUsed)} / ${fmtBytes(memTotal)})` },
+        { t: now, level: memPct >= MEM_CRIT_PCT ? 'err' : 'warn', text: `[mem] services: ${fmtBytes(memServices)} · arc: ${fmtBytes(arcSize)} · free: ${fmtBytes(memFree)}` },
       ],
       actions: [{ label: 'open truenas ›', href: UI }],
     });
