@@ -286,6 +286,28 @@ export function nasIssues(data) {
   const now = new Date().toLocaleTimeString(undefined, { hour: "2-digit", minute: "2-digit", hour12: false });
   const issues = [];
 
+  if (data.cpuTemp != null && data.cpuTemp >= CPU_WARN_C) {
+    const tempId  = 'nas-cpu-temp';
+    const firstTs = lsMarkFirstSeen(tempId);
+    const tempAge = Date.now() - firstTs;
+    issues.push({
+      id: tempId,
+      severity: data.cpuTemp >= CPU_CRIT_C ? 'crit' : 'warn',
+      label: 'cpu hot',
+      headline: `CPU temperature is ${data.cpuTemp}°C.`,
+      source: 'truenas · system',
+      firstSeenTs: firstTs,
+      when: tempAge >= 60000 ? `${fmtAge(tempAge)} unresolved` : 'now',
+      description: `TrueNAS CPU is at ${data.cpuTemp}°C (warn ≥${CPU_WARN_C}°C, crit ≥${CPU_CRIT_C}°C). Check airflow or fan health.`,
+      logs: [
+        { t: now, level: data.cpuTemp >= CPU_CRIT_C ? 'err' : 'warn', text: `[thermal] cpu temp: ${data.cpuTemp}°C` },
+      ],
+      actions: [{ label: 'open truenas ›', href: UI }],
+    });
+  } else {
+    lsClearFirstSeen('nas-cpu-temp');
+  }
+
   for (const pool of data.pools) {
     if (pool.status !== "ONLINE") {
       const poolId  = `nas-pool-${pool.name}`;
