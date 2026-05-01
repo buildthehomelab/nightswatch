@@ -33,6 +33,7 @@ Three top-level states driven by `issues.length` and severity:
 
 ## TrueNAS integration
 
+- **Version: TrueNAS SCALE 25.10.3** (patronus.vaultrona.com)
 - Proxied through Vite dev server: `/truenas/*` → `https://patronus.vaultrona.com:3443`
 - Auth: `VITE_TRUENAS_KEY` env var (set in `.env.local`)
 - `VITE_STOPPED_APP_HIDE_MINUTES=60` — hides stopped apps from NAS strip after N minutes
