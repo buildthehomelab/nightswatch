@@ -56,11 +56,14 @@ const PHRASES = {
 
 function pickPhrase(arr) {
   const key = `nightswatch:phrase:${arr[0]}`;
-  const ONE_HOUR = 3_600_000;
+  const ONE_MINUTE = 60_000;
   let last = {};
   try { last = JSON.parse(localStorage.getItem(key) ?? '{}'); } catch {}
+  if (last.idx != null && Date.now() - (last.ts ?? 0) < ONE_MINUTE) {
+    return arr[last.idx] ?? arr[0];
+  }
   let idx = Math.floor(Math.random() * arr.length);
-  if (arr.length > 1 && Date.now() - (last.ts ?? 0) > ONE_HOUR) {
+  if (arr.length > 1) {
     while (idx === last.idx) idx = Math.floor(Math.random() * arr.length);
   }
   try { localStorage.setItem(key, JSON.stringify({ idx, ts: Date.now() })); } catch {}
