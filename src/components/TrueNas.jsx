@@ -522,7 +522,7 @@ export function nasIssues(data) {
       when: whenStr,
       description: `TrueNAS app "${app.name}" is in state ${app.state}${app.human_version ? ` (version ${app.human_version})` : ""}.${descExtra}`,
       logs: [
-        { t: stoppedAt ?? now, level: severity === "crit" ? "err" : "warn", text: `[app] ${app.name}: state=${app.state}` },
+        { t: stoppedAt ?? "—", level: severity === "crit" ? "err" : "warn", text: `[app] ${app.name}: state=${app.state}` },
       ],
       actions: [{ label: "open truenas apps ›", href: `${UI}/ui/apps/installed` }],
     });
