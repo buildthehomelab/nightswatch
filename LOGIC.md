@@ -248,11 +248,12 @@ Output format: "4d" | "12h" | "45m" | "30s"
 
 | Key | Owner | Contents |
 |-----|-------|---------|
-| `dashboard:customize` | CustomizePanel | all UI settings object |
-| `dashboard:ignored` | App | `[[ignoreKey, label], ...]` tuples |
-| `truenas:releaseCache` | TrueNas | `{[image]: {version, fetchedAt}}` (4h TTL) |
-| `truenas:stoppedSince` | TrueNas | `[[appName, timestamp], ...]` tuples |
-| `truenas:firstSeen:*` | TrueNas | per-issue first-seen timestamps (cpu-temp, pool-cap, etc.) |
+| `nightswatch:customize` | CustomizePanel | all UI settings object |
+| `nightswatch:ignored` | App | `[[ignoreKey, label], ...]` tuples |
+| `nightswatch:phrase:{arr[0]}` | pickPhrase | `{idx, ts}` — last picked index + timestamp (1-min TTL per phrase set) |
+| `truenas:releaseCache` | truenas.js | `{[image]: {version, fetchedAt}}` (4h TTL) |
+| `truenas:stoppedSince` | truenas.js | `[[appName, timestamp], ...]` tuples |
+| `truenas:firstSeen` | truenas.js | `{[issueKey]: timestamp}` — per-issue first-seen (cpu-temp, pool-cap, etc.) |
 
 ---
 
