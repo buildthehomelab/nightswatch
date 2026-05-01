@@ -165,8 +165,8 @@ All handlers skip when an INPUT or TEXTAREA is focused.
 | `3` | IssueList | Toggle info severity filter |
 | `l` | App | Toggle Dozzle log viewer |
 | `r` | App | Refresh (force re-render + new timestamp) |
-| `` ` `` / `h` / `?` | CustomizePanel | Toggle dev panel |
-| `Esc` | Global | Close any open overlay |
+| `` ` `` / `h` / `?` | CustomizePanel | Toggle CustomizePanel (keyboard shortcuts table lives inside it) |
+| `Esc` | CustomizePanel | Close CustomizePanel |
 
 > **Note:** `j` = prev, `k` = next. Intentional inversion from vim convention.
 
