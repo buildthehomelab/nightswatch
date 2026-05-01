@@ -221,7 +221,7 @@ function Logs({ lines }) {
   );
 }
 
-function Issue({ issue, isOpen, isFocused, onToggle, index, onOpenLogs }) {
+function Issue({ issue, isOpen, isFocused, onToggle, index, onOpenLogs, onIgnore }) {
   const ref = useRef(null);
   useEffect(() => {
     if (isFocused) ref.current?.scrollIntoView({ block: "nearest", behavior: "smooth" });
