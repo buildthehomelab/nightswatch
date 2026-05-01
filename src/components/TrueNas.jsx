@@ -375,6 +375,31 @@ export function nasIssues(data) {
     lsClearFirstSeen('nas-cpu-temp');
   }
 
+  const memTotal = data.info?.physmem ?? null;
+  const memUsed  = data.memUsed ?? null;
+  const memPct   = memUsed != null && memTotal ? Math.round((memUsed / memTotal) * 100) : null;
+  if (memPct != null && memPct >= MEM_WARN_PCT) {
+    const memId  = 'nas-mem';
+    const firstTs = lsMarkFirstSeen(memId);
+    const memAge  = Date.now() - firstTs;
+    issues.push({
+      id: memId,
+      severity: memPct >= MEM_CRIT_PCT ? 'crit' : 'warn',
+      label: 'memory high',
+      headline: `Memory usage is at ${memPct}%.`,
+      source: 'truenas · system',
+      firstSeenTs: firstTs,
+      when: memAge >= 60000 ? `${fmtAge(memAge)} unresolved` : 'now',
+      description: `TrueNAS memory is ${memPct}% used (warn ≥${MEM_WARN_PCT}%, crit ≥${MEM_CRIT_PCT}%). ${fmtBytes(memUsed)} used of ${fmtBytes(memTotal)}.`,
+      logs: [
+        { t: now, level: memPct >= MEM_CRIT_PCT ? 'err' : 'warn', text: `[mem] usage: ${memPct}% (${fmtBytes(memUsed)} / ${fmtBytes(memTotal)})` },
+      ],
+      actions: [{ label: 'open truenas ›', href: UI }],
+    });
+  } else {
+    lsClearFirstSeen('nas-mem');
+  }
+
   const newVer = data.updateStatus?.status?.new_version;
   if (newVer?.version) {
     const updateId  = 'nas-sys-update';
