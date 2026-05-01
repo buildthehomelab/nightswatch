@@ -536,50 +536,56 @@ export default function App() {
         onClose={() => setDozzleOpen(false)}
       />
 
-      <CustomizePanel>
-        <CustomizeRadio
-          label="Theme"
-          value={t.theme}
-          options={[
-            { value: "paper", label: "paper" },
-            { value: "ink",   label: "ink" },
-          ]}
-          onChange={(v) => setTweak("theme", v)}
-        />
-        <CustomizeSection label="Ambient strip" />
-        <CustomizeRadio
-          label="Placement"
-          value={t.ambientPlacement}
-          options={[
-            { value: "bottom", label: "bottom" },
-            { value: "top",    label: "top" },
-          ]}
-          onChange={(v) => setTweak("ambientPlacement", v)}
-        />
-        <CustomizeToggle label="Date"     value={t.showDate}    onChange={(v) => setTweak("showDate", v)} />
-        <CustomizeToggle label="TrueNAS" value={t.showNas} onChange={(v) => setTweak("showNas", v)} />
-        <div className="twk-sub">
-          <CustomizeToggle label="Name"  value={t.showNasName}  onChange={(v) => setTweak("showNasName", v)} />
-          <CustomizeToggle label="Load"    value={t.showNasLoad}    onChange={(v) => setTweak("showNasLoad", v)} />
+      <CustomizePanel side={t.ambientPlacement === "bottom" ? "top" : "bottom"}>
+        <CustomizeColumn>
+          <CustomizeSection label="Theme" />
+          <CustomizeRadio
+            label="Theme"
+            value={t.theme}
+            options={[
+              { value: "paper", label: "paper" },
+              { value: "ink",   label: "ink" },
+            ]}
+            onChange={(v) => setTweak("theme", v)}
+          />
+          <CustomizeSection label="Ambient strip" />
+          <CustomizeRadio
+            label="Placement"
+            value={t.ambientPlacement}
+            options={[
+              { value: "bottom", label: "bottom" },
+              { value: "top",    label: "top" },
+            ]}
+            onChange={(v) => setTweak("ambientPlacement", v)}
+          />
+          <CustomizeToggle label="Date"    value={t.showDate}    onChange={(v) => setTweak("showDate", v)} />
+          <CustomizeToggle label="Uptime"  value={t.showUptime}  onChange={(v) => setTweak("showUptime", v)} />
+          <CustomizeToggle label="WAN"     value={t.showWan}     onChange={(v) => setTweak("showWan", v)} />
+          <CustomizeToggle label="Weather" value={t.showWeather} onChange={(v) => setTweak("showWeather", v)} />
+        </CustomizeColumn>
+        <CustomizeColumn>
+          <CustomizeSection label="TrueNAS" />
+          <CustomizeToggle label="Show"     value={t.showNas}       onChange={(v) => setTweak("showNas", v)} />
+          <CustomizeToggle label="Name"     value={t.showNasName}   onChange={(v) => setTweak("showNasName", v)} />
+          <CustomizeToggle label="Load"     value={t.showNasLoad}   onChange={(v) => setTweak("showNasLoad", v)} />
           <CustomizeToggle label="CPU Temp" value={t.showNasCpuTemp} onChange={(v) => setTweak("showNasCpuTemp", v)} />
-          <CustomizeToggle label="Memory"  value={t.showNasMemory}  onChange={(v) => setTweak("showNasMemory", v)} />
-          <CustomizeToggle label="Apps"    value={t.showNasApps}    onChange={(v) => setTweak("showNasApps", v)} />
-          <CustomizeToggle label="Pools" value={t.showNasPools} onChange={(v) => setTweak("showNasPools", v)} />
-        </div>
-        <CustomizeToggle label="Uptime"   value={t.showUptime}  onChange={(v) => setTweak("showUptime", v)} />
-        <CustomizeToggle label="WAN"      value={t.showWan}     onChange={(v) => setTweak("showWan", v)} />
-        <CustomizeToggle label="Weather"  value={t.showWeather} onChange={(v) => setTweak("showWeather", v)} />
-        <CustomizeSection label="Keyboard shortcuts" />
-        <table className="help-table">
-          <tbody>
-            {SHORTCUTS.map(({ key, desc }) => (
-              <tr key={key}>
-                <td className="help-key">{key}</td>
-                <td className="help-desc">{desc}</td>
-              </tr>
-            ))}
-          </tbody>
-        </table>
+          <CustomizeToggle label="Memory"   value={t.showNasMemory} onChange={(v) => setTweak("showNasMemory", v)} />
+          <CustomizeToggle label="Apps"     value={t.showNasApps}   onChange={(v) => setTweak("showNasApps", v)} />
+          <CustomizeToggle label="Pools"    value={t.showNasPools}  onChange={(v) => setTweak("showNasPools", v)} />
+        </CustomizeColumn>
+        <CustomizeColumn wide>
+          <CustomizeSection label="Keyboard shortcuts" />
+          <table className="help-table">
+            <tbody>
+              {SHORTCUTS.map(({ key, desc }) => (
+                <tr key={key}>
+                  <td className="help-key">{key}</td>
+                  <td className="help-desc">{desc}</td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
+        </CustomizeColumn>
       </CustomizePanel>
     </>
   );
