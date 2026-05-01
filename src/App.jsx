@@ -495,7 +495,7 @@ export default function App() {
     const liveIssues = [
       ...nasIssues(nasData),
       ...cveIssues(cveData),
-      ...(DEMO ? CVE_FIXTURES : []),
+      ...(DEMO && t.enableCve ? CVE_FIXTURES : []),
     ];
     if (t.enableTruenas && nasErr) {
       liveIssues.unshift({
