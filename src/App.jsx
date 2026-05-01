@@ -448,7 +448,7 @@ export default function App() {
       <div className="page">
 
         {isHealthy ? (
-          <Healthy now={now} uptime={uptime} />
+          <Healthy now={now} uptime={uptime} nasData={nasData} />
         ) : (
           <>
             <div className="masthead">
