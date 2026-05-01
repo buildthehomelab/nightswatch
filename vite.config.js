@@ -12,22 +12,21 @@ function truenasProxyPlugin(key) {
 
   function middleware(req, res) {
     const upstreamPath = req.url.replace(/^\/truenas/, '')
+    // Strip hop-by-hop and encoding headers; TrueNAS returns plain JSON without them
+    const { 'accept-encoding': _ae, connection: _conn, 'transfer-encoding': _te, ...fwdHeaders } = req.headers
     const proxyReq = https.request({
       hostname: TRUENAS_TARGET,
       port:     TRUENAS_PORT,
       path:     upstreamPath,
       method:   req.method,
       headers: {
-        ...req.headers,
+        ...fwdHeaders,
         host:          TRUENAS_TARGET,
         authorization: `Bearer ${key ?? ''}`,
       },
       rejectUnauthorized: false,
     }, (proxyRes) => {
-      res.writeHead(proxyRes.statusCode, {
-        'content-type':  proxyRes.headers['content-type'] ?? 'application/json',
-        'cache-control': proxyRes.headers['cache-control'] ?? 'no-store',
-      })
+      res.writeHead(proxyRes.statusCode, proxyRes.headers)
       proxyRes.pipe(res)
     })
 
