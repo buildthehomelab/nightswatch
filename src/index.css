@@ -217,8 +217,6 @@ body {
   font-family: var(--sans);
   font-size: 12px;
   font-weight: 600;
-  letter-spacing: 0.125px;
-  text-transform: uppercase;
   color: var(--ink-3);
   padding-bottom: 12px;
   border-bottom: 1px solid var(--rule);
