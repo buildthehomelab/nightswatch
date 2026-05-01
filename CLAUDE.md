@@ -49,7 +49,6 @@ Three top-level states driven by `issues.length` and severity:
 | `h` or `?` | Help overlay |
 | `l` | Open Dozzle log viewer |
 | `r` | Refresh (force re-render) |
-| `t` | Toggle paper/ink theme |
 | `` ` `` | Toggle TweaksPanel |
 | `Esc` | Close overlay |
 
