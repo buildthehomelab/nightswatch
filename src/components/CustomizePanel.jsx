@@ -63,10 +63,11 @@ const __CUSTOMIZE_STYLE = `
     font-size: 9px; font-weight: 500;
     letter-spacing: 0.1em; text-transform: uppercase;
     color: var(--ink-3);
-    padding: 20px 0 8px;
+    padding: 12px 0 8px;
     border-bottom: 0.5px solid var(--rule);
     margin-bottom: 14px;
   }
+  .twk-col > .twk-sect:first-child { padding-top: 0; }
 
   .twk-row { display: flex; flex-direction: column; gap: 6px; margin-bottom: 14px; }
   .twk-row-h {
