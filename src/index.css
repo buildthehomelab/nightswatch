@@ -97,6 +97,8 @@ body {
 .ambient .dot.crit { background: var(--crit); }
 .ambient .item .v.warn { color: var(--warn); }
 .ambient .item .v.crit { color: var(--crit); }
+.ambient-link { color: var(--accent); text-decoration: none; font-weight: 600; }
+.ambient-link:hover { text-decoration: underline; }
 
 /* ── Masthead ────────────────────────────────────────── */
 .masthead {
