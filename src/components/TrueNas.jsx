@@ -392,11 +392,12 @@ export function nasIssues(data) {
 
     issues.push({
       id: updateId,
-      severity: "info",
+      severity: updateStale ? "warn" : "info",
       label: "app update",
       headline,
       source: "truenas · apps",
-      when: relDate ? `released ${relDate}` : firstStr,
+      firstSeenTs: firstTs,
+      when: updateStale ? `${fmtAge(updateAge)} unresolved` : relDate ? `released ${relDate}` : firstStr,
       description,
       logs,
       actions: [
