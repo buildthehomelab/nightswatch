@@ -90,5 +90,5 @@ Fetches `https://1.1.1.1` with `mode: "no-cors"` every 30s. Requires 3 consecuti
 - Replace mock Dozzle with iframe to real Dozzle instance
 - Wire issue actions to real backend endpoints (auth required)
 - Add `aria-*` + keyboard support to issue rows (currently `<div>`)
-- Guard TweaksPanel behind `?dev=1` or remove entirely
+- Guard CustomizePanel behind `?dev=1` or remove entirely
 - Real weather, real WAN check via router, real uptime from `/proc/uptime`
