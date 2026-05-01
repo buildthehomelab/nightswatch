@@ -205,13 +205,22 @@ async function fetchCpuTemp(hdrs) {
   } catch { return null; }
 }
 
+async function fetchUpdateStatus(hdrs) {
+  try {
+    const r = await fetch(`${API}/update/status`, { headers: hdrs });
+    if (!r.ok) return null;
+    return r.json();
+  } catch { return null; }
+}
+
 async function fetchData() {
   const hdrs = { Authorization: `Bearer ${KEY}` };
-  const [info, pools, apps, cpuTemp] = await Promise.all([
+  const [info, pools, apps, cpuTemp, updateStatus] = await Promise.all([
     fetch(`${API}/system/info`, { headers: hdrs }).then(r => r.json()),
     fetch(`${API}/pool`,        { headers: hdrs }).then(r => r.json()),
     fetch(`${API}/app`,         { headers: hdrs }).then(r => r.json()).catch(() => []),
     fetchCpuTemp(hdrs),
+    fetchUpdateStatus(hdrs),
   ]);
 
   const appList = Array.isArray(apps) ? apps : [];
