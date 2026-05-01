@@ -27,7 +27,6 @@ export const MOCK_NAS_DATA = {
   cpuTemp: 54,
   memFree: 18.2 * 1e9,
   arcSize:  6.4 * 1e9,
-  physmem:  32  * 1e9,
   updateStatus: null,
   stoppedSince: new Map([
     ['unpackerr',   new Date(Date.now() - 1000 * 60 * 40)],
