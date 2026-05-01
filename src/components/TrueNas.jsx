@@ -324,7 +324,6 @@ export function nasIssues(data) {
     });
   }
 
-  const upgradeableIds = new Set((data.apps ?? []).filter(a => a.upgrade_available).map(a => `nas-app-update-${a.name}`));
   for (const app of (data.apps ?? []).filter(a => !a.upgrade_available)) {
     lsClearFirstSeen(`nas-app-update-${app.name}`);
   }
