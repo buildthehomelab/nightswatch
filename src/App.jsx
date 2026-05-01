@@ -22,6 +22,7 @@ const TWEAK_DEFAULTS = {
   showUptime: true,
   showNas: false,
   showDate: true,
+  ambientPlacement: "bottom",
 };
 
 const MASTHEAD_STALE_MS = 4 * 60 * 60 * 1000;
