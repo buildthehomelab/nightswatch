@@ -1,4 +1,5 @@
 import { useState, useEffect, useRef } from 'react';
+import { MOCK_NAS_DATA } from '../data/mockNas';
 
 export const UI  = import.meta.env.VITE_TRUENAS_URL ?? "";
 const API = "/truenas/api/v2.0";
