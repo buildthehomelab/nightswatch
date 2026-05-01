@@ -244,7 +244,8 @@ function Issue({ issue, isOpen, isFocused, onToggle, index, onOpenLogs, onIgnore
           <div className="description">{issue.description}</div>
           <div className="actions">
             {issue.actions.map((a) => {
-              if (typeof a === "object" && a.href) {
+              if (typeof a === "object" && a !== null) {
+                if (!a.href) return null;
                 return (
                   <a key={a.label} href={a.href} target="_blank" rel="noopener noreferrer"
                      className="action-link" onClick={(e) => e.stopPropagation()}>
