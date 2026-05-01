@@ -1,6 +1,6 @@
 import { useState, useEffect, useRef, useMemo } from 'react';
 import Dozzle from './components/Dozzle';
-import { useTrueNas, nasIssues, fmtUptime, fmtAge, fmtBytes, UI as NAS_UI, POOL_WARN_PCT, POOL_CRIT_PCT, CPU_WARN_C, CPU_CRIT_C } from './components/TrueNas';
+import { useTrueNas, nasIssues, fmtUptime, fmtAge, fmtBytes, UI as NAS_UI, POOL_WARN_PCT, POOL_CRIT_PCT, CPU_WARN_C, CPU_CRIT_C } from './services/truenas';
 import {
   useCustomize, CustomizePanel, CustomizeColumn, CustomizeSection, CustomizeRadio, CustomizeToggle,
 } from './components/CustomizePanel';
