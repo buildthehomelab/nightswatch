@@ -278,7 +278,7 @@ export function useTrueNas(enabled = true) {
   const stoppedSince    = useRef(lsLoad());
 
   useEffect(() => {
-    if (DEMO) return;
+    if (DEMO) { setData(enabled ? MOCK_NAS_DATA : null); return; }
     if (!enabled) { setData(null); setErr(null); return; }
     const refresh = () =>
       fetchData()
