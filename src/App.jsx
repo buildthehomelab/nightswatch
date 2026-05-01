@@ -462,9 +462,6 @@ export default function App() {
           </>
         )}
 
-        <footer className="footnote rise rise-d3">
-          <a href="#" onClick={(e) => { e.preventDefault(); openLogs(); }}>logs</a>
-        </footer>
       </div>
 
       {t.showAmbient && (
