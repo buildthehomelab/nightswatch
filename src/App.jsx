@@ -2,13 +2,16 @@ import { useState, useEffect, useRef, useMemo } from 'react';
 import Dozzle from './components/Dozzle';
 import { useTrueNas, nasIssues, fmtUptime, fmtAge, fmtBytes, UI as NAS_UI, POOL_WARN_PCT, POOL_CRIT_PCT, CPU_WARN_C, CPU_CRIT_C } from './services/truenas';
 import { useCve, cveIssues } from './services/cve';
+import { CVE_FIXTURES } from './data/fixtures';
+
+const DEMO = import.meta.env.DEMO === 'true';
 import {
   useCustomize, CustomizePanel, CustomizeColumn, CustomizeSection, CustomizeRadio, CustomizeToggle,
 } from './components/CustomizePanel';
 
 const WEATHER_LOCATION = import.meta.env.VITE_WEATHER_LOCATION ?? "";
 
-if (import.meta.env.DEMO === 'true') document.title = 'Nightswatch [demo]';
+if (DEMO) document.title = 'Nightswatch [demo]';
 
 const LS_IGNORED_KEY = 'nightswatch:ignored';
 function loadIgnored() {
@@ -492,6 +495,7 @@ export default function App() {
     const liveIssues = [
       ...nasIssues(nasData),
       ...cveIssues(cveData),
+      ...(DEMO ? CVE_FIXTURES : []),
     ];
     if (t.enableTruenas && nasErr) {
       liveIssues.unshift({
