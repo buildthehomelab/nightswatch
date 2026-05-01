@@ -397,10 +397,18 @@ export default function App() {
   const [dozzleOpen, setDozzleOpen] = useState(false);
   const [ignored, setIgnored] = useState(() => loadIgnored());
 
-  const handleIgnore = (key) => {
+  const handleIgnore = (key, label) => {
     setIgnored(prev => {
-      const next = new Set(prev);
-      next.add(key);
+      const next = new Map(prev);
+      next.set(key, label);
+      saveIgnored(next);
+      return next;
+    });
+  };
+  const handleUnignore = (key) => {
+    setIgnored(prev => {
+      const next = new Map(prev);
+      next.delete(key);
       saveIgnored(next);
       return next;
     });
