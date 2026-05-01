@@ -290,6 +290,22 @@ export default function App() {
   const [wanDownSince, setWanDownSince] = useState(null);
   const [lastChecked, setLastChecked] = useState(null);
   const wanFailCount = useRef(0);
+  const [weather, setWeather] = useState("—");
+
+  useEffect(() => {
+    if (!WEATHER_LOCATION) return;
+    const poll = async () => {
+      try {
+        const r = await fetch(`https://wttr.in/${encodeURIComponent(WEATHER_LOCATION)}?format=%t+%C`);
+        const text = (await r.text()).trim();
+        // "+14°C Partly cloudy" → "14°c · partly cloudy"
+        setWeather(text.replace(/^\+/, '').replace(/\s+/, ' · ').toLowerCase());
+      } catch {}
+    };
+    poll();
+    const id = setInterval(poll, 30 * 60 * 1000);
+    return () => clearInterval(id);
+  }, []);
 
   const openLogs = () => setDozzleOpen(true);
 
