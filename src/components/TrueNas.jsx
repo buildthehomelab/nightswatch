@@ -246,6 +246,7 @@ async function fetchMemUsed(hdrs) {
     if (!res.ok) return null;
     const json = await res.json();
     if (!Array.isArray(json) || !json[0]) return null;
+    console.log('[mem] raw:', JSON.stringify(json[0]).slice(0, 600));
     const { legend, data, aggregations } = json[0];
     // legend[0] = "time"; find "used" among the rest
     const legIdx = Array.isArray(legend)
