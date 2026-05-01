@@ -1,5 +1,8 @@
 import { useState, useEffect, useRef, useMemo } from 'react';
 
+const DEMO = import.meta.env.VITE_DEMO === 'true';
+const DOZZLE_BASE = import.meta.env.VITE_DOZZLE_URL ?? "";
+
 const DOZZLE_CONTAINERS = [
   { id: "sonarr",       name: "sonarr",       group: "media",     status: "ok"   },
   { id: "radarr",       name: "radarr",       group: "media",     status: "ok"   },
@@ -101,7 +104,37 @@ function buildInitialLines(containerId) {
   return lines;
 }
 
-export default function Dozzle({ open, onClose, initialContainer }) {
+function DozzleIframe({ open, onClose }) {
+  useEffect(() => {
+    if (!open) return;
+    const onKey = (e) => { if (e.key === "Escape") onClose(); };
+    window.addEventListener("keydown", onKey);
+    return () => window.removeEventListener("keydown", onKey);
+  }, [open, onClose]);
+
+  return (
+    <>
+      <div className={`dozzle-scrim${open ? " open" : ""}`} onClick={onClose} />
+      <aside className={`dozzle${open ? " open" : ""}`} aria-hidden={!open}>
+        <div className="dozzle-hd">
+          <div className="dozzle-title">
+            <span className="dozzle-label">logs</span>
+          </div>
+          <button className="dozzle-close" onClick={onClose}>esc</button>
+        </div>
+        <iframe
+          src={open ? DOZZLE_BASE : undefined}
+          title="Dozzle log viewer"
+          className="dozzle-frame"
+          sandbox="allow-scripts allow-same-origin allow-forms"
+          referrerPolicy="no-referrer"
+        />
+      </aside>
+    </>
+  );
+}
+
+function DozzleDemo({ open, onClose, initialContainer }) {
   const [active, setActive] = useState(initialContainer || "sonarr");
   const [filter, setFilter] = useState("");
   const [showInfo, setShowInfo] = useState(true);
@@ -233,4 +266,8 @@ export default function Dozzle({ open, onClose, initialContainer }) {
       </aside>
     </>
   );
+}
+
+export default function Dozzle(props) {
+  return DEMO ? <DozzleDemo {...props} /> : <DozzleIframe {...props} />;
 }
