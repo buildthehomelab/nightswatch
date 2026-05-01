@@ -581,6 +581,7 @@ export function nasIssues(data) {
       when: updateStale ? `${fmtAge(updateAge)} unresolved` : relDate ? `released ${relDate}` : firstStr,
       description,
       logs,
+      ignoreKey: `nas-app-update:${app.name}:${tag ?? next ?? 'unknown'}`,
       actions: [
         { label: "open truenas apps ›", href: `${UI}/ui/apps/installed` },
         ...(release?.html_url ? [{ label: "view release ›", href: release.html_url }] : []),
