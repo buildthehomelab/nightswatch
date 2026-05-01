@@ -135,10 +135,10 @@ body {
 
 /* ── Masthead ────────────────────────────────────────── */
 .masthead {
-  padding: 96px 0 24px;
+  padding: 72px 0 24px;
   display: flex;
   flex-direction: column;
-  gap: 6px;
+  gap: 8px;
 }
 .masthead .eyebrow {
   font-family: var(--mono);
