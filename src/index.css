@@ -294,7 +294,7 @@ body {
   color: var(--ink-2);
 }
 
-[data-theme="dark"] .issue.crit .severity { background: rgba(224,90,68,0.15); }
+[data-theme="dark"] .issue.crit .severity { background: rgba(208,85,53,0.15); }
 [data-theme="dark"] .issue.warn .severity { background: rgba(232,122,48,0.15); }
 [data-theme="dark"] .issue.info .severity { background: rgba(255,255,255,0.07); }
 
