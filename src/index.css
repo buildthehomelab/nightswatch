@@ -431,29 +431,19 @@ body {
 /* ── Dozzle overlay ──────────────────────────────────── */
 .dozzle-scrim {
   position: fixed; inset: 0;
-  background: rgba(20, 18, 14, 0);
-  pointer-events: none;
   z-index: 100;
-  transition: background-color .35s ease;
-}
-.dozzle-scrim.open {
-  background: rgba(20, 18, 14, 0.42);
-  pointer-events: auto;
-  backdrop-filter: blur(2px);
-  -webkit-backdrop-filter: blur(2px);
 }
 .dozzle {
   position: fixed;
   top: 0; right: 0; bottom: 0;
   width: min(1300px, 96vw);
-  background: #0e0d0b;
-  color: #d8d3c4;
+  background: var(--paper);
   z-index: 101;
   display: flex;
   flex-direction: column;
   transform: translateX(100%);
-  transition: transform .42s cubic-bezier(.22, 1, .36, 1);
-  box-shadow: -32px 0 80px rgba(0,0,0,.45);
+  transition: transform .3s cubic-bezier(.4, 0, .2, 1);
+  border-left: 0.5px solid var(--rule);
   font-family: var(--mono);
 }
 .dozzle.open { transform: translateX(0); }
@@ -462,33 +452,37 @@ body {
   display: flex;
   align-items: center;
   justify-content: space-between;
-  padding: 14px 18px;
-  border-bottom: 0.5px solid rgba(255,255,255,0.08);
+  padding: 20px 20px 16px;
+  border-bottom: 0.5px solid var(--rule);
   flex-shrink: 0;
 }
-.dozzle-hd .title {
-  display: flex; align-items: baseline; gap: 10px;
-  font-size: 12px; letter-spacing: 0.06em;
-  color: #8e8878; text-transform: lowercase;
+.dozzle-title {
+  display: flex; align-items: baseline; gap: 12px;
 }
-.dozzle-hd .title b {
-  color: #ece7d8; font-weight: 500; letter-spacing: 0.02em;
+.dozzle-label {
+  font-family: var(--mono);
+  font-size: 10px; font-weight: 500;
+  letter-spacing: 0.12em; text-transform: uppercase;
+  color: var(--ink-3);
 }
-.dozzle-hd .title .url {
-  color: #5e594d; font-size: 11px;
+.dozzle-url {
+  font-family: var(--mono);
+  font-size: 10px; letter-spacing: 0.02em;
+  color: var(--ink-3);
+  opacity: 0.5;
 }
 .dozzle-close {
   appearance: none; border: 0; background: transparent;
-  color: #8e8878; font-family: var(--mono); font-size: 12px;
-  cursor: pointer; padding: 6px 10px; border-radius: 4px;
-  letter-spacing: 0.04em;
+  color: var(--ink-3); font-family: var(--mono); font-size: 9.5px;
+  cursor: default; padding: 0; letter-spacing: 0.08em; text-transform: uppercase;
+  transition: color 0.12s;
 }
-.dozzle-close:hover { background: rgba(255,255,255,0.06); color: #ece7d8; }
+.dozzle-close:hover { color: var(--ink); }
 
 .dozzle-frame {
   flex: 1;
   border: none;
-  background: #0a0907;
+  background: var(--paper-2);
 }
 
 /* ── Help overlay ────────────────────────────────────── */
