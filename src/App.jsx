@@ -63,9 +63,10 @@ function mastheadEyebrow(issues) {
 
 
 function fmtDate(d) {
-  return d.toLocaleDateString(undefined, {
-    weekday: "long", month: "long", day: "numeric",
+  const parts = d.toLocaleDateString(undefined, {
+    weekday: "short", month: "short", day: "numeric",
   });
+  return parts.replace(/,?\s+/g, "_").toLowerCase();
 }
 function fmtTime(d) {
   return d.toLocaleTimeString(undefined, { hour: "2-digit", minute: "2-digit", hour12: false });
