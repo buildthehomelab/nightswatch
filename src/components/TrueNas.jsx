@@ -349,7 +349,6 @@ export function useTrueNas() {
 
 export function nasIssues(data) {
   if (!Array.isArray(data?.pools)) return [];
-  const now = new Date().toLocaleTimeString(undefined, { hour: "2-digit", minute: "2-digit", hour12: false });
   const issues = [];
 
   if (data.cpuTemp != null && data.cpuTemp >= CPU_WARN_C) {
