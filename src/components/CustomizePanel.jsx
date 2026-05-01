@@ -31,7 +31,7 @@ const __CUSTOMIZE_STYLE = `
     flex-shrink: 0;
   }
   .twk-title {
-    font-family: var(--mono);
+    font-family: var(--sans);
     font-size: 10px; font-weight: 500;
     letter-spacing: 0.12em; text-transform: uppercase;
     color: var(--ink-3);
@@ -39,7 +39,7 @@ const __CUSTOMIZE_STYLE = `
   .twk-x {
     appearance: none; border: 0; background: transparent;
     color: var(--ink-3); cursor: default;
-    font-family: var(--mono); font-size: 9.5px;
+    font-family: var(--sans); font-size: 9.5px;
     letter-spacing: 0.08em; text-transform: uppercase;
     padding: 0; line-height: 1; transition: color 0.12s;
   }
@@ -59,7 +59,7 @@ const __CUSTOMIZE_STYLE = `
   .twk-col-wide { min-width: 220px; }
 
   .twk-sect {
-    font-family: var(--mono);
+    font-family: var(--sans);
     font-size: 9px; font-weight: 500;
     letter-spacing: 0.1em; text-transform: uppercase;
     color: var(--ink-3);
@@ -76,7 +76,7 @@ const __CUSTOMIZE_STYLE = `
   }
   .twk-lbl {
     display: flex; justify-content: space-between; align-items: baseline;
-    font-family: var(--mono); font-size: 11px; letter-spacing: 0.02em;
+    font-family: var(--sans); font-size: 11px; letter-spacing: 0.02em;
     color: var(--ink);
   }
   .twk-val { color: var(--ink-3); font-variant-numeric: tabular-nums; }
@@ -98,7 +98,7 @@ const __CUSTOMIZE_STYLE = `
     appearance: none; position: relative; z-index: 1;
     flex: 1; border: 0; background: transparent;
     color: var(--ink-3);
-    font-family: var(--mono); font-size: 11px; letter-spacing: 0.02em;
+    font-family: var(--sans); font-size: 11px; letter-spacing: 0.02em;
     font-weight: 400; min-height: 26px;
     border-radius: 2px; cursor: default; padding: 4px 8px;
     line-height: 1.2; transition: color 0.12s;
@@ -125,7 +125,7 @@ const __CUSTOMIZE_STYLE = `
     appearance: none; width: 100%; height: 28px; padding: 0 8px;
     border: 0.5px solid var(--rule); border-radius: 3px;
     background: var(--paper-2); color: var(--ink);
-    font-family: var(--mono); font-size: 11px; outline: none;
+    font-family: var(--sans); font-size: 11px; outline: none;
   }
   .twk-field:focus { border-color: var(--ink-3); }
   select.twk-field {
@@ -154,18 +154,18 @@ const __CUSTOMIZE_STYLE = `
     background: var(--paper-2);
   }
   .twk-num-lbl {
-    font-family: var(--mono); font-size: 11px;
+    font-family: var(--sans); font-size: 11px;
     color: var(--ink-2); cursor: ew-resize; user-select: none; padding-right: 8px;
   }
   .twk-num input {
     flex: 1; min-width: 0; height: 100%; border: 0;
-    background: transparent; font-family: var(--mono); font-size: 11px;
+    background: transparent; font-family: var(--sans); font-size: 11px;
     font-variant-numeric: tabular-nums; text-align: right; padding: 0 8px 0 0;
     outline: none; color: var(--ink); -moz-appearance: textfield;
   }
   .twk-num input::-webkit-inner-spin-button,
   .twk-num input::-webkit-outer-spin-button { -webkit-appearance: none; margin: 0; }
-  .twk-num-unit { padding-right: 8px; color: var(--ink-3); font-family: var(--mono); font-size: 11px; }
+  .twk-num-unit { padding-right: 8px; color: var(--ink-3); font-family: var(--sans); font-size: 11px; }
 
   .twk-sub {
     padding-left: 12px;
@@ -180,7 +180,7 @@ const __CUSTOMIZE_STYLE = `
     appearance: none; height: 28px; padding: 0 12px;
     border: 0.5px solid var(--rule); border-radius: 3px;
     background: var(--ink); color: var(--paper);
-    font-family: var(--mono); font-size: 11px; letter-spacing: 0.02em;
+    font-family: var(--sans); font-size: 11px; letter-spacing: 0.02em;
     cursor: default; transition: opacity 0.12s;
   }
   .twk-btn:hover { opacity: 0.75; }
