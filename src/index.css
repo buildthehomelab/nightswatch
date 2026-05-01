@@ -426,6 +426,21 @@ body {
 }
 .action-ignore:hover { color: var(--ink); border-color: var(--ink-3); }
 
+.twk-empty {
+  font-family: var(--mono); font-size: 10px;
+  color: var(--ink-3);
+}
+.twk-ignored-row {
+  display: flex; align-items: baseline; justify-content: space-between; gap: 8px;
+  padding: 2px 0;
+}
+.twk-ignored-label {
+  font-family: var(--mono); font-size: 10px;
+  color: var(--ink-2);
+  flex: 1; min-width: 0;
+  overflow: hidden; text-overflow: ellipsis; white-space: nowrap;
+}
+
 /* ── Footer note ─────────────────────────────────────── */
 .footnote {
   margin-top: auto;
