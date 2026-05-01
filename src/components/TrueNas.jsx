@@ -32,6 +32,32 @@ function lsSaveRelease(map) {
 
 const RELEASE_CACHE = lsLoadRelease();
 
+const LS_FIRST_SEEN_KEY = 'truenas:firstSeen';
+
+function lsLoadFirstSeen() {
+  try {
+    const raw = localStorage.getItem(LS_FIRST_SEEN_KEY);
+    return raw ? JSON.parse(raw) : {};
+  } catch { return {}; }
+}
+
+function lsMarkFirstSeen(id) {
+  const map = lsLoadFirstSeen();
+  if (!map[id]) {
+    map[id] = Date.now();
+    try { localStorage.setItem(LS_FIRST_SEEN_KEY, JSON.stringify(map)); } catch {}
+  }
+  return map[id];
+}
+
+function lsClearFirstSeen(id) {
+  const map = lsLoadFirstSeen();
+  if (map[id]) {
+    delete map[id];
+    try { localStorage.setItem(LS_FIRST_SEEN_KEY, JSON.stringify(map)); } catch {}
+  }
+}
+
 export function fmtUptime(sec) {
   if (sec == null) return "—";
   const d = Math.floor(sec / 86400);
