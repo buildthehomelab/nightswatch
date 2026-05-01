@@ -429,7 +429,7 @@ export default function App() {
             now={now}
             wanUp={wanUp}
             uptime={uptime}
-            weather="14° · clear"
+            weather={weather}
             lastCheck={lastCheck}
             showWeather={t.showWeather}
           />
