@@ -185,8 +185,8 @@ function trimChangelog(body, maxLen = 400) {
   return (lastNl > 80 ? text.slice(0, lastNl) : text) + '…';
 }
 
-const CPU_WARN_C = Number(import.meta.env.VITE_CPU_WARN_C ?? 70) || 70;
-const CPU_CRIT_C = Number(import.meta.env.VITE_CPU_CRIT_C ?? 85) || 85;
+export const CPU_WARN_C = Number(import.meta.env.VITE_CPU_WARN_C ?? 70) || 70;
+export const CPU_CRIT_C = Number(import.meta.env.VITE_CPU_CRIT_C ?? 85) || 85;
 
 async function fetchCpuTemp(hdrs) {
   try {
