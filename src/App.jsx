@@ -549,6 +549,15 @@ export default function App() {
         />
 
         <TweakSection label="Ambient strip" />
+        <TweakRadio
+          label="Placement"
+          value={t.ambientPlacement}
+          options={[
+            { value: "bottom", label: "bottom" },
+            { value: "top",    label: "top" },
+          ]}
+          onChange={(v) => setTweak("ambientPlacement", v)}
+        />
         <TweakToggle label="Show Weather"     value={t.showWeather} onChange={(v) => setTweak("showWeather", v)} />
         <TweakToggle label="Show WAN"         value={t.showWan}     onChange={(v) => setTweak("showWan", v)} />
         <TweakToggle label="Show Uptime"      value={t.showUptime}  onChange={(v) => setTweak("showUptime", v)} />
