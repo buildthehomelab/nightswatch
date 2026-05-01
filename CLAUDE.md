@@ -95,7 +95,7 @@ wan-down → pihole
 
 ## WAN check
 
-Fetches `https://1.1.1.1` with `mode: "no-cors"` every 30s. Requires 3 consecutive failures (`wanFailCount` ref) before marking WAN down, to avoid false positives. WAN issue is always injected first (highest priority) and removed from fixture set.
+Probes both `https://1.1.1.1` and `https://8.8.8.8` in parallel (`mode: "no-cors"`) every 30s. Either success → WAN up. Both fail → increment `wanFailCount`. Requires 3 consecutive all-fail rounds before marking WAN down (`wanFailCount >= 3`). WAN issue injected first (highest priority).
 
 ## Production TODOs (from README)
 
