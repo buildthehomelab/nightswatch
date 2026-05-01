@@ -14,8 +14,8 @@ function truenasProxyPlugin(key, host, port) {
     // Strip hop-by-hop and encoding headers; TrueNAS returns plain JSON without them
     const { 'accept-encoding': _ae, connection: _conn, 'transfer-encoding': _te, ...fwdHeaders } = req.headers
     const proxyReq = https.request({
-      hostname: TRUENAS_TARGET,
-      port:     TRUENAS_PORT,
+      hostname: target,
+      port:     targetPort,
       path:     upstreamPath,
       method:   req.method,
       headers: {
