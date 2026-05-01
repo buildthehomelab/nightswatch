@@ -222,7 +222,7 @@ body {
   justify-content: space-between;
   align-items: baseline;
 }
-.section-label .count { color: var(--ink-2); }
+.section-label .count { color: var(--ink-2); white-space: nowrap; }
 .filter-chip {
   cursor: pointer;
   border-radius: 2px;
