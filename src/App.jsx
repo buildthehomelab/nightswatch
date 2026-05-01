@@ -25,21 +25,31 @@ const TWEAK_DEFAULTS = {
 function mastheadPhrase(issues) {
   const crits = issues.filter(i => i.severity === 'crit');
   const warns = issues.filter(i => i.severity === 'warn');
+  const ec = crits.length > 0 ? 'em-crit' : 'em-warn';
 
   if (crits.length === 1 && warns.length === 0) {
-    if (crits[0].id === 'wan-down') return <>Internet is <em>down.</em></>;
-    return <>One critical issue <em>needs attention.</em></>;
+    if (crits[0].id === 'wan-down') return <>Internet is <em className={ec}>down.</em></>;
+    return <>One critical issue <em className={ec}>needs attention.</em></>;
   }
   if (crits.length > 1 && warns.length === 0) {
-    return <>{crits.length} critical issues <em>need attention.</em></>;
+    return <>{crits.length} critical issues <em className={ec}>need attention.</em></>;
   }
   if (crits.length === 0 && warns.length === 1) {
-    return <>One thing <em>needs a look.</em></>;
+    return <>One thing <em className={ec}>needs a look.</em></>;
   }
   if (crits.length === 0) {
-    return <>A few things <em>need a look.</em></>;
+    return <>A few things <em className={ec}>need a look.</em></>;
   }
-  return <>{issues.length} things <em>need attention.</em></>;
+  return <>{issues.length} things <em className={ec}>need attention.</em></>;
+}
+
+function mastheadEyebrow(issues) {
+  const crits = issues.filter(i => i.severity === 'crit').length;
+  const warns = issues.filter(i => i.severity === 'warn').length;
+  const parts = [];
+  if (crits) parts.push(`${crits} critical`);
+  if (warns) parts.push(`${warns} warning${warns > 1 ? 's' : ''}`);
+  return parts.join(' · ');
 }
 
 
