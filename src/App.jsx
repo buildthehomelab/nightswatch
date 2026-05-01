@@ -553,6 +553,7 @@ export default function App() {
         <TweakToggle label="Show WAN"         value={t.showWan}     onChange={(v) => setTweak("showWan", v)} />
         <TweakToggle label="Show Uptime"      value={t.showUptime}  onChange={(v) => setTweak("showUptime", v)} />
         <TweakToggle label="Show TrueNAS"     value={t.showNas}     onChange={(v) => setTweak("showNas", v)} />
+        <TweakToggle label="Show Date"        value={t.showDate}    onChange={(v) => setTweak("showDate", v)} />
       </TweaksPanel>
     </>
   );
