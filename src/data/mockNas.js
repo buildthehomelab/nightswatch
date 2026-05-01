@@ -4,6 +4,7 @@ export const MOCK_NAS_DATA = {
     uptime_seconds: 86400 * 12 + 3600 * 4 + 60 * 22,
     loadavg: [1.42, 1.31, 1.18],
     version: 'TrueNAS-SCALE-25.10.3',
+    physmem: 32 * 1e9,
   },
   pools: [
     { name: 'tank',   status: 'ONLINE', size: 12 * 1e12, allocated: 10.1 * 1e12 },
