@@ -58,12 +58,11 @@ Three top-level states driven by `issues.length` and severity:
 Dev-only controls, opened with backtick. Persisted to localStorage via `useCustomize()`.
 
 Defaults (`CUSTOMIZE_DEFAULTS` in App.jsx):
-- `state`: "warnings" (drives which fixtures show)
 - `theme`: "ink"
-- `density`: "regular"
-- `showAmbient`: false — ambient header strip hidden by default
 - `showWeather`: false
+- `showWan`: true, `showUptime`: true, `showDate`: true
 - `showNas`: false — TrueNAS data strip hidden by default
+- `ambientPlacement`: "bottom"
 
 ## Design tokens
 
