@@ -7,6 +7,8 @@ import {
 
 const WEATHER_LOCATION = import.meta.env.VITE_WEATHER_LOCATION ?? "";
 
+if (import.meta.env.DEMO === 'true') document.title = 'Nightswatch [demo]';
+
 const LS_IGNORED_KEY = 'nightswatch:ignored';
 function loadIgnored() {
   try {
