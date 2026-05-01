@@ -137,12 +137,6 @@ function Ambient({ now, wanUp, uptime, weather, showWeather, showNas, nasData })
       )}
 
       <div className="right">
-        {showWeather && (
-          <span className="item">
-            <span className="k">outside</span>
-            <span className="v">{weather}</span>
-          </span>
-        )}
         <span className="item">
           <span className="v">{fmtTime(now)}</span>
           <span className="k">· {fmtDate(now)}</span>
