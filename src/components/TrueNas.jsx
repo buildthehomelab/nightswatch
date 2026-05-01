@@ -345,7 +345,7 @@ export function nasIssues(data) {
     const isBeta    = /EARLY|BETA/i.test(profile) || /BETA/i.test(newVer.version);
     const relDate   = fmtReleaseDate(newVer.manifest?.date);
     const notesUrl  = newVer.release_notes_url ?? null;
-    const changelog = trimChangelog(newVer.release_notes);
+    const changelog = formatSysReleaseNotes(newVer.release_notes);
     const downloaded = data.updateStatus?.update_download_progress?.percent === 100;
     const description = (changelog ? `${changelog}\n\n` : "")
       + (downloaded ? "Update already downloaded — ready to install." : "");
