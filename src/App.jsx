@@ -378,9 +378,7 @@ const SHORTCUTS = [
 
 export default function App() {
   const [t, setTweak] = useCustomize(CUSTOMIZE_DEFAULTS);
-  const themeRef = useRef(t.theme);
   const startTime = useRef(Date.now());
-  useEffect(() => { themeRef.current = t.theme; }, [t.theme]);
   const [now, setNow] = useState(new Date());
   const [dozzleOpen, setDozzleOpen] = useState(false);
   const [ignored, setIgnored] = useState(() => loadIgnored());
