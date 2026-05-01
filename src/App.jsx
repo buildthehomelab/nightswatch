@@ -85,30 +85,8 @@ function Ambient({ now, wanUp, uptime, weather, showWeather, showWan, showUptime
 
   return (
     <footer className="ambient rise" data-placement={placement}>
-      <div className="left">
-        {showWeather && (
-          <span className="item">
-            <span className="k">outside</span>
-            <span className="v">{weather}</span>
-          </span>
-        )}
-        {showWan && (
-          <span className="item">
-            <span className="k">wan</span>
-            <span className={`dot ${wanUp ? "" : "crit"}`}></span>
-            <span className="v">{wanUp ? "up" : "down"}</span>
-          </span>
-        )}
-        {showUptime && (
-          <span className="item">
-            <span className="k">uptime</span>
-            <span className="v">{uptime}</span>
-          </span>
-        )}
-      </div>
-
       {showNas && nasData && (
-        <div className="mid">
+        <div className="left">
           <span className="item">
             <a href={NAS_UI} target="_blank" rel="noopener noreferrer" className="nas-link">{hostname}</a>
           </span>
