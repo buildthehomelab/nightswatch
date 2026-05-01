@@ -52,7 +52,11 @@ function truenasProxyPlugin(key, host, port) {
 
 export default defineConfig(({ mode }) => {
   const env = loadEnv(mode, process.cwd(), '')
+  const truenasUrl = env.TRUENAS_HOST
+    ? `https://${env.TRUENAS_HOST}${env.TRUENAS_PORT && env.TRUENAS_PORT !== '443' ? `:${env.TRUENAS_PORT}` : ''}`
+    : (env.VITE_TRUENAS_URL ?? '')
   return {
+    define: { 'import.meta.env.VITE_TRUENAS_URL': JSON.stringify(truenasUrl) },
     plugins: [react(), basicSsl(), truenasProxyPlugin(env.TRUENAS_KEY, env.TRUENAS_HOST, env.TRUENAS_PORT)],
     server: {
       proxy: {
