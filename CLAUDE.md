@@ -50,21 +50,22 @@ Three top-level states driven by `issues.length` and severity:
 |-----|--------|
 | `j` / `k` | Navigate issues (j=prev, k=next — intentional, not vim-standard) |
 | `Enter` | Expand/collapse focused issue |
-| `h` or `?` | Help overlay |
+| `1` / `2` / `3` | Filter critical / warning / advisory severity |
+| `` ` `` / `h` / `?` | Toggle CustomizePanel (shortcuts table lives inside it) |
 | `l` | Open Dozzle log viewer |
 | `r` | Refresh (force re-render) |
-| `` ` `` | Toggle CustomizePanel |
-| `Esc` | Close overlay |
+| `Esc` | Close CustomizePanel |
 
 ## CustomizePanel
 
-Dev-only controls, opened with backtick. Persisted to localStorage via `useCustomize()`.
+Dev-only controls, opened with backtick / `h` / `?`. Persisted to localStorage (`nightswatch:customize`) via `useCustomize()`.
 
 Defaults (`CUSTOMIZE_DEFAULTS` in App.jsx):
 - `theme`: "dark"
 - `showWeather`: false
 - `showWan`: true, `showUptime`: true, `showDate`: true
-- `showNas`: false — TrueNAS data strip hidden by default
+- `enableTruenas`: false — TrueNAS API polling disabled by default
+- `showNas`: false — TrueNAS data strip hidden by default (independent of `enableTruenas`)
 - `ambientPlacement`: "bottom"
 
 ## Design tokens
