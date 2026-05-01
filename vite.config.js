@@ -15,6 +15,7 @@ export default defineConfig({
         target: 'https://wttr.in',
         changeOrigin: true,
         rewrite: path => path.replace(/^\/wttr/, ''),
+        headers: { 'User-Agent': 'curl/7.88.1' },
       },
     },
   },
