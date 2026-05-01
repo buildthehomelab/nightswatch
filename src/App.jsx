@@ -1,6 +1,7 @@
 import { useState, useEffect, useRef, useMemo } from 'react';
 import Dozzle from './components/Dozzle';
 import { useTrueNas, nasIssues, fmtUptime, fmtAge, fmtBytes, UI as NAS_UI, POOL_WARN_PCT, POOL_CRIT_PCT, CPU_WARN_C, CPU_CRIT_C } from './services/truenas';
+import { useCve, cveIssues } from './services/cve';
 import {
   useCustomize, CustomizePanel, CustomizeColumn, CustomizeSection, CustomizeRadio, CustomizeToggle,
 } from './components/CustomizePanel';
@@ -31,6 +32,7 @@ const CUSTOMIZE_DEFAULTS = {
   showWan: true,
   showUptime: true,
   enableTruenas: false,
+  enableCve: false,
   showNas: false,
   showNasName: true,
   showNasLoad: true,
@@ -414,6 +416,7 @@ export default function App() {
     });
   };
   const { data: nasData, err: nasErr } = useTrueNas(t.enableTruenas);
+  const { data: cveData, err: cveErr } = useCve(t.enableCve);
   const [wanUp, setWanUp] = useState(true);
   const [wanDownSince, setWanDownSince] = useState(null);
   const wanFailCount = useRef(0);
@@ -486,7 +489,10 @@ export default function App() {
   }, [t.theme]);
 
   const issues = useMemo(() => {
-    const liveIssues = nasIssues(nasData);
+    const liveIssues = [
+      ...nasIssues(nasData),
+      ...cveIssues(cveData),
+    ];
     if (t.enableTruenas && nasErr) {
       liveIssues.unshift({
         id: "nas-unreachable",
@@ -502,6 +508,21 @@ export default function App() {
         ],
         ignoreKey: null,
         actions: [{ label: "open truenas ›", href: NAS_UI }],
+      });
+    }
+    if (t.enableCve && cveErr) {
+      liveIssues.unshift({
+        id: "cve-error",
+        severity: "warn",
+        label: "cve feed",
+        headline: "Cannot reach NVD CVE feed.",
+        source: "nvd · api",
+        firstSeenTs: null,
+        when: "now",
+        description: `NVD API is unreachable. CVE data may be stale.\n\nError: ${cveErr}`,
+        logs: [{ t: "—", level: "warn", text: `[cve] fetch failed: ${cveErr}` }],
+        ignoreKey: null,
+        actions: [{ label: "nvd status ›", href: "https://nvd.nist.gov/" }],
       });
     }
     if (!wanUp) {
