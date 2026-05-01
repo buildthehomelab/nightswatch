@@ -503,8 +503,7 @@ export default function App() {
 
       </div>
 
-      {t.showAmbient && (
-        <Ambient
+      <Ambient
           now={now}
           wanUp={wanUp}
           uptime={uptime}
