@@ -612,12 +612,14 @@ export default function App() {
           <CustomizeToggle label="Enable"   value={t.enableTruenas}  onChange={(v) => setTweak("enableTruenas", v)} />
           {t.enableTruenas && <>
             <CustomizeToggle label="Ambient Strip" value={t.showNas}   onChange={(v) => setTweak("showNas", v)} />
-            <CustomizeToggle label="Apps"     value={t.showNasApps}    onChange={(v) => setTweak("showNasApps", v)} />
-            <CustomizeToggle label="CPU Temp" value={t.showNasCpuTemp} onChange={(v) => setTweak("showNasCpuTemp", v)} />
-            <CustomizeToggle label="Load"     value={t.showNasLoad}    onChange={(v) => setTweak("showNasLoad", v)} />
-            <CustomizeToggle label="Memory"   value={t.showNasMemory}  onChange={(v) => setTweak("showNasMemory", v)} />
-            <CustomizeToggle label="Name"     value={t.showNasName}    onChange={(v) => setTweak("showNasName", v)} />
-            <CustomizeToggle label="Pools"    value={t.showNasPools}   onChange={(v) => setTweak("showNasPools", v)} />
+            <div className="twk-subgroup">
+              <CustomizeToggle label="Apps"     value={t.showNasApps}    onChange={(v) => setTweak("showNasApps", v)} />
+              <CustomizeToggle label="CPU Temp" value={t.showNasCpuTemp} onChange={(v) => setTweak("showNasCpuTemp", v)} />
+              <CustomizeToggle label="Load"     value={t.showNasLoad}    onChange={(v) => setTweak("showNasLoad", v)} />
+              <CustomizeToggle label="Memory"   value={t.showNasMemory}  onChange={(v) => setTweak("showNasMemory", v)} />
+              <CustomizeToggle label="Name"     value={t.showNasName}    onChange={(v) => setTweak("showNasName", v)} />
+              <CustomizeToggle label="Pools"    value={t.showNasPools}   onChange={(v) => setTweak("showNasPools", v)} />
+            </div>
           </>}
         </CustomizeColumn>
         <CustomizeColumn>
