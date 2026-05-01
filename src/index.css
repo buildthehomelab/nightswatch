@@ -336,6 +336,8 @@ body {
   text-wrap: pretty;
   max-width: 60ch;
   white-space: pre-wrap;
+  border-top: 0.5px solid var(--rule);
+  padding-top: 12px;
 }
 .issue .logs {
   font-family: var(--mono);
