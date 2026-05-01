@@ -487,12 +487,18 @@ export default function App() {
           { t: since, level: "err", text: "[wan] probe 1.1.1.1 failed — network unreachable" },
           { t: since, level: "err", text: "[wan] probe 8.8.8.8 failed — network unreachable" },
         ],
+        ignoreKey: `wan-down:${wanDownSince?.getTime() ?? 0}`,
         actions: ["restart pppoe", "ping ISP gateway", "ssh edgerouter"],
       };
       return [wanIssue, ...liveIssues];
     }
     return liveIssues;
   }, [wanUp, wanDownSince, nasData]);
+
+  const visibleIssues = useMemo(
+    () => issues.filter(i => !i.ignoreKey || !ignored.has(i.ignoreKey)),
+    [issues, ignored]
+  );
 
 
   const uptime = useMemo(() => {
