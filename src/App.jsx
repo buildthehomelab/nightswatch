@@ -104,10 +104,6 @@ function Ambient({ now, wanUp, uptime, weather, lastCheck, showWeather, showNas,
           <span className="k">uptime</span>
           <span className="v">{uptime}</span>
         </span>
-        <span className="item">
-          <span className="k">last check</span>
-          <span className="v">{lastCheck}</span>
-        </span>
       </div>
     </footer>
   );
