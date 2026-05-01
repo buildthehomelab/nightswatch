@@ -223,6 +223,18 @@ body {
   align-items: baseline;
 }
 .section-label .count { color: var(--ink-2); }
+.filter-chip {
+  cursor: pointer;
+  border-radius: 2px;
+  padding: 1px 3px;
+  margin: 0 -3px;
+  transition: color .15s, background .15s;
+}
+.filter-chip:hover { color: var(--ink); }
+.filter-chip-crit.active { color: var(--crit); }
+.filter-chip-warn.active { color: var(--warn); }
+.filter-chip-info.active { color: var(--ink); }
+.section-label .sep { color: var(--ink-3); }
 
 .issue {
   border-bottom: 0.5px solid var(--rule);
