@@ -5,7 +5,9 @@
       "Bash(git commit -m ' *)",
       "Bash(git -C /Users/redpandasquishy/Code/dashboard status)",
       "Bash(git -C /Users/redpandasquishy/Code/dashboard diff)",
-      "Bash(git *)"
+      "Bash(git *)",
+      "Bash(pkill -f \"vite\")",
+      "Bash(npm run *)"
     ]
   }
 }

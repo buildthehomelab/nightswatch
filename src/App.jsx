@@ -296,7 +296,7 @@ export default function App() {
     if (!WEATHER_LOCATION) return;
     const poll = async () => {
       try {
-        const r = await fetch(`https://wttr.in/${encodeURIComponent(WEATHER_LOCATION)}?format=%t+%C`);
+        const r = await fetch(`https://wttr.in/${encodeURIComponent(WEATHER_LOCATION)}?format=%t+%C`, { headers: { Accept: 'text/plain' } });
         const text = (await r.text()).trim();
         // "+14°C Partly cloudy" → "14°c · partly cloudy"
         setWeather(text.replace(/^\+/, '').replace(/\s+/, ' · ').toLowerCase());
