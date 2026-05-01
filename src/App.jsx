@@ -88,13 +88,7 @@ function Ambient({ now, wanUp, uptime, weather, showWeather, showWan, showUptime
   const hostname = nasData?.info?.hostname ?? 'nas';
   const cpuTemp  = nasData?.cpuTemp ?? null;
   const cpuCls   = cpuTemp == null ? '' : cpuTemp >= CPU_CRIT_C ? ' crit' : cpuTemp >= CPU_WARN_C ? ' warn' : '';
-  const physmem     = nasData?.info?.physmem ?? null;
-  const memFree     = nasData?.memFree ?? null;
-  const arcSize     = nasData?.arcSize ?? null;
-  const memServices = physmem != null && memFree != null && arcSize != null
-    ? Math.max(0, physmem - memFree - arcSize) : null;
-  const memPct  = memServices != null && physmem ? Math.round((memServices / physmem) * 100) : null;
-  const memCls  = memPct == null ? '' : memPct >= MEM_CRIT_PCT ? ' crit' : memPct >= MEM_WARN_PCT ? ' warn' : '';
+  const physmem = nasData?.info?.physmem ?? null;
 
   return (
     <footer className="ambient rise" data-placement={placement}>
