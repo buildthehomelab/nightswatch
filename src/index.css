@@ -52,14 +52,20 @@ body {
   flex-direction: column;
 }
 
-/* ── Ambient header strip ─────────────────────────────── */
+/* ── Ambient footer strip ─────────────────────────────── */
 .ambient {
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  z-index: 50;
+  background: var(--paper);
+  border-top: 0.5px solid var(--rule);
+  padding: 10px 48px;
   display: flex;
   align-items: baseline;
   justify-content: space-between;
   gap: 24px;
-  padding-bottom: 18px;
-  border-bottom: 0.5px solid var(--rule);
   font-family: var(--mono);
   font-size: 11.5px;
   letter-spacing: 0.02em;
