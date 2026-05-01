@@ -8,13 +8,39 @@ export const POOL_WARN_PCT = Number(import.meta.env.VITE_POOL_WARN_PCT ?? 80) ||
 export const POOL_CRIT_PCT = Number(import.meta.env.VITE_POOL_CRIT_PCT ?? 90) || 90;
 export const CPU_WARN_C  = Number(import.meta.env.VITE_CPU_WARN_C  ?? 70) || 70;
 export const CPU_CRIT_C  = Number(import.meta.env.VITE_CPU_CRIT_C  ?? 85) || 85;
-const MEM_WARN_PCT = Number(import.meta.env.VITE_MEM_WARN_PCT ?? 80) || 80;
-const MEM_CRIT_PCT = Number(import.meta.env.VITE_MEM_CRIT_PCT ?? 90) || 90;
+const MEM_WARN_PCT       = Number(import.meta.env.VITE_MEM_WARN_PCT       ?? 80) || 80;
+const MEM_CRIT_PCT       = Number(import.meta.env.VITE_MEM_CRIT_PCT       ?? 90) || 90;
+const LOAD_WARN          = Number(import.meta.env.VITE_LOAD_WARN           ?? 4)  || 4;
+const LOAD_CRIT          = Number(import.meta.env.VITE_LOAD_CRIT           ?? 8)  || 8;
+const SCRUB_STALE_DAYS   = Number(import.meta.env.VITE_SCRUB_STALE_DAYS    ?? 30) || 30;
 
 const RELEASE_TTL        = 4 * 60 * 60 * 1000;
 const LS_RELEASE_KEY     = 'truenas:releaseCache';
 const AGE_WARN_TO_CRIT_MS = 4 * 60 * 60 * 1000;
 const AGE_INFO_TO_WARN_MS = 7 * 24 * 60 * 60 * 1000;
+
+// ── Alert helpers ─────────────────────────────────────────
+
+function parseNasDate(d) {
+  if (d == null) return null;
+  if (typeof d === 'object' && d.$date != null) return d.$date;
+  if (typeof d === 'number') return d < 1e12 ? d * 1000 : d;
+  return null;
+}
+
+function alertLabel(klass) {
+  return klass
+    .replace(/([A-Z]+)([A-Z][a-z])/g, '$1 $2')
+    .replace(/([a-z])([A-Z])/g, '$1 $2')
+    .toLowerCase();
+}
+
+// Klasses we already surface via native pool/app checks
+const SKIP_ALERT_KLASSES = new Set([
+  'ZpoolStatusWarning', 'ZpoolStatusCritical',
+  'ZpoolCapacityWarning', 'ZpoolCapacityError',
+  'ScrubFinished', 'ScrubStarted',
+]);
 
 // ── Formatters ────────────────────────────────────────────
 
@@ -211,6 +237,15 @@ async function fetchMemStats(hdrs) {
   } catch { return { memFree: null, arcSize: null }; }
 }
 
+async function fetchAlerts(hdrs) {
+  try {
+    const r = await fetch(`${API}/alert/list`, { headers: hdrs });
+    if (!r.ok) return [];
+    const json = await r.json();
+    return Array.isArray(json) ? json : [];
+  } catch { return []; }
+}
+
 async function fetchUpdateStatus(hdrs) {
   try {
     const r = await fetch(`${API}/update/status`, { headers: hdrs });
@@ -222,13 +257,14 @@ async function fetchUpdateStatus(hdrs) {
 async function fetchData() {
   const hdrs = {};
   const ok = (r) => { if (!r.ok) throw new Error(`HTTP ${r.status}`); return r.json(); };
-  const [info, pools, apps, cpuTemp, { memFree, arcSize }, updateStatus] = await Promise.all([
+  const [info, pools, apps, cpuTemp, { memFree, arcSize }, updateStatus, alerts] = await Promise.all([
     fetch(`${API}/system/info`, { headers: hdrs }).then(ok),
     fetch(`${API}/pool`,        { headers: hdrs }).then(ok),
     fetch(`${API}/app`,         { headers: hdrs }).then(ok).catch(() => []),
     fetchCpuTemp(hdrs),
     fetchMemStats(hdrs),
     fetchUpdateStatus(hdrs),
+    fetchAlerts(hdrs),
   ]);
 
   const appList = Array.isArray(apps) ? apps : [];
@@ -245,7 +281,7 @@ async function fetchData() {
       })
   );
 
-  return { info, pools, apps: appList, releaseMap, cpuTemp, memFree, arcSize, updateStatus };
+  return { info, pools, apps: appList, releaseMap, cpuTemp, memFree, arcSize, updateStatus, alerts };
 }
 
 // ── Stopped-app tracking (localStorage) ──────────────────
@@ -437,6 +473,34 @@ export function nasIssues(data) {
     lsClearFirstSeen('nas-mem');
   }
 
+  // Load average
+  const load1 = data.info?.loadavg?.[0] ?? null;
+  if (load1 != null && load1 >= LOAD_WARN) {
+    const loadId   = 'nas-load';
+    const firstTs  = lsMarkFirstSeen(loadId);
+    const loadAge  = Date.now() - firstTs;
+    const firstStr = new Date(firstTs).toLocaleTimeString(undefined, { hour: "2-digit", minute: "2-digit", hour12: false });
+    const load5    = data.info.loadavg[1]?.toFixed(2) ?? '—';
+    const load15   = data.info.loadavg[2]?.toFixed(2) ?? '—';
+    issues.push({
+      id: loadId,
+      severity: load1 >= LOAD_CRIT ? 'crit' : 'warn',
+      label: 'load high',
+      headline: `System load is ${load1.toFixed(2)}.`,
+      source: 'truenas · system',
+      firstSeenTs: firstTs,
+      when: loadAge >= 60000 ? `${fmtAge(loadAge)} unresolved` : 'now',
+      description: `1-min load average is ${load1.toFixed(2)} (warn ≥${LOAD_WARN}, crit ≥${LOAD_CRIT}).\n5m: ${load5}  15m: ${load15}`,
+      logs: [
+        { t: firstStr, level: load1 >= LOAD_CRIT ? 'err' : 'warn', text: `[load] 1m=${load1.toFixed(2)} 5m=${load5} 15m=${load15}` },
+      ],
+      ignoreKey: `nas-load:${firstTs}`,
+      actions: [{ label: 'open truenas ›', href: UI }],
+    });
+  } else {
+    lsClearFirstSeen('nas-load');
+  }
+
   // System update
   const newVer = data.updateStatus?.status?.new_version;
   if (newVer?.version) {
@@ -529,6 +593,63 @@ export function nasIssues(data) {
     } else {
       lsClearFirstSeen(`nas-cap-${pool.name}`);
     }
+
+    // Scrub errors / overdue
+    const scan = pool.scan;
+    const scrubId = `nas-scrub-${pool.name}`;
+    const scrubStaleId = `nas-scrub-stale-${pool.name}`;
+    if (scan && (scan.errors ?? 0) > 0) {
+      lsClearFirstSeen(scrubStaleId);
+      const firstTs  = lsMarkFirstSeen(scrubId);
+      const scrubAge = Date.now() - firstTs;
+      const firstStr = new Date(firstTs).toLocaleTimeString(undefined, { hour: "2-digit", minute: "2-digit", hour12: false });
+      const endMs    = parseNasDate(scan.end_time);
+      const endStr   = endMs ? new Date(endMs).toLocaleDateString(undefined, { month: 'short', day: 'numeric' }) : null;
+      issues.push({
+        id: scrubId,
+        severity: 'warn',
+        label: 'scrub errors',
+        headline: `${pool.name}: scrub found ${scan.errors} error${scan.errors !== 1 ? 's' : ''}.`,
+        source: `truenas · pool ${pool.name}`,
+        firstSeenTs: firstTs,
+        when: scrubAge >= 60000 ? `${fmtAge(scrubAge)} unresolved` : endStr ? `scrub ${endStr}` : firstStr,
+        description: `ZFS scrub on "${pool.name}" completed with ${scan.errors} error${scan.errors !== 1 ? 's' : ''}${endStr ? ` on ${endStr}` : ''}. ZFS corrected what it could; drive hardware should be inspected.`,
+        logs: [
+          { t: firstStr, level: 'warn', text: `[zfs] scrub ${pool.name}: ${scan.errors} error${scan.errors !== 1 ? 's' : ''} found` },
+        ],
+        ignoreKey: `nas-scrub-${pool.name}:${endMs ?? firstTs}`,
+        actions: [{ label: 'open truenas ›', href: UI }],
+      });
+    } else {
+      lsClearFirstSeen(scrubId);
+      const endMs      = parseNasDate(scan?.end_time);
+      const staleMs    = SCRUB_STALE_DAYS * 86400_000;
+      const isOverdue  = !endMs || (Date.now() - endMs) > staleMs;
+      if (isOverdue) {
+        const firstTs  = lsMarkFirstSeen(scrubStaleId);
+        const scrubAge = Date.now() - firstTs;
+        const lastStr  = endMs
+          ? `${Math.floor((Date.now() - endMs) / 86400_000)}d ago`
+          : 'never';
+        issues.push({
+          id: scrubStaleId,
+          severity: 'info',
+          label: 'scrub overdue',
+          headline: `${pool.name}: last scrub ${lastStr}.`,
+          source: `truenas · pool ${pool.name}`,
+          firstSeenTs: firstTs,
+          when: scrubAge >= 60000 ? `${fmtAge(scrubAge)} unresolved` : lastStr,
+          description: `Pool "${pool.name}" has not been scrubbed in over ${SCRUB_STALE_DAYS} days (last: ${lastStr}). Regular scrubs detect silent data corruption.`,
+          logs: [
+            { t: new Date(firstTs).toLocaleTimeString(undefined, { hour: "2-digit", minute: "2-digit", hour12: false }), level: 'info', text: `[zfs] scrub ${pool.name}: last=${lastStr}` },
+          ],
+          ignoreKey: `nas-scrub-stale-${pool.name}:${endMs ?? 0}`,
+          actions: [{ label: 'open truenas ›', href: UI }],
+        });
+      } else {
+        lsClearFirstSeen(scrubStaleId);
+      }
+    }
   }
 
   // App state
@@ -620,6 +741,33 @@ export function nasIssues(data) {
         { label: "open truenas apps ›", href: `${UI}/ui/apps/installed` },
         ...(release?.html_url ? [{ label: "view release ›", href: release.html_url }] : []),
       ],
+    });
+  }
+
+  // Native TrueNAS alerts (SMART, replication, certs, fan, etc.)
+  for (const alert of (data.alerts ?? [])) {
+    if (alert.dismissed) continue;
+    if (SKIP_ALERT_KLASSES.has(alert.klass)) continue;
+    const firstMs  = parseNasDate(alert.datetime) ?? Date.now();
+    const alertAge = Date.now() - firstMs;
+    const firstStr = new Date(firstMs).toLocaleTimeString(undefined, { hour: "2-digit", minute: "2-digit", hour12: false });
+    const severity = alert.level === 'CRITICAL' ? 'crit' : alert.level === 'WARNING' ? 'warn' : 'info';
+    const body     = (alert.formatted ?? alert.text ?? '').trim();
+    const headline = body.split('\n')[0].slice(0, 120);
+    issues.push({
+      id: `nas-alert-${alert.uuid}`,
+      severity,
+      label: alertLabel(alert.klass),
+      headline,
+      source: 'truenas · alerts',
+      firstSeenTs: firstMs,
+      when: alertAge >= 60000 ? `${fmtAge(alertAge)} unresolved` : 'now',
+      description: body,
+      logs: [
+        { t: firstStr, level: severity === 'crit' ? 'err' : severity, text: `[alert:${alert.klass}] ${alert.text ?? ''}` },
+      ],
+      ignoreKey: `nas-alert:${alert.uuid}`,
+      actions: [{ label: 'open truenas ›', href: UI }],
     });
   }
 
