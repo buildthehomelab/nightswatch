@@ -456,12 +456,11 @@ export default function App() {
         setWanUp(true);
         setWanDownSince(null);
       } else {
+        const isNewlyDown = wanFailCount.current === 2;
         wanFailCount.current += 1;
         if (wanFailCount.current >= 3) {
-          setWanUp((prev) => {
-            if (prev) setWanDownSince(new Date());
-            return false;
-          });
+          if (isNewlyDown) setWanDownSince(new Date());
+          setWanUp(false);
         }
       }
     };
