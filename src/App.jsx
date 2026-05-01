@@ -22,10 +22,19 @@ const TWEAK_DEFAULTS = {
   showNas: false,
 };
 
+const MASTHEAD_STALE_MS = 4 * 60 * 60 * 1000;
+
 function mastheadPhrase(issues) {
   const crits = issues.filter(i => i.severity === 'crit');
   const warns = issues.filter(i => i.severity === 'warn');
   const ec = crits.length > 0 ? 'em-crit' : 'em-warn';
+
+  const maxCritAge = crits.reduce((max, i) => Math.max(max, i.firstSeenTs ? Date.now() - i.firstSeenTs : 0), 0);
+  if (maxCritAge >= MASTHEAD_STALE_MS) {
+    const age = fmtAge(maxCritAge);
+    const label = crits.length === 1 ? 'Critical issue' : `${crits.length} critical issues`;
+    return <>{label} unresolved for <em className={ec}>over {age}.</em></>;
+  }
 
   if (crits.length === 1 && warns.length === 0) {
     if (crits[0].id === 'wan-down') return <>Internet is <em className={ec}>down.</em></>;
