@@ -138,7 +138,7 @@ export function TweaksPanel({ title = 'Tweaks', children }) {
   const devMode = new URLSearchParams(window.location.search).has('dev');
   const [open, setOpen] = useState(devMode);
   const dragRef = useRef(null);
-  const offsetRef = useRef({ x: 16, y: 16 });
+  const offsetRef = useRef(lsLoadPos() ?? { x: 16, y: 16 });
   const PAD = 16;
 
   const clampToViewport = useCallback(() => {
