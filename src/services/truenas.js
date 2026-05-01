@@ -270,12 +270,15 @@ function lsSave(map) {
 
 // ── Hook ──────────────────────────────────────────────────
 
+const DEMO = import.meta.env.VITE_DEMO === 'true';
+
 export function useTrueNas(enabled = true) {
-  const [data, setData] = useState(null);
+  const [data, setData] = useState(DEMO ? MOCK_NAS_DATA : null);
   const [err, setErr]   = useState(null);
   const stoppedSince    = useRef(lsLoad());
 
   useEffect(() => {
+    if (DEMO) return;
     if (!enabled) { setData(null); setErr(null); return; }
     const refresh = () =>
       fetchData()
