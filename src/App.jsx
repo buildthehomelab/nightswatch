@@ -7,7 +7,7 @@ import {
 
 const WEATHER_LOCATION = import.meta.env.VITE_WEATHER_LOCATION ?? "";
 
-const LS_IGNORED_KEY = 'dashboard:ignored';
+const LS_IGNORED_KEY = 'nightswatch:ignored';
 function loadIgnored() {
   try {
     const raw = JSON.parse(localStorage.getItem(LS_IGNORED_KEY) ?? '[]');
