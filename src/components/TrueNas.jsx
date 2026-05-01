@@ -244,13 +244,13 @@ export function nasIssues(data) {
       });
     }
 
-    if (pool.size && pool.allocated / pool.size > 0.9) {
+    if (pool.size && pool.allocated / pool.size * 100 >= POOL_WARN_PCT) {
       const pct   = Math.round((pool.allocated / pool.size) * 100);
       const free  = fmtBytes(pool.size - pool.allocated);
       const total = fmtBytes(pool.size);
       issues.push({
         id: `nas-cap-${pool.name}`,
-        severity: pct >= 95 ? "crit" : "warn",
+        severity: pct >= POOL_CRIT_PCT ? "crit" : "warn",
         label: "disk space low",
         headline: `${pool.name} is at ${pct}%.`,
         source: `truenas · pool ${pool.name}`,
