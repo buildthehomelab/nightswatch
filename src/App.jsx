@@ -514,6 +514,7 @@ export default function App() {
           showWan={t.showWan}
           showUptime={t.showUptime}
           showNas={t.showNas}
+          showDate={t.showDate}
           nasData={nasData}
         />
       )}
