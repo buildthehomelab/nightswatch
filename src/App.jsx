@@ -7,6 +7,15 @@ import {
 
 const WEATHER_LOCATION = import.meta.env.VITE_WEATHER_LOCATION ?? "";
 
+const LS_IGNORED_KEY = 'dashboard:ignored';
+function loadIgnored() {
+  try { return new Set(JSON.parse(localStorage.getItem(LS_IGNORED_KEY) ?? '[]')); }
+  catch { return new Set(); }
+}
+function saveIgnored(set) {
+  try { localStorage.setItem(LS_IGNORED_KEY, JSON.stringify([...set])); } catch {}
+}
+
 const ISSUE_TO_CONTAINER = {
 "wan-down":       "pihole",
   "smart-tank":     "jellyfin",
