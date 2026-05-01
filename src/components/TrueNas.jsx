@@ -369,6 +369,8 @@ export function nasIssues(data) {
     const firstTs   = lsMarkFirstSeen(updateId);
     const firstDt   = new Date(firstTs);
     const firstStr  = firstDt.toLocaleTimeString(undefined, { hour: "2-digit", minute: "2-digit", hour12: false });
+    const updateAge = Date.now() - firstTs;
+    const updateStale = updateAge >= AGE_INFO_TO_WARN_MS;
 
     const headline = next
       ? `${app.name}: update available → ${next}.`
