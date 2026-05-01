@@ -14,7 +14,7 @@ const ISSUE_TO_CONTAINER = {
   "ups":            "watchtower",
 };
 
-const TWEAK_DEFAULTS = {
+const CUSTOMIZE_DEFAULTS = {
   theme: "ink",
   density: "compact",
   showWeather: false,
