@@ -298,8 +298,8 @@ export default function App() {
       try {
         const r = await fetch(`/wttr/${encodeURIComponent(WEATHER_LOCATION)}?format=1`);
         const text = (await r.text()).trim();
-        // "⛅ +12°C" → strip emoji, strip leading +, lowercase → "12°c"
-        const clean = text.replace(/[^\x20-\x7E°]/g, '').replace(/^\+/, '').trim().toLowerCase();
+        // "⛅ +12°C" → strip leading +, collapse spaces, lowercase → "⛅ 12°c"
+        const clean = text.replace(/^\+/, '').replace(/\s+/g, ' ').trim().toLowerCase();
         setWeather(clean || '—');
       } catch {}
     };
