@@ -548,6 +548,8 @@ export default function App() {
             ]}
             onChange={(v) => setTweak("theme", v)}
           />
+        </CustomizeColumn>
+        <CustomizeColumn>
           <CustomizeSection label="Ambient strip" />
           <CustomizeRadio
             label="Placement"
