@@ -42,32 +42,41 @@ const CUSTOMIZE_DEFAULTS = {
 
 const MASTHEAD_STALE_MS = 4 * 60 * 60 * 1000;
 
-function mastheadPhrase(issues) {
+const PHRASES = {
+  healthy:        ["Live Laugh Lab.", "live, laugh, love."],
+  wanDown:        ["The System is Down."],
+  ignoredDays:    ["You're cordially invited to go fuck yourself.", "Down with the System."],
+  stale:          ["SNAFU: Situation normal, all fucked up."],
+  multiCrit:      ["everything is on fire. As it should be."],
+  critIgnored:    ["oh goodness."],
+  crit:           ["What in the Claude??!", "This is fine."],
+  multiIssue:     ["everything is on fire."],
+  singleWarn:     ["One thing needs a look."],
+};
+
+function pickPhrase(arr, seed = Date.now()) {
+  return arr[Math.floor(seed / 86400000) % arr.length];
+}
+
+function mastheadPhrase(issues, ignored) {
   const crits = issues.filter(i => i.severity === 'crit');
-  const warns = issues.filter(i => i.severity === 'warn');
   const ec = crits.length > 0 ? 'em-crit' : 'em-warn';
-
   const maxCritAge = crits.reduce((max, i) => Math.max(max, i.firstSeenTs ? Date.now() - i.firstSeenTs : 0), 0);
-  if (maxCritAge >= MASTHEAD_STALE_MS) {
-    const age = fmtAge(maxCritAge);
-    const label = crits.length === 1 ? 'Critical issue' : `${crits.length} critical issues`;
-    return <>{label} unresolved for <em className={ec}>over {age}.</em></>;
-  }
 
-  if (crits.length === 1 && warns.length === 0) {
-    if (crits[0].id === 'wan-down') return <>Internet is <em className={ec}>down.</em></>;
-    return <>One critical issue <em className={ec}>needs attention.</em></>;
-  }
-  if (crits.length > 1 && warns.length === 0) {
-    return <>{crits.length} critical issues <em className={ec}>need attention.</em></>;
-  }
-  if (crits.length === 0 && warns.length === 1) {
-    return <>One thing <em className={ec}>needs a look.</em></>;
-  }
-  if (crits.length === 0) {
-    return <>A few things <em className={ec}>need a look.</em></>;
-  }
-  return <>{issues.length} things <em className={ec}>need attention.</em></>;
+  const TWO_DAYS = 2 * 24 * 60 * 60 * 1000;
+  const ignoredDays = [...(ignored?.keys() ?? [])].some(key => {
+    const ts = Number(key.split(':').pop());
+    return !isNaN(ts) && (Date.now() - ts) > TWO_DAYS;
+  });
+
+  if (issues.some(i => i.id === 'wan-down'))    return <em className={ec}>{pickPhrase(PHRASES.wanDown)}</em>;
+  if (ignoredDays)                               return <em className={ec}>{pickPhrase(PHRASES.ignoredDays)}</em>;
+  if (maxCritAge >= MASTHEAD_STALE_MS)           return <em className={ec}>{pickPhrase(PHRASES.stale)}</em>;
+  if (crits.length > 1)                          return <em className={ec}>{pickPhrase(PHRASES.multiCrit)}</em>;
+  if (crits.length > 0 && ignored?.size > 0)     return <em className={ec}>{pickPhrase(PHRASES.critIgnored)}</em>;
+  if (crits.length > 0)                          return <em className={ec}>{pickPhrase(PHRASES.crit)}</em>;
+  if (issues.length > 1)                         return <em className="em-warn">{pickPhrase(PHRASES.multiIssue)}</em>;
+  return <em className="em-warn">{pickPhrase(PHRASES.singleWarn)}</em>;
 }
 
 
