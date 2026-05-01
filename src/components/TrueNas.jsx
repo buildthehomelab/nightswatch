@@ -529,6 +529,7 @@ export function nasIssues(data) {
       logs: [
         { t: stoppedAt ?? "—", level: severity === "crit" ? "err" : "warn", text: `[app] ${app.name}: state=${app.state}` },
       ],
+      ignoreKey: `nas-app-${app.name}:${since?.getTime() ?? 0}`,
       actions: [{ label: "open truenas apps ›", href: `${UI}/ui/apps/installed` }],
     });
   }
