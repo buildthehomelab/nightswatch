@@ -80,7 +80,6 @@ body {
   border-bottom: 1px solid var(--rule);
 }
 .ambient .left,
-.ambient .mid,
 .ambient .right {
   display: flex;
   gap: 20px;
