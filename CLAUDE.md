@@ -91,8 +91,6 @@ Fetches `https://1.1.1.1` with `mode: "no-cors"` every 30s. Requires 3 consecuti
 
 ## Production TODOs (from README)
 
-- Replace fixtures with live polling/SSE from status aggregator
 - Wire issue actions to real backend endpoints (auth required)
 - Add `aria-*` + keyboard support to issue rows (currently `<div>`)
-- Guard CustomizePanel behind `?dev=1` or remove entirely
-- Real weather, real WAN check via router, real uptime from `/proc/uptime`
+- Real WAN check via router API (currently probes 1.1.1.1/8.8.8.8 directly from browser)
