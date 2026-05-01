@@ -1,6 +1,6 @@
 import { useState, useEffect, useRef, useMemo } from 'react';
 
-const DEMO = import.meta.env.VITE_DEMO === 'true';
+const DEMO = import.meta.env.DEMO === 'true';
 const DOZZLE_BASE = import.meta.env.VITE_DOZZLE_URL ?? "";
 
 const DOZZLE_CONTAINERS = [
