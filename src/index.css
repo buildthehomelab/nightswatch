@@ -161,6 +161,7 @@ body {
   font-style: italic;
   font-weight: 300;
   color: var(--ink-2);
+  white-space: nowrap;
 }
 
 /* ── Healthy state ───────────────────────────────────── */
