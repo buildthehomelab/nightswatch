@@ -478,6 +478,24 @@ export default function TrueNas({ data, err }) {
   return (
     <div className="nas-strip rise">
       <div className="nas-left">
+        {(Array.isArray(pools) ? pools : []).map(pool => {
+          const ok  = pool.status === "ONLINE";
+          const pct = pool.size ? Math.round((pool.allocated / pool.size) * 100) : null;
+          const dotCls = !ok ? " crit" : pct >= 90 ? " crit" : pct >= 80 ? " warn" : "";
+          const valCls = !ok ? " nas-crit" : pct >= 90 ? " nas-crit" : pct >= 80 ? " nas-warn" : "";
+          return (
+            <span key={pool.name} className="nas-item" title={`${fmtBytes(pool.allocated)} / ${fmtBytes(pool.size)}`}>
+              <span className={`nas-dot${dotCls}`} />
+              <span className="nas-k">{pool.name}</span>
+              <span className={`nas-v${valCls}`}>
+                {pct != null ? `${pct}%` : "—"}
+                {!ok && <span className="nas-crit"> · {pool.status.toLowerCase()}</span>}
+              </span>
+            </span>
+          );
+        })}
+      </div>
+      <div className="nas-right">
         <span className="nas-item">
           <a href={UI} target="_blank" rel="noopener noreferrer" className="nas-link">
             {hostname}
@@ -511,24 +529,6 @@ export default function TrueNas({ data, err }) {
             <span className="nas-v nas-warn">{updateCount}</span>
           </span>
         )}
-      </div>
-      <div className="nas-right">
-        {(Array.isArray(pools) ? pools : []).map(pool => {
-          const ok  = pool.status === "ONLINE";
-          const pct = pool.size ? Math.round((pool.allocated / pool.size) * 100) : null;
-          const dotCls = !ok ? " crit" : pct >= 90 ? " crit" : pct >= 80 ? " warn" : "";
-          const valCls = !ok ? " nas-crit" : pct >= 90 ? " nas-crit" : pct >= 80 ? " nas-warn" : "";
-          return (
-            <span key={pool.name} className="nas-item" title={`${fmtBytes(pool.allocated)} / ${fmtBytes(pool.size)}`}>
-              <span className={`nas-dot${dotCls}`} />
-              <span className="nas-k">{pool.name}</span>
-              <span className={`nas-v${valCls}`}>
-                {pct != null ? `${pct}%` : "—"}
-                {!ok && <span className="nas-crit"> · {pool.status.toLowerCase()}</span>}
-              </span>
-            </span>
-          );
-        })}
       </div>
     </div>
   );
