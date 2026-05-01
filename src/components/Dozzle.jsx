@@ -1,9 +1,8 @@
-import { useEffect, useRef } from 'react';
+import { useEffect } from 'react';
 
 const DOZZLE_BASE = import.meta.env.VITE_DOZZLE_URL ?? "";
 
 export default function Dozzle({ open, onClose }) {
-  const closeRef = useRef(null);
 
   useEffect(() => {
     if (!open) return;
