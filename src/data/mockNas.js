@@ -27,7 +27,16 @@ export const MOCK_NAS_DATA = {
   cpuTemp: 54,
   memFree: 18.2 * 1e9,
   arcSize:  6.4 * 1e9,
-  updateStatus: null,
+  updateStatus: {
+    status: {
+      new_version: {
+        version: '25.10.4',
+        manifest: { profile: 'STABLE', date: '2026-04-28' },
+        release_notes: null,
+      },
+    },
+    update_download_progress: null,
+  },
   stoppedSince: new Map([
     ['unpackerr',   new Date(Date.now() - 1000 * 60 * 40)],
     ['filebrowser', new Date(Date.now() - 1000 * 60 * 12)],
