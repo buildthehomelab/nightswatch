@@ -620,6 +620,18 @@ export default function App() {
           <CustomizeToggle label="Apps"     value={t.showNasApps}   onChange={(v) => setTweak("showNasApps", v)} />
           <CustomizeToggle label="Pools"    value={t.showNasPools}  onChange={(v) => setTweak("showNasPools", v)} />
         </CustomizeColumn>
+        <CustomizeColumn>
+          <CustomizeSection label="Ignored" />
+          {ignored.size === 0
+            ? <span className="twk-empty">nothing ignored</span>
+            : [...ignored.entries()].map(([key, label]) => (
+                <div key={key} className="twk-ignored-row">
+                  <span className="twk-ignored-label" title={key}>{label || key}</span>
+                  <button className="action-ignore" onClick={() => handleUnignore(key)}>unignore ›</button>
+                </div>
+              ))
+          }
+        </CustomizeColumn>
         <CustomizeColumn wide>
           <CustomizeSection label="Keyboard shortcuts" />
           <table className="help-table">
