@@ -40,7 +40,7 @@ const __CUSTOMIZE_STYLE = `
   .twk-x:hover { color: var(--ink); }
 
   .twk-body {
-    padding: 0 20px 28px; flex: 1;
+    padding: 20px 20px 28px; flex: 1;
     display: flex; flex-direction: column;
     overflow-y: auto; overflow-x: hidden;
     scrollbar-width: thin; scrollbar-color: var(--rule) transparent;
