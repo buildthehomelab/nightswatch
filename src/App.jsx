@@ -463,13 +463,7 @@ export default function App() {
         )}
 
         <footer className="footnote rise rise-d3">
-<span>
-            <a href="#" onClick={(e) => e.preventDefault()}>all services</a>
-            {"   "}
-            <a href="#" onClick={(e) => { e.preventDefault(); openLogs(); }}>logs</a>
-            {"   "}
-            <a href="#" onClick={(e) => e.preventDefault()}>history</a>
-          </span>
+          <a href="#" onClick={(e) => { e.preventDefault(); openLogs(); }}>logs</a>
         </footer>
       </div>
 
