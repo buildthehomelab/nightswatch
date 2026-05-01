@@ -294,7 +294,7 @@ function IssueList({ issues, onOpenLogs, onIgnore }) {
       if (["INPUT", "TEXTAREA"].includes(document.activeElement?.tagName)) return;
       if (e.key === "j" || e.key === "J") {
         e.preventDefault();
-        setFocusedIndex((i) => (i === null ? filtered.length - 1 : Math.max(i - 1, 0)));
+        setFocusedIndex((i) => (i === null ? 0 : Math.max(i - 1, 0)));
       } else if (e.key === "k" || e.key === "K") {
         e.preventDefault();
         setFocusedIndex((i) => (i === null ? 0 : Math.min(i + 1, filtered.length - 1)));
