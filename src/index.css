@@ -150,8 +150,8 @@ body {
 .masthead h1 {
   font-family: var(--serif);
   font-weight: 400;
-  font-size: 64px;
-  line-height: 1.05;
+  font-size: 56px;
+  line-height: 1.08;
   letter-spacing: -0.02em;
   margin: 0;
   color: var(--ink);
@@ -160,9 +160,10 @@ body {
 .masthead h1 em {
   font-style: italic;
   font-weight: 300;
-  color: var(--ink-2);
   white-space: nowrap;
 }
+.masthead h1 em.em-crit { color: var(--crit); }
+.masthead h1 em.em-warn { color: var(--warn); }
 
 /* ── Healthy state ───────────────────────────────────── */
 .healthy {
