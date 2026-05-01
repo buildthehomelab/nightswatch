@@ -513,7 +513,7 @@ export default function App() {
     return `${days}d`;
   }, [now, nasData]);
 
-  const isHealthy = issues.length === 0;
+  const isHealthy = visibleIssues.length === 0;
 
   return (
     <>
