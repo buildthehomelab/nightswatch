@@ -122,6 +122,16 @@ const __CUSTOMIZE_STYLE = `
   }
   .twk-toggle[data-on="1"] i { transform: translateX(14px); background: var(--paper); }
 
+  .twk-subgroup {
+    margin-left: 8px;
+    padding-left: 10px;
+    border-left: 2px solid var(--rule);
+    display: flex;
+    flex-direction: column;
+    margin-top: 2px;
+    margin-bottom: 2px;
+  }
+
 `;
 
 const CUSTOMIZE_LS_KEY = 'dashboard:customize';
