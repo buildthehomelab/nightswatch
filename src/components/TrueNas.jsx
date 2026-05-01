@@ -5,8 +5,30 @@ const API = "/truenas/api/v2.0";
 const KEY                  = import.meta.env.VITE_TRUENAS_KEY ?? "";
 const STOPPED_HIDE_MINUTES = Number(import.meta.env.VITE_STOPPED_APP_HIDE_MINUTES ?? 0) || 0;
 
-const RELEASE_CACHE = new Map(); // image → { release, fetchedAt }
-const RELEASE_TTL   = 10 * 60 * 1000;
+const RELEASE_TTL     = 10 * 60 * 1000;
+const LS_RELEASE_KEY  = 'truenas:releaseCache';
+
+function lsLoadRelease() {
+  try {
+    const raw = localStorage.getItem(LS_RELEASE_KEY);
+    if (!raw) return new Map();
+    const obj = JSON.parse(raw);
+    const now = Date.now();
+    return new Map(
+      Object.entries(obj)
+        .filter(([, v]) => now - v.fetchedAt < RELEASE_TTL)
+        .map(([k, v]) => [k, v])
+    );
+  } catch { return new Map(); }
+}
+
+function lsSaveRelease(map) {
+  try {
+    localStorage.setItem(LS_RELEASE_KEY, JSON.stringify(Object.fromEntries(map)));
+  } catch {}
+}
+
+const RELEASE_CACHE = lsLoadRelease();
 
 export function fmtUptime(sec) {
   if (sec == null) return "—";
