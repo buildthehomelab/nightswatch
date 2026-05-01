@@ -204,11 +204,12 @@ body {
 .section-label .sep { color: var(--ink-3); }
 
 .issue {
+  grid-column: 1 / -1;
   border-bottom: 1px solid var(--rule);
   padding: 18px 0;
   cursor: pointer;
   display: grid;
-  grid-template-columns: min-content 1fr auto;
+  grid-template-columns: subgrid;
   gap: 16px;
   align-items: start;
   transition: background-color .15s ease;
