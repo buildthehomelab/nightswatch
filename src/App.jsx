@@ -102,6 +102,12 @@ function Ambient({ now, wanUp, uptime, weather, showWeather, showNas, nasData })
           {load1 && (
             <span className="item"><span className="k">load</span><span className="v">{load1}</span></span>
           )}
+          {cpuTemp != null && (
+            <span className="item">
+              <span className="k">cpu</span>
+              <span className={`v${cpuCls}`}>{cpuTemp}°C</span>
+            </span>
+          )}
           {apps.length > 0 && (
             <span className="item">
               <span className="k">apps</span>
