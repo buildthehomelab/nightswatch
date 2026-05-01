@@ -554,7 +554,11 @@ export default function App() {
           onChange={(v) => setTweak("ambientPlacement", v)}
         />
         <CustomizeToggle label="Date"     value={t.showDate}    onChange={(v) => setTweak("showDate", v)} />
-        <CustomizeToggle label="TrueNAS"  value={t.showNas}     onChange={(v) => setTweak("showNas", v)} />
+        <CustomizeToggle label="TrueNAS"     value={t.showNas}      onChange={(v) => setTweak("showNas", v)} />
+        <CustomizeToggle label="NAS · Name"  value={t.showNasName}  onChange={(v) => setTweak("showNasName", v)} />
+        <CustomizeToggle label="NAS · Load"  value={t.showNasLoad}  onChange={(v) => setTweak("showNasLoad", v)} />
+        <CustomizeToggle label="NAS · Apps"  value={t.showNasApps}  onChange={(v) => setTweak("showNasApps", v)} />
+        <CustomizeToggle label="NAS · Pools" value={t.showNasPools} onChange={(v) => setTweak("showNasPools", v)} />
         <CustomizeToggle label="Uptime"   value={t.showUptime}  onChange={(v) => setTweak("showUptime", v)} />
         <CustomizeToggle label="WAN"      value={t.showWan}     onChange={(v) => setTweak("showWan", v)} />
         <CustomizeToggle label="Weather"  value={t.showWeather} onChange={(v) => setTweak("showWeather", v)} />
