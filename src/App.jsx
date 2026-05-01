@@ -17,7 +17,6 @@ const ISSUE_TO_CONTAINER = {
 const TWEAK_DEFAULTS = {
   theme: "ink",
   density: "regular",
-  showAmbient: true,
   showWeather: false,
   showWan: true,
   showUptime: true,
