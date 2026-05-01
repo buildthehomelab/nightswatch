@@ -20,7 +20,7 @@ export default function Dozzle({ open, onClose }) {
             <span className="dozzle-label">logs</span>
             {DOZZLE_BASE && <span className="dozzle-url">{DOZZLE_BASE}</span>}
           </div>
-          <button ref={closeRef} className="dozzle-close" onClick={onClose}>esc</button>
+          <button className="dozzle-close" onClick={onClose}>esc</button>
         </div>
         <iframe
           src={open ? DOZZLE_BASE : undefined}
