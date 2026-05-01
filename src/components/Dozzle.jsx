@@ -7,7 +7,6 @@ export default function Dozzle({ open, onClose }) {
 
   useEffect(() => {
     if (!open) return;
-    closeRef.current?.focus();
     const onKey = (e) => { if (e.key === "Escape") onClose(); };
     window.addEventListener("keydown", onKey);
     return () => window.removeEventListener("keydown", onKey);
