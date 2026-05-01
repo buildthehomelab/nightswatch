@@ -33,9 +33,10 @@ Three top-level states driven by `issues.length` and severity:
 
 ## TrueNAS integration
 
-- **Version: TrueNAS SCALE 25.10.3** (patronus.vaultrona.com)
-- Proxied through Vite dev server: `/truenas/*` → `https://patronus.vaultrona.com:3443`
+- **Version: TrueNAS SCALE 25.10.3**
+- Proxied through Vite dev server: `/truenas/*` → `$TRUENAS_HOST:$TRUENAS_PORT`
 - Auth: `TRUENAS_KEY` env var (set in `.env.local`, no `VITE_` prefix — injected at proxy layer in vite.config.js, not exposed to browser)
+- `TRUENAS_HOST` / `TRUENAS_PORT` — proxy target (server-side only, no `VITE_` prefix)
 - `VITE_STOPPED_APP_HIDE_MINUTES=60` — hides stopped apps from NAS strip after N minutes
 - `RELEASE_CACHE`: 10-min TTL Map for GitHub release version checks (linuxserver images mapped to upstream repos)
 - `useTrueNas()` hook polls on mount; `nasIssues(data)` derives crit/warn issues from pool health, disk SMART, app update availability
