@@ -15,14 +15,14 @@ export default function Dozzle({ open, onClose }) {
 
   return (
     <>
-      <div className={`dozzle-scrim ${open ? "open" : ""}`} onClick={onClose}></div>
+      {open && <div className="dozzle-scrim" onClick={onClose} />}
       <aside className={`dozzle ${open ? "open" : ""}`} aria-hidden={!open}>
         <div className="dozzle-hd">
-          <div className="title">
-            <b>dozzle</b>
-            <span className="url">{DOZZLE_BASE}</span>
+          <div className="dozzle-title">
+            <span className="dozzle-label">logs</span>
+            {DOZZLE_BASE && <span className="dozzle-url">{DOZZLE_BASE}</span>}
           </div>
-          <button ref={closeRef} className="dozzle-close" onClick={onClose}>close · esc</button>
+          <button ref={closeRef} className="dozzle-close" onClick={onClose}>esc</button>
         </div>
         <iframe
           src={open ? DOZZLE_BASE : undefined}
