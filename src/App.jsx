@@ -4,7 +4,6 @@ import { useTrueNas, nasIssues, fmtUptime, UI as NAS_UI, POOL_WARN_PCT, POOL_CRI
 import {
   useTweaks, TweaksPanel, TweakSection, TweakRadio, TweakToggle,
 } from './components/TweaksPanel';
-import { ISSUE_FIXTURES } from './data/fixtures';
 
 const WEATHER_LOCATION = import.meta.env.VITE_WEATHER_LOCATION ?? "";
 
