@@ -614,7 +614,7 @@ export default function App() {
               ))
           }
         </CustomizeColumn>
-        <CustomizeColumn wide>
+        <CustomizeColumn wide push>
           <CustomizeSection label="Keyboard shortcuts" />
           <table className="help-table">
             <tbody>
