@@ -6,6 +6,7 @@ import {
 } from './components/CustomizePanel';
 
 const WEATHER_LOCATION = import.meta.env.VITE_WEATHER_LOCATION ?? "";
+const DEMO = import.meta.env.DEMO === 'true';
 
 const LS_IGNORED_KEY = 'nightswatch:ignored';
 function loadIgnored() {
@@ -441,6 +442,7 @@ export default function App() {
   }, []);
 
   useEffect(() => {
+    if (DEMO) return;
     const probe = (url) => fetch(url, { mode: "no-cors", cache: "no-store" }).then(() => true).catch(() => false);
     const check = async () => {
       const [cf, google] = await Promise.all([probe("https://1.1.1.1"), probe("https://8.8.8.8")]);
