@@ -505,7 +505,7 @@ export default function App() {
   const issues = useMemo(() => {
     const liveIssues = [
       ...nasIssues(nasData),
-      ...cveIssues(cveData),
+      ...cveIssues(cveData, cveKeywords),
       ...(DEMO && t.enableCve ? CVE_FIXTURES : []),
     ];
     if (t.enableTruenas && nasErr) {
