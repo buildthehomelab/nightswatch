@@ -185,12 +185,33 @@ function trimChangelog(body, maxLen = 400) {
   return (lastNl > 80 ? text.slice(0, lastNl) : text) + '…';
 }
 
+const CPU_WARN_C = Number(import.meta.env.VITE_CPU_WARN_C ?? 70) || 70;
+const CPU_CRIT_C = Number(import.meta.env.VITE_CPU_CRIT_C ?? 85) || 85;
+
+async function fetchCpuTemp(hdrs) {
+  try {
+    const res = await fetch(`${API}/reporting/get_data`, {
+      method: 'POST',
+      headers: { ...hdrs, 'Content-Type': 'application/json' },
+      body: JSON.stringify({ graphs: [{ name: 'cputemp' }], unit: 'CELSIUS' }),
+    });
+    if (!res.ok) return null;
+    const json = await res.json();
+    if (!Array.isArray(json) || !json[0]) return null;
+    const agg = json[0].aggregations?.mean;
+    if (!Array.isArray(agg) || agg.length === 0) return null;
+    const valid = agg.filter(v => v != null && !isNaN(v));
+    return valid.length > 0 ? Math.round(Math.max(...valid)) : null;
+  } catch { return null; }
+}
+
 async function fetchData() {
   const hdrs = { Authorization: `Bearer ${KEY}` };
-  const [info, pools, apps] = await Promise.all([
+  const [info, pools, apps, cpuTemp] = await Promise.all([
     fetch(`${API}/system/info`, { headers: hdrs }).then(r => r.json()),
     fetch(`${API}/pool`,        { headers: hdrs }).then(r => r.json()),
     fetch(`${API}/app`,         { headers: hdrs }).then(r => r.json()).catch(() => []),
+    fetchCpuTemp(hdrs),
   ]);
 
   const appList = Array.isArray(apps) ? apps : [];
@@ -207,7 +228,7 @@ async function fetchData() {
       })
   );
 
-  return { info, pools, apps: appList, releaseMap };
+  return { info, pools, apps: appList, releaseMap, cpuTemp };
 }
 
 const LS_KEY = 'truenas:stoppedSince';
