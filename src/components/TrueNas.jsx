@@ -410,6 +410,7 @@ export function nasIssues(data) {
     const updateId  = 'nas-sys-update';
     const firstTs   = lsMarkFirstSeen(updateId);
     const updateAge = Date.now() - firstTs;
+    const firstStr  = new Date(firstTs).toLocaleTimeString(undefined, { hour: "2-digit", minute: "2-digit", hour12: false });
     const profile   = newVer.manifest?.profile ?? newVer.manifest?.train ?? "";
     const isBeta    = /EARLY|BETA/i.test(profile) || /BETA/i.test(newVer.version);
     const relDate   = fmtReleaseDate(newVer.manifest?.date);
@@ -425,11 +426,11 @@ export function nasIssues(data) {
       headline: `TrueNAS update available: ${newVer.version}.`,
       source: "truenas · system",
       firstSeenTs: firstTs,
-      when: updateAge >= 60000 ? `${fmtAge(updateAge)} unresolved` : relDate ? `released ${relDate}` : now,
+      when: updateAge >= 60000 ? `${fmtAge(updateAge)} unresolved` : relDate ? `released ${relDate}` : firstStr,
       description: description || `TrueNAS ${newVer.version} is available.`,
       logs: [
-        { t: now, level: isBeta ? "warn" : "info", text: `[update] ${newVer.version} available (${profile || "general"})` },
-        ...(downloaded ? [{ t: now, level: "info", text: "[update] download complete — ready to install" }] : []),
+        { t: firstStr, level: isBeta ? "warn" : "info", text: `[update] ${newVer.version} available (${profile || "general"})` },
+        ...(downloaded ? [{ t: firstStr, level: "info", text: "[update] download complete — ready to install" }] : []),
       ],
       actions: [
         { label: "open truenas ›", href: `${UI}/ui/system/update` },
