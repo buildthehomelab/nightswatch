@@ -42,13 +42,6 @@ function mastheadPhrase(issues) {
   return <>{issues.length} things <em>need attention.</em></>;
 }
 
-function greeting(d) {
-  const h = d.getHours();
-  if (h < 5)  return "Late night.";
-  if (h < 12) return "Good morning.";
-  if (h < 17) return "Good afternoon.";
-  return "Good evening.";
-}
 
 function fmtDate(d) {
   return d.toLocaleDateString(undefined, {
