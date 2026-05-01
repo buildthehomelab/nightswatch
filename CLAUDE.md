@@ -68,8 +68,8 @@ Defaults (`CUSTOMIZE_DEFAULTS` in App.jsx):
 
 See `DESIGN.md` for the full design system reference (Notion-inspired). CSS custom properties on `:root`, switched via `data-theme="light|dark"` on `<html>`.
 
-Light theme: `--paper #ffffff`, `--paper-2 #f6f5f4`, `--ink rgba(0,0,0,0.95)`, `--ink-2 #615d59`, `--ink-3 #a39e98`, `--warn #dd5b00`, `--crit #c0392b`, `--ok #2a9d99`, `--accent #0075de`
-Dark theme: `--paper #31302e`, `--paper-2 #3d3b38`, `--ink rgba(255,255,255,0.9)`, `--ink-2 #c5bfb5`, `--ink-3 #8a8478`, `--warn #e87a30`, `--crit #e05a44`, `--ok #3bbfba`, `--accent #62aef0`
+Light theme: `--paper #ffffff`, `--paper-2 #f6f5f4`, `--ink rgba(0,0,0,0.95)`, `--ink-2 #615d59`, `--ink-3 #a39e98`, `--warn #dd5b00`, `--crit #b03520`, `--ok #2a9d99`, `--accent #0075de`
+Dark theme: `--paper #31302e`, `--paper-2 #3d3b38`, `--ink rgba(255,255,255,0.9)`, `--ink-2 #c5bfb5`, `--ink-3 #8a8478`, `--warn #e87a30`, `--crit #d05535`, `--ok #3bbfba`, `--accent #62aef0`
 
 Font: `--sans` Inter (headlines, body, UI); `--mono` JetBrains Mono (log output only).
 Borders: `1px solid var(--rule)` — whisper weight (`rgba(0,0,0,0.1)` light / `rgba(255,255,255,0.1)` dark).
