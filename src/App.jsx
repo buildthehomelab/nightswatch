@@ -383,6 +383,16 @@ export default function App() {
   useEffect(() => { themeRef.current = t.theme; }, [t.theme]);
   const [now, setNow] = useState(new Date());
   const [dozzleOpen, setDozzleOpen] = useState(false);
+  const [ignored, setIgnored] = useState(() => loadIgnored());
+
+  const handleIgnore = (key) => {
+    setIgnored(prev => {
+      const next = new Set(prev);
+      next.add(key);
+      saveIgnored(next);
+      return next;
+    });
+  };
   const { data: nasData, err: nasErr } = useTrueNas();
   const [wanUp, setWanUp] = useState(true);
   const [wanDownSince, setWanDownSince] = useState(null);
