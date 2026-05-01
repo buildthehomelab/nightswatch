@@ -470,7 +470,7 @@ export default function App() {
   }, []);
 
   useEffect(() => {
-    document.documentElement.setAttribute("data-theme", t.theme === "ink" ? "dark" : "light");
+    document.documentElement.setAttribute("data-theme", t.theme);
     document.body.className = "density-compact";
   }, [t.theme]);
 
