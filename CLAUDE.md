@@ -52,11 +52,11 @@ Three top-level states driven by `issues.length` and severity:
 | `` ` `` | Toggle CustomizePanel |
 | `Esc` | Close overlay |
 
-## TweaksPanel
+## CustomizePanel
 
-Dev-only controls, opened with backtick. Persisted to localStorage via `useTweaks()`.
+Dev-only controls, opened with backtick. Persisted to localStorage via `useCustomize()`.
 
-Defaults (`TWEAK_DEFAULTS` in App.jsx):
+Defaults (`CUSTOMIZE_DEFAULTS` in App.jsx):
 - `state`: "warnings" (drives which fixtures show)
 - `theme`: "ink"
 - `density`: "regular"
