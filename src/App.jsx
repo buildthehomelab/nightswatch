@@ -523,9 +523,9 @@ export default function App() {
 
       <HelpOverlay open={helpOpen} onClose={() => setHelpOpen(false)} />
 
-      <TweaksPanel>
-        <TweakSection label="Appearance" />
-        <TweakRadio
+      <CustomizePanel>
+        <CustomizeSection label="Appearance" />
+        <CustomizeRadio
           label="Theme"
           value={t.theme}
           options={[
@@ -534,8 +534,8 @@ export default function App() {
           ]}
           onChange={(v) => setTweak("theme", v)}
         />
-        <TweakSection label="Ambient strip" />
-        <TweakRadio
+        <CustomizeSection label="Ambient strip" />
+        <CustomizeRadio
           label="Placement"
           value={t.ambientPlacement}
           options={[
@@ -544,12 +544,12 @@ export default function App() {
           ]}
           onChange={(v) => setTweak("ambientPlacement", v)}
         />
-        <TweakToggle label="Date"     value={t.showDate}    onChange={(v) => setTweak("showDate", v)} />
-        <TweakToggle label="TrueNAS"  value={t.showNas}     onChange={(v) => setTweak("showNas", v)} />
-        <TweakToggle label="Uptime"   value={t.showUptime}  onChange={(v) => setTweak("showUptime", v)} />
-        <TweakToggle label="WAN"      value={t.showWan}     onChange={(v) => setTweak("showWan", v)} />
-        <TweakToggle label="Weather"  value={t.showWeather} onChange={(v) => setTweak("showWeather", v)} />
-      </TweaksPanel>
+        <CustomizeToggle label="Date"     value={t.showDate}    onChange={(v) => setTweak("showDate", v)} />
+        <CustomizeToggle label="TrueNAS"  value={t.showNas}     onChange={(v) => setTweak("showNas", v)} />
+        <CustomizeToggle label="Uptime"   value={t.showUptime}  onChange={(v) => setTweak("showUptime", v)} />
+        <CustomizeToggle label="WAN"      value={t.showWan}     onChange={(v) => setTweak("showWan", v)} />
+        <CustomizeToggle label="Weather"  value={t.showWeather} onChange={(v) => setTweak("showWeather", v)} />
+      </CustomizePanel>
     </>
   );
 }
