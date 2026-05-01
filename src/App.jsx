@@ -544,11 +544,11 @@ export default function App() {
           ]}
           onChange={(v) => setTweak("ambientPlacement", v)}
         />
-        <TweakToggle label="Show Weather"     value={t.showWeather} onChange={(v) => setTweak("showWeather", v)} />
-        <TweakToggle label="Show WAN"         value={t.showWan}     onChange={(v) => setTweak("showWan", v)} />
-        <TweakToggle label="Show Uptime"      value={t.showUptime}  onChange={(v) => setTweak("showUptime", v)} />
-        <TweakToggle label="Show TrueNAS"     value={t.showNas}     onChange={(v) => setTweak("showNas", v)} />
-        <TweakToggle label="Show Date"        value={t.showDate}    onChange={(v) => setTweak("showDate", v)} />
+        <TweakToggle label="Weather"  value={t.showWeather} onChange={(v) => setTweak("showWeather", v)} />
+        <TweakToggle label="WAN"      value={t.showWan}     onChange={(v) => setTweak("showWan", v)} />
+        <TweakToggle label="Uptime"   value={t.showUptime}  onChange={(v) => setTweak("showUptime", v)} />
+        <TweakToggle label="TrueNAS"  value={t.showNas}     onChange={(v) => setTweak("showNas", v)} />
+        <TweakToggle label="Date"     value={t.showDate}    onChange={(v) => setTweak("showDate", v)} />
       </TweaksPanel>
     </>
   );
