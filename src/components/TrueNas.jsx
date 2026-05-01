@@ -7,8 +7,10 @@ const STOPPED_HIDE_MINUTES = Number(import.meta.env.VITE_STOPPED_APP_HIDE_MINUTE
 export const POOL_WARN_PCT = Number(import.meta.env.VITE_POOL_WARN_PCT ?? 80) || 80;
 export const POOL_CRIT_PCT = Number(import.meta.env.VITE_POOL_CRIT_PCT ?? 90) || 90;
 
-const RELEASE_TTL     = 4 * 60 * 60 * 1000;
-const LS_RELEASE_KEY  = 'truenas:releaseCache';
+const RELEASE_TTL        = 4 * 60 * 60 * 1000;
+const LS_RELEASE_KEY     = 'truenas:releaseCache';
+const AGE_WARN_TO_CRIT_MS = 4 * 60 * 60 * 1000;
+const AGE_INFO_TO_WARN_MS = 7 * 24 * 60 * 60 * 1000;
 
 function lsLoadRelease() {
   try {
