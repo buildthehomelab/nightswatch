@@ -553,7 +553,7 @@ export default function App() {
           <>
             <div className="masthead">
               <h1 className="rise rise-d1">
-                {mastheadPhrase(visibleIssues)}
+                {mastheadPhrase(visibleIssues, ignored)}
               </h1>
             </div>
             <IssueList issues={visibleIssues} onOpenLogs={openLogs} onIgnore={handleIgnore} />
