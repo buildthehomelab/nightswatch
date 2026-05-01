@@ -15,7 +15,6 @@ const ISSUE_TO_CONTAINER = {
 };
 
 const TWEAK_DEFAULTS = {
-  state: "warnings",
   theme: "ink",
   density: "regular",
   showAmbient: true,
