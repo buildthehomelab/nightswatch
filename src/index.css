@@ -166,6 +166,8 @@ body {
 }
 .masthead h1 em {
   font-style: normal;
+  font-weight: 600;
+  font-feature-settings: "lnum", "locl";
 }
 .masthead h1 em.em-crit { color: var(--crit); }
 .masthead h1 em.em-warn { color: var(--warn); }
