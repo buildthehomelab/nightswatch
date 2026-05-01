@@ -387,7 +387,6 @@ export default function App() {
           });
         }
       }
-      setLastChecked(new Date());
     };
     check();
     const id = setInterval(check, 30_000);
