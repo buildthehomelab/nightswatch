@@ -60,6 +60,16 @@ function lsClearFirstSeen(id) {
   }
 }
 
+export function fmtAge(ms) {
+  const mins = Math.floor(ms / 60000);
+  if (mins < 60) return `${mins}m`;
+  const hours = Math.floor(mins / 60);
+  if (hours < 24) return `${hours}h`;
+  const days = Math.floor(hours / 24);
+  const rem = hours % 24;
+  return rem > 0 ? `${days}d ${rem}h` : `${days}d`;
+}
+
 export function fmtUptime(sec) {
   if (sec == null) return "—";
   const d = Math.floor(sec / 86400);
