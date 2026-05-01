@@ -66,12 +66,14 @@ Defaults (`CUSTOMIZE_DEFAULTS` in App.jsx):
 
 ## Design tokens
 
-CSS custom properties on `:root`, switched via `data-theme="light|dark"` on `<html>`.
+See `DESIGN.md` for the full design system reference (Notion-inspired). CSS custom properties on `:root`, switched via `data-theme="light|dark"` on `<html>`.
 
-Paper theme (light): `--paper #f4efe4`, `--ink #1a1814`, `--warn #a8741a`, `--crit #8a2a1f`, `--ok #4a6b3a`
-Ink theme (dark): `--paper #14130f`, `--ink #ece7d8`, `--warn #d9a44a`, `--crit #d97a64`, `--ok #95b87f`
+Paper theme (light): `--paper #ffffff`, `--paper-2 #f6f5f4`, `--ink rgba(0,0,0,0.95)`, `--ink-2 #615d59`, `--ink-3 #a39e98`, `--warn #dd5b00`, `--crit #c0392b`, `--ok #2a9d99`, `--accent #0075de`
+Ink theme (dark): `--paper #31302e`, `--paper-2 #3d3b38`, `--ink rgba(255,255,255,0.9)`, `--ink-2 #c5bfb5`, `--ink-3 #8a8478`, `--warn #e87a30`, `--crit #e05a44`, `--ok #3bbfba`, `--accent #62aef0`
 
-All borders are `0.5px solid var(--rule)` — never 1px+. No shadows except Dozzle panel.
+Font: `--sans` Inter (headlines, body, UI); `--mono` JetBrains Mono (log output only).
+Borders: `1px solid var(--rule)` — whisper weight (`rgba(0,0,0,0.1)` light / `rgba(255,255,255,0.1)` dark).
+Severity badges: pill (9999px radius) with tinted background. Action buttons: 4px radius. Detail cards: 12px radius with 4-layer card shadow.
 
 ## Issue-to-container mapping
 
