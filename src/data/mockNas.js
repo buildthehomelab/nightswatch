@@ -1,0 +1,35 @@
+export const MOCK_NAS_DATA = {
+  info: {
+    hostname: 'patronus',
+    uptime_seconds: 86400 * 12 + 3600 * 4 + 60 * 22,
+    loadavg: [1.42, 1.31, 1.18],
+    version: 'TrueNAS-SCALE-25.10.3',
+  },
+  pools: [
+    { name: 'tank',   status: 'ONLINE', size: 12 * 1e12, allocated: 10.1 * 1e12 },
+    { name: 'nvme',   status: 'ONLINE', size: 2  * 1e12, allocated: 0.6  * 1e12 },
+    { name: 'backup', status: 'ONLINE', size: 16 * 1e12, allocated: 9.4  * 1e12 },
+  ],
+  apps: [
+    { name: 'plex',        state: 'RUNNING' },
+    { name: 'sonarr',      state: 'RUNNING' },
+    { name: 'radarr',      state: 'RUNNING' },
+    { name: 'prowlarr',    state: 'RUNNING' },
+    { name: 'jellyfin',    state: 'RUNNING' },
+    { name: 'overseerr',   state: 'RUNNING' },
+    { name: 'tautulli',    state: 'RUNNING' },
+    { name: 'sabnzbd',     state: 'RUNNING' },
+    { name: 'bazarr',      state: 'RUNNING' },
+    { name: 'unpackerr',   state: 'STOPPED' },
+    { name: 'filebrowser', state: 'STOPPED' },
+  ],
+  cpuTemp: 54,
+  memFree: 18.2 * 1e9,
+  arcSize:  6.4 * 1e9,
+  physmem:  32  * 1e9,
+  updateStatus: null,
+  stoppedSince: new Map([
+    ['unpackerr',   new Date(Date.now() - 1000 * 60 * 40)],
+    ['filebrowser', new Date(Date.now() - 1000 * 60 * 12)],
+  ]),
+};
