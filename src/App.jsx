@@ -495,6 +495,8 @@ export default function App() {
           weather={weather}
           lastCheck={lastCheck}
           showWeather={t.showWeather}
+          showNas={t.showNas}
+          nasData={nasData}
         />
       )}
 
