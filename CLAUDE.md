@@ -44,7 +44,7 @@ Three top-level states driven by `issues.length` and severity:
 
 | Key | Action |
 |-----|--------|
-| `j` / `k` | Navigate issues (vim-style, note: j=prev, k=next — inverted from vim) |
+| `j` / `k` | Navigate issues (j=prev, k=next — intentional, not vim-standard) |
 | `Enter` | Expand/collapse focused issue |
 | `h` or `?` | Help overlay |
 | `l` | Open Dozzle log viewer |
