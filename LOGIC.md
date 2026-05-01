@@ -21,14 +21,31 @@ visibleIssues has any crit
 
 ### Masthead Phrase Rules
 
-| Condition | Phrase |
-|-----------|--------|
-| 1 crit (wan-down) | "Internet is down." |
-| 1 crit (other) | "One critical issue needs attention." |
-| N crits | "{N} critical issues need attention." |
-| any crit unresolved ≥ 4h | "Critical issue unresolved for over {age}." |
-| warnings only, 1 issue | "One thing needs a look." |
-| warnings only, many | "A few things need a look." |
+Phrases are random strings drawn from `PHRASES` buckets via `pickPhrase()`. Priority (first match wins):
+
+| Priority | Condition | Phrase bucket |
+|----------|-----------|---------------|
+| 1 | `wan-down` in issues | `PHRASES.wanDown` |
+| 2 | any ignored key timestamp > 2 days old | `PHRASES.ignoredDays` |
+| 3 | oldest crit age ≥ 4h (`MASTHEAD_STALE_MS`) | `PHRASES.stale` |
+| 4 | crits > 1 | `PHRASES.multiCrit` |
+| 5 | crits > 0 AND `ignored.size > 0` | `PHRASES.critIgnored` |
+| 6 | crits > 0 | `PHRASES.crit` |
+| 7 | issues > 1 | `PHRASES.multiIssue` |
+| 8 | fallback (single warn) | `PHRASES.singleWarn` |
+
+### pickPhrase
+
+```
+pickPhrase(arr):
+  key = `nightswatch:phrase:${arr[0]}`
+  if stored idx exists AND age < 1 minute → return arr[stored.idx]
+  pick random idx ≠ last idx
+  save {idx, ts} to localStorage
+  return arr[idx]
+```
+
+Guarantees phrase stability across re-renders for 60s, always rotates on refresh after 1 min.
 
 ---
 
