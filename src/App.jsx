@@ -398,9 +398,6 @@ export default function App() {
       } else if (e.key === "r" || e.key === "R") {
         e.preventDefault();
         setNow(new Date());
-      } else if (e.key === "t" || e.key === "T") {
-        e.preventDefault();
-        setTweak("theme", themeRef.current === "paper" ? "ink" : "paper");
       } else if (e.key === "Escape") {
         setHelpOpen(false);
       }
