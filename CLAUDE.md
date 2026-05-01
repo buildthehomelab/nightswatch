@@ -58,7 +58,7 @@ Three top-level states driven by `issues.length` and severity:
 Dev-only controls, opened with backtick. Persisted to localStorage via `useCustomize()`.
 
 Defaults (`CUSTOMIZE_DEFAULTS` in App.jsx):
-- `theme`: "ink"
+- `theme`: "dark"
 - `showWeather`: false
 - `showWan`: true, `showUptime`: true, `showDate`: true
 - `showNas`: false — TrueNAS data strip hidden by default
