@@ -1,6 +1,6 @@
 import { useState, useEffect, useRef } from 'react';
 
-const UI  = "https://patronus.vaultrona.com";
+export const UI  = "https://patronus.vaultrona.com";
 const API = "/truenas/api/v2.0";
 const KEY                  = import.meta.env.VITE_TRUENAS_KEY ?? "";
 const STOPPED_HIDE_MINUTES = Number(import.meta.env.VITE_STOPPED_APP_HIDE_MINUTES ?? 0) || 0;
