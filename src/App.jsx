@@ -415,11 +415,12 @@ export default function App() {
         severity: "crit",
         label: "wan down",
         headline: "Internet connection is offline.",
-        source: "connectivity check · 1.1.1.1",
+        source: "connectivity check · 1.1.1.1 · 8.8.8.8",
         when: `since ${since}`,
-        description: "Active connectivity check failed. Cannot reach 1.1.1.1 (Cloudflare). Outbound services are unreachable.",
+        description: "Active connectivity checks failed. Cannot reach 1.1.1.1 (Cloudflare) or 8.8.8.8 (Google). Outbound services are unreachable.",
         logs: [
-          { t: since, level: "err", text: "[wan] fetch https://1.1.1.1 failed — network unreachable" },
+          { t: since, level: "err", text: "[wan] probe 1.1.1.1 failed — network unreachable" },
+          { t: since, level: "err", text: "[wan] probe 8.8.8.8 failed — network unreachable" },
         ],
         actions: ["restart pppoe", "ping ISP gateway", "ssh edgerouter"],
       };
