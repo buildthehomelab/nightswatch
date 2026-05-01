@@ -83,12 +83,6 @@ function Ambient({ now, wanUp, uptime, weather, showWeather, showNas, nasData })
   return (
     <footer className="ambient rise">
       <div className="left">
-        {cpuTemp != null && (
-          <span className="item">
-            <span className="k">cpu</span>
-            <span className={`v${cpuCls}`}>{cpuTemp}°C</span>
-          </span>
-        )}
         <span className="item">
           <span className="k">wan</span>
           <span className={`dot ${wanUp ? "" : "crit"}`}></span>
