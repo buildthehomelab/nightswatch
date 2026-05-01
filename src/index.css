@@ -61,13 +61,6 @@ body {
   z-index: 50;
   background: var(--paper);
   border-top: 0.5px solid var(--rule);
-  border-bottom: none;
-}
-.ambient[data-placement="top"] {
-  top: 0;
-  bottom: auto;
-  border-top: none;
-  border-bottom: 0.5px solid var(--rule);
   padding: 10px 48px;
   display: flex;
   align-items: baseline;
@@ -78,6 +71,12 @@ body {
   letter-spacing: 0.02em;
   color: var(--ink-3);
   text-transform: lowercase;
+}
+.ambient[data-placement="top"] {
+  top: 0;
+  bottom: auto;
+  border-top: none;
+  border-bottom: 0.5px solid var(--rule);
 }
 .ambient .left,
 .ambient .mid,
