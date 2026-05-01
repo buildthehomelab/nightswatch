@@ -611,7 +611,7 @@ export default function App() {
           <CustomizeSection label="TrueNAS" />
           <CustomizeToggle label="Enable"   value={t.enableTruenas}  onChange={(v) => setTweak("enableTruenas", v)} />
           {t.enableTruenas && <>
-            <CustomizeToggle label="Strip"    value={t.showNas}        onChange={(v) => setTweak("showNas", v)} />
+            <CustomizeToggle label="Ambient Strip" value={t.showNas}   onChange={(v) => setTweak("showNas", v)} />
             <CustomizeToggle label="Apps"     value={t.showNasApps}    onChange={(v) => setTweak("showNasApps", v)} />
             <CustomizeToggle label="CPU Temp" value={t.showNasCpuTemp} onChange={(v) => setTweak("showNasCpuTemp", v)} />
             <CustomizeToggle label="Load"     value={t.showNasLoad}    onChange={(v) => setTweak("showNasLoad", v)} />
