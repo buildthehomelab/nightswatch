@@ -44,7 +44,7 @@ function fmtTime(d) {
 
 function Ambient({ now, wanUp, uptime, weather, lastCheck, showWeather }) {
   return (
-    <header className="ambient rise">
+    <footer className="ambient rise">
       <div className="left">
         <span className="item">
           <span className="v">{fmtTime(now)}</span>
