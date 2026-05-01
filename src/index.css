@@ -85,7 +85,7 @@ body {
   gap: 20px;
   align-items: center;
 }
-.ambient .right { flex-wrap: wrap; justify-content: flex-end; }
+.ambient .right { flex-wrap: wrap; justify-content: flex-end; margin-left: auto; }
 .ambient .item { display: inline-flex; gap: 6px; align-items: center; }
 .ambient .item .k { color: var(--ink-3); }
 .ambient .item .v { color: var(--ink-2); font-variant-numeric: tabular-nums; }
