@@ -1,6 +1,6 @@
 import { useEffect, useRef } from 'react';
 
-const DOZZLE_BASE = "https://logs.vaultrona.com";
+const DOZZLE_BASE = import.meta.env.VITE_DOZZLE_URL ?? "";
 
 export default function Dozzle({ open, onClose }) {
   const closeRef = useRef(null);
