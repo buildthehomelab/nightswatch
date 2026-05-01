@@ -237,7 +237,7 @@ async function fetchData() {
       })
   );
 
-  return { info, pools, apps: appList, releaseMap, cpuTemp };
+  return { info, pools, apps: appList, releaseMap, cpuTemp, updateStatus };
 }
 
 const LS_KEY = 'truenas:stoppedSince';
