@@ -20,10 +20,7 @@ function saveIgnored(map) {
 }
 
 const ISSUE_TO_CONTAINER = {
-"wan-down":       "pihole",
-  "smart-tank":     "jellyfin",
-  "disk-media":     "sonarr",
-  "ups":            "watchtower",
+  "wan-down": "pihole",
 };
 
 const CUSTOMIZE_DEFAULTS = {
