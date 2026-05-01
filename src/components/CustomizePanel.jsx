@@ -219,15 +219,6 @@ export function CustomizeRow({ label, value, children, inline = false }) {
   );
 }
 
-export function CustomizeSlider({ label, value, min = 0, max = 100, step = 1, unit = '', onChange }) {
-  return (
-    <CustomizeRow label={label} value={`${value}${unit}`}>
-      <input type="range" className="twk-slider" min={min} max={max} step={step}
-             value={value} onChange={(e) => onChange(Number(e.target.value))} />
-    </CustomizeRow>
-  );
-}
-
 export function CustomizeToggle({ label, value, onChange }) {
   return (
     <div className="twk-row twk-row-h">
