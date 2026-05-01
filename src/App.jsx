@@ -527,8 +527,6 @@ export default function App() {
         onClose={() => setDozzleOpen(false)}
       />
 
-      <HelpOverlay open={helpOpen} onClose={() => setHelpOpen(false)} />
-
       <CustomizePanel>
         <CustomizeRadio
           label="Theme"
