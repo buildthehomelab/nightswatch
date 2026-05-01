@@ -305,11 +305,11 @@ body {
 }
 .issue .headline {
   font-family: var(--sans);
-  font-size: 22px;
-  font-weight: 700;
-  line-height: 1.27;
+  font-size: 18px;
+  font-weight: 600;
+  line-height: 1.30;
   color: var(--ink);
-  letter-spacing: -0.25px;
+  letter-spacing: -0.15px;
 }
 .issue .meta {
   font-family: var(--sans);
