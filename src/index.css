@@ -46,7 +46,7 @@ body {
 ::selection { background: var(--ink); color: var(--paper); }
 
 .page {
-  max-width: 880px;
+  max-width: 1200px;
   margin: 0 auto;
   padding: 56px 48px 72px;
   min-height: 100vh;
