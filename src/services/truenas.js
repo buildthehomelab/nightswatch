@@ -268,12 +268,13 @@ function lsSave(map) {
 
 // ── Hook ──────────────────────────────────────────────────
 
-export function useTrueNas() {
+export function useTrueNas(enabled = true) {
   const [data, setData] = useState(null);
   const [err, setErr]   = useState(null);
   const stoppedSince    = useRef(lsLoad());
 
   useEffect(() => {
+    if (!enabled) { setData(null); setErr(null); return; }
     const refresh = () =>
       fetchData()
         .then(d => {
@@ -295,7 +296,7 @@ export function useTrueNas() {
     refresh();
     const id = setInterval(refresh, 60_000);
     return () => clearInterval(id);
-  }, []);
+  }, [enabled]);
 
   return { data, err };
 }
