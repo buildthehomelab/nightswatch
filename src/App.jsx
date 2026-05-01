@@ -460,7 +460,6 @@ export default function App() {
   return (
     <>
       <div className="page">
-        {t.showNas && <TrueNas data={nasData} err={nasErr} />}
 
         {isHealthy ? (
           <Healthy now={now} uptime={uptime} />
