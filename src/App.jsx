@@ -477,18 +477,6 @@ export default function App() {
       <HelpOverlay open={helpOpen} onClose={() => setHelpOpen(false)} />
 
       <TweaksPanel>
-        <TweakSection label="State (demo)" />
-        <TweakRadio
-          label="Show"
-          value={t.state}
-          options={[
-            { value: "healthy",  label: "calm" },
-            { value: "warnings", label: "warn" },
-            { value: "critical", label: "crit" },
-          ]}
-          onChange={(v) => setTweak("state", v)}
-        />
-
         <TweakSection label="Appearance" />
         <TweakRadio
           label="Theme"
