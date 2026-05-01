@@ -220,10 +220,11 @@ async function fetchUpdateStatus(hdrs) {
 
 async function fetchData() {
   const hdrs = {};
+  const ok = (r) => { if (!r.ok) throw new Error(`HTTP ${r.status}`); return r.json(); };
   const [info, pools, apps, cpuTemp, { memFree, arcSize }, updateStatus] = await Promise.all([
-    fetch(`${API}/system/info`, { headers: hdrs }).then(r => r.json()),
-    fetch(`${API}/pool`,        { headers: hdrs }).then(r => r.json()),
-    fetch(`${API}/app`,         { headers: hdrs }).then(r => r.json()).catch(() => []),
+    fetch(`${API}/system/info`, { headers: hdrs }).then(ok),
+    fetch(`${API}/pool`,        { headers: hdrs }).then(ok),
+    fetch(`${API}/app`,         { headers: hdrs }).then(ok).catch(() => []),
     fetchCpuTemp(hdrs),
     fetchMemStats(hdrs),
     fetchUpdateStatus(hdrs),
