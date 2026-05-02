@@ -59,6 +59,7 @@ export const MOCK_NAS_DATA = {
     },
   ],
   cpuTemp: 54,
+  netStats: { rx: 48.3 * 1024 * 1024, tx: 11.7 * 1024 * 1024 },
   memFree: 18.2 * 1e9,
   arcSize:  6.4 * 1e9,
   updateStatus: {
