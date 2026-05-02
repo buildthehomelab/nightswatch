@@ -290,6 +290,10 @@ Configured in `vite.config.js`. Applies to both dev and preview servers.
 | `VITE_TRUENAS_URL` | `.env.local` | TrueNAS UI base URL for hostname link in ambient strip |
 | `VITE_DOZZLE_URL` | `.env.local` | Dozzle iframe base URL; empty = blank iframe (mock mode) |
 | `VITE_STOPPED_APP_HIDE_MINUTES` | `.env.local` | Minutes before stopped apps hidden from NAS strip (default 60) |
+| `VITE_WEATHER_LOCATION` | `.env.local` | Location string for wttr.in weather; empty = weather disabled |
+| `VITE_CVE_KEYWORDS` | `.env.local` | Comma-separated NVD keyword list (e.g. `truenas,plex,nginx`) |
+| `VITE_CVE_DAYS_BACK` | `.env.local` | Days back to query NVD (default 30) |
+| `VITE_CVE_MIN_CVSS` | `.env.local` | Minimum CVSS score to surface as issue (default 4.0) |
 
 ---
 
