@@ -8,6 +8,8 @@ export const POOL_WARN_PCT = Number(import.meta.env.VITE_POOL_WARN_PCT ?? 80) ||
 export const POOL_CRIT_PCT = Number(import.meta.env.VITE_POOL_CRIT_PCT ?? 90) || 90;
 export const CPU_WARN_C  = Number(import.meta.env.VITE_CPU_WARN_C  ?? 70) || 70;
 export const CPU_CRIT_C  = Number(import.meta.env.VITE_CPU_CRIT_C  ?? 85) || 85;
+const DISK_WARN_C        = Number(import.meta.env.VITE_DISK_WARN_C  ?? 45) || 45;
+const DISK_CRIT_C        = Number(import.meta.env.VITE_DISK_CRIT_C  ?? 55) || 55;
 const MEM_WARN_PCT       = Number(import.meta.env.VITE_MEM_WARN_PCT       ?? 80) || 80;
 const MEM_CRIT_PCT       = Number(import.meta.env.VITE_MEM_CRIT_PCT       ?? 90) || 90;
 const LOAD_WARN          = Number(import.meta.env.VITE_LOAD_WARN           ?? 4)  || 4;
@@ -213,6 +215,43 @@ async function fetchCpuTemp(hdrs) {
   } catch { return null; }
 }
 
+function parseDiskId(identifier) {
+  const parts = identifier.split(' | ');
+  return {
+    dev:    parts[0]?.trim() ?? identifier,
+    type:   parts[1]?.replace('Type: ', '').trim() ?? null,
+    model:  parts[2]?.replace('Model: ', '').trim() ?? null,
+    serial: parts[3]?.replace('Serial: ', '').trim() ?? null,
+  };
+}
+
+async function fetchDiskTemps(hdrs) {
+  try {
+    const graphsRes = await fetch(`${API}/reporting/graphs`, { headers: hdrs });
+    if (!graphsRes.ok) return [];
+    const graphs = await graphsRes.json();
+    const diskGraph = Array.isArray(graphs) ? graphs.find(g => g.name === 'disktemp') : null;
+    if (!diskGraph?.identifiers?.length) return [];
+
+    const res = await fetch(`${API}/reporting/get_data`, {
+      method: 'POST',
+      headers: { ...hdrs, 'Content-Type': 'application/json' },
+      body: JSON.stringify({
+        graphs: diskGraph.identifiers.map(id => ({ name: 'disktemp', identifier: id })),
+      }),
+    });
+    if (!res.ok) return [];
+    const json = await res.json();
+    if (!Array.isArray(json)) return [];
+
+    return diskGraph.identifiers.map((identifier, i) => {
+      const temp = lastVal([json[i]]);
+      if (temp == null) return null;
+      return { identifier, ...parseDiskId(identifier), temp: Math.round(temp) };
+    }).filter(Boolean);
+  } catch { return []; }
+}
+
 function lastVal(json) {
   if (!Array.isArray(json) || !json[0]) return null;
   const { data, aggregations } = json[0];
@@ -258,12 +297,13 @@ async function fetchUpdateStatus(hdrs) {
 async function fetchData() {
   const hdrs = {};
   const ok = (r) => { if (!r.ok) throw new Error(`HTTP ${r.status}`); return r.json(); };
-  const [info, pools, apps, cpuTemp, { memFree, arcSize }, updateStatus, alerts] = await Promise.all([
+  const [info, pools, apps, cpuTemp, { memFree, arcSize }, diskTemps, updateStatus, alerts] = await Promise.all([
     fetch(`${API}/system/info`, { headers: hdrs }).then(ok),
     fetch(`${API}/pool`,        { headers: hdrs }).then(ok),
     fetch(`${API}/app`,         { headers: hdrs }).then(ok).catch(() => []),
     fetchCpuTemp(hdrs),
     fetchMemStats(hdrs),
+    fetchDiskTemps(hdrs),
     fetchUpdateStatus(hdrs),
     fetchAlerts(hdrs),
   ]);
@@ -282,7 +322,7 @@ async function fetchData() {
       })
   );
 
-  return { info, pools, apps: appList, releaseMap, cpuTemp, memFree, arcSize, updateStatus, alerts };
+  return { info, pools, apps: appList, releaseMap, cpuTemp, memFree, arcSize, diskTemps, updateStatus, alerts };
 }
 
 // ── Stopped-app tracking (localStorage) ──────────────────
@@ -440,6 +480,34 @@ export function nasIssues(data) {
     });
   } else {
     lsClearFirstSeen('nas-cpu-temp');
+  }
+
+  // Disk temperatures
+  for (const disk of (data.diskTemps ?? [])) {
+    const diskId = `nas-disk-temp-${disk.dev}`;
+    if (disk.temp >= DISK_WARN_C) {
+      const firstTs  = lsMarkFirstSeen(diskId);
+      const diskAge  = Date.now() - firstTs;
+      const firstStr = new Date(firstTs).toLocaleTimeString(undefined, { hour: "2-digit", minute: "2-digit", hour12: false });
+      const label    = disk.model ? `${disk.dev} · ${disk.model}` : disk.dev;
+      issues.push({
+        id: diskId,
+        severity: disk.temp >= DISK_CRIT_C ? 'crit' : 'warn',
+        label: 'disk hot',
+        headline: `${disk.dev} is running at ${disk.temp}°C.`,
+        source: `truenas · disk`,
+        firstSeenTs: firstTs,
+        when: diskAge >= 60000 ? `${fmtAge(diskAge)} unresolved` : 'now',
+        description: `${label}${disk.serial ? ` (${disk.serial})` : ''} is at ${disk.temp}°C.\nWarn ≥${DISK_WARN_C}°C, crit ≥${DISK_CRIT_C}°C. Check airflow or drive health.`,
+        logs: [
+          { t: firstStr, level: disk.temp >= DISK_CRIT_C ? 'err' : 'warn', text: `[thermal] ${disk.dev}: ${disk.temp}°C${disk.model ? ` (${disk.model})` : ''}` },
+        ],
+        ignoreKey: `nas-disk-temp-${disk.dev}:${firstTs}`,
+        actions: [{ label: 'open truenas ›', href: UI }],
+      });
+    } else {
+      lsClearFirstSeen(diskId);
+    }
   }
 
   // Memory
