@@ -285,6 +285,47 @@ async function fetchMemStats(hdrs) {
   } catch { return { memFree: null, arcSize: null }; }
 }
 
+function lastNetVals(entry) {
+  if (!entry) return null;
+  const { data, aggregations } = entry;
+  const agg = aggregations?.mean;
+  if (Array.isArray(agg) && agg.length >= 2 && agg[0] != null) return [agg[0], agg[1] ?? 0];
+  if (Array.isArray(data) && data.length > 0) {
+    const last = data[data.length - 1];
+    if (Array.isArray(last) && last.length >= 3) return [last[1] ?? 0, last[2] ?? 0];
+  }
+  return null;
+}
+
+async function fetchNetStats(hdrs) {
+  try {
+    const graphsRes = await fetch(`${API}/reporting/graphs`, { headers: hdrs });
+    if (!graphsRes.ok) return null;
+    const graphs = await graphsRes.json();
+    const netGraph = Array.isArray(graphs) ? graphs.find(g => g.name === 'interface') : null;
+    if (!netGraph?.identifiers?.length) return null;
+
+    const ifaces = netGraph.identifiers.filter(id => id !== 'lo');
+    if (!ifaces.length) return null;
+
+    const res = await fetch(`${API}/reporting/get_data`, {
+      method: 'POST',
+      headers: { ...hdrs, 'Content-Type': 'application/json' },
+      body: JSON.stringify({ graphs: ifaces.map(id => ({ name: 'interface', identifier: id })) }),
+    });
+    if (!res.ok) return null;
+    const json = await res.json();
+    if (!Array.isArray(json)) return null;
+
+    let rx = 0, tx = 0;
+    for (const entry of json) {
+      const vals = lastNetVals(entry);
+      if (vals) { rx += vals[0]; tx += vals[1]; }
+    }
+    return { rx, tx };
+  } catch { return null; }
+}
+
 async function fetchAlerts(hdrs) {
   try {
     const r = await fetch(`${API}/alert/list`, { headers: hdrs });
@@ -305,7 +346,7 @@ async function fetchUpdateStatus(hdrs) {
 async function fetchData() {
   const hdrs = {};
   const ok = (r) => { if (!r.ok) throw new Error(`HTTP ${r.status}`); return r.json(); };
-  const [info, pools, apps, cpuTemp, { memFree, arcSize }, diskTemps, updateStatus, alerts] = await Promise.all([
+  const [info, pools, apps, cpuTemp, { memFree, arcSize }, diskTemps, updateStatus, alerts, netStats] = await Promise.all([
     fetch(`${API}/system/info`, { headers: hdrs }).then(ok),
     fetch(`${API}/pool`,        { headers: hdrs }).then(ok),
     fetch(`${API}/app`,         { headers: hdrs }).then(ok).catch(() => []),
@@ -314,6 +355,7 @@ async function fetchData() {
     fetchDiskTemps(hdrs),
     fetchUpdateStatus(hdrs),
     fetchAlerts(hdrs),
+    fetchNetStats(hdrs),
   ]);
 
   const appList = Array.isArray(apps) ? apps : [];
@@ -330,7 +372,7 @@ async function fetchData() {
       })
   );
 
-  return { info, pools, apps: appList, releaseMap, cpuTemp, memFree, arcSize, diskTemps, updateStatus, alerts };
+  return { info, pools, apps: appList, releaseMap, cpuTemp, memFree, arcSize, diskTemps, updateStatus, alerts, netStats };
 }
 
 // ── Stopped-app tracking (localStorage) ──────────────────
