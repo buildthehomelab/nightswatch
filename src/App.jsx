@@ -609,6 +609,7 @@ export default function App() {
 
   // Mount: init cleanSince if missing and no crits
   useEffect(() => {
+    if (DEMO) return;
     if (!hasCrit && !localStorage.getItem(LS_CLEAN_KEY)) {
       const ts = new Date().toISOString();
       localStorage.setItem(LS_CLEAN_KEY, ts);
@@ -619,6 +620,7 @@ export default function App() {
   // Backfill from NAS uptime once per page load — extends cleanSince to system boot
   // if current streak is < NAS uptime and < 24h old (init code set it, not a real crit-clear)
   useEffect(() => {
+    if (DEMO) return;
     if (!nasData?.info?.uptime_seconds) return;
     if (sessionStorage.getItem('nightswatch:backfillDone')) return;
     sessionStorage.setItem('nightswatch:backfillDone', '1');
@@ -636,6 +638,7 @@ export default function App() {
 
   // Track crit transitions: crit appears → hard reset; crits clear → start new streak
   useEffect(() => {
+    if (DEMO) return;
     const prev = prevHasCritRef.current;
     prevHasCritRef.current = hasCrit;
     if (!prev && hasCrit) {
