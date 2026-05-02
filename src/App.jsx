@@ -186,12 +186,6 @@ function Ambient({ now, wanUp, uptime, rank, weather, showWeather, showWan, show
               </span>
             );
           })}
-          {showNasNet && nasData?.netStats && (
-            <span className="item">
-              <span className="k">net</span>
-              <span className="v">↓{fmtRate(nasData.netStats.rx)} ↑{fmtRate(nasData.netStats.tx)}</span>
-            </span>
-          )}
         </div>
       )}
 
