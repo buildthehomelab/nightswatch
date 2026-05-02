@@ -318,6 +318,8 @@ Output format: "4d" | "12h" | "45m" | "30s"
 | `truenas:releaseCache` | truenas.js | `{[image]: {version, fetchedAt}}` (4h TTL) |
 | `truenas:stoppedSince` | truenas.js | `[[appName, timestamp], ...]` tuples |
 | `truenas:firstSeen` | truenas.js | `{[issueKey]: timestamp}` — per-issue first-seen (cpu-temp, pool-cap, etc.) |
+| `cve:cache` | cve.js | `{[keyword]: {fetchedAt, vulnerabilities[]}}` (1h TTL per keyword) |
+| `cve:firstSeen` | cve.js | `{[cveId]: timestamp}` — when each CVE was first seen by this client |
 
 ---
 
