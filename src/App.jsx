@@ -373,7 +373,7 @@ function IssueList({ issues, onOpenLogs, onIgnore }) {
             </span>
           ))}
         </span>
-        </div>
+      </div>
       {filtered.map((issue, i) => (
         <Issue
           key={issue.id}
