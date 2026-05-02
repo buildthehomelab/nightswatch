@@ -54,10 +54,15 @@ Guarantees phrase stability across re-renders for 60s, always rotates on refresh
 Runs in `App.jsx` on every render cycle:
 
 ```
-1. liveIssues = nasIssues(nasData)       // TrueNAS-derived
-2. if (!wanUp) prepend WAN crit issue    // always highest priority
-3. merge fixture issues from dev panel   // for demo/testing
-4. visibleIssues = filter out ignored    // via ignoreKey map
+1. liveIssues = [
+     ...nasIssues(nasData),              // TrueNAS-derived (when enableTruenas)
+     ...cveIssues(cveData, keywords),    // NVD CVE-derived (when enableCve)
+     ...(DEMO && enableCve ? CVE_FIXTURES : []),
+   ]
+2. if nasErr  → unshift nas-unreachable warn issue
+3. if cveErr  → unshift cve-error warn issue
+4. if !wanUp  → prepend wan-down crit issue  (always highest priority)
+5. visibleIssues = filter out ignored        // via ignoreKey map
 ```
 
 ### WAN Issue Shape
