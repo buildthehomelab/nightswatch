@@ -199,7 +199,17 @@ function Ambient({ now, wanUp, uptime, weather, showWeather, showWan, showUptime
   );
 }
 
-function Healthy({ uptime, nasData }) {
+const LS_CLEAN_KEY = 'nightswatch:cleanSince';
+
+function rankForDays(days) {
+  if (days >= 100) return 'Lord Commander';
+  if (days >= 30)  return 'First Ranger';
+  if (days >= 7)   return 'Ranger';
+  if (days >= 1)   return 'Steward';
+  return null;
+}
+
+function Healthy({ uptime, nasData, cleanDays, rank }) {
   const [phrase, setPhrase] = useState(() => pickPhrase(PHRASES.healthy));
   useEffect(() => {
     const id = setInterval(() => setPhrase(pickPhrase(PHRASES.healthy)), 60 * 60 * 1000);
@@ -217,6 +227,8 @@ function Healthy({ uptime, nasData }) {
       <div className="sub rise rise-d2">
         {running > 0 && <><span>{running} services healthy</span><span className="sep">·</span></>}
         <span>{uptime} uptime</span>
+        {cleanDays >= 1 && <><span className="sep">·</span><span>{cleanDays}d clean</span></>}
+        {rank && <><span className="sep">·</span><span className="rank">{rank}</span></>}
       </div>
     </section>
   );
@@ -589,13 +601,40 @@ export default function App() {
   }, [now, nasData]);
 
   const isHealthy = visibleIssues.length === 0;
+  const hasCrit = visibleIssues.some(i => i.severity === 'crit');
+  const prevHasCritRef = useRef(hasCrit);
+
+  // Mount: start streak if no history and no crits
+  useEffect(() => {
+    if (!hasCrit && !localStorage.getItem(LS_CLEAN_KEY)) {
+      localStorage.setItem(LS_CLEAN_KEY, new Date().toISOString());
+    }
+  }, []); // eslint-disable-line react-hooks/exhaustive-deps
+
+  // Track crit transitions: crit appears → hard reset; crits clear → start new streak
+  useEffect(() => {
+    const prev = prevHasCritRef.current;
+    prevHasCritRef.current = hasCrit;
+    if (!prev && hasCrit) {
+      localStorage.removeItem(LS_CLEAN_KEY);
+    } else if (prev && !hasCrit) {
+      localStorage.setItem(LS_CLEAN_KEY, new Date().toISOString());
+    }
+  }, [hasCrit]);
+
+  const { cleanDays, rank } = useMemo(() => {
+    const raw = localStorage.getItem(LS_CLEAN_KEY);
+    if (!raw || hasCrit) return { cleanDays: 0, rank: null };
+    const days = Math.floor((Date.now() - new Date(raw).getTime()) / 86_400_000);
+    return { cleanDays: days, rank: rankForDays(days) };
+  }, [now, hasCrit]);
 
   return (
     <>
       <div className="page">
 
         {isHealthy ? (
-          <Healthy uptime={uptime} nasData={nasData} />
+          <Healthy uptime={uptime} nasData={nasData} cleanDays={cleanDays} rank={rank} />
         ) : (
           <>
             <div className="masthead">
