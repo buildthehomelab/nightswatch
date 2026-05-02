@@ -122,3 +122,4 @@ Probes both `https://1.1.1.1` and `https://8.8.8.8` in parallel (`mode: "no-cors
 - Wire issue actions to real backend endpoints (auth required)
 - Add `aria-*` + keyboard support to issue rows (currently `<div>`)
 - Real WAN check via router API (currently probes 1.1.1.1/8.8.8.8 directly from browser)
+- Auto-add base infrastructure CVE keywords (`linux kernel`, `openssh`, `openssl`, `sudo`) when `enableCve` is on — user currently must add these manually to `VITE_CVE_KEYWORDS` to catch broad/systemic CVEs
