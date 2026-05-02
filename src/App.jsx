@@ -362,7 +362,6 @@ function IssueList({ issues, onOpenLogs, onIgnore }) {
   return (
     <section className="issues">
       <div className="section-label rise">
-        <span>Needs attention</span>
         <span className="count">
           {chips.map((c, i) => (
             <span key={c.sev}>
