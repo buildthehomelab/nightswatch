@@ -31,9 +31,11 @@ Three top-level states driven by `issues.length` and severity:
 - **critical**: any crit → same as warnings, crits sort first
 
 `issues` array in App is assembled from:
-1. Fixture issues (from `CUSTOMIZE_DEFAULTS.state` via CustomizePanel)
-2. Real WAN check (fetch `1.1.1.1`, requires 3 consecutive failures)
-3. Live TrueNAS issues via `nasIssues(nasData)` — always injected alongside fixtures
+1. Live TrueNAS issues via `nasIssues(nasData)` (when `enableTruenas`)
+2. Live CVE issues via `cveIssues(cveData)` (when `enableCve`)
+3. Error sentinel issues for unreachable NAS or NVD APIs
+4. WAN issue prepended first (highest priority) when offline
+5. Fixture issues injected in DEMO mode
 
 ## TrueNAS integration
 
