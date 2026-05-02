@@ -1,6 +1,6 @@
 import { useState, useEffect, useRef, useMemo } from 'react';
 import Dozzle from './components/Dozzle';
-import { useTrueNas, nasIssues, fmtUptime, fmtAge, fmtBytes, UI as NAS_UI, POOL_WARN_PCT, POOL_CRIT_PCT, CPU_WARN_C, CPU_CRIT_C } from './services/truenas';
+import { useTrueNas, nasIssues, fmtUptime, fmtAge, fmtBytes, fmtRate, UI as NAS_UI, POOL_WARN_PCT, POOL_CRIT_PCT, CPU_WARN_C, CPU_CRIT_C } from './services/truenas';
 import { useCve, cveIssues, BASE_CVE_KEYWORDS } from './services/cve';
 
 const SERVICE_CVE_KEYWORDS = {
@@ -47,6 +47,7 @@ const CUSTOMIZE_DEFAULTS = {
   showNasMemory: true,
   showNasApps: true,
   showNasPools: true,
+  showNasNet: true,
   showDate: true,
   showRank: true,
   ambientPlacement: "bottom",
@@ -126,7 +127,7 @@ function fmtTime(d) {
   return d.toLocaleTimeString(undefined, { hour: "2-digit", minute: "2-digit", hour12: false });
 }
 
-function Ambient({ now, wanUp, uptime, rank, weather, showWeather, showWan, showUptime, showRank, showNas, showNasName, showNasLoad, showNasCpuTemp, showNasMemory, showNasApps, showNasPools, showDate, placement, nasData }) {
+function Ambient({ now, wanUp, uptime, rank, weather, showWeather, showWan, showUptime, showRank, showNas, showNasName, showNasLoad, showNasCpuTemp, showNasMemory, showNasApps, showNasPools, showNasNet, showDate, placement, nasData }) {
   const pools    = Array.isArray(nasData?.pools) ? nasData.pools : [];
   const apps     = Array.isArray(nasData?.apps)  ? nasData.apps  : [];
   const running  = apps.filter(a => a.state === 'RUNNING').length;
@@ -179,6 +180,12 @@ function Ambient({ now, wanUp, uptime, rank, weather, showWeather, showWan, show
               </span>
             );
           })}
+          {showNasNet && nasData?.netStats && (
+            <span className="item">
+              <span className="k">net</span>
+              <span className="v">↓{fmtRate(nasData.netStats.rx)} ↑{fmtRate(nasData.netStats.tx)}</span>
+            </span>
+          )}
         </div>
       )}
 
