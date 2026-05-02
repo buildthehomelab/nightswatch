@@ -220,7 +220,7 @@ async function fetchGpuTemp(hdrs) {
     const res = await fetch(`${API}/reporting/get_data`, {
       method: 'POST',
       headers: { ...hdrs, 'Content-Type': 'application/json' },
-      body: JSON.stringify({ graphs: [{ name: 'gpu_temp' }] }),
+      body: JSON.stringify({ graphs: [{ name: 'gputemp' }] }),
     });
     if (!res.ok) return null;
     const json = await res.json();
