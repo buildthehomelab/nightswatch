@@ -420,6 +420,7 @@ export default function App() {
   const [dozzleOpen, setDozzleOpen] = useState(false);
   const [dozzleContainer, setDozzleContainer] = useState(null);
   const [ignored, setIgnored] = useState(() => loadIgnored());
+  const [cleanSince, setCleanSince] = useState(() => localStorage.getItem(LS_CLEAN_KEY));
 
   const handleIgnore = (key, label) => {
     setIgnored(prev => {
@@ -604,23 +605,30 @@ export default function App() {
   const hasCrit = visibleIssues.some(i => i.severity === 'crit');
   const prevHasCritRef = useRef(hasCrit);
 
-  // Mount: start streak if no history and no crits
+  // Mount: init cleanSince if missing and no crits
   useEffect(() => {
     if (!hasCrit && !localStorage.getItem(LS_CLEAN_KEY)) {
-      localStorage.setItem(LS_CLEAN_KEY, new Date().toISOString());
+      const ts = new Date().toISOString();
+      localStorage.setItem(LS_CLEAN_KEY, ts);
+      setCleanSince(ts);
     }
   }, []); // eslint-disable-line react-hooks/exhaustive-deps
 
-  // Backfill cleanSince from NAS uptime on first data load if set very recently this session
+  // Backfill from NAS uptime once per page load — extends cleanSince to system boot
+  // if current streak is < NAS uptime and < 24h old (init code set it, not a real crit-clear)
   useEffect(() => {
-    if (!nasData?.info?.uptime_seconds || hasCrit) return;
+    if (!nasData?.info?.uptime_seconds) return;
+    if (sessionStorage.getItem('nightswatch:backfillDone')) return;
+    sessionStorage.setItem('nightswatch:backfillDone', '1');
+    if (hasCrit) return;
     const raw = localStorage.getItem(LS_CLEAN_KEY);
     if (!raw) return;
-    const msSinceSet = Date.now() - new Date(raw).getTime();
-    if (msSinceSet > 60_000) return;
+    const msSinceClean = Date.now() - new Date(raw).getTime();
     const uptimeMs = nasData.info.uptime_seconds * 1000;
-    if (uptimeMs > msSinceSet) {
-      localStorage.setItem(LS_CLEAN_KEY, new Date(Date.now() - uptimeMs).toISOString());
+    if (uptimeMs > msSinceClean && msSinceClean < 24 * 60 * 60 * 1000) {
+      const ts = new Date(Date.now() - uptimeMs).toISOString();
+      localStorage.setItem(LS_CLEAN_KEY, ts);
+      setCleanSince(ts);
     }
   }, [nasData]); // eslint-disable-line react-hooks/exhaustive-deps
 
@@ -630,17 +638,19 @@ export default function App() {
     prevHasCritRef.current = hasCrit;
     if (!prev && hasCrit) {
       localStorage.removeItem(LS_CLEAN_KEY);
+      setCleanSince(null);
     } else if (prev && !hasCrit) {
-      localStorage.setItem(LS_CLEAN_KEY, new Date().toISOString());
+      const ts = new Date().toISOString();
+      localStorage.setItem(LS_CLEAN_KEY, ts);
+      setCleanSince(ts);
     }
   }, [hasCrit]);
 
   const { cleanDays, rank } = useMemo(() => {
-    const raw = localStorage.getItem(LS_CLEAN_KEY);
-    if (!raw || hasCrit) return { cleanDays: 0, rank: null };
-    const days = Math.floor((+now - new Date(raw).getTime()) / 86_400_000);
+    if (!cleanSince || hasCrit) return { cleanDays: 0, rank: null };
+    const days = Math.floor((+now - new Date(cleanSince).getTime()) / 86_400_000);
     return { cleanDays: days, rank: rankForDays(days) };
-  }, [now, hasCrit]);
+  }, [cleanSince, now, hasCrit]);
 
   return (
     <>
