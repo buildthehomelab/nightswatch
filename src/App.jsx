@@ -1,6 +1,6 @@
 import { useState, useEffect, useRef, useMemo } from 'react';
 import Dozzle from './components/Dozzle';
-import { useTrueNas, nasIssues, fmtUptime, fmtAge, fmtBytes, UI as NAS_UI, POOL_WARN_PCT, POOL_CRIT_PCT, CPU_WARN_C, CPU_CRIT_C, GPU_WARN_C, GPU_CRIT_C } from './services/truenas';
+import { useTrueNas, nasIssues, fmtUptime, fmtAge, fmtBytes, UI as NAS_UI, POOL_WARN_PCT, POOL_CRIT_PCT, CPU_WARN_C, CPU_CRIT_C } from './services/truenas';
 import { useCve, cveIssues, BASE_CVE_KEYWORDS } from './services/cve';
 
 const SERVICE_CVE_KEYWORDS = {
@@ -44,7 +44,6 @@ const CUSTOMIZE_DEFAULTS = {
   showNasName: true,
   showNasLoad: true,
   showNasCpuTemp: true,
-  showNasGpuTemp: true,
   showNasMemory: true,
   showNasApps: true,
   showNasPools: true,
@@ -113,7 +112,7 @@ function fmtTime(d) {
   return d.toLocaleTimeString(undefined, { hour: "2-digit", minute: "2-digit", hour12: false });
 }
 
-function Ambient({ now, wanUp, uptime, weather, showWeather, showWan, showUptime, showNas, showNasName, showNasLoad, showNasCpuTemp, showNasGpuTemp, showNasMemory, showNasApps, showNasPools, showDate, placement, nasData }) {
+function Ambient({ now, wanUp, uptime, weather, showWeather, showWan, showUptime, showNas, showNasName, showNasLoad, showNasCpuTemp, showNasMemory, showNasApps, showNasPools, showDate, placement, nasData }) {
   const pools    = Array.isArray(nasData?.pools) ? nasData.pools : [];
   const apps     = Array.isArray(nasData?.apps)  ? nasData.apps  : [];
   const running  = apps.filter(a => a.state === 'RUNNING').length;
@@ -121,8 +120,6 @@ function Ambient({ now, wanUp, uptime, weather, showWeather, showWan, showUptime
   const hostname = nasData?.info?.hostname ?? 'nas';
   const cpuTemp  = nasData?.cpuTemp ?? null;
   const cpuCls   = cpuTemp == null ? '' : cpuTemp >= CPU_CRIT_C ? ' crit' : cpuTemp >= CPU_WARN_C ? ' warn' : '';
-  const gpuTemp  = nasData?.gpuTemp ?? null;
-  const gpuCls   = gpuTemp == null ? '' : gpuTemp >= GPU_CRIT_C ? ' crit' : gpuTemp >= GPU_WARN_C ? ' warn' : '';
   const memFree = nasData?.memFree ?? null;
 
   return (
@@ -141,12 +138,6 @@ function Ambient({ now, wanUp, uptime, weather, showWeather, showWan, showUptime
             <span className="item">
               <span className="k">cpu</span>
               <span className={`v${cpuCls}`}>{cpuTemp}°C</span>
-            </span>
-          )}
-          {showNasGpuTemp && gpuTemp != null && (
-            <span className="item">
-              <span className="k">gpu</span>
-              <span className={`v${gpuCls}`}>{gpuTemp}°C</span>
             </span>
           )}
           {showNasMemory && memFree != null && (
