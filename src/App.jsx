@@ -200,7 +200,11 @@ function Ambient({ now, wanUp, uptime, weather, showWeather, showWan, showUptime
 }
 
 function Healthy({ uptime, nasData }) {
-  const phrase = pickPhrase(PHRASES.healthy);
+  const [phrase, setPhrase] = useState(() => pickPhrase(PHRASES.healthy));
+  useEffect(() => {
+    const id = setInterval(() => setPhrase(pickPhrase(PHRASES.healthy)), 60 * 60 * 1000);
+    return () => clearInterval(id);
+  }, []);
   const apps = Array.isArray(nasData?.apps) ? nasData.apps : [];
   const running = apps.filter(a => a.state === 'RUNNING').length;
   return (
