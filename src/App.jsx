@@ -161,6 +161,12 @@ function Ambient({ now, wanUp, uptime, rank, weather, showWeather, showWan, show
               <span className="v">{fmtBytes(memFree)}</span>
             </span>
           )}
+          {showNasNet && nasData?.netStats && (
+            <span className="item">
+              <span className="k">net</span>
+              <span className="v">↓{fmtRate(nasData.netStats.rx)} ↑{fmtRate(nasData.netStats.tx)}</span>
+            </span>
+          )}
           {showNasApps && apps.length > 0 && (
             <span className="item">
               <span className="k">apps</span>
