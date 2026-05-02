@@ -61,7 +61,7 @@ export default defineConfig(({ mode }) => {
       'import.meta.env.VITE_TRUENAS_URL':              JSON.stringify(truenasUrl),
       'import.meta.env.VITE_POOL_WARN_PCT':            JSON.stringify(env.TRUENAS_POOL_WARN_PCT ?? '80'),
       'import.meta.env.VITE_POOL_CRIT_PCT':            JSON.stringify(env.TRUENAS_POOL_CRIT_PCT ?? '90'),
-      'import.meta.env.VITE_STOPPED_APP_HIDE_MINUTES': JSON.stringify(env.TRUENAS_STOPPED_APP_HIDE_MINUTES ?? ''),
+      'import.meta.env.VITE_STOPPED_APP_HIDE_MINUTES': JSON.stringify(env.TRUENAS_STOPPED_APP_HIDE_MINUTES ?? '60'),
       'import.meta.env.VITE_DISK_WARN_C':              JSON.stringify(env.TRUENAS_DISK_WARN_C ?? '45'),
       'import.meta.env.VITE_DISK_CRIT_C':              JSON.stringify(env.TRUENAS_DISK_CRIT_C ?? '55'),
       'import.meta.env.VITE_DOZZLE_URL':               JSON.stringify(env.DOZZLE_URL ?? ''),
