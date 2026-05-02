@@ -55,7 +55,12 @@ const CUSTOMIZE_DEFAULTS = {
 const MASTHEAD_STALE_MS = 4 * 60 * 60 * 1000;
 
 const PHRASES = {
-  healthy:        ["Live Laugh Lab.", "live, laugh, love.", "Serenity now.", "Boring is beautiful.", "Vibes: nominal.", "Touch grass.", "It's giving stable.", "No news is good news."],
+  healthy: {
+    morning:   ["Rise and grind. Kidding.", "Morning. Everything behaved overnight.", "Still standing. Well rested.", "Early shift. Nothing to report.", "Caffeinate. Systems nominal."],
+    afternoon: ["Live Laugh Lab.", "Boring is beautiful.", "Vibes: nominal.", "It's giving stable.", "Nothing on fire. Carry on."],
+    evening:   ["Serenity now.", "No news is good news.", "Touch grass. Or don't.", "Quiet hours. Everything holding.", "Evenings are for the stable."],
+    night:     ["You're still here? That's fine.", "Burning the midnight oil.", "Dark and quiet. All clear.", "Nothing moves. Good.", "live, laugh, love."],
+  },
   wanDown:        ["The System is Down.", "404: Internet not found.", "The internet called in sick.", "Unplugged from the matrix."],
   ignoredDays:    ["You're cordially invited to go fuck yourself.", "Down with the System.", "We've been trying to reach you about your server's extended warranty.", "Outstanding. Truly outstanding.", "Cool cool cool cool cool.", "No thoughts, head empty, alerts ignored."],
   stale:          ["SNAFU: Situation normal, all fucked up.", "FUBAR.", "This is not a drill. (It hasn't been a drill for days.)", "We've been here before."],
