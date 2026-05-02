@@ -661,10 +661,10 @@ export default function App() {
   }, [hasCrit]);
 
   const rank = useMemo(() => {
-    if (!cleanSince || hasCrit) return null;
+    if (!cleanSince) return 'Initiate';
     const days = Math.floor((+now - new Date(cleanSince).getTime()) / 86_400_000);
     return rankForDays(days);
-  }, [cleanSince, now, hasCrit]);
+  }, [cleanSince, now]);
 
   return (
     <>
