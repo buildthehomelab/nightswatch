@@ -656,10 +656,10 @@ export default function App() {
     }
   }, [hasCrit]);
 
-  const { cleanDays, rank } = useMemo(() => {
-    if (!cleanSince || hasCrit) return { cleanDays: 0, rank: null };
+  const rank = useMemo(() => {
+    if (!cleanSince || hasCrit) return null;
     const days = Math.floor((+now - new Date(cleanSince).getTime()) / 86_400_000);
-    return { cleanDays: days, rank: rankForDays(days) };
+    return rankForDays(days);
   }, [cleanSince, now, hasCrit]);
 
   return (
@@ -667,7 +667,7 @@ export default function App() {
       <div className="page">
 
         {isHealthy ? (
-          <Healthy uptime={uptime} nasData={nasData} cleanDays={cleanDays} rank={rank} />
+          <Healthy uptime={uptime} nasData={nasData} />
         ) : (
           <>
             <div className="masthead">
@@ -681,15 +681,17 @@ export default function App() {
 
       </div>
 
-      {(t.showWeather || t.showWan || t.showUptime || t.showNas || t.showDate) && (
+      {(t.showWeather || t.showWan || t.showUptime || t.showNas || t.showDate || t.showRank) && (
         <Ambient
           now={now}
           wanUp={wanUp}
           uptime={uptime}
+          rank={rank}
           weather={weather}
           showWeather={t.showWeather}
           showWan={t.showWan}
           showUptime={t.showUptime}
+          showRank={t.showRank}
           showNas={t.showNas}
           showNasName={t.showNasName}
           showNasLoad={t.showNasLoad}
@@ -735,6 +737,7 @@ export default function App() {
           />
           <CustomizeToggle label="Date"    value={t.showDate}    onChange={(v) => setTweak("showDate", v)} />
           <CustomizeToggle label="Uptime"  value={t.showUptime}  onChange={(v) => setTweak("showUptime", v)} />
+          <CustomizeToggle label="Rank"    value={t.showRank}    onChange={(v) => setTweak("showRank", v)} />
           <CustomizeToggle label="WAN"     value={t.showWan}     onChange={(v) => setTweak("showWan", v)} />
           <CustomizeToggle label="Weather" value={t.showWeather} onChange={(v) => setTweak("showWeather", v)} />
         </CustomizeColumn>
