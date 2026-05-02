@@ -48,6 +48,7 @@ const CUSTOMIZE_DEFAULTS = {
   showNasApps: true,
   showNasPools: true,
   showDate: true,
+  showRank: true,
   ambientPlacement: "bottom",
 };
 
