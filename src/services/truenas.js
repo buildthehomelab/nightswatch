@@ -222,8 +222,9 @@ async function fetchGpuTemp(hdrs) {
       headers: { ...hdrs, 'Content-Type': 'application/json' },
       body: JSON.stringify({ graphs: [{ name: 'gputemp' }] }),
     });
-    if (!res.ok) return null;
+    if (!res.ok) { console.debug('[gpu] reporting/get_data status:', res.status); return null; }
     const json = await res.json();
+    console.debug('[gpu] gputemp response:', JSON.stringify(json));
     if (!Array.isArray(json) || !json[0]) return null;
     const agg = json[0].aggregations?.mean;
     if (Array.isArray(agg) && agg.length > 0) {
