@@ -329,6 +329,8 @@ Output format: "4d" | "12h" | "45m" | "30s"
 |-----------|--------|---------|
 | `App.jsx` | state, keyboard, WAN probes | issue assembly, layout switching |
 | `services/truenas.js` | `/truenas/api/v2.0/*` poll | `nasData`, `nasIssues()` — pure data, no JSX |
+| `services/cve.js` | NVD API poll (direct) | `cveData`, `cveIssues()` — pure data, no JSX |
 | `CustomizePanel.jsx` | keyboard, localStorage | `[settings, setSettings]` via `useCustomize()` |
 | `Dozzle.jsx` | `open` prop, `VITE_DOZZLE_URL` | iframe log viewer overlay |
 | `src/data/fixtures.js` | — | static demo issues for healthy/warnings/critical states |
+| `src/data/mockNas.js` | — | mock TrueNAS API response for offline dev |
