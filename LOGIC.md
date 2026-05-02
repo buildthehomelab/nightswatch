@@ -156,6 +156,61 @@ CPU temp:        warn → crit if (temp ≥ 85°C)
 
 ---
 
+## 4b. CVE Issue Derivation
+
+**Poll interval**: every 60 minutes via `useCve()` hook.  
+**API**: `https://services.nvd.nist.gov/rest/json/cves/2.0` (direct, no proxy).  
+**Cache TTL**: 1 hour per keyword, stored in `cve:cache`.
+
+### Keyword Assembly
+
+```
+BASE_CVE_KEYWORDS = VITE_CVE_KEYWORDS.split(',')
+
+SERVICE_CVE_KEYWORDS = { enableTruenas: 'truenas' }
+  // when enableTruenas=true → 'truenas' auto-appended to keyword list
+
+final keywords = dedupe([...BASE_CVE_KEYWORDS, ...active service keywords])
+```
+
+If ≤ 4 uncached keywords → fetch in parallel. Else → fetch sequentially to avoid rate limiting.
+
+### Severity Mapping
+
+```
+CVSS score → severity:
+  null or < VITE_CVE_MIN_CVSS (default 4.0) → discard
+  ≥ 9.0 → crit  (label: "cve critical")
+  ≥ 7.0 → warn  (label: "cve")
+  else  → info  (label: "cve")
+```
+
+### Issue Shape
+
+```js
+{
+  id:          `cve-${cve.id}`,
+  severity,
+  label:       "cve critical" | "cve",
+  headline:    `${cveId}: ${shortDesc (80 char max)}.`,
+  source:      `nvd · ${keywords.join(', ')}`,
+  when:        `published ${pubDate}` | "recent",
+  description: full description + ` CVSS ${score}.`,
+  firstSeenTs: lsMarkFirstSeen(cveId),   // from cve:firstSeen localStorage
+  ignoreKey:   `cve:${cveId}`,
+  actions:     [{ label: "view on nvd ›", href: "https://nvd.nist.gov/vuln/detail/${cveId}" }],
+}
+```
+
+### Error Sentinels
+
+| Condition | Issue injected |
+|-----------|---------------|
+| `nasErr` (TrueNAS unreachable) | `{ id: "nas-unreachable", severity: "warn" }` |
+| `cveErr` (NVD unreachable) | `{ id: "cve-error", severity: "warn" }` |
+
+---
+
 ## 5. Keyboard Shortcuts
 
 All handlers skip when an INPUT or TEXTAREA is focused.
