@@ -484,23 +484,26 @@ export function nasIssues(data) {
 
   // Disk temperatures
   for (const disk of (data.diskTemps ?? [])) {
-    const diskId = `nas-disk-temp-${disk.dev}`;
-    if (disk.temp >= DISK_WARN_C) {
+    const diskId   = `nas-disk-temp-${disk.dev}`;
+    const tempBump = disk.type === 'SSD' ? 10 : 0;
+    const warnC    = DISK_WARN_C + tempBump;
+    const critC    = DISK_CRIT_C + tempBump;
+    if (disk.temp >= warnC) {
       const firstTs  = lsMarkFirstSeen(diskId);
       const diskAge  = Date.now() - firstTs;
       const firstStr = new Date(firstTs).toLocaleTimeString(undefined, { hour: "2-digit", minute: "2-digit", hour12: false });
       const label    = disk.model ? `${disk.dev} · ${disk.model}` : disk.dev;
       issues.push({
         id: diskId,
-        severity: disk.temp >= DISK_CRIT_C ? 'crit' : 'warn',
+        severity: disk.temp >= critC ? 'crit' : 'warn',
         label: 'disk hot',
         headline: `${disk.dev} is running at ${disk.temp}°C.`,
         source: `truenas · disk`,
         firstSeenTs: firstTs,
         when: diskAge >= 60000 ? `${fmtAge(diskAge)} unresolved` : 'now',
-        description: `${label}${disk.serial ? ` (${disk.serial})` : ''} is at ${disk.temp}°C.\nWarn ≥${DISK_WARN_C}°C, crit ≥${DISK_CRIT_C}°C. Check airflow or drive health.`,
+        description: `${label}${disk.serial ? ` (${disk.serial})` : ''} is at ${disk.temp}°C.\nWarn ≥${warnC}°C, crit ≥${critC}°C. Check airflow or drive health.`,
         logs: [
-          { t: firstStr, level: disk.temp >= DISK_CRIT_C ? 'err' : 'warn', text: `[thermal] ${disk.dev}: ${disk.temp}°C${disk.model ? ` (${disk.model})` : ''}` },
+          { t: firstStr, level: disk.temp >= critC ? 'err' : 'warn', text: `[thermal] ${disk.dev}: ${disk.temp}°C${disk.model ? ` (${disk.model})` : ''}` },
         ],
         ignoreKey: `nas-disk-temp-${disk.dev}:${firstTs}`,
         actions: [{ label: 'open truenas ›', href: UI }],
