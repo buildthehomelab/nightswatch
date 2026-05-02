@@ -113,7 +113,7 @@ function fmtTime(d) {
   return d.toLocaleTimeString(undefined, { hour: "2-digit", minute: "2-digit", hour12: false });
 }
 
-function Ambient({ now, wanUp, uptime, weather, showWeather, showWan, showUptime, showNas, showNasName, showNasLoad, showNasCpuTemp, showNasMemory, showNasApps, showNasPools, showDate, placement, nasData }) {
+function Ambient({ now, wanUp, uptime, rank, weather, showWeather, showWan, showUptime, showRank, showNas, showNasName, showNasLoad, showNasCpuTemp, showNasMemory, showNasApps, showNasPools, showDate, placement, nasData }) {
   const pools    = Array.isArray(nasData?.pools) ? nasData.pools : [];
   const apps     = Array.isArray(nasData?.apps)  ? nasData.apps  : [];
   const running  = apps.filter(a => a.state === 'RUNNING').length;
@@ -193,6 +193,12 @@ function Ambient({ now, wanUp, uptime, weather, showWeather, showWan, showUptime
           <span className="item">
             <span className="k">uptime</span>
             <span className="v">{uptime}</span>
+          </span>
+        )}
+        {showRank && rank && (
+          <span className="item">
+            <span className="k">rank</span>
+            <span className="v rank">{rank}</span>
           </span>
         )}
       </div>
