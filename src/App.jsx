@@ -214,7 +214,7 @@ function rankForDays(days) {
   if (days >= 30)  return 'First Ranger';
   if (days >= 7)   return 'Ranger';
   if (days >= 1)   return 'Steward';
-  return null;
+  return 'Initiate';
 }
 
 function Healthy({ uptime, nasData }) {
