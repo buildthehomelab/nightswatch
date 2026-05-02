@@ -71,6 +71,14 @@ const PHRASES = {
   singleWarn:     ["One thing needs a look.", "Minor turbulence.", "A wrinkle.", "Noted."],
 };
 
+function healthyPhrasePool(now) {
+  const h = now.getHours();
+  if (h >= 5  && h < 12) return PHRASES.healthy.morning;
+  if (h >= 12 && h < 18) return PHRASES.healthy.afternoon;
+  if (h >= 18 && h < 23) return PHRASES.healthy.evening;
+  return PHRASES.healthy.night;
+}
+
 function pickPhrase(arr) {
   const key = `nightswatch:phrase:${arr[0]}`;
   const ONE_MINUTE = 60_000;
@@ -222,14 +230,20 @@ function rankForDays(days) {
   return 'Initiate';
 }
 
-function Healthy({ uptime, nasData }) {
-  const [phrase, setPhrase] = useState(() => pickPhrase(PHRASES.healthy));
+const HEALTHY_MILESTONES = [7, 14, 30, 60, 90, 180, 365];
+
+function Healthy({ uptime, nasData, now, cleanSince }) {
+  const [phrase, setPhrase] = useState(() => pickPhrase(healthyPhrasePool(new Date())));
   useEffect(() => {
-    const id = setInterval(() => setPhrase(pickPhrase(PHRASES.healthy)), 60 * 60 * 1000);
+    const id = setInterval(() => setPhrase(pickPhrase(healthyPhrasePool(new Date()))), 60 * 60 * 1000);
     return () => clearInterval(id);
   }, []);
   const apps = Array.isArray(nasData?.apps) ? nasData.apps : [];
   const running = apps.filter(a => a.state === 'RUNNING').length;
+  const cleanDays = cleanSince ? Math.floor((now - new Date(cleanSince)) / 86_400_000) : null;
+  const milestoneNote = cleanDays != null && HEALTHY_MILESTONES.includes(cleanDays)
+    ? `${cleanDays} days without incident`
+    : null;
   return (
     <section className="healthy">
       <div className="rise rise-d1">
@@ -240,6 +254,7 @@ function Healthy({ uptime, nasData }) {
       <div className="sub rise rise-d2">
         {running > 0 && <><span>{running} services healthy</span><span className="sep">·</span></>}
         <span>{uptime} uptime</span>
+        {milestoneNote && <><span className="sep">·</span><span className="milestone">{milestoneNote}</span></>}
       </div>
     </section>
   );
