@@ -791,6 +791,7 @@ export default function App() {
               <CustomizeToggle label="Load"     value={t.showNasLoad}    onChange={(v) => setTweak("showNasLoad", v)} />
               <CustomizeToggle label="Memory"   value={t.showNasMemory}  onChange={(v) => setTweak("showNasMemory", v)} />
               <CustomizeToggle label="Name"     value={t.showNasName}    onChange={(v) => setTweak("showNasName", v)} />
+              <CustomizeToggle label="Network"  value={t.showNasNet}     onChange={(v) => setTweak("showNasNet", v)} />
               <CustomizeToggle label="Pools"    value={t.showNasPools}   onChange={(v) => setTweak("showNasPools", v)} />
             </div>
           </>}
