@@ -216,7 +216,7 @@ function rankForDays(days) {
   return null;
 }
 
-function Healthy({ uptime, nasData, cleanDays, rank }) {
+function Healthy({ uptime, nasData }) {
   const [phrase, setPhrase] = useState(() => pickPhrase(PHRASES.healthy));
   useEffect(() => {
     const id = setInterval(() => setPhrase(pickPhrase(PHRASES.healthy)), 60 * 60 * 1000);
@@ -234,8 +234,6 @@ function Healthy({ uptime, nasData, cleanDays, rank }) {
       <div className="sub rise rise-d2">
         {running > 0 && <><span>{running} services healthy</span><span className="sep">·</span></>}
         <span>{uptime} uptime</span>
-        {cleanDays >= 1 && <><span className="sep">·</span><span>{cleanDays}d clean</span></>}
-        {rank && <><span className="sep">·</span><span className="rank">{rank}</span></>}
       </div>
     </section>
   );
