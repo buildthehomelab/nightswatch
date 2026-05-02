@@ -625,7 +625,7 @@ export default function App() {
   const { cleanDays, rank } = useMemo(() => {
     const raw = localStorage.getItem(LS_CLEAN_KEY);
     if (!raw || hasCrit) return { cleanDays: 0, rank: null };
-    const days = Math.floor((Date.now() - new Date(raw).getTime()) / 86_400_000);
+    const days = Math.floor((+now - new Date(raw).getTime()) / 86_400_000);
     return { cleanDays: days, rank: rankForDays(days) };
   }, [now, hasCrit]);
 
