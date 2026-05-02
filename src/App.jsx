@@ -207,6 +207,7 @@ function Ambient({ now, wanUp, uptime, rank, weather, showWeather, showWan, show
 }
 
 const LS_CLEAN_KEY = 'nightswatch:cleanSince';
+const LS_LAST_CRIT_KEY = 'nightswatch:lastCritAt';
 
 function rankForDays(days) {
   if (days >= 100) return 'Lord Commander';
@@ -624,12 +625,13 @@ export default function App() {
 
   // Backfill from NAS uptime once per page load — extends cleanSince to system boot
   // if current streak is < NAS uptime and < 24h old (init code set it, not a real crit-clear)
+  // Skipped if a crit was active and unresolved across sessions (lastCritAt still set)
   useEffect(() => {
     if (DEMO) return;
     if (!nasData?.info?.uptime_seconds) return;
     if (sessionStorage.getItem('nightswatch:backfillDone')) return;
     sessionStorage.setItem('nightswatch:backfillDone', '1');
-    if (hasCrit) return;
+    if (hasCrit || localStorage.getItem(LS_LAST_CRIT_KEY)) return;
     const raw = localStorage.getItem(LS_CLEAN_KEY);
     if (!raw) return;
     const msSinceClean = Date.now() - new Date(raw).getTime();
@@ -641,17 +643,19 @@ export default function App() {
     }
   }, [nasData]); // eslint-disable-line react-hooks/exhaustive-deps
 
-  // Track crit transitions: crit appears → hard reset; crits clear → start new streak
+  // Track crit transitions: crit appears → hard reset + record when; crits clear → start new streak
   useEffect(() => {
     if (DEMO) return;
     const prev = prevHasCritRef.current;
     prevHasCritRef.current = hasCrit;
     if (!prev && hasCrit) {
       localStorage.removeItem(LS_CLEAN_KEY);
+      localStorage.setItem(LS_LAST_CRIT_KEY, new Date().toISOString());
       setCleanSince(null);
     } else if (prev && !hasCrit) {
       const ts = new Date().toISOString();
       localStorage.setItem(LS_CLEAN_KEY, ts);
+      localStorage.removeItem(LS_LAST_CRIT_KEY);
       setCleanSince(ts);
     }
   }, [hasCrit]);
