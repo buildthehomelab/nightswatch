@@ -472,6 +472,31 @@ export function nasIssues(data) {
     lsClearFirstSeen('nas-cpu-temp');
   }
 
+  // GPU temperature
+  if (data.gpuTemp != null && data.gpuTemp >= GPU_WARN_C) {
+    const gpuId   = 'nas-gpu-temp';
+    const firstTs = lsMarkFirstSeen(gpuId);
+    const gpuAge  = Date.now() - firstTs;
+    const firstStr = new Date(firstTs).toLocaleTimeString(undefined, { hour: "2-digit", minute: "2-digit", hour12: false });
+    issues.push({
+      id: gpuId,
+      severity: data.gpuTemp >= GPU_CRIT_C ? 'crit' : 'warn',
+      label: 'gpu hot',
+      headline: `GPU temperature is ${data.gpuTemp}°C.`,
+      source: 'truenas · system',
+      firstSeenTs: firstTs,
+      when: gpuAge >= 60000 ? `${fmtAge(gpuAge)} unresolved` : 'now',
+      description: `TrueNAS GPU is at ${data.gpuTemp}°C (warn ≥${GPU_WARN_C}°C, crit ≥${GPU_CRIT_C}°C). Check GPU cooling or reduce workload.`,
+      logs: [
+        { t: firstStr, level: data.gpuTemp >= GPU_CRIT_C ? 'err' : 'warn', text: `[thermal] gpu temp: ${data.gpuTemp}°C` },
+      ],
+      ignoreKey: `nas-gpu-temp:${firstTs}`,
+      actions: [{ label: 'open truenas ›', href: UI }],
+    });
+  } else {
+    lsClearFirstSeen('nas-gpu-temp');
+  }
+
   // Memory
   const physmem     = data.info?.physmem ?? null;
   const memFree     = data.memFree ?? null;
