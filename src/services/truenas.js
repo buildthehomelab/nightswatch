@@ -215,6 +215,33 @@ async function fetchCpuTemp(hdrs) {
   } catch { return null; }
 }
 
+async function fetchGpuTemp(hdrs) {
+  try {
+    const res = await fetch(`${API}/reporting/get_data`, {
+      method: 'POST',
+      headers: { ...hdrs, 'Content-Type': 'application/json' },
+      body: JSON.stringify({ graphs: [{ name: 'gpu_temp' }] }),
+    });
+    if (!res.ok) return null;
+    const json = await res.json();
+    if (!Array.isArray(json) || !json[0]) return null;
+    const agg = json[0].aggregations?.mean;
+    if (Array.isArray(agg) && agg.length > 0) {
+      const valid = agg.filter(v => v != null && !isNaN(v));
+      if (valid.length > 0) return Math.round(Math.max(...valid));
+    }
+    const rows = json[0].data;
+    if (Array.isArray(rows) && rows.length > 0) {
+      const last = rows[rows.length - 1];
+      if (Array.isArray(last)) {
+        const vals = last.slice(1).filter(v => v != null && !isNaN(v));
+        if (vals.length > 0) return Math.round(Math.max(...vals));
+      }
+    }
+    return null;
+  } catch { return null; }
+}
+
 function lastVal(json) {
   if (!Array.isArray(json) || !json[0]) return null;
   const { data, aggregations } = json[0];
@@ -260,11 +287,12 @@ async function fetchUpdateStatus(hdrs) {
 async function fetchData() {
   const hdrs = {};
   const ok = (r) => { if (!r.ok) throw new Error(`HTTP ${r.status}`); return r.json(); };
-  const [info, pools, apps, cpuTemp, { memFree, arcSize }, updateStatus, alerts] = await Promise.all([
+  const [info, pools, apps, cpuTemp, gpuTemp, { memFree, arcSize }, updateStatus, alerts] = await Promise.all([
     fetch(`${API}/system/info`, { headers: hdrs }).then(ok),
     fetch(`${API}/pool`,        { headers: hdrs }).then(ok),
     fetch(`${API}/app`,         { headers: hdrs }).then(ok).catch(() => []),
     fetchCpuTemp(hdrs),
+    fetchGpuTemp(hdrs),
     fetchMemStats(hdrs),
     fetchUpdateStatus(hdrs),
     fetchAlerts(hdrs),
@@ -284,7 +312,7 @@ async function fetchData() {
       })
   );
 
-  return { info, pools, apps: appList, releaseMap, cpuTemp, memFree, arcSize, updateStatus, alerts };
+  return { info, pools, apps: appList, releaseMap, cpuTemp, gpuTemp, memFree, arcSize, updateStatus, alerts };
 }
 
 // ── Stopped-app tracking (localStorage) ──────────────────
