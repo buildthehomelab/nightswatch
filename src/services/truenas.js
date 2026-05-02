@@ -74,6 +74,14 @@ export function fmtBytes(bytes) {
   return `${gb.toFixed(1)} GB`;
 }
 
+export function fmtRate(bps) {
+  if (bps == null) return "—";
+  if (bps >= 1024 ** 3) return `${(bps / 1024 ** 3).toFixed(1)} GB/s`;
+  if (bps >= 1024 ** 2) return `${(bps / 1024 ** 2).toFixed(1)} MB/s`;
+  if (bps >= 1024)      return `${Math.round(bps / 1024)} KB/s`;
+  return `${Math.round(bps)} B/s`;
+}
+
 // ── Release cache (localStorage) ─────────────────────────
 
 function lsLoadRelease() {
