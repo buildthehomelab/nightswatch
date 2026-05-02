@@ -8,8 +8,6 @@ export const POOL_WARN_PCT = Number(import.meta.env.VITE_POOL_WARN_PCT ?? 80) ||
 export const POOL_CRIT_PCT = Number(import.meta.env.VITE_POOL_CRIT_PCT ?? 90) || 90;
 export const CPU_WARN_C  = Number(import.meta.env.VITE_CPU_WARN_C  ?? 70) || 70;
 export const CPU_CRIT_C  = Number(import.meta.env.VITE_CPU_CRIT_C  ?? 85) || 85;
-export const GPU_WARN_C  = Number(import.meta.env.VITE_GPU_WARN_C  ?? 80) || 80;
-export const GPU_CRIT_C  = Number(import.meta.env.VITE_GPU_CRIT_C  ?? 95) || 95;
 const MEM_WARN_PCT       = Number(import.meta.env.VITE_MEM_WARN_PCT       ?? 80) || 80;
 const MEM_CRIT_PCT       = Number(import.meta.env.VITE_MEM_CRIT_PCT       ?? 90) || 90;
 const LOAD_WARN          = Number(import.meta.env.VITE_LOAD_WARN           ?? 4)  || 4;
@@ -215,33 +213,6 @@ async function fetchCpuTemp(hdrs) {
   } catch { return null; }
 }
 
-async function fetchGpuTemp(hdrs) {
-  try {
-    const res = await fetch(`${API}/reporting/get_data`, {
-      method: 'POST',
-      headers: { ...hdrs, 'Content-Type': 'application/json' },
-      body: JSON.stringify({ graphs: [{ name: 'gputemp' }] }),
-    });
-    if (!res.ok) return null;
-    const json = await res.json();
-    if (!Array.isArray(json) || !json[0]) return null;
-    const agg = json[0].aggregations?.mean;
-    if (Array.isArray(agg) && agg.length > 0) {
-      const valid = agg.filter(v => v != null && !isNaN(v));
-      if (valid.length > 0) return Math.round(Math.max(...valid));
-    }
-    const rows = json[0].data;
-    if (Array.isArray(rows) && rows.length > 0) {
-      const last = rows[rows.length - 1];
-      if (Array.isArray(last)) {
-        const vals = last.slice(1).filter(v => v != null && !isNaN(v));
-        if (vals.length > 0) return Math.round(Math.max(...vals));
-      }
-    }
-    return null;
-  } catch { return null; }
-}
-
 function lastVal(json) {
   if (!Array.isArray(json) || !json[0]) return null;
   const { data, aggregations } = json[0];
@@ -287,12 +258,11 @@ async function fetchUpdateStatus(hdrs) {
 async function fetchData() {
   const hdrs = {};
   const ok = (r) => { if (!r.ok) throw new Error(`HTTP ${r.status}`); return r.json(); };
-  const [info, pools, apps, cpuTemp, gpuTemp, { memFree, arcSize }, updateStatus, alerts] = await Promise.all([
+  const [info, pools, apps, cpuTemp, { memFree, arcSize }, updateStatus, alerts] = await Promise.all([
     fetch(`${API}/system/info`, { headers: hdrs }).then(ok),
     fetch(`${API}/pool`,        { headers: hdrs }).then(ok),
     fetch(`${API}/app`,         { headers: hdrs }).then(ok).catch(() => []),
     fetchCpuTemp(hdrs),
-    fetchGpuTemp(hdrs),
     fetchMemStats(hdrs),
     fetchUpdateStatus(hdrs),
     fetchAlerts(hdrs),
@@ -312,7 +282,7 @@ async function fetchData() {
       })
   );
 
-  return { info, pools, apps: appList, releaseMap, cpuTemp, gpuTemp, memFree, arcSize, updateStatus, alerts };
+  return { info, pools, apps: appList, releaseMap, cpuTemp, memFree, arcSize, updateStatus, alerts };
 }
 
 // ── Stopped-app tracking (localStorage) ──────────────────
@@ -470,31 +440,6 @@ export function nasIssues(data) {
     });
   } else {
     lsClearFirstSeen('nas-cpu-temp');
-  }
-
-  // GPU temperature
-  if (data.gpuTemp != null && data.gpuTemp >= GPU_WARN_C) {
-    const gpuId   = 'nas-gpu-temp';
-    const firstTs = lsMarkFirstSeen(gpuId);
-    const gpuAge  = Date.now() - firstTs;
-    const firstStr = new Date(firstTs).toLocaleTimeString(undefined, { hour: "2-digit", minute: "2-digit", hour12: false });
-    issues.push({
-      id: gpuId,
-      severity: data.gpuTemp >= GPU_CRIT_C ? 'crit' : 'warn',
-      label: 'gpu hot',
-      headline: `GPU temperature is ${data.gpuTemp}°C.`,
-      source: 'truenas · system',
-      firstSeenTs: firstTs,
-      when: gpuAge >= 60000 ? `${fmtAge(gpuAge)} unresolved` : 'now',
-      description: `TrueNAS GPU is at ${data.gpuTemp}°C (warn ≥${GPU_WARN_C}°C, crit ≥${GPU_CRIT_C}°C). Check GPU cooling or reduce workload.`,
-      logs: [
-        { t: firstStr, level: data.gpuTemp >= GPU_CRIT_C ? 'err' : 'warn', text: `[thermal] gpu temp: ${data.gpuTemp}°C` },
-      ],
-      ignoreKey: `nas-gpu-temp:${firstTs}`,
-      actions: [{ label: 'open truenas ›', href: UI }],
-    });
-  } else {
-    lsClearFirstSeen('nas-gpu-temp');
   }
 
   // Memory
