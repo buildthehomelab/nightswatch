@@ -189,7 +189,7 @@ body {
   justify-content: space-between;
   align-items: baseline;
 }
-.section-label .count { color: var(--ink-2); white-space: nowrap; }
+.section-label .count { color: var(--ink-2); white-space: nowrap; margin-left: auto; }
 .filter-chip {
   cursor: pointer;
   border-radius: 4px;
