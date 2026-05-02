@@ -69,6 +69,7 @@ Defaults (`CUSTOMIZE_DEFAULTS` in App.jsx):
 - `showWeather`: false
 - `showWan`: true, `showUptime`: true, `showDate`: true
 - `enableTruenas`: false — TrueNAS API polling disabled by default
+- `enableCve`: false — NVD CVE feed disabled by default
 - `showNas`: false — TrueNAS data strip hidden by default (independent of `enableTruenas`)
 - `ambientPlacement`: "bottom"
 
