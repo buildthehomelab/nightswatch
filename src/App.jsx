@@ -674,7 +674,6 @@ export default function App() {
             <div className="twk-subgroup">
               <CustomizeToggle label="Apps"     value={t.showNasApps}    onChange={(v) => setTweak("showNasApps", v)} />
               <CustomizeToggle label="CPU Temp" value={t.showNasCpuTemp} onChange={(v) => setTweak("showNasCpuTemp", v)} />
-              <CustomizeToggle label="GPU Temp" value={t.showNasGpuTemp} onChange={(v) => setTweak("showNasGpuTemp", v)} />
               <CustomizeToggle label="Load"     value={t.showNasLoad}    onChange={(v) => setTweak("showNasLoad", v)} />
               <CustomizeToggle label="Memory"   value={t.showNasMemory}  onChange={(v) => setTweak("showNasMemory", v)} />
               <CustomizeToggle label="Name"     value={t.showNasName}    onChange={(v) => setTweak("showNasName", v)} />
