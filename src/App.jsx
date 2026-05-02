@@ -611,6 +611,19 @@ export default function App() {
     }
   }, []); // eslint-disable-line react-hooks/exhaustive-deps
 
+  // Backfill cleanSince from NAS uptime on first data load if set very recently this session
+  useEffect(() => {
+    if (!nasData?.info?.uptime_seconds || hasCrit) return;
+    const raw = localStorage.getItem(LS_CLEAN_KEY);
+    if (!raw) return;
+    const msSinceSet = Date.now() - new Date(raw).getTime();
+    if (msSinceSet > 60_000) return;
+    const uptimeMs = nasData.info.uptime_seconds * 1000;
+    if (uptimeMs > msSinceSet) {
+      localStorage.setItem(LS_CLEAN_KEY, new Date(Date.now() - uptimeMs).toISOString());
+    }
+  }, [nasData]); // eslint-disable-line react-hooks/exhaustive-deps
+
   // Track crit transitions: crit appears → hard reset; crits clear → start new streak
   useEffect(() => {
     const prev = prevHasCritRef.current;
