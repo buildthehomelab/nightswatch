@@ -62,6 +62,8 @@ export default defineConfig(({ mode }) => {
       'import.meta.env.VITE_POOL_WARN_PCT':            JSON.stringify(env.TRUENAS_POOL_WARN_PCT ?? ''),
       'import.meta.env.VITE_POOL_CRIT_PCT':            JSON.stringify(env.TRUENAS_POOL_CRIT_PCT ?? ''),
       'import.meta.env.VITE_STOPPED_APP_HIDE_MINUTES': JSON.stringify(env.TRUENAS_STOPPED_APP_HIDE_MINUTES ?? ''),
+      'import.meta.env.VITE_DISK_WARN_C':              JSON.stringify(env.TRUENAS_DISK_WARN_C ?? ''),
+      'import.meta.env.VITE_DISK_CRIT_C':              JSON.stringify(env.TRUENAS_DISK_CRIT_C ?? ''),
       'import.meta.env.VITE_DOZZLE_URL':               JSON.stringify(env.DOZZLE_URL ?? ''),
       'import.meta.env.VITE_WEATHER_LOCATION':         JSON.stringify(env.WEATHER_LOCATION ?? ''),
       'import.meta.env.VITE_CVE_KEYWORDS':             JSON.stringify(env.CVE_KEYWORDS ?? ''),
