@@ -117,7 +117,7 @@ Requires 3 consecutive failures to avoid false positives from transient network 
 **Poll interval**: every 60 seconds via `useTrueNas()` hook.  
 **API**: `/truenas/api/v2.0/*` (proxied — see §8).
 
-`nasIssues(nasData)` in `TrueNas.jsx` derives issues:
+`nasIssues(nasData)` in `services/truenas.js` derives issues:
 
 ### Issue Rules
 
