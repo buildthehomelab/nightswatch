@@ -636,7 +636,7 @@ export default function App() {
     if (!raw) return;
     const msSinceClean = Date.now() - new Date(raw).getTime();
     const uptimeMs = nasData.info.uptime_seconds * 1000;
-    if (uptimeMs > msSinceClean && msSinceClean < 24 * 60 * 60 * 1000) {
+    if (uptimeMs > msSinceClean) {
       const ts = new Date(Date.now() - uptimeMs).toISOString();
       localStorage.setItem(LS_CLEAN_KEY, ts);
       setCleanSince(ts);
