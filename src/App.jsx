@@ -420,7 +420,9 @@ export default function App() {
   const [dozzleOpen, setDozzleOpen] = useState(false);
   const [dozzleContainer, setDozzleContainer] = useState(null);
   const [ignored, setIgnored] = useState(() => loadIgnored());
-  const [cleanSince, setCleanSince] = useState(() => localStorage.getItem(LS_CLEAN_KEY));
+  const [cleanSince, setCleanSince] = useState(() =>
+    DEMO ? new Date(Date.now() - 8 * 24 * 60 * 60 * 1000).toISOString() : localStorage.getItem(LS_CLEAN_KEY)
+  );
 
   const handleIgnore = (key, label) => {
     setIgnored(prev => {
