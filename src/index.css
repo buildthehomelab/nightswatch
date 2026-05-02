@@ -154,6 +154,7 @@ body {
   margin: 0;
   font-feature-settings: "lnum", "locl";
   text-wrap: balance;
+  animation: rise 0.3s ease both, breath 5s ease-in-out 0.35s infinite;
 }
 .healthy .hero em {
   font-style: normal;
