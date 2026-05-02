@@ -737,6 +737,7 @@ export default function App() {
           showNasMemory={t.showNasMemory}
           showNasApps={t.showNasApps}
           showNasPools={t.showNasPools}
+          showNasNet={t.showNasNet}
           showDate={t.showDate}
           placement={t.ambientPlacement}
           nasData={nasData}
