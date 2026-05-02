@@ -37,6 +37,17 @@ Three top-level states driven by `issues.length` and severity:
 4. WAN issue prepended first (highest priority) when offline
 5. Fixture issues injected in DEMO mode
 
+## CVE integration
+
+- Fetches from NVD API (`https://services.nvd.nist.gov/rest/json/cves/2.0`) — no proxy, direct browser fetch
+- `useCve(enabled, keywords)` hook polls every **60 minutes**; cache TTL **1 hour** (localStorage `cve:cache`)
+- Keywords: `VITE_CVE_KEYWORDS` (comma-separated) + auto-appends `"truenas"` when `enableTruenas` is on (`SERVICE_CVE_KEYWORDS` map)
+- `VITE_CVE_DAYS_BACK` — how many days back to search (default 30)
+- `VITE_CVE_MIN_CVSS` — minimum CVSS score to surface (default 4.0)
+- Severity mapping: CVSS ≥ 9.0 → crit, ≥ 7.0 → warn, ≥ min → info; below min discarded
+- Per-CVE first-seen timestamp in localStorage `cve:firstSeen`
+- `cveIssues(data, keywords)` dedupes by CVE ID, sorts by CVSS score descending
+
 ## TrueNAS integration
 
 - **Version: TrueNAS SCALE 25.10.3**
