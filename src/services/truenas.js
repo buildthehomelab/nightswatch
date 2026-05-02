@@ -217,6 +217,11 @@ async function fetchCpuTemp(hdrs) {
 
 async function fetchGpuTemp(hdrs) {
   try {
+    // probe device/get_info for GPU hardware info
+    const devRes = await fetch(`${API}/device/get_info?type=GPU`, { headers: hdrs });
+    console.debug('[gpu] device/get_info status:', devRes.status, await devRes.text());
+  } catch(e) { console.debug('[gpu] device/get_info error:', e); }
+  try {
     const res = await fetch(`${API}/reporting/get_data`, {
       method: 'POST',
       headers: { ...hdrs, 'Content-Type': 'application/json' },
