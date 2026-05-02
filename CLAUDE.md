@@ -55,6 +55,10 @@ Three top-level states driven by `issues.length` and severity:
 - Auth: `TRUENAS_KEY` env var (set in `.env.local`, no `VITE_` prefix — injected at proxy layer in vite.config.js, not exposed to browser)
 - `TRUENAS_HOST` / `TRUENAS_PORT` — proxy target (server-side only, no `VITE_` prefix)
 - `VITE_STOPPED_APP_HIDE_MINUTES=60` — hides stopped apps from NAS strip after N minutes
+- `VITE_WEATHER_LOCATION` — location string for wttr.in weather (empty = weather disabled; proxied via `/wttr/`, polls every 30 min)
+- `VITE_CVE_KEYWORDS` — comma-separated NVD keyword list (e.g. `truenas,plex,nginx`)
+- `VITE_CVE_DAYS_BACK` — days back to search NVD (default 30)
+- `VITE_CVE_MIN_CVSS` — minimum CVSS score to show as issue (default 4.0)
 - `RELEASE_CACHE`: 10-min TTL Map for GitHub release version checks (linuxserver images mapped to upstream repos)
 - `useTrueNas()` hook polls on mount; `nasIssues(data)` derives crit/warn issues from pool health, disk SMART, app update availability
 - Uptime in App prefers `nasData.info.uptime_seconds`, falls back to session uptime
