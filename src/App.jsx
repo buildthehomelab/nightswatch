@@ -233,7 +233,14 @@ function rankForDays(days) {
 const HEALTHY_MILESTONES = [7, 14, 30, 60, 90, 180, 365];
 
 function Healthy({ uptime, nasData, now, cleanSince }) {
-  const [phrase, setPhrase] = useState(() => pickPhrase(healthyPhrasePool(new Date())));
+  const pool = healthyPhrasePool(now);
+  const bucketKey = pool[0];
+  const [phrase, setPhrase] = useState(() => pickPhrase(pool));
+  const mounted = useRef(false);
+  useEffect(() => {
+    if (!mounted.current) { mounted.current = true; return; }
+    setPhrase(pickPhrase(healthyPhrasePool(new Date())));
+  }, [bucketKey]);
   useEffect(() => {
     const id = setInterval(() => setPhrase(pickPhrase(healthyPhrasePool(new Date()))), 60 * 60 * 1000);
     return () => clearInterval(id);
