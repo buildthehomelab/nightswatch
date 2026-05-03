@@ -152,18 +152,18 @@ body {
 }
 .healthy .hero {
   font-family: var(--display);
-  font-weight: 700;
-  font-style: italic;
-  font-size: 80px;
+  font-weight: 800;
+  font-style: normal;
+  font-size: 72px;
   line-height: 1.0;
-  letter-spacing: -0.5px;
+  letter-spacing: 0.5px;
   color: var(--ink);
   margin: 0;
   text-wrap: balance;
   animation: rise 0.3s ease both, breath 5s ease-in-out 0.35s infinite;
 }
 .healthy .hero em {
-  font-style: italic;
+  font-style: normal;
 }
 .healthy .sub {
   font-family: var(--sans);
