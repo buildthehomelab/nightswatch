@@ -329,14 +329,18 @@ body {
 .issue .details-inner {
   padding: 16px 20px;
   background: var(--paper-2);
-  border: 1px solid var(--ink-3);
-  border-radius: 4px;
+  border: 1px solid var(--rule);
+  border-radius: 8px;
   display: flex;
   flex-direction: column;
   gap: 14px;
+  box-shadow: rgba(0,0,0,0.1) 0px 10px 15px -3px;
 }
 .issue.crit.open .details-inner {
   border-color: var(--crit);
+}
+[data-theme="dark"] .issue .details-inner {
+  box-shadow: rgba(22,15,36,0.6) 0px 4px 18px;
 }
 .issue .description {
   font-family: var(--sans);
