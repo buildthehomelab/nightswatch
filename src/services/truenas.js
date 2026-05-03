@@ -344,10 +344,19 @@ async function fetchUpdateStatus(hdrs) {
   } catch { return null; }
 }
 
+async function fetchRunningJobs(hdrs) {
+  try {
+    const r = await fetch(`${API}/core/get_jobs?limit=10&state=RUNNING`, { headers: hdrs });
+    if (!r.ok) return [];
+    const json = await r.json();
+    return Array.isArray(json) ? json : [];
+  } catch { return []; }
+}
+
 async function fetchData() {
   const hdrs = {};
   const ok = (r) => { if (!r.ok) throw new Error(`HTTP ${r.status}`); return r.json(); };
-  const [info, pools, apps, cpuTemp, { memFree, arcSize }, diskTemps, updateStatus, alerts, netStats] = await Promise.all([
+  const [info, pools, apps, cpuTemp, { memFree, arcSize }, diskTemps, updateStatus, alerts, netStats, runningJobs] = await Promise.all([
     fetch(`${API}/system/info`, { headers: hdrs }).then(ok),
     fetch(`${API}/pool`,        { headers: hdrs }).then(ok),
     fetch(`${API}/app`,         { headers: hdrs }).then(ok).catch(() => []),
@@ -357,6 +366,7 @@ async function fetchData() {
     fetchUpdateStatus(hdrs),
     fetchAlerts(hdrs),
     fetchNetStats(hdrs),
+    fetchRunningJobs(hdrs),
   ]);
 
   const appList = Array.isArray(apps) ? apps : [];
@@ -373,7 +383,7 @@ async function fetchData() {
       })
   );
 
-  return { info, pools, apps: appList, releaseMap, cpuTemp, memFree, arcSize, diskTemps, updateStatus, alerts, netStats };
+  return { info, pools, apps: appList, releaseMap, cpuTemp, memFree, arcSize, diskTemps, updateStatus, alerts, netStats, runningJobs };
 }
 
 // ── Stopped-app tracking (localStorage) ──────────────────
