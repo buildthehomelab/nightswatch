@@ -258,7 +258,7 @@ function Ambient({ now, wanUp, uptime, rank, cleanSince, weather, showWeather, s
         <button
           className={`ambient-help${!toured ? ' ambient-help-first' : ''}`}
           onClick={onOpenCustomize}
-          title="Customize (h / ? / `)"
+          title="Customize (h / ?)"
         >{toured ? <GearIcon /> : 'configure ›'}</button>
       </div>
       <AmbientPopover
