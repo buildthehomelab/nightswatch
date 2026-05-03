@@ -12,10 +12,10 @@ import { MOCK_NAS_STAGES } from './data/mockNas';
 const DEMO = import.meta.env.DEMO === 'true';
 
 const DEMO_STAGES = DEMO ? [
-  { issues: [],                              nasData: MOCK_NAS_STAGES[0], duration: 10_000 },
-  { issues: [ISSUE_FIXTURES.warnings[1]],   nasData: MOCK_NAS_STAGES[1], duration: 6_000  },
-  { issues: ISSUE_FIXTURES.warnings,        nasData: MOCK_NAS_STAGES[2], duration: 8_000  },
-  { issues: ISSUE_FIXTURES.critical,        nasData: MOCK_NAS_STAGES[3], duration: 13_000 },
+  { issues: [],                               nasData: MOCK_NAS_STAGES[0], duration: 10_000 },
+  { issues: [ISSUE_FIXTURES.warnings[1]],     nasData: MOCK_NAS_STAGES[1], duration: 6_000  },
+  { issues: [ISSUE_FIXTURES.warnings[0]],     nasData: MOCK_NAS_STAGES[2], duration: 8_000  },
+  { issues: ISSUE_FIXTURES.critical,          nasData: MOCK_NAS_STAGES[3], duration: 13_000 },
 ] : null;
 import {
   useCustomize, CustomizePanel, CustomizeColumn, CustomizeSection, CustomizeRadio, CustomizeToggle,
