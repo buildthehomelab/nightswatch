@@ -172,8 +172,11 @@ export default function AmbientPopover({ chip, anchor, placement, nasData, clean
   if (!content) return null;
 
   const isApps  = chip === 'apps';
-  const popWidth = isApps ? 200 : 160;
-  const left = Math.min(anchor.left, window.innerWidth - popWidth - 8);
+  const isRank  = chip === 'rank';
+  const popWidth = isApps || isRank ? 220 : 160;
+  const left = isRank
+    ? Math.max(8, anchor.right - popWidth)
+    : Math.min(anchor.left, window.innerWidth - popWidth - 8);
   const style = { left };
   if (placement === 'bottom') {
     style.bottom = window.innerHeight - anchor.top + 8;
