@@ -615,6 +615,24 @@ export function nasIssues(data) {
     const firstStr = new Date(firstTs).toLocaleTimeString(undefined, { hour: "2-digit", minute: "2-digit", hour12: false });
     const load5    = data.info.loadavg[1]?.toFixed(2) ?? '—';
     const load15   = data.info.loadavg[2]?.toFixed(2) ?? '—';
+    const cores    = data.info?.cores ?? null;
+    const pct      = cores ? Math.round((load1 / cores) * 100) : null;
+    const trend    = (data.info.loadavg[1] != null)
+      ? (load1 > data.info.loadavg[1] * 1.1 ? ' ↑ rising' : load1 < data.info.loadavg[1] * 0.9 ? ' ↓ recovering' : '')
+      : '';
+
+    const jobs = (data.runningJobs ?? [])
+      .filter(j => j.method && j.method !== 'core.ping' && j.method !== 'reporting.netdata_get_all_metrics')
+      .slice(0, 5);
+    const jobLines = jobs.map(j => {
+      const pctStr = j.progress?.percent != null ? ` ${Math.round(j.progress.percent)}%` : '';
+      const desc   = j.progress?.description ? ` — ${j.progress.description}` : '';
+      return `  ${j.method}${pctStr}${desc}`;
+    });
+
+    const coreStr  = cores ? ` on ${cores} cores (${pct}% saturated)` : '';
+    const jobsStr  = jobLines.length ? `\n\nRunning jobs:\n${jobLines.join('\n')}` : '';
+
     issues.push({
       id: loadId,
       severity: load1 >= LOAD_CRIT ? 'crit' : 'warn',
@@ -623,9 +641,10 @@ export function nasIssues(data) {
       source: 'truenas · system',
       firstSeenTs: firstTs,
       when: loadAge >= 60000 ? `${fmtAge(loadAge)} unresolved` : 'now',
-      description: `1-min load average is ${load1.toFixed(2)} (warn ≥${LOAD_WARN}, crit ≥${LOAD_CRIT}).\n5m: ${load5}  15m: ${load15}`,
+      description: `1-min load average is ${load1.toFixed(2)}${coreStr} (warn ≥${LOAD_WARN}, crit ≥${LOAD_CRIT})${trend}.\n5m: ${load5}  15m: ${load15}${jobsStr}`,
       logs: [
-        { t: firstStr, level: load1 >= LOAD_CRIT ? 'err' : 'warn', text: `[load] 1m=${load1.toFixed(2)} 5m=${load5} 15m=${load15}` },
+        { t: firstStr, level: load1 >= LOAD_CRIT ? 'err' : 'warn', text: `[load] 1m=${load1.toFixed(2)} 5m=${load5} 15m=${load15}${cores ? ` cores=${cores}` : ''}${trend}` },
+        ...jobs.map(j => ({ t: firstStr, level: 'info', text: `[job] ${j.method}${j.progress?.percent != null ? ` ${Math.round(j.progress.percent)}%` : ''}` })),
       ],
       ignoreKey: `nas-load:${firstTs}`,
       actions: [{ label: 'open truenas ›', href: UI }],
