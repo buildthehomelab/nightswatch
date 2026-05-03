@@ -770,6 +770,7 @@ export default function App() {
           wanUp={wanUp}
           uptime={uptime}
           rank={rank}
+          cleanSince={cleanSince}
           weather={weather}
           showWeather={t.showWeather}
           showWan={t.showWan}
