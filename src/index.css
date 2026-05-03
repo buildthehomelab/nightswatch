@@ -146,14 +146,13 @@ body {
   gap: 20px;
 }
 .healthy .hero {
-  font-family: var(--sans);
-  font-weight: 700;
-  font-size: 48px;
-  line-height: 1.00;
-  letter-spacing: -1.5px;
+  font-family: var(--display);
+  font-weight: 800;
+  font-size: 64px;
+  line-height: 1.0;
+  letter-spacing: -1.8px;
   color: var(--ink);
   margin: 0;
-  font-feature-settings: "lnum", "locl";
   text-wrap: balance;
   animation: rise 0.3s ease both, breath 5s ease-in-out 0.35s infinite;
 }
