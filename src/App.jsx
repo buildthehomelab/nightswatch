@@ -581,7 +581,7 @@ export default function App() {
       } else if (e.key === "r" || e.key === "R") {
         e.preventDefault();
         setNow(new Date());
-      } else if (!toured && (e.key === 'h' || e.key === 'H' || e.key === '?' || e.key === '`')) {
+      } else if (!toured && (e.key === 'h' || e.key === 'H' || e.key === '?')) {
         markTourred();
       }
     };
