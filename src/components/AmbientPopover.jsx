@@ -1,5 +1,15 @@
 import { fmtBytes, fmtRate, CPU_WARN_C, CPU_CRIT_C, POOL_WARN_PCT, POOL_CRIT_PCT } from '../services/truenas';
 
+function fmtClean(ms) {
+  const s = Math.floor(ms / 1000);
+  if (s < 60)  return `${s}s`;
+  const m = Math.floor(s / 60);
+  if (m < 60)  return `${m}m`;
+  const h = Math.floor(m / 60);
+  if (h < 24)  return `${h}h`;
+  return `${Math.floor(h / 24)}d`;
+}
+
 const RANK_LADDER = [
   { name: 'Initiate',       days: 0   },
   { name: 'Steward',        days: 1   },
@@ -87,15 +97,16 @@ function AppsDetail({ apps }) {
   );
 }
 
-function RankDetail({ cleanSince, now }) {
-  const cleanDays = cleanSince ? Math.floor((now - new Date(cleanSince)) / 86_400_000) : null;
+function RankDetail({ cleanSince }) {
+  const elapsed   = cleanSince ? Date.now() - new Date(cleanSince).getTime() : null;
+  const cleanDays = elapsed != null ? Math.floor(elapsed / 86_400_000) : null;
   const nextRank  = cleanDays != null ? RANK_LADDER.find(r => r.days > cleanDays) ?? null : null;
   const daysUntil = nextRank ? nextRank.days - cleanDays : null;
 
-  if (cleanDays == null) return <Row k="streak" v="none" />;
+  if (elapsed == null) return <Row k="streak" v="none" />;
   return (
     <>
-      <Row k="clean" v={`${cleanDays}d`} />
+      <Row k="clean for" v={fmtClean(elapsed)} />
       <div className="ap-rule" />
       {nextRank ? (
         <>
