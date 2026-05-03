@@ -1,32 +1,35 @@
+/* ── Light theme: Sentry brand on white ─────────────────── */
 :root {
-  --paper: #faf7f0;
-  --paper-2: #f0ebe0;
-  --ink: #1c1a14;
-  --ink-2: #5c5448;
-  --ink-3: #9c9080;
-  --rule: rgba(28,26,20,0.1);
-  --rule-soft: rgba(28,26,20,0.05);
-  --warn: #b87010;
-  --crit: #b83020;
-  --ok: #3a7a44;
-  --accent: #b87010;
+  --paper:    #ffffff;
+  --paper-2:  #f5f2ff;
+  --ink:      #1f1633;
+  --ink-2:    #584872;
+  --ink-3:    #8a78a8;
+  --rule:     rgba(54,45,89,0.15);
+  --rule-soft:rgba(54,45,89,0.07);
+  --warn:     #b86820;
+  --crit:     #a83060;
+  --ok:       #527a10;
+  --accent:   #6a5fc1;
 
-  --display: "Cormorant Garamond", Georgia, serif;
-  --sans: "DM Sans", ui-sans-serif, system-ui, sans-serif;
-  --mono: "JetBrains Mono", ui-monospace, "SF Mono", Menlo, monospace;
+  --display: "Barlow Condensed", ui-sans-serif, system-ui, sans-serif;
+  --sans:    "Rubik", ui-sans-serif, system-ui, sans-serif;
+  --mono:    "JetBrains Mono", ui-monospace, "SF Mono", Menlo, monospace;
 }
+
+/* ── Dark theme: Sentry's signature deep purple ──────────── */
 [data-theme="dark"] {
-  --paper: #131210;
-  --paper-2: #1e1c18;
-  --ink: #f0e8d4;
-  --ink-2: #b0a890;
-  --ink-3: #706858;
-  --rule: rgba(240,232,212,0.08);
-  --rule-soft: rgba(240,232,212,0.04);
-  --warn: #e8a030;
-  --crit: #e04828;
-  --ok: #68b870;
-  --accent: #e8a030;
+  --paper:    #1f1633;
+  --paper-2:  #2a2040;
+  --ink:      #ffffff;
+  --ink-2:    #e5e7eb;
+  --ink-3:    #79628c;
+  --rule:     #362d59;
+  --rule-soft:rgba(54,45,89,0.5);
+  --warn:     #ffb287;
+  --crit:     #fa7faa;
+  --ok:       #c2ef4e;
+  --accent:   #6a5fc1;
 }
 
 * { box-sizing: border-box; }
