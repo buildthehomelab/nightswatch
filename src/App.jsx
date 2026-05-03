@@ -495,7 +495,8 @@ export default function App() {
       return next;
     });
   };
-  const { data: nasData, err: nasErr } = useTrueNas(t.enableTruenas);
+  const { data: nasDataLive, err: nasErr } = useTrueNas(t.enableTruenas);
+  const nasData = DEMO_STAGES ? DEMO_STAGES[demoStage].nasData : nasDataLive;
   const cveKeywords = useMemo(() => {
     const extras = Object.entries(SERVICE_CVE_KEYWORDS)
       .filter(([flag]) => t[flag])
