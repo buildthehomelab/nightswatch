@@ -228,10 +228,10 @@ body {
 .density-compact .issue.focused { padding: 11px 16px; }
 
 [data-theme="dark"] .issue.focused {
-  background: #2a2040;
+  background: #1e1c18;
   box-shadow: inset 3px 0 0 var(--accent);
 }
-[data-theme="dark"] .density-compact .issue.focused { background: #2a2040; }
+[data-theme="dark"] .density-compact .issue.focused { background: #1e1c18; }
 
 .issue .severity {
   font-family: var(--sans);
