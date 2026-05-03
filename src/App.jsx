@@ -501,6 +501,8 @@ export default function App() {
   const [t, setTweak] = useCustomize(CUSTOMIZE_DEFAULTS);
   const startTime = useRef(Date.now());
   const [now, setNow] = useState(new Date());
+  const [toured, setTourred] = useState(() => !!localStorage.getItem('nightswatch:toured'));
+  const markTourred = () => { setTourred(true); localStorage.setItem('nightswatch:toured', '1'); };
   const [dozzleOpen, setDozzleOpen] = useState(false);
   const [dozzleContainer, setDozzleContainer] = useState(null);
   const [ignored, setIgnored] = useState(() => loadIgnored());
@@ -574,11 +576,13 @@ export default function App() {
       } else if (e.key === "r" || e.key === "R") {
         e.preventDefault();
         setNow(new Date());
+      } else if (!toured && (e.key === 'h' || e.key === 'H' || e.key === '?' || e.key === '`')) {
+        markTourred();
       }
     };
     window.addEventListener("keydown", onKey);
     return () => window.removeEventListener("keydown", onKey);
-  }, [dozzleOpen]);
+  }, [dozzleOpen, toured]);
 
   useEffect(() => {
     const id = setInterval(() => setNow(new Date()), 30_000);
