@@ -579,7 +579,9 @@ export default function App() {
     const liveIssues = [
       ...nasIssues(nasData),
       ...cveIssues(cveData, cveKeywords),
-      ...(DEMO && t.enableCve ? CVE_FIXTURES : []),
+      ...(DEMO && t.enableCve
+        ? demoStage >= 3 ? CVE_FIXTURES : demoStage >= 2 ? [CVE_FIXTURES[1]] : []
+        : []),
       ...(DEMO_STAGES ? DEMO_STAGES.slice(0, demoStage + 1).flatMap(s => s.issues) : []),
     ];
     if (t.enableTruenas && nasErr) {
