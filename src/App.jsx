@@ -6,9 +6,16 @@ import { useCve, cveIssues, BASE_CVE_KEYWORDS } from './services/cve';
 const SERVICE_CVE_KEYWORDS = {
   enableTruenas: 'truenas',
 };
-import { CVE_FIXTURES } from './data/fixtures';
+import { CVE_FIXTURES, ISSUE_FIXTURES } from './data/fixtures';
 
 const DEMO = import.meta.env.DEMO === 'true';
+
+const DEMO_STAGES = DEMO ? [
+  { issues: [],                              duration: 7_000  },
+  { issues: [ISSUE_FIXTURES.warnings[1]],   duration: 6_000  },
+  { issues: ISSUE_FIXTURES.warnings,        duration: 8_000  },
+  { issues: ISSUE_FIXTURES.critical,        duration: 13_000 },
+] : null;
 import {
   useCustomize, CustomizePanel, CustomizeColumn, CustomizeSection, CustomizeRadio, CustomizeToggle,
 } from './components/CustomizePanel';
@@ -463,6 +470,13 @@ export default function App() {
   const [cleanSince, setCleanSince] = useState(() =>
     DEMO ? new Date(Date.now() - 8 * 24 * 60 * 60 * 1000).toISOString() : localStorage.getItem(LS_CLEAN_KEY)
   );
+  const [demoStage, setDemoStage] = useState(0);
+
+  useEffect(() => {
+    if (!DEMO_STAGES) return;
+    const id = setTimeout(() => setDemoStage(s => (s + 1) % DEMO_STAGES.length), DEMO_STAGES[demoStage].duration);
+    return () => clearTimeout(id);
+  }, [demoStage]);
 
   const handleIgnore = (key, label) => {
     setIgnored(prev => {
