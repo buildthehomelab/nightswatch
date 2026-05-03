@@ -105,6 +105,58 @@ body {
 .ambient .item .v.rank { color: var(--ok); }
 .ambient-link { color: var(--accent); text-decoration: none; font-weight: 600; }
 .ambient-link:hover { text-decoration: underline; }
+.ambient .item:not(:has(.ambient-link)) { cursor: default; }
+
+/* ── Ambient chip popovers ───────────────────────────── */
+.ambient-popover {
+  position: fixed;
+  z-index: 200;
+  background: var(--paper-2);
+  border: 1px solid var(--rule);
+  border-radius: 8px;
+  padding: 10px 12px;
+  min-width: 140px;
+  box-shadow: 0 4px 20px rgba(0,0,0,.18);
+  font-family: var(--mono);
+  font-size: 11.5px;
+  line-height: 1.6;
+  animation: fadeIn 80ms ease both;
+  pointer-events: auto;
+}
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(3px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+.ap-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
+  gap: 16px;
+}
+.ap-k { color: var(--ink-3); white-space: nowrap; }
+.ap-v { color: var(--ink-2); font-variant-numeric: tabular-nums; text-align: right; }
+.ap-v.warn { color: var(--warn); }
+.ap-v.crit { color: var(--crit); }
+.ap-v.ok   { color: var(--ok);   }
+.ap-rule { border: none; border-top: 1px solid var(--rule); margin: 6px 0; }
+.ap-apps { max-height: 240px; overflow-y: auto; }
+.ap-group { margin-bottom: 2px; }
+.ap-group:last-child { margin-bottom: 0; }
+.ap-group-label {
+  font-family: var(--sans);
+  font-size: 10px; font-weight: 600;
+  color: var(--ink-3);
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  margin-bottom: 3px;
+}
+.ap-app-row { display: flex; justify-content: space-between; gap: 12px; padding: 1px 0; }
+.ap-app-name {
+  color: var(--ink-2);
+  overflow: hidden; text-overflow: ellipsis; white-space: nowrap;
+  max-width: 130px;
+}
+.ap-app-ver { color: var(--ink-3); white-space: nowrap; font-size: 10.5px; }
 
 /* ── Masthead ────────────────────────────────────────── */
 .masthead {
