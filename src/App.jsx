@@ -7,14 +7,15 @@ const SERVICE_CVE_KEYWORDS = {
   enableTruenas: 'truenas',
 };
 import { CVE_FIXTURES, ISSUE_FIXTURES } from './data/fixtures';
+import { MOCK_NAS_STAGES } from './data/mockNas';
 
 const DEMO = import.meta.env.DEMO === 'true';
 
 const DEMO_STAGES = DEMO ? [
-  { issues: [],                              duration: 7_000  },
-  { issues: [ISSUE_FIXTURES.warnings[1]],   duration: 6_000  },
-  { issues: ISSUE_FIXTURES.warnings,        duration: 8_000  },
-  { issues: ISSUE_FIXTURES.critical,        duration: 13_000 },
+  { issues: [],                              nasData: MOCK_NAS_STAGES[0], duration: 7_000  },
+  { issues: [ISSUE_FIXTURES.warnings[1]],   nasData: MOCK_NAS_STAGES[1], duration: 6_000  },
+  { issues: ISSUE_FIXTURES.warnings,        nasData: MOCK_NAS_STAGES[2], duration: 8_000  },
+  { issues: ISSUE_FIXTURES.critical,        nasData: MOCK_NAS_STAGES[3], duration: 13_000 },
 ] : null;
 import {
   useCustomize, CustomizePanel, CustomizeColumn, CustomizeSection, CustomizeRadio, CustomizeToggle,
