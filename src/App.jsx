@@ -579,6 +579,7 @@ export default function App() {
       ...nasIssues(nasData),
       ...cveIssues(cveData, cveKeywords),
       ...(DEMO && t.enableCve ? CVE_FIXTURES : []),
+      ...(DEMO_STAGES ? DEMO_STAGES[demoStage].issues : []),
     ];
     if (t.enableTruenas && nasErr) {
       liveIssues.unshift({
