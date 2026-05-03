@@ -135,7 +135,7 @@ function fmtTime(d) {
   return d.toLocaleTimeString(undefined, { hour: "2-digit", minute: "2-digit", hour12: false });
 }
 
-function Ambient({ now, wanUp, uptime, rank, weather, showWeather, showWan, showUptime, showRank, showNas, showNasName, showNasLoad, showNasCpuTemp, showNasMemory, showNasApps, showNasPools, showNasNet, showDate, placement, nasData }) {
+function Ambient({ now, wanUp, uptime, rank, cleanSince, weather, showWeather, showWan, showUptime, showRank, showNas, showNasName, showNasLoad, showNasCpuTemp, showNasMemory, showNasApps, showNasPools, showNasNet, showDate, placement, nasData }) {
   const pools    = Array.isArray(nasData?.pools) ? nasData.pools : [];
   const apps     = Array.isArray(nasData?.apps)  ? nasData.apps  : [];
   const running  = apps.filter(a => a.state === 'RUNNING').length;
@@ -240,7 +240,7 @@ function Ambient({ now, wanUp, uptime, rank, weather, showWeather, showWan, show
           </span>
         )}
         {showRank && rank && (
-          <span className="item">
+          <span className="item" onMouseEnter={(e) => openPopover('rank', e)} onMouseLeave={scheduleClose}>
             <span className="k">rank</span>
             <span className="v rank">{rank}</span>
           </span>
@@ -251,6 +251,8 @@ function Ambient({ now, wanUp, uptime, rank, weather, showWeather, showWan, show
         anchor={popoverAnchor}
         placement={placement}
         nasData={nasData}
+        cleanSince={cleanSince}
+        now={now}
         onMouseEnter={cancelClose}
         onMouseLeave={scheduleClose}
       />
