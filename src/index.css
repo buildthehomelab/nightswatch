@@ -462,8 +462,8 @@ body {
 }
 @media (max-width: 640px) {
   .page { padding: 32px 24px 64px; }
-  .masthead h1 { font-size: 40px; letter-spacing: -1.2px; }
-  .healthy .hero { font-size: 32px; letter-spacing: -0.8px; }
+  .masthead h1 { font-size: 48px; letter-spacing: -1.5px; }
+  .healthy .hero { font-size: 40px; letter-spacing: -1.2px; }
   .issues { grid-template-columns: 1fr; }
   .issue { gap: 8px; }
   .issue .when { display: none; }
