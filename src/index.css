@@ -477,8 +477,8 @@ body {
 }
 @media (max-width: 640px) {
   .page { padding: 32px 24px 64px; }
-  .masthead h1 { font-size: 52px; letter-spacing: 0.3px; }
-  .healthy .hero { font-size: 44px; letter-spacing: 0.3px; }
+  .masthead h1 { font-size: 56px; letter-spacing: -0.3px; }
+  .healthy .hero { font-size: 48px; letter-spacing: -0.3px; }
   .issues { grid-template-columns: 1fr; }
   .issue { gap: 8px; }
   .issue .when { display: none; }
