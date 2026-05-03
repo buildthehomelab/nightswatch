@@ -121,8 +121,12 @@ body {
   transition: color .2s, background .2s, border-color .2s;
   flex-shrink: 0;
   white-space: nowrap;
+  display: inline-flex;
+  align-items: center;
 }
 .ambient-help:hover { color: var(--ink-2); background: var(--paper-2); }
+.ambient-help svg { display: block; transition: transform .35s ease; }
+.ambient-help:hover svg { transform: rotate(45deg); }
 .ambient-help-first {
   color: var(--ink-2);
   border-color: var(--rule);
