@@ -326,12 +326,14 @@ body {
 .issue .details-inner {
   padding: 16px 20px;
   background: var(--paper-2);
-  border: 1px solid var(--rule);
-  border-radius: 12px;
+  border: 1px solid var(--ink-3);
+  border-radius: 4px;
   display: flex;
   flex-direction: column;
   gap: 14px;
-  box-shadow: rgba(0,0,0,0.04) 0px 4px 18px, rgba(0,0,0,0.027) 0px 2.025px 7.85px, rgba(0,0,0,0.02) 0px 0.8px 2.93px, rgba(0,0,0,0.01) 0px 0.175px 1.04px;
+}
+.issue.crit.open .details-inner {
+  border-color: var(--crit);
 }
 .issue .description {
   font-family: var(--sans);
