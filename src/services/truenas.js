@@ -143,7 +143,8 @@ const LINUXSERVER_UPSTREAM = {
   prowlarr:    { owner: 'Prowlarr',      repo: 'Prowlarr' },
   qbittorrent: { owner: 'qbittorrent',   repo: 'qBittorrent' },
   readarr:     { owner: 'Readarr',       repo: 'Readarr' },
-  bazarr:      { owner: 'morpheus65535', repo: 'bazarr' },
+  bazarr:        { owner: 'morpheus65535', repo: 'bazarr' },
+  'code-server': { owner: 'coder',         repo: 'code-server' },
 };
 
 function imageToGithubRepo(image) {
