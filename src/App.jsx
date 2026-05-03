@@ -475,7 +475,7 @@ export default function App() {
 
   useEffect(() => {
     if (!DEMO_STAGES) return;
-    const id = setTimeout(() => setDemoStage(s => (s + 1) % DEMO_STAGES.length), DEMO_STAGES[demoStage].duration);
+    const id = setTimeout(() => setDemoStage(s => Math.min(s + 1, DEMO_STAGES.length - 1)), DEMO_STAGES[demoStage].duration);
     return () => clearTimeout(id);
   }, [demoStage]);
 
