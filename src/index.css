@@ -377,54 +377,54 @@ body {
 .issue .actions button {
   font-family: var(--sans);
   font-size: 12px;
-  font-weight: 700;
-  color: #ffffff;
-  background: #79628c;
-  border: 1px solid #584674;
+  font-weight: 500;
+  color: var(--accent);
+  background: transparent;
+  border: 1px solid var(--accent);
   padding: 5px 14px;
-  border-radius: 13px;
+  border-radius: 3px;
   cursor: pointer;
+  letter-spacing: 0.06em;
   text-transform: uppercase;
-  letter-spacing: 0.2px;
-  box-shadow: rgba(0,0,0,0.1) 0px 1px 3px 0px inset;
-  transition: box-shadow .15s ease;
+  transition: background .15s ease, color .15s ease;
 }
 .issue .actions button:hover {
-  box-shadow: rgba(0,0,0,0.18) 0px 0.5rem 1.5rem;
+  background: var(--accent);
+  color: var(--paper);
 }
 .action-link {
   font-family: var(--sans);
   font-size: 12px;
-  font-weight: 700;
-  color: #ffffff;
-  background: #79628c;
-  border: 1px solid #584674;
+  font-weight: 500;
+  color: var(--accent);
+  background: transparent;
+  border: 1px solid var(--accent);
   padding: 5px 14px;
-  border-radius: 13px;
+  border-radius: 3px;
   cursor: pointer;
   text-decoration: none;
   display: inline-flex;
   align-items: center;
+  letter-spacing: 0.06em;
   text-transform: uppercase;
-  letter-spacing: 0.2px;
-  box-shadow: rgba(0,0,0,0.1) 0px 1px 3px 0px inset;
-  transition: box-shadow .15s ease;
+  transition: background .15s ease, color .15s ease;
 }
 .action-link:hover {
-  box-shadow: rgba(0,0,0,0.18) 0px 0.5rem 1.5rem;
+  background: var(--accent);
+  color: var(--paper);
 }
 .action-ignore {
   font-family: var(--sans);
   font-size: 12px;
-  font-weight: 500;
+  font-weight: 400;
   color: var(--ink-3);
   background: transparent;
-  border: 1px solid var(--rule-soft);
+  border: 1px solid var(--rule);
   padding: 5px 12px;
-  border-radius: 13px;
+  border-radius: 3px;
   cursor: pointer;
+  letter-spacing: 0.06em;
   text-transform: uppercase;
-  letter-spacing: 0.2px;
   transition: color .15s, border-color .15s;
 }
 .action-ignore:hover { color: var(--ink); border-color: var(--ink-3); }
