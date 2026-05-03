@@ -116,25 +116,25 @@ body {
 .masthead .eyebrow {
   font-family: var(--sans);
   font-size: 11px;
-  font-weight: 500;
-  color: var(--accent);
-  letter-spacing: 0.12em;
+  font-weight: 600;
+  color: var(--ok);
+  letter-spacing: 0.2px;
   text-transform: uppercase;
 }
 .masthead h1 {
   font-family: var(--display);
-  font-weight: 700;
-  font-style: italic;
-  font-size: 88px;
-  line-height: 0.96;
-  letter-spacing: -0.5px;
+  font-weight: 800;
+  font-style: normal;
+  font-size: 80px;
+  line-height: 1.0;
+  letter-spacing: 0.5px;
   margin: 0;
   color: var(--ink);
   text-wrap: pretty;
 }
 .masthead h1 em {
-  font-style: italic;
-  font-weight: 700;
+  font-style: normal;
+  font-weight: 800;
 }
 .masthead h1 em.em-crit { color: var(--crit); }
 .masthead h1 em.em-warn { color: var(--warn); }
