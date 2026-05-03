@@ -34,7 +34,7 @@ const ISSUE_TO_CONTAINER = {
 };
 
 const CUSTOMIZE_DEFAULTS = {
-  theme: "light",
+  theme: "dark",
   showWeather: false,
   showWan: true,
   showUptime: true,
