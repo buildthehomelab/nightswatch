@@ -137,6 +137,7 @@ const __CUSTOMIZE_STYLE = `
 const CUSTOMIZE_LS_KEY = 'nightswatch:customize';
 
 function lsLoad(defaults) {
+  if (import.meta.env.DEMO === 'true') return defaults;
   try {
     const raw = localStorage.getItem(CUSTOMIZE_LS_KEY);
     if (!raw) return defaults;
