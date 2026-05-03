@@ -106,7 +106,6 @@ function pickPhrase(arr) {
 
 function mastheadPhrase(issues, ignored) {
   const crits = issues.filter(i => i.severity === 'crit');
-  const ec = crits.length > 0 ? 'em-crit' : 'em-warn';
   const maxCritAge = crits.reduce((max, i) => Math.max(max, i.firstSeenTs ? Date.now() - i.firstSeenTs : 0), 0);
 
   const TWO_DAYS = 2 * 24 * 60 * 60 * 1000;
@@ -115,14 +114,14 @@ function mastheadPhrase(issues, ignored) {
     return !isNaN(ts) && (Date.now() - ts) > TWO_DAYS;
   });
 
-  if (issues.some(i => i.id === 'wan-down'))    return <em className={ec}>{pickPhrase(PHRASES.wanDown)}</em>;
-  if (ignoredDays)                               return <em className={ec}>{pickPhrase(PHRASES.ignoredDays)}</em>;
-  if (maxCritAge >= MASTHEAD_STALE_MS)           return <em className={ec}>{pickPhrase(PHRASES.stale)}</em>;
-  if (crits.length > 1)                          return <em className={ec}>{pickPhrase(PHRASES.multiCrit)}</em>;
-  if (crits.length > 0 && ignored?.size > 0)     return <em className={ec}>{pickPhrase(PHRASES.critIgnored)}</em>;
-  if (crits.length > 0)                          return <em className={ec}>{pickPhrase(PHRASES.crit)}</em>;
-  if (issues.length > 1)                         return <em className="em-warn">{pickPhrase(PHRASES.multiIssue)}</em>;
-  return <em className="em-warn">{pickPhrase(PHRASES.singleWarn)}</em>;
+  if (issues.some(i => i.id === 'wan-down'))    return <em className="em-crit">{pickPhrase(PHRASES.wanDown)}</em>;
+  if (ignoredDays)                               return <em className="em-crit">{pickPhrase(PHRASES.ignoredDays)}</em>;
+  if (maxCritAge >= MASTHEAD_STALE_MS)           return <em className="em-crit">{pickPhrase(PHRASES.stale)}</em>;
+  if (crits.length > 1)                          return <em className="em-crit">{pickPhrase(PHRASES.multiCrit)}</em>;
+  if (crits.length > 0 && ignored?.size > 0)     return <em className="em-crit">{pickPhrase(PHRASES.critIgnored)}</em>;
+  if (crits.length > 0)                          return <em className="em-crit">{pickPhrase(PHRASES.crit)}</em>;
+  if (issues.length > 1)                         return <em className="em-crit">{pickPhrase(PHRASES.multiIssue)}</em>;
+  return <em className="em-crit">{pickPhrase(PHRASES.singleWarn)}</em>;
 }
 
 
