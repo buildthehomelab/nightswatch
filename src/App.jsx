@@ -250,6 +250,11 @@ function Ambient({ now, wanUp, uptime, rank, cleanSince, weather, showWeather, s
             <span className="v rank">{rank}</span>
           </span>
         )}
+        <button
+          className={`ambient-help${firstVisit ? ' first-visit' : ''}`}
+          onClick={() => window.postMessage({ type: '__activate_edit_mode' }, '*')}
+          title="Customize (h / ? / `)"
+        >?</button>
       </div>
       <AmbientPopover
         chip={popoverChip}
