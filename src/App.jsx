@@ -638,7 +638,7 @@ export default function App() {
       return [wanIssue, ...liveIssues];
     }
     return liveIssues;
-  }, [wanUp, wanDownSince, nasData, nasErr, cveData, cveErr, cveKeywords, t.enableTruenas, t.enableCve]);
+  }, [wanUp, wanDownSince, nasData, nasErr, cveData, cveErr, cveKeywords, t.enableTruenas, t.enableCve, demoStage]);
 
   const visibleIssues = useMemo(
     () => issues.filter(i => !i.ignoreKey || !ignored.has(i.ignoreKey)),
