@@ -135,7 +135,7 @@ function fmtTime(d) {
   return d.toLocaleTimeString(undefined, { hour: "2-digit", minute: "2-digit", hour12: false });
 }
 
-function Ambient({ now, wanUp, uptime, rank, cleanSince, weather, showWeather, showWan, showUptime, showRank, showNas, showNasName, showNasLoad, showNasCpuTemp, showNasMemory, showNasApps, showNasPools, showNasNet, showDate, placement, nasData }) {
+function Ambient({ now, wanUp, uptime, rank, cleanSince, weather, showWeather, showWan, showUptime, showRank, showNas, showNasName, showNasLoad, showNasCpuTemp, showNasMemory, showNasApps, showNasPools, showNasNet, showDate, placement, nasData, toured, onOpenCustomize }) {
   const pools    = Array.isArray(nasData?.pools) ? nasData.pools : [];
   const apps     = Array.isArray(nasData?.apps)  ? nasData.apps  : [];
   const running  = apps.filter(a => a.state === 'RUNNING').length;
@@ -148,11 +148,6 @@ function Ambient({ now, wanUp, uptime, rank, cleanSince, weather, showWeather, s
   const [popoverChip, setPopoverChip] = useState(null);
   const [popoverAnchor, setPopoverAnchor] = useState(null);
   const closeTimerRef = useRef(null);
-
-  const [firstVisit] = useState(() => !localStorage.getItem('nightswatch:toured'));
-  useEffect(() => {
-    if (firstVisit) localStorage.setItem('nightswatch:toured', '1');
-  }, [firstVisit]);
 
   const openPopover = (chipId, e) => {
     clearTimeout(closeTimerRef.current);
@@ -251,10 +246,10 @@ function Ambient({ now, wanUp, uptime, rank, cleanSince, weather, showWeather, s
           </span>
         )}
         <button
-          className={`ambient-help${firstVisit ? ' first-visit' : ''}`}
-          onClick={() => window.postMessage({ type: '__activate_edit_mode' }, '*')}
+          className={`ambient-help${!toured ? ' ambient-help-first' : ''}`}
+          onClick={onOpenCustomize}
           title="Customize (h / ? / `)"
-        >?</button>
+        >{toured ? '?' : 'configure ›'}</button>
       </div>
       <AmbientPopover
         chip={popoverChip}
