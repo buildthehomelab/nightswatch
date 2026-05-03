@@ -45,7 +45,7 @@ body {
 }
 
 ::selection { background: var(--accent); color: var(--paper); }
-[data-theme="dark"] ::selection { background: #c2ef4e; color: #1f1633; }
+[data-theme="dark"] ::selection { background: #e8a030; color: #131210; }
 
 .page {
   max-width: 1200px;
