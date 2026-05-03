@@ -796,6 +796,8 @@ export default function App() {
           showDate={t.showDate}
           placement={t.ambientPlacement}
           nasData={nasData}
+          toured={toured}
+          onOpenCustomize={() => { markTourred(); window.postMessage({ type: '__activate_edit_mode' }, '*'); }}
         />
       )}
 
