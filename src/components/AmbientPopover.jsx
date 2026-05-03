@@ -98,25 +98,42 @@ function AppsDetail({ apps }) {
 }
 
 function RankDetail({ cleanSince }) {
-  const elapsed   = cleanSince ? Date.now() - new Date(cleanSince).getTime() : null;
-  const cleanDays = elapsed != null ? Math.floor(elapsed / 86_400_000) : null;
-  const nextRank  = cleanDays != null ? RANK_LADDER.find(r => r.days > cleanDays) ?? null : null;
-  const daysUntil = nextRank ? nextRank.days - cleanDays : null;
+  const elapsed     = cleanSince ? Date.now() - new Date(cleanSince).getTime() : null;
+  const elapsedDays = elapsed != null ? elapsed / 86_400_000 : null;
 
-  if (elapsed == null) return <Row k="streak" v="none" />;
+  const currentIdx  = elapsed != null
+    ? RANK_LADDER.reduce((acc, r, i) => r.days <= elapsedDays ? i : acc, 0) : 0;
+  const currentRank = RANK_LADDER[currentIdx];
+  const nextRank    = RANK_LADDER[currentIdx + 1] ?? null;
+
+  let progress  = 100;
+  let remaining = null;
+  if (nextRank && elapsed != null) {
+    const from = currentRank.days * 86_400_000;
+    const to   = nextRank.days   * 86_400_000;
+    progress  = Math.min(100, Math.round(((elapsed - from) / (to - from)) * 100));
+    remaining = to - elapsed;
+  }
+
+  if (elapsed == null) return <div className="rk-empty">no streak</div>;
+
   return (
-    <>
-      <Row k="clean for" v={fmtClean(elapsed)} />
-      <div className="ap-rule" />
-      {nextRank ? (
-        <>
-          <Row k="next" v={nextRank.name} />
-          <Row k="in"   v={`${daysUntil}d`} />
-        </>
-      ) : (
-        <Row k="status" v="max rank" cls="ok" />
-      )}
-    </>
+    <div className="rk-wrap">
+      <div className="rk-header">
+        <span className="rk-name">{currentRank.name}</span>
+        <span className="rk-pct">{progress}%</span>
+      </div>
+      <div className="rk-bar-track">
+        <div className="rk-bar-fill" style={{ width: `${progress}%` }} />
+      </div>
+      <div className="rk-footer">
+        <span className="rk-streak">clean for {fmtClean(elapsed)}</span>
+        {nextRank
+          ? <span className="rk-next">→ {nextRank.name} in {fmtClean(remaining)}</span>
+          : <span className="rk-max">max rank</span>
+        }
+      </div>
+    </div>
   );
 }
 
