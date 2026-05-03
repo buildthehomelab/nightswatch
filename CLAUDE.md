@@ -54,6 +54,7 @@ Three top-level states driven by `issues.length` and severity:
 - Proxied through Vite dev server: `/truenas/*` → `$TRUENAS_HOST:$TRUENAS_PORT`
 - Auth: `TRUENAS_KEY` env var (set in `.env.local`, no `VITE_` prefix — injected at proxy layer in vite.config.js, not exposed to browser)
 - `TRUENAS_HOST` / `TRUENAS_PORT` — proxy target (server-side only, no `VITE_` prefix)
+- `TRUENAS_UI_URL` — override URL for browser links only (split DNS: set to `https://hostname` without port; proxy still uses `TRUENAS_PORT`)
 - `VITE_STOPPED_APP_HIDE_MINUTES=60` — hides stopped apps from NAS strip after N minutes
 - `VITE_WEATHER_LOCATION` — location string for wttr.in weather (empty = weather disabled; proxied via `/wttr/`, polls every 30 min)
 - `VITE_CVE_KEYWORDS` — comma-separated NVD keyword list (e.g. `truenas,plex,nginx`)
