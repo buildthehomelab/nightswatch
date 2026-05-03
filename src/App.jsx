@@ -149,6 +149,11 @@ function Ambient({ now, wanUp, uptime, rank, cleanSince, weather, showWeather, s
   const [popoverAnchor, setPopoverAnchor] = useState(null);
   const closeTimerRef = useRef(null);
 
+  const [firstVisit] = useState(() => !localStorage.getItem('nightswatch:toured'));
+  useEffect(() => {
+    if (firstVisit) localStorage.setItem('nightswatch:toured', '1');
+  }, [firstVisit]);
+
   const openPopover = (chipId, e) => {
     clearTimeout(closeTimerRef.current);
     setPopoverChip(chipId);
