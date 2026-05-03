@@ -1,5 +1,13 @@
 import { fmtBytes, fmtRate, CPU_WARN_C, CPU_CRIT_C, POOL_WARN_PCT, POOL_CRIT_PCT } from '../services/truenas';
 
+const RANK_LADDER = [
+  { name: 'Initiate',       days: 0   },
+  { name: 'Steward',        days: 1   },
+  { name: 'Ranger',         days: 7   },
+  { name: 'First Ranger',   days: 30  },
+  { name: 'Lord Commander', days: 100 },
+];
+
 function Row({ k, v, cls }) {
   return (
     <div className="ap-row">
@@ -79,6 +87,28 @@ function AppsDetail({ apps }) {
   );
 }
 
+function RankDetail({ cleanSince, now }) {
+  const cleanDays = cleanSince ? Math.floor((now - new Date(cleanSince)) / 86_400_000) : null;
+  const nextRank  = cleanDays != null ? RANK_LADDER.find(r => r.days > cleanDays) ?? null : null;
+  const daysUntil = nextRank ? nextRank.days - cleanDays : null;
+
+  if (cleanDays == null) return <Row k="streak" v="none" />;
+  return (
+    <>
+      <Row k="clean" v={`${cleanDays}d`} />
+      <div className="ap-rule" />
+      {nextRank ? (
+        <>
+          <Row k="next" v={nextRank.name} />
+          <Row k="in"   v={`${daysUntil}d`} />
+        </>
+      ) : (
+        <Row k="status" v="max rank" cls="ok" />
+      )}
+    </>
+  );
+}
+
 function PoolDetail({ pool }) {
   const pct = pool.size ? Math.round((pool.allocated / pool.size) * 100) : null;
   const cls = pool.status !== 'ONLINE' || pct >= POOL_CRIT_PCT ? 'crit' : pct >= POOL_WARN_PCT ? 'warn' : '';
@@ -96,7 +126,7 @@ function PoolDetail({ pool }) {
   );
 }
 
-export default function AmbientPopover({ chip, anchor, placement, nasData, onMouseEnter, onMouseLeave }) {
+export default function AmbientPopover({ chip, anchor, placement, nasData, cleanSince, now, onMouseEnter, onMouseLeave }) {
   if (!chip || !anchor) return null;
 
   const pools = Array.isArray(nasData?.pools) ? nasData.pools : [];
@@ -108,6 +138,7 @@ export default function AmbientPopover({ chip, anchor, placement, nasData, onMou
   else if (chip === 'mem')  content = <MemDetail  physmem={nasData?.info?.physmem} memFree={nasData?.memFree} arcSize={nasData?.arcSize} />;
   else if (chip === 'net')  content = <NetDetail  netStats={nasData?.netStats} />;
   else if (chip === 'apps') content = <AppsDetail apps={nasData?.apps ?? []} />;
+  else if (chip === 'rank') content = <RankDetail cleanSince={cleanSince} now={now} />;
   else if (pool)            content = <PoolDetail pool={pool} />;
 
   if (!content) return null;
