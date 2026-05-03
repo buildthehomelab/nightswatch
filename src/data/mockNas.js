@@ -27,9 +27,9 @@ export const MOCK_NAS_STAGES = [
     arcSize:    6.4e9,
     netStats:   { rx: 4.2  * 1024 * 1024, tx: 1.1 * 1024 * 1024 },
     pools: [
-      { name: 'tank',   status: 'ONLINE', size: 12*1e12, allocated: 5.0*1e12,  scan: { function: 'SCRUB', state: 'FINISHED', errors: 0 } },
-      { name: 'nvme',   status: 'ONLINE', size:  2*1e12, allocated: 0.6*1e12,  scan: { function: 'SCRUB', state: 'FINISHED', errors: 0 } },
-      { name: 'backup', status: 'ONLINE', size: 16*1e12, allocated: 8.3*1e12,  scan: { function: 'SCRUB', state: 'FINISHED', errors: 0 } },
+      { name: 'tank',   status: 'ONLINE', size: 12*1e12, allocated: 5.0*1e12,  scan: { function: 'SCRUB', state: 'FINISHED', errors: 0, end_time: now - 7 * 86400_000 } },
+      { name: 'nvme',   status: 'ONLINE', size:  2*1e12, allocated: 0.6*1e12,  scan: { function: 'SCRUB', state: 'FINISHED', errors: 0, end_time: now - 7 * 86400_000 } },
+      { name: 'backup', status: 'ONLINE', size: 16*1e12, allocated: 8.3*1e12,  scan: { function: 'SCRUB', state: 'FINISHED', errors: 0, end_time: now - 7 * 86400_000 } },
     ],
     apps: DEMO_APPS_RUNNING, alerts: [], updateStatus: null, diskTemps: [], stoppedSince: new Map(),
   },
@@ -41,9 +41,9 @@ export const MOCK_NAS_STAGES = [
     arcSize:    6.6e9,
     netStats:   { rx: 18.7 * 1024 * 1024, tx: 5.3 * 1024 * 1024 },
     pools: [
-      { name: 'tank',   status: 'ONLINE', size: 12*1e12, allocated: 5.0*1e12,  scan: { function: 'SCRUB', state: 'FINISHED', errors: 0 } },
-      { name: 'nvme',   status: 'ONLINE', size:  2*1e12, allocated: 0.6*1e12,  scan: { function: 'SCRUB', state: 'FINISHED', errors: 0 } },
-      { name: 'backup', status: 'ONLINE', size: 16*1e12, allocated: 8.3*1e12,  scan: { function: 'SCRUB', state: 'FINISHED', errors: 0 } },
+      { name: 'tank',   status: 'ONLINE', size: 12*1e12, allocated: 5.0*1e12,  scan: { function: 'SCRUB', state: 'FINISHED', errors: 0, end_time: now - 7 * 86400_000 } },
+      { name: 'nvme',   status: 'ONLINE', size:  2*1e12, allocated: 0.6*1e12,  scan: { function: 'SCRUB', state: 'FINISHED', errors: 0, end_time: now - 7 * 86400_000 } },
+      { name: 'backup', status: 'ONLINE', size: 16*1e12, allocated: 8.3*1e12,  scan: { function: 'SCRUB', state: 'FINISHED', errors: 0, end_time: now - 7 * 86400_000 } },
     ],
     apps: DEMO_APPS_RUNNING, alerts: [], updateStatus: null, diskTemps: [], stoppedSince: new Map(),
   },
@@ -55,9 +55,9 @@ export const MOCK_NAS_STAGES = [
     arcSize:    7.2e9,
     netStats:   { rx: 48.3 * 1024 * 1024, tx: 11.7 * 1024 * 1024 },
     pools: [
-      { name: 'tank',   status: 'ONLINE', size: 12*1e12, allocated: 7.8*1e12,  scan: { function: 'SCRUB', state: 'FINISHED', errors: 0 } }, // 65%
-      { name: 'nvme',   status: 'ONLINE', size:  2*1e12, allocated: 0.7*1e12,  scan: { function: 'SCRUB', state: 'FINISHED', errors: 0 } },
-      { name: 'backup', status: 'ONLINE', size: 16*1e12, allocated: 9.6*1e12,  scan: { function: 'SCRUB', state: 'FINISHED', errors: 0 } }, // 60%
+      { name: 'tank',   status: 'ONLINE', size: 12*1e12, allocated: 7.8*1e12,  scan: { function: 'SCRUB', state: 'FINISHED', errors: 0, end_time: now - 7 * 86400_000 } }, // 65%
+      { name: 'nvme',   status: 'ONLINE', size:  2*1e12, allocated: 0.7*1e12,  scan: { function: 'SCRUB', state: 'FINISHED', errors: 0, end_time: now - 7 * 86400_000 } },
+      { name: 'backup', status: 'ONLINE', size: 16*1e12, allocated: 9.6*1e12,  scan: { function: 'SCRUB', state: 'FINISHED', errors: 0, end_time: now - 7 * 86400_000 } }, // 60%
     ],
     apps: DEMO_APPS_RUNNING, alerts: [], updateStatus: null, diskTemps: [], stoppedSince: new Map(),
   },
@@ -69,9 +69,9 @@ export const MOCK_NAS_STAGES = [
     arcSize:    7.8e9,
     netStats:   { rx: 92.4 * 1024 * 1024, tx: 24.1 * 1024 * 1024 },
     pools: [
-      { name: 'tank',   status: 'ONLINE', size: 12*1e12, allocated: 9.2*1e12,  scan: { function: 'SCRUB', state: 'FINISHED', errors: 0 } }, // 77%
-      { name: 'nvme',   status: 'ONLINE', size:  2*1e12, allocated: 0.7*1e12,  scan: { function: 'SCRUB', state: 'FINISHED', errors: 0 } },
-      { name: 'backup', status: 'ONLINE', size: 16*1e12, allocated: 11.8*1e12, scan: { function: 'SCRUB', state: 'FINISHED', errors: 0 } }, // 74%
+      { name: 'tank',   status: 'ONLINE', size: 12*1e12, allocated: 9.2*1e12,  scan: { function: 'SCRUB', state: 'FINISHED', errors: 0, end_time: now - 7 * 86400_000 } }, // 77%
+      { name: 'nvme',   status: 'ONLINE', size:  2*1e12, allocated: 0.7*1e12,  scan: { function: 'SCRUB', state: 'FINISHED', errors: 0, end_time: now - 7 * 86400_000 } },
+      { name: 'backup', status: 'ONLINE', size: 16*1e12, allocated: 11.8*1e12, scan: { function: 'SCRUB', state: 'FINISHED', errors: 0, end_time: now - 7 * 86400_000 } }, // 74%
     ],
     apps: DEMO_APPS_RUNNING, alerts: [], updateStatus: null, diskTemps: [], stoppedSince: new Map(),
   },
