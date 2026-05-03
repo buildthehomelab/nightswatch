@@ -1,7 +1,8 @@
 import { useState, useEffect, useRef } from 'react';
 import { MOCK_NAS_DATA } from '../data/mockNas';
 
-export const UI  = import.meta.env.VITE_TRUENAS_URL ?? "";
+const _rawUI = import.meta.env.VITE_TRUENAS_URL ?? "";
+export const UI = _rawUI && !_rawUI.startsWith("https://") ? `https://${_rawUI.replace(/^https?:\/\//, "")}` : _rawUI;
 const API = "/truenas/api/v2.0";
 const STOPPED_HIDE_MINUTES = Number(import.meta.env.VITE_STOPPED_APP_HIDE_MINUTES ?? 0) || 0;
 export const POOL_WARN_PCT = Number(import.meta.env.VITE_POOL_WARN_PCT ?? 80) || 80;
