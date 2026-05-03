@@ -47,8 +47,8 @@ body {
   transition: background-color .4s ease, color .4s ease;
 }
 
-::selection { background: var(--accent); color: var(--paper); }
-[data-theme="dark"] ::selection { background: #e8a030; color: #131210; }
+::selection { background: var(--accent); color: #ffffff; }
+[data-theme="dark"] ::selection { background: #c2ef4e; color: #1f1633; }
 
 .page {
   max-width: 1200px;
