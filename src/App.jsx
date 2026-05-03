@@ -1,5 +1,6 @@
 import { useState, useEffect, useRef, useMemo } from 'react';
 import Dozzle from './components/Dozzle';
+import AmbientPopover from './components/AmbientPopover';
 import { useTrueNas, nasIssues, fmtUptime, fmtAge, fmtBytes, fmtRate, UI as NAS_UI, POOL_WARN_PCT, POOL_CRIT_PCT, CPU_WARN_C, CPU_CRIT_C } from './services/truenas';
 import { useCve, cveIssues, BASE_CVE_KEYWORDS } from './services/cve';
 
@@ -144,6 +145,20 @@ function Ambient({ now, wanUp, uptime, rank, weather, showWeather, showWan, show
   const cpuCls   = cpuTemp == null ? '' : cpuTemp >= CPU_CRIT_C ? ' crit' : cpuTemp >= CPU_WARN_C ? ' warn' : '';
   const memFree = nasData?.memFree ?? null;
 
+  const [popoverChip, setPopoverChip] = useState(null);
+  const [popoverAnchor, setPopoverAnchor] = useState(null);
+  const closeTimerRef = useRef(null);
+
+  const openPopover = (chipId, e) => {
+    clearTimeout(closeTimerRef.current);
+    setPopoverChip(chipId);
+    setPopoverAnchor(e.currentTarget.getBoundingClientRect());
+  };
+  const scheduleClose = () => {
+    closeTimerRef.current = setTimeout(() => setPopoverChip(null), 150);
+  };
+  const cancelClose = () => clearTimeout(closeTimerRef.current);
+
   return (
     <footer className="ambient rise" data-placement={placement}>
       {showNas && nasData && (
@@ -154,28 +169,30 @@ function Ambient({ now, wanUp, uptime, rank, weather, showWeather, showWan, show
             </span>
           )}
           {showNasLoad && load1 && (
-            <span className="item"><span className="k">load</span><span className="v">{load1}</span></span>
+            <span className="item" onMouseEnter={(e) => openPopover('load', e)} onMouseLeave={scheduleClose}>
+              <span className="k">load</span><span className="v">{load1}</span>
+            </span>
           )}
           {showNasCpuTemp && cpuTemp != null && (
-            <span className="item">
+            <span className="item" onMouseEnter={(e) => openPopover('cpu', e)} onMouseLeave={scheduleClose}>
               <span className="k">cpu</span>
               <span className={`v${cpuCls}`}>{cpuTemp}°C</span>
             </span>
           )}
           {showNasMemory && memFree != null && (
-            <span className="item">
+            <span className="item" onMouseEnter={(e) => openPopover('mem', e)} onMouseLeave={scheduleClose}>
               <span className="k">mem free</span>
               <span className="v">{fmtBytes(memFree)}</span>
             </span>
           )}
           {showNasNet && nasData?.netStats && (
-            <span className="item">
+            <span className="item" onMouseEnter={(e) => openPopover('net', e)} onMouseLeave={scheduleClose}>
               <span className="k">net</span>
               <span className="v">↓{fmtRate(nasData.netStats.rx)} ↑{fmtRate(nasData.netStats.tx)}</span>
             </span>
           )}
           {showNasApps && apps.length > 0 && (
-            <span className="item">
+            <span className="item" onMouseEnter={(e) => openPopover('apps', e)} onMouseLeave={scheduleClose}>
               <span className="k">apps</span>
               <span className="v">{running}/{apps.length}</span>
             </span>
@@ -186,7 +203,7 @@ function Ambient({ now, wanUp, uptime, rank, weather, showWeather, showWan, show
             const dotCls = !ok || pct >= POOL_CRIT_PCT ? ' crit' : pct >= POOL_WARN_PCT ? ' warn' : '';
             const valCls = !ok || pct >= POOL_CRIT_PCT ? ' crit' : pct >= POOL_WARN_PCT ? ' warn' : '';
             return (
-              <span key={pool.name} className="item">
+              <span key={pool.name} className="item" onMouseEnter={(e) => openPopover(pool.name, e)} onMouseLeave={scheduleClose}>
                 <span className={`dot${dotCls}`} />
                 <span className="k">{pool.name}</span>
                 <span className={`v${valCls}`}>{pct != null ? `${pct}%` : '—'}</span>
@@ -229,6 +246,14 @@ function Ambient({ now, wanUp, uptime, rank, weather, showWeather, showWan, show
           </span>
         )}
       </div>
+      <AmbientPopover
+        chip={popoverChip}
+        anchor={popoverAnchor}
+        placement={placement}
+        nasData={nasData}
+        onMouseEnter={cancelClose}
+        onMouseLeave={scheduleClose}
+      />
     </footer>
   );
 }
