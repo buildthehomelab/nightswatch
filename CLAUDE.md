@@ -26,11 +26,11 @@ React + Vite SPA. Minimal, attention-driven homelab status page. Silence is the 
 
 ## Docs
 
-- [`docs/features.md`](docs/features.md) — full feature reference
-- [`docs/logic.md`](docs/logic.md) — state machine, issue pipeline, data flow
-- [`docs/design.md`](docs/design.md) — design tokens, typography, spacing
-- [`docs/truenas-v26.md`](docs/truenas-v26.md) — ⚠️ breaking changes in TrueNAS 26
-- [`CONTRIBUTING.md`](CONTRIBUTING.md) — how to add integrations and phrases
+- [`docs/features.md`](docs/features.md): full feature reference
+- [`docs/logic.md`](docs/logic.md): state machine, issue pipeline, data flow
+- [`docs/design.md`](docs/design.md): design tokens, typography, spacing
+- [`docs/truenas-v26.md`](docs/truenas-v26.md): ⚠️ breaking changes in TrueNAS 26
+- [`CONTRIBUTING.md`](CONTRIBUTING.md): how to add integrations and phrases
 
 ## Architecture
 
