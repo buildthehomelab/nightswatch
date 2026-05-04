@@ -446,6 +446,11 @@ body.has-bg-image.density-compact .issue { padding: 11px 16px; }
   opacity: 1;
   margin-top: 4px;
 }
+.issue.open .details-inner > * { animation: rise .2s ease both; }
+.issue.open .details-inner > *:nth-child(1) { animation-delay: .08s; }
+.issue.open .details-inner > *:nth-child(2) { animation-delay: .15s; }
+.issue.open .details-inner > *:nth-child(3) { animation-delay: .22s; }
+
 .issue .details-inner {
   padding: 16px 20px;
   background: var(--paper-2);
