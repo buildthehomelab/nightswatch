@@ -718,7 +718,7 @@ body.has-bg-image.density-compact .issue { padding: 11px 16px; }
   display: flex;
   align-items: center;
   gap: 8px;
-  padding: 10px 16px;
+  padding: 6px 48px;
   border-bottom: 1px solid var(--rule);
   flex-shrink: 0;
 }
