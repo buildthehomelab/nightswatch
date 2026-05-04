@@ -13,7 +13,7 @@ const DEMO_APPS_RUNNING = [
 ];
 
 const DEMO_INFO_BASE = {
-  hostname: 'patronus', cores: 8,
+  hostname: 'truenas', cores: 8,
   version: 'TrueNAS-SCALE-25.10.3', physmem: 32 * 1e9,
   uptime_seconds: 86400 * 12 + 3600 * 4 + 60 * 22,
 };
