@@ -340,6 +340,7 @@ Output format: "4d" | "12h" | "45m" | "30s"
 | `services/truenas.js` | `/truenas/api/v2.0/*` poll | `nasData`, `nasIssues()` — pure data, no JSX |
 | `services/cve.js` | NVD API poll (direct) | `cveData`, `cveIssues()` — pure data, no JSX |
 | `CustomizePanel.jsx` | keyboard, localStorage | `[settings, setSettings]` via `useCustomize()` |
+| `AmbientPopover.jsx` | chip id, anchor rect, nasData | hover detail panels for ambient strip chips |
 | `Dozzle.jsx` | `open` prop, `VITE_DOZZLE_URL` | iframe log viewer overlay |
 | `src/data/fixtures.js` | — | static demo issues for healthy/warnings/critical states |
 | `src/data/mockNas.js` | — | mock TrueNAS API response for offline dev |
