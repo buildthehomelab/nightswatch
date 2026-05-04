@@ -859,6 +859,7 @@ export default function App() {
         open={dozzleOpen}
         onClose={() => setDozzleOpen(false)}
         initialContainer={dozzleContainer}
+        placement={t.ambientPlacement}
       />
 
       <CustomizePanel side={t.ambientPlacement === "bottom" ? "top" : "bottom"}>
