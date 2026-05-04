@@ -49,7 +49,7 @@ A "service" in Nightswatch is a file in `src/services/` that:
 
 ```js
 {
-  id:          string,          // unique, stable — used for ignore persistence
+  id:          string,          // unique, stable; used for ignore persistence
   severity:    'crit' | 'warn' | 'info',
   label:       string,          // short badge text (e.g. "pool degraded")
   headline:    string,          // one sentence, ends with a period
