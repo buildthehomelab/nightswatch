@@ -78,7 +78,7 @@ Three top-level states driven by `issues.length` and severity:
 
 ## CustomizePanel
 
-Dev-only controls, opened with backtick / `h` / `?`. Persisted to localStorage (`nightswatch:customize`) via `useCustomize()`.
+Dev-only controls, opened with `h` / `?`. Persisted to localStorage (`nightswatch:customize`) via `useCustomize()`.
 
 Defaults (`CUSTOMIZE_DEFAULTS` in App.jsx):
 - `theme`: "dark"
