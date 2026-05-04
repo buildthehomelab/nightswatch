@@ -629,6 +629,13 @@ body.has-bg-image.density-compact .issue { padding: 11px 16px; }
   transform: translateY(calc(-100% - 1px));
 }
 .dozzle.open { transform: translateY(0); }
+.dozzle--fullscreen {
+  top: 0; height: auto;
+  border-left: 1px solid var(--rule);
+  border-top: none;
+  transform: translateX(100%);
+}
+.dozzle--fullscreen.open { transform: translateX(0); }
 
 .dozzle-hd {
   display: flex;
