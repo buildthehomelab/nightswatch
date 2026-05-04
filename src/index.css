@@ -634,9 +634,10 @@ body.has-bg-image.density-compact .issue { padding: 11px 16px; }
   display: flex;
   align-items: center;
   justify-content: space-between;
-  padding: 20px 20px 16px;
+  padding: 10px 48px;
   border-bottom: 1px solid var(--rule);
   flex-shrink: 0;
+  gap: 24px;
 }
 .dozzle-title {
   display: flex; align-items: baseline; gap: 12px;
