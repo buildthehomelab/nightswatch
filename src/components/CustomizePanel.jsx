@@ -1,4 +1,4 @@
-import { useState, useRef, useEffect, useCallback } from 'react';
+import { useState, useRef, useEffect, useCallback, useId } from 'react';
 
 const __CUSTOMIZE_STYLE = `
   .twk-scrim {
@@ -307,3 +307,32 @@ export function CustomizeRadio({ label, value, options, onChange }) {
   );
 }
 
+export function BgImagePicker({ value, onChange }) {
+  const id = useId();
+  const [err, setErr] = useState('');
+
+  const handleFile = (e) => {
+    const file = e.target.files?.[0];
+    if (!file) return;
+    const reader = new FileReader();
+    reader.onload = (ev) => { onChange(ev.target.result); setErr(''); };
+    reader.onerror = () => setErr('Failed to read file');
+    reader.readAsDataURL(file);
+    e.target.value = '';
+  };
+
+  return (
+    <div className="twk-row">
+      <input id={id} type="file" accept="image/*" style={{ display: 'none' }} onChange={handleFile} />
+      {value ? (
+        <div className="twk-bg-preview">
+          <img className="twk-bg-thumb" src={value} alt="" />
+          <button type="button" className="twk-bg-btn" onClick={() => onChange('')}>remove</button>
+        </div>
+      ) : (
+        <label htmlFor={id} className="twk-bg-btn" style={{ display: 'inline-block' }}>upload image</label>
+      )}
+      {err && <div className="twk-bg-err">{err}</div>}
+    </div>
+  );
+}
