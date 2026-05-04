@@ -111,6 +111,14 @@ Key variables:
 | `npm run test` | Vitest |
 | `npm run setup` | Install git hooks (run once after cloning) |
 
+**Docker:**
+
+| Command | Description |
+|---|---|
+| `docker compose up` | Dev server with HMR (HTTPS, port 5173) |
+| `docker compose -f docker-compose.prod.yml --env-file .env.local build` | Build production image |
+| `docker compose -f docker-compose.prod.yml --env-file .env.local up -d` | Run production container (HTTP, port 8080) |
+
 ---
 
 ## Keyboard shortcuts
