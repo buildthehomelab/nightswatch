@@ -57,7 +57,7 @@ Copy `.env.example` to `.env.local`. All options documented there.
 |---|---|---|
 | `TRUENAS_HOST` | TrueNAS | Hostname or IP |
 | `TRUENAS_PORT` | TrueNAS | HTTPS port (default 443) |
-| `TRUENAS_KEY` | TrueNAS | API key from TrueNAS Settings > API Keys |
+| `TRUENAS_KEY` | TrueNAS | [API key](https://www.truenas.com/docs/scale/toptoolbar/managingapikeys/) from TrueNAS Settings > API Keys |
 | `TRUENAS_UI_URL` | Optional | Browser-facing URL override (split DNS) |
 | `DOZZLE_URL` | Optional | Dozzle instance URL for log viewing |
 | `WEATHER_LOCATION` | Optional | City name or coordinates (wttr.in) |
