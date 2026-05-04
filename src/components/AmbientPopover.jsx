@@ -96,13 +96,40 @@ function MemDetail({ physmem, memFree, arcSize }) {
   );
 }
 
+const GBE_MAX = 125 * 1024 * 1024;
+
 function NetDetail({ netStats }) {
+  const rx     = netStats?.rx ?? 0;
+  const tx     = netStats?.tx ?? 0;
+  const ifaces = netStats?.ifaces ?? [];
+
+  const rxPct = Math.min(100, Math.round((rx / GBE_MAX) * 100));
+  const txPct = Math.min(100, Math.round((tx / GBE_MAX) * 100));
+  const rxCls = rxPct >= 90 ? 'crit' : rxPct >= 70 ? 'warn' : '';
+  const txCls = txPct >= 90 ? 'crit' : txPct >= 70 ? 'warn' : '';
+
   return (
     <>
-      <Head label="network" />
+      <Head label={ifaces.length > 1 ? `network · ${ifaces.length} ifaces` : 'network'} />
       <div className="ap-body">
-        <Row k="↓ rx" v={fmtRate(netStats?.rx)} />
-        <Row k="↑ tx" v={fmtRate(netStats?.tx)} />
+        <Row k="↓ rx" v={fmtRate(rx)} cls={rxCls || undefined} />
+        <MiniBar pct={rxPct} cls={rxCls} />
+        <Row k="↑ tx" v={fmtRate(tx)} cls={txCls || undefined} />
+        <MiniBar pct={txPct} cls={txCls} />
+        {ifaces.length > 0 && (
+          <>
+            <div className="ap-rule" />
+            {ifaces.map((iface) => (
+              <div key={iface.name} className="ap-net-iface">
+                <div className="ap-net-iface-name">{iface.name}</div>
+                <Row k="↓" v={fmtRate(iface.rx)} />
+                <Row k="↑" v={fmtRate(iface.tx)} />
+              </div>
+            ))}
+          </>
+        )}
+        <div className="ap-rule" />
+        <Row k="ref" v="1 GbE" />
       </div>
     </>
   );
