@@ -10,7 +10,7 @@ const SERVICE_CVE_KEYWORDS = {
 import { CVE_FIXTURES, ISSUE_FIXTURES } from './data/fixtures';
 import { MOCK_NAS_STAGES } from './data/mockNas';
 
-const DEMO = import.meta.env.DEMO === 'true';
+import { DEMO, WEATHER_LOCATION as _WEATHER_LOCATION } from './nwenv';
 
 const DEMO_STAGES = DEMO ? [
   { issues: [],                               nasData: MOCK_NAS_STAGES[0], duration: 10_000 },
@@ -22,7 +22,7 @@ import {
   useCustomize, CustomizePanel, CustomizeColumn, CustomizeSection, CustomizeRadio, CustomizeToggle, BgImagePicker,
 } from './components/CustomizePanel';
 
-const WEATHER_LOCATION = import.meta.env.VITE_WEATHER_LOCATION ?? "";
+const WEATHER_LOCATION = _WEATHER_LOCATION;
 
 if (DEMO) document.title = 'Nightswatch [demo]';
 
