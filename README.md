@@ -32,10 +32,20 @@ Issues auto-escalate with age. Keyboard-first navigation. Everything persists to
 
 ## Quick start
 
-### Docker (recommended)
+### Pre-built image (fastest)
 
 ```sh
-git clone https://github.com/your-username/nightswatch.git
+curl -o docker-compose.yml https://raw.githubusercontent.com/hybridlabs-dev/nightswatch/main/docker-compose.example.yml
+# edit docker-compose.yml: set TRUENAS_HOST, TRUENAS_PORT, TRUENAS_KEY
+docker compose up -d
+```
+
+Open `http://localhost:8080`.
+
+### From source (dev / contributors)
+
+```sh
+git clone https://github.com/hybridlabs-dev/nightswatch.git
 cd nightswatch
 cp .env.example .env.local
 # edit .env.local: set TRUENAS_HOST, TRUENAS_PORT, and TRUENAS_KEY at minimum
