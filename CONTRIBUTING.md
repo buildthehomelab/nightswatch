@@ -97,7 +97,7 @@ Chips in the ambient strip that open popovers live in `src/components/AmbientPop
 
 ## Phrases and copy
 
-Phrases live in the `PHRASES` object in `src/App.jsx`. Each bucket is an array of strings — add to any bucket or add a new bucket (and a corresponding priority rule in `mastheadPhrase()`).
+Phrases live in the `PHRASES` object in `src/App.jsx`. Each bucket is an array of strings. Add to any bucket or add a new bucket (and a corresponding priority rule in `mastheadPhrase()`).
 
 The project has a voice: dry, sardonic, a little tired. Keep it in that register.
 
