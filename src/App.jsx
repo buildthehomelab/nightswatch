@@ -184,30 +184,30 @@ function Ambient({ now, wanUp, wanDownSince, uptime, rank, cleanSince, weather, 
             </span>
           )}
           {showNasLoad && load1 && (
-            <span className="item" onMouseEnter={(e) => openPopover('load', e)} onMouseLeave={scheduleClose}>
+            <span className="item item-pop" onMouseEnter={(e) => openPopover('load', e)} onMouseLeave={scheduleClose}>
               <span className="k">load</span><span className="v">{load1}</span>
             </span>
           )}
           {showNasCpuTemp && cpuTemp != null && (
-            <span className="item" onMouseEnter={(e) => openPopover('cpu', e)} onMouseLeave={scheduleClose}>
+            <span className="item item-pop" onMouseEnter={(e) => openPopover('cpu', e)} onMouseLeave={scheduleClose}>
               <span className="k">cpu</span>
               <span className={`v${cpuCls}`}>{cpuTemp}°C</span>
             </span>
           )}
           {showNasMemory && memFree != null && (
-            <span className="item" onMouseEnter={(e) => openPopover('mem', e)} onMouseLeave={scheduleClose}>
+            <span className="item item-pop" onMouseEnter={(e) => openPopover('mem', e)} onMouseLeave={scheduleClose}>
               <span className="k">mem free</span>
               <span className="v">{fmtBytes(memFree)}</span>
             </span>
           )}
           {showNasNet && nasData?.netStats && (
-            <span className="item" onMouseEnter={(e) => openPopover('net', e)} onMouseLeave={scheduleClose}>
+            <span className="item item-pop" onMouseEnter={(e) => openPopover('net', e)} onMouseLeave={scheduleClose}>
               <span className="k">net</span>
               <span className="v">↓{fmtRate(nasData.netStats.rx)} ↑{fmtRate(nasData.netStats.tx)}</span>
             </span>
           )}
           {showNasApps && apps.length > 0 && (
-            <span className="item" onMouseEnter={(e) => openPopover('apps', e)} onMouseLeave={scheduleClose}>
+            <span className="item item-pop" onMouseEnter={(e) => openPopover('apps', e)} onMouseLeave={scheduleClose}>
               <span className="k">apps</span>
               <span className="v">{running}/{apps.length}</span>
             </span>
@@ -218,7 +218,7 @@ function Ambient({ now, wanUp, wanDownSince, uptime, rank, cleanSince, weather, 
             const dotCls = !ok || pct >= POOL_CRIT_PCT ? ' crit' : pct >= POOL_WARN_PCT ? ' warn' : '';
             const valCls = !ok || pct >= POOL_CRIT_PCT ? ' crit' : pct >= POOL_WARN_PCT ? ' warn' : '';
             return (
-              <span key={pool.name} className="item" onMouseEnter={(e) => openPopover(pool.name, e)} onMouseLeave={scheduleClose}>
+              <span key={pool.name} className="item item-pop" onMouseEnter={(e) => openPopover(pool.name, e)} onMouseLeave={scheduleClose}>
                 <span className={`dot${dotCls}`} />
                 <span className="k">{pool.name}</span>
                 <span className={`v${valCls}`}>{pct != null ? `${pct}%` : '—'}</span>
