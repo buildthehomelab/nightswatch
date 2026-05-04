@@ -62,6 +62,10 @@ Three top-level states driven by `issues.length` and severity:
 
 See `docs/design.md` for the full reference. CSS custom properties on `:root`, switched via `data-theme="light|dark"` on `<html>`.
 
+## Writing style
+
+No em dashes (—) in documentation. Use a colon to introduce, a semicolon between independent clauses, a comma or parentheses for a qualifier, or split into two sentences.
+
 ## TrueNAS version
 
 Currently targets **TrueNAS SCALE 25.10.x** (REST API v2.0). TrueNAS 26 removes REST; see `docs/truenas-v26.md` before upgrading.
