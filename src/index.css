@@ -211,7 +211,7 @@ body {
 .ap-app-ver { color: var(--ink-3); white-space: nowrap; font-size: 10.5px; margin-left: auto; }
 
 /* ── Rank popover ────────────────────────────────────── */
-.rk-wrap { min-width: 200px; }
+.rk-wrap { width: 100%; }
 .rk-header { display: flex; justify-content: space-between; align-items: baseline; margin-bottom: 5px; }
 .rk-name { font-family: var(--sans); font-size: 12px; font-weight: 600; color: var(--ok); }
 .rk-pct  { font-family: var(--mono); font-size: 10px; color: var(--ink-3); }
