@@ -8,6 +8,11 @@ server {
     gzip_types text/plain text/css application/javascript application/json image/svg+xml;
     gzip_min_length 1024;
 
+    location = /__nwenv.js {
+        expires -1;
+        add_header Cache-Control "no-store";
+    }
+
     location / {
         try_files $uri $uri/ /index.html;
     }
