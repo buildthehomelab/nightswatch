@@ -842,8 +842,11 @@ body.has-bg-image.density-compact .issue { padding: 11px 16px; }
   border: 1px solid var(--rule);
   transition: all 0.1s;
   user-select: none;
+  appearance: none;
+  line-height: 1.4;
 }
 .dozzle-chip.on { color: var(--ink); border-color: var(--ink-2); }
+.dozzle-chip:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
 
 .dozzle-stream {
   flex: 1;
