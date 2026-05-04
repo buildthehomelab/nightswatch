@@ -1,0 +1,11 @@
+node_modules/
+dist/
+.git/
+.env.local
+*.local
+.claude/
+.DS_Store
+coverage/
+scripts/
+docs/
+wrangler.toml
