@@ -244,15 +244,20 @@ Opens automatically if URL contains `?dev`. Toggle with backtick / `h` / `?`.
 | `showWan` | `true` | WAN up/down in ambient strip |
 | `showUptime` | `true` | system uptime in ambient strip |
 | `showDate` | `true` | current date in ambient strip |
+| `showRank` | `true` | operator rank chip in ambient strip (based on clean-since streak) |
 | `enableTruenas` | `false` | enables TrueNAS API polling (useTrueNas hook); controls issue derivation |
 | `showNas` | `false` | TrueNAS data strip (hidden by default; independent of enableTruenas) |
 | `showNasName` | `true` | NAS hostname as link |
 | `showNasLoad` | `true` | load average |
 | `showNasCpuTemp` | `true` | CPU temp, colored at warn/crit thresholds |
 | `showNasMemory` | `true` | free memory in bytes |
+| `showNasNet` | `true` | network throughput ↓rx ↑tx |
 | `showNasApps` | `true` | running / total app count |
 | `showNasPools` | `true` | pool % used, colored dots at warn/crit |
 | `ambientPlacement` | `"bottom"` | ambient strip position: `bottom` or `top` |
+| `bgFit` | `"cover"` | background image fit: `cover`, `contain`, `stretch`, `tile` |
+| `bgPosition` | `"center"` | background image position (CSS `background-position`) |
+| `bgDim` | `0` | background image dim overlay opacity (0–1) |
 
 **Ignored panel** shows only currently active ignored issues — ones whose `ignoreKey` exists in the current `issues` array. Historical/stale ignored keys are silently filtered out of the display (but remain in localStorage until manually cleared).
 
