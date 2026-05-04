@@ -6,9 +6,8 @@ const CACHE_TTL     = 60 * 60 * 1000;
 const LS_CACHE_KEY  = 'cve:cache';
 const LS_FIRST_SEEN = 'cve:firstSeen';
 
-export const BASE_CVE_KEYWORDS = (import.meta.env.VITE_CVE_KEYWORDS ?? '').split(',').map(s => s.trim()).filter(Boolean);
-const CVE_DAYS_BACK = Number(import.meta.env.VITE_CVE_DAYS_BACK ?? 30) || 30;
-const CVE_MIN_CVSS  = Number(import.meta.env.VITE_CVE_MIN_CVSS  ?? 4.0) || 4.0;
+import { CVE_KEYWORDS_RAW, CVE_DAYS_BACK, CVE_MIN_CVSS } from '../nwenv';
+export const BASE_CVE_KEYWORDS = CVE_KEYWORDS_RAW.split(',').map(s => s.trim()).filter(Boolean);
 
 // ── localStorage ──────────────────────────────────────────
 
