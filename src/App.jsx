@@ -150,7 +150,7 @@ function GearIcon() {
   );
 }
 
-function Ambient({ now, wanUp, uptime, rank, cleanSince, weather, weatherForecast, showWeather, showWan, showUptime, showRank, showNas, showNasName, showNasLoad, showNasCpuTemp, showNasMemory, showNasApps, showNasPools, showNasNet, showDate, placement, nasData, toured, onOpenCustomize }) {
+function Ambient({ now, wanUp, uptime, rank, cleanSince, weather, weatherForecast, startTimeMs, nasUptimeSeconds, nasVersion, showWeather, showWan, showUptime, showRank, showNas, showNasName, showNasLoad, showNasCpuTemp, showNasMemory, showNasApps, showNasPools, showNasNet, showDate, placement, nasData, toured, onOpenCustomize }) {
   const pools    = Array.isArray(nasData?.pools) ? nasData.pools : [];
   const apps     = Array.isArray(nasData?.apps)  ? nasData.apps  : [];
   const running  = apps.filter(a => a.state === 'RUNNING').length;
@@ -249,7 +249,7 @@ function Ambient({ now, wanUp, uptime, rank, cleanSince, weather, weatherForecas
           </span>
         )}
         {showUptime && (
-          <span className="item">
+          <span className="item" onMouseEnter={(e) => openPopover('uptime', e)} onMouseLeave={scheduleClose}>
             <span className="k">uptime</span>
             <span className="v">{uptime}</span>
           </span>
@@ -274,6 +274,9 @@ function Ambient({ now, wanUp, uptime, rank, cleanSince, weather, weatherForecas
         cleanSince={cleanSince}
         now={now}
         weatherForecast={weatherForecast}
+        startTimeMs={startTimeMs}
+        nasUptimeSeconds={nasUptimeSeconds}
+        nasVersion={nasVersion}
         onMouseEnter={cancelClose}
         onMouseLeave={scheduleClose}
       />
