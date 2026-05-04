@@ -643,25 +643,22 @@ body.has-bg-image.density-compact .issue { padding: 11px 16px; }
   display: flex; align-items: baseline; gap: 12px;
 }
 .dozzle-label {
-  font-family: var(--sans);
   font-size: 12px; font-weight: 600;
   color: var(--ink);
 }
 .dozzle-active-name {
-  font-family: var(--sans);
   font-size: 12px; font-weight: 400;
   color: var(--ink-2);
 }
 .dozzle-url {
-  font-family: var(--sans);
   font-size: 12px; font-weight: 400;
   color: var(--ink-3);
   opacity: 0.5;
 }
 .dozzle-close {
   appearance: none; border: 0; background: transparent;
-  color: var(--ink-3); font-family: var(--sans); font-size: 12px; font-weight: 600;
-  cursor: default; padding: 0;
+  color: var(--ink-3); font-size: 12px; font-weight: 600;
+  cursor: default; padding: 0; margin-left: auto;
   transition: color 0.12s;
 }
 .dozzle-close:hover { color: var(--ink); }
