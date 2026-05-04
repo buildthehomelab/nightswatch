@@ -106,6 +106,15 @@ body {
 .ambient-link { color: var(--accent); text-decoration: none; font-weight: 600; }
 .ambient-link:hover { text-decoration: underline; }
 .ambient .item:not(:has(.ambient-link)) { cursor: default; }
+.ambient .item-pop {
+  border-radius: 4px;
+  transition: background .15s, padding .15s, margin .15s;
+}
+.ambient .item-pop:hover {
+  background: var(--paper-2);
+  padding: 2px 5px;
+  margin: -2px -5px;
+}
 .ambient-help {
   appearance: none;
   border: 1px solid transparent;
