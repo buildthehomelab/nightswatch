@@ -186,8 +186,9 @@ Phrases rotate every 60 seconds, never repeat back-to-back. Each bucket is indep
 Press `` ` `` to open the customization panel. All settings persist across sessions via localStorage.
 
 - Light / dark theme
-- Ambient strip placement and per-metric visibility
-- TrueNAS enable + ambient strip sub-toggles
+- Background image (with fit, position, and dim controls)
+- Ambient strip placement and per-metric visibility (date, uptime, rank, WAN, weather)
+- TrueNAS enable + ambient strip sub-toggles (apps, CPU temp, load, memory, name, network, pools)
 - CVE feed enable
 - Ignored issues list (with per-issue unignore)
 - Keyboard shortcuts reference
