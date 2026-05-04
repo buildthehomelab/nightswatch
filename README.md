@@ -104,7 +104,8 @@ ghcr.io/hybridlabs-dev/nightswatch:0.1
 
 ## TrueNAS v26 warning
 
-TrueNAS 26.0 removes REST (`/api/v2.0`) entirely. Do not upgrade before migration is complete. See [`docs/truenas-v26.md`](docs/truenas-v26.md).
+TrueNAS 26.0 removes REST (`/api/v2.0`) entirely. Do not upgrade before migration is complete. 
+See [`docs/truenas-v26.md`](docs/truenas-v26.md).
 
 ---
 
