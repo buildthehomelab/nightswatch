@@ -137,18 +137,44 @@ Key variables:
 
 ## Deployment
 
-### Docker (recommended)
+### Pre-built image (recommended)
+
+No cloning or building required. Copy [`docker-compose.example.yml`](docker-compose.example.yml), fill in your values, and run:
 
 ```sh
+curl -o docker-compose.yml https://raw.githubusercontent.com/hybridlabs-dev/nightswatch/main/docker-compose.example.yml
+# edit docker-compose.yml: set TRUENAS_HOST, TRUENAS_PORT, TRUENAS_KEY
+docker compose up -d
+```
+
+The image is published to GHCR on every release:
+
+```
+ghcr.io/hybridlabs-dev/nightswatch:latest   # most recent release
+ghcr.io/hybridlabs-dev/nightswatch:0.1      # minor-pinned
+ghcr.io/hybridlabs-dev/nightswatch:0.1.0    # exact version
+```
+
+### Build from source
+
+```sh
+git clone https://github.com/hybridlabs-dev/nightswatch.git
+cd nightswatch
+cp .env.example .env.local
+# edit .env.local: set TRUENAS_HOST, TRUENAS_PORT, TRUENAS_KEY
 docker compose -f docker-compose.prod.yml --env-file .env.local build
 docker compose -f docker-compose.prod.yml --env-file .env.local up -d
 ```
 
-The container serves HTTP on port 8080 and handles the TrueNAS proxy internally; no external reverse proxy is required. Point your existing proxy (Traefik, Nginx Proxy Manager, Caddy) at port 8080 for HTTPS termination and domain routing.
+### Notes
+
+The container serves HTTP on port 8080. Point your existing reverse proxy (Traefik, Nginx Proxy Manager, Caddy) at port 8080 for HTTPS termination and domain routing. No external proxy is required otherwise.
 
 Set `PORT=` in your environment to map a different host port.
 
-### Manual
+Gate the entire dashboard behind your reverse-proxy auth layer (Authelia, Authentik, Tailscale). The dashboard exposes NAS operational state and should not be public.
+
+### Manual (no Docker)
 
 Build with `npm run build` and serve `dist/` behind a reverse proxy that forwards `/truenas/*` to your TrueNAS instance with the API key header injected:
 
@@ -159,8 +185,6 @@ location /truenas/ {
     proxy_ssl_verify off;
 }
 ```
-
-Gate the entire dashboard behind your existing reverse-proxy auth (Authelia, Authentik, Tailscale), as it exposes operational controls.
 
 ---
 
