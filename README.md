@@ -8,6 +8,8 @@ Silence-first homelab status dashboard. Healthy = one quiet phrase. Something wr
 ![React](https://img.shields.io/badge/React-18-61dafb.svg)
 ![Vite](https://img.shields.io/badge/Vite-5-646cff.svg)
 
+![Nightswatch dashboard — healthy state](docs/screenshot.png)
+
 ---
 
 | State | Display |
@@ -110,3 +112,7 @@ See [`docs/truenas-v26.md`](docs/truenas-v26.md).
 ---
 
 [Contributing](CONTRIBUTING.md) | [MIT License](LICENSE)
+
+---
+
+Bundled wallpaper via [r/wallpaper](https://www.reddit.com/r/wallpaper).
