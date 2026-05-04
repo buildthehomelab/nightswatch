@@ -366,6 +366,10 @@ body.has-bg-image .issues .section-label { border-bottom: none; }
 .filter-chip-info.active { color: var(--ink); background: var(--paper-2); }
 [data-theme="dark"] .filter-chip-crit.active { background: rgba(250,127,170,0.12); }
 [data-theme="dark"] .filter-chip-warn.active { background: rgba(255,178,135,0.12); }
+.filter-chip-crit.active:hover { background: rgba(168,48,96,0.18); }
+.filter-chip-warn.active:hover { background: rgba(184,104,32,0.18); }
+[data-theme="dark"] .filter-chip-crit.active:hover { background: rgba(250,127,170,0.22); }
+[data-theme="dark"] .filter-chip-warn.active:hover { background: rgba(255,178,135,0.22); }
 .section-label .sep { color: var(--ink-3); }
 
 .issue {
