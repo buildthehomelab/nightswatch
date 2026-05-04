@@ -103,6 +103,10 @@ The project has a voice: dry, sardonic, a little tired. Keep it in that register
 
 ---
 
+## Writing style
+
+- No em dashes (—). Use a colon to introduce, a semicolon between independent clauses, a comma or parentheses for a qualifier, or split into two sentences.
+
 ## Code style
 
 - No comments unless the *why* is non-obvious
