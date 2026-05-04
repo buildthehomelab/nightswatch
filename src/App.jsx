@@ -236,26 +236,26 @@ function Ambient({ now, wanUp, wanDownSince, uptime, rank, cleanSince, weather, 
           </span>
         )}
         {showWeather && (
-          <span className="item" onMouseEnter={(e) => openPopover('weather', e)} onMouseLeave={scheduleClose}>
+          <span className="item item-pop" onMouseEnter={(e) => openPopover('weather', e)} onMouseLeave={scheduleClose}>
             <span className="k">outside</span>
             <span className="v">{weather}</span>
           </span>
         )}
         {showWan && (
-          <span className="item" onMouseEnter={(e) => openPopover('wan', e)} onMouseLeave={scheduleClose}>
+          <span className="item item-pop" onMouseEnter={(e) => openPopover('wan', e)} onMouseLeave={scheduleClose}>
             <span className="k">wan</span>
             <span className={`dot${wanUp ? "" : " crit"}`}></span>
             <span className={`v${wanUp ? "" : " crit"}`}>{wanUp ? "up" : "down"}</span>
           </span>
         )}
         {showUptime && (
-          <span className="item" onMouseEnter={(e) => openPopover('uptime', e)} onMouseLeave={scheduleClose}>
+          <span className="item item-pop" onMouseEnter={(e) => openPopover('uptime', e)} onMouseLeave={scheduleClose}>
             <span className="k">uptime</span>
             <span className="v">{uptime}</span>
           </span>
         )}
         {showRank && rank && (
-          <span className="item" onMouseEnter={(e) => openPopover('rank', e)} onMouseLeave={scheduleClose}>
+          <span className="item item-pop" onMouseEnter={(e) => openPopover('rank', e)} onMouseLeave={scheduleClose}>
             <span className="k">rank</span>
             <span className="v rank">{rank}</span>
           </span>
