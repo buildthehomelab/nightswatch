@@ -115,7 +115,7 @@ function DozzleIframe({ open, onClose, placement }) {
   return (
     <>
       <div className={`dozzle-scrim${open ? " open" : ""}`} onClick={onClose} />
-      <aside className={`dozzle${open ? " open" : ""}`} data-placement={placement || "bottom"} aria-hidden={!open}>
+      <aside className={`dozzle dozzle--fullscreen${open ? " open" : ""}`} data-placement={placement || "bottom"} aria-hidden={!open}>
         <div className="dozzle-hd">
           <div className="dozzle-title">
             <span className="dozzle-label">logs</span>
