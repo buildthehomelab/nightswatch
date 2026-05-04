@@ -624,15 +624,25 @@ export function nasIssues(data) {
 
     const jobs = (data.runningJobs ?? [])
       .filter(j => j.method && j.method !== 'core.ping' && j.method !== 'reporting.netdata_get_all_metrics')
-      .slice(0, 5);
-    const jobLines = jobs.map(j => {
-      const pctStr = j.progress?.percent != null ? ` ${Math.round(j.progress.percent)}%` : '';
-      const desc   = j.progress?.description ? ` — ${j.progress.description}` : '';
-      return `  ${j.method}${pctStr}${desc}`;
-    });
+      .slice(0, 8);
 
-    const coreStr  = cores ? ` on ${cores} cores (${pct}% saturated)` : '';
-    const jobsStr  = jobLines.length ? `\n\nRunning jobs:\n${jobLines.join('\n')}` : '';
+    const runningApps = (data.apps ?? [])
+      .filter(a => a.state === 'RUNNING')
+      .map(a => a.name);
+
+    const coreStr = cores ? ` on ${cores} cores (${pct}% saturated)` : '';
+
+    const activityLines = [
+      ...jobs.map(j => {
+        const pctStr = j.progress?.percent != null ? ` ${Math.round(j.progress.percent)}%` : '';
+        const desc   = j.progress?.description ? ` — ${j.progress.description}` : '';
+        return `  [job] ${j.method}${pctStr}${desc}`;
+      }),
+      ...(runningApps.length ? [`  [apps] ${runningApps.join(', ')}`] : []),
+    ];
+    const activityStr = activityLines.length
+      ? `\n\nActive:\n${activityLines.join('\n')}`
+      : '';
 
     issues.push({
       id: loadId,
@@ -642,10 +652,11 @@ export function nasIssues(data) {
       source: 'truenas · system',
       firstSeenTs: firstTs,
       when: loadAge >= 60000 ? `${fmtAge(loadAge)} unresolved` : 'now',
-      description: `1-min load average is ${load1.toFixed(2)}${coreStr} (warn ≥${LOAD_WARN}, crit ≥${LOAD_CRIT})${trend}.\n5m: ${load5}  15m: ${load15}${jobsStr}`,
+      description: `1-min load average is ${load1.toFixed(2)}${coreStr} (warn ≥${LOAD_WARN}, crit ≥${LOAD_CRIT})${trend}.\n5m: ${load5}  15m: ${load15}${activityStr}`,
       logs: [
         { t: firstStr, level: load1 >= LOAD_CRIT ? 'err' : 'warn', text: `[load] 1m=${load1.toFixed(2)} 5m=${load5} 15m=${load15}${cores ? ` cores=${cores}` : ''}${trend}` },
         ...jobs.map(j => ({ t: firstStr, level: 'info', text: `[job] ${j.method}${j.progress?.percent != null ? ` ${Math.round(j.progress.percent)}%` : ''}` })),
+        ...(runningApps.length ? [{ t: firstStr, level: 'info', text: `[apps] ${runningApps.join(' · ')}` }] : []),
       ],
       ignoreKey: `nas-load:${firstTs}`,
       actions: [{ label: 'open truenas ›', href: UI }],
