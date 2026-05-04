@@ -851,6 +851,7 @@ export default function App() {
         <Ambient
           now={now}
           wanUp={wanUp}
+          wanDownSince={wanDownSince}
           uptime={uptime}
           rank={rank}
           cleanSince={cleanSince}
