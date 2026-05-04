@@ -136,7 +136,7 @@ export const MOCK_NAS_DATA = {
     },
   ],
   cpuTemp: 54,
-  netStats: { rx: 48.3 * 1024 * 1024, tx: 11.7 * 1024 * 1024 },
+  netStats: { rx: 48.3 * 1024 * 1024, tx: 11.7 * 1024 * 1024, ifaces: [{ name: 'igb0', rx: 45.1 * 1024 * 1024, tx: 10.9 * 1024 * 1024 }, { name: 'igb1', rx: 3.2 * 1024 * 1024, tx: 0.8 * 1024 * 1024 }] },
   memFree: 18.2 * 1e9,
   arcSize:  6.4 * 1e9,
   updateStatus: {
