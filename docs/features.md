@@ -214,5 +214,5 @@ Press `` ` `` to open the customization panel. All settings persist across sessi
 | Styling | CSS custom properties — no Tailwind, no CSS-in-JS |
 | State | `useState` / `useRef` / `useMemo` — no external state library |
 | Routing | None |
-| Fonts | Inter (UI) + JetBrains Mono (log output) |
+| Fonts | Barlow Condensed (display) + Rubik (UI) + JetBrains Mono (mono labels/data) |
 | Theme | Light / dark via `data-theme` on `<html>` |
