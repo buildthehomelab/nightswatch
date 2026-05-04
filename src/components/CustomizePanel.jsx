@@ -132,6 +132,19 @@ const __CUSTOMIZE_STYLE = `
     margin-bottom: 2px;
   }
 
+  .twk-bg-preview { display: flex; align-items: center; gap: 10px; margin-bottom: 8px; }
+  .twk-bg-thumb {
+    width: 72px; height: 44px; object-fit: cover;
+    border-radius: 3px; border: 1px solid var(--rule); flex-shrink: 0;
+  }
+  .twk-bg-btn {
+    appearance: none; border: 1px solid var(--rule); background: var(--paper-2);
+    color: var(--ink-2); font-family: var(--sans); font-size: 11px; letter-spacing: 0.02em;
+    padding: 5px 10px; border-radius: 3px; cursor: default; transition: color 0.12s;
+  }
+  .twk-bg-btn:hover { color: var(--ink); }
+  .twk-bg-err { font-family: var(--sans); font-size: 10px; color: var(--crit); margin-top: 4px; }
+
 `;
 
 const CUSTOMIZE_LS_KEY = 'nightswatch:customize';
