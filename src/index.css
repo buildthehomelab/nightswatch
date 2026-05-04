@@ -375,6 +375,10 @@ body.has-bg-image.density-compact .issue { padding: 11px 16px; }
   background: currentColor;
   flex-shrink: 0;
 }
+/* crit accent */
+.issue.crit { box-shadow: inset 3px 0 0 var(--crit); }
+.issue.crit .severity::before { animation: pulse-dot 2s ease-in-out infinite; }
+
 /* light theme severity */
 .issue.crit .severity { background: rgba(168,48,96,0.1);  color: var(--crit); }
 .issue.warn .severity { background: rgba(184,104,32,0.1); color: var(--warn); }
