@@ -627,17 +627,28 @@ export default function App() {
 
   useEffect(() => {
     if (t.bgImage) {
-      document.body.style.backgroundImage = `url(${t.bgImage})`;
-      document.body.style.backgroundSize = 'cover';
-      document.body.style.backgroundPosition = 'center';
+      const dim = t.bgDim ?? 0;
+      const dimLayer = dim > 0 ? `linear-gradient(rgba(0,0,0,${dim}),rgba(0,0,0,${dim})),` : '';
+      document.body.style.backgroundImage = `${dimLayer}url(${t.bgImage})`;
+      const fit = t.bgFit ?? 'cover';
+      if (fit === 'tile') {
+        document.body.style.backgroundSize = 'auto';
+        document.body.style.backgroundRepeat = 'repeat';
+      } else if (fit === 'contain') {
+        document.body.style.backgroundSize = 'contain';
+        document.body.style.backgroundRepeat = 'no-repeat';
+      } else {
+        document.body.style.backgroundSize = fit === 'stretch' ? '100% 100%' : 'cover';
+        document.body.style.backgroundRepeat = 'no-repeat';
+      }
+      document.body.style.backgroundPosition = t.bgPosition ?? 'center';
       document.body.style.backgroundAttachment = 'fixed';
     } else {
-      document.body.style.removeProperty('background-image');
-      document.body.style.removeProperty('background-size');
-      document.body.style.removeProperty('background-position');
-      document.body.style.removeProperty('background-attachment');
+      for (const p of ['background-image','background-size','background-repeat','background-position','background-attachment']) {
+        document.body.style.removeProperty(p);
+      }
     }
-  }, [t.bgImage]);
+  }, [t.bgImage, t.bgFit, t.bgPosition, t.bgDim]);
 
   const issues = useMemo(() => {
     const liveIssues = [
