@@ -854,6 +854,9 @@ export default function App() {
           cleanSince={cleanSince}
           weather={weather}
           weatherForecast={weatherForecast}
+          startTimeMs={startTime.current}
+          nasUptimeSeconds={nasData?.info?.uptime_seconds ?? null}
+          nasVersion={nasData?.info?.version ?? null}
           showWeather={t.showWeather}
           showWan={t.showWan}
           showUptime={t.showUptime}
