@@ -1,0 +1,26 @@
+services:
+  app:
+    build:
+      context: .
+      target: runtime
+      args:
+        TRUENAS_HOST: ${TRUENAS_HOST}
+        TRUENAS_PORT: ${TRUENAS_PORT:-443}
+        TRUENAS_UI_URL: ${TRUENAS_UI_URL:-}
+        TRUENAS_STOPPED_APP_HIDE_MINUTES: ${TRUENAS_STOPPED_APP_HIDE_MINUTES:-60}
+        TRUENAS_POOL_WARN_PCT: ${TRUENAS_POOL_WARN_PCT:-80}
+        TRUENAS_POOL_CRIT_PCT: ${TRUENAS_POOL_CRIT_PCT:-90}
+        TRUENAS_DISK_WARN_C: ${TRUENAS_DISK_WARN_C:-45}
+        TRUENAS_DISK_CRIT_C: ${TRUENAS_DISK_CRIT_C:-55}
+        DOZZLE_URL: ${DOZZLE_URL:-}
+        WEATHER_LOCATION: ${WEATHER_LOCATION:-}
+        CVE_KEYWORDS: ${CVE_KEYWORDS:-}
+        DEMO: ${DEMO:-false}
+    image: nightswatch:latest
+    environment:
+      TRUENAS_HOST: ${TRUENAS_HOST}
+      TRUENAS_PORT: ${TRUENAS_PORT:-443}
+      TRUENAS_KEY: ${TRUENAS_KEY}
+    ports:
+      - "${PORT:-8080}:80"
+    restart: unless-stopped
