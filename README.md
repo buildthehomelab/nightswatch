@@ -98,8 +98,8 @@ docker compose -f docker-compose.prod.yml --env-file .env.local up -d
 **GHCR image tags:**
 
 ```
-ghcr.io/hybridlabs-dev/nightswatch:latest
-ghcr.io/hybridlabs-dev/nightswatch:0.1
+ghcr.io/buildthehomelab/nightswatch:latest
+ghcr.io/buildthehomelab/nightswatch:0.1
 ```
 
 ---
