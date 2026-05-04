@@ -1,7 +1,7 @@
 import { useState, useEffect, useRef, useMemo } from 'react';
 
-const DEMO = import.meta.env.DEMO === 'true';
-const DOZZLE_BASE = import.meta.env.VITE_DOZZLE_URL ?? "";
+import { DEMO, DOZZLE_URL } from '../nwenv';
+const DOZZLE_BASE = DOZZLE_URL;
 
 const DOZZLE_CONTAINERS = [
   { id: "sonarr",       name: "sonarr",       group: "media",     status: "ok"   },
