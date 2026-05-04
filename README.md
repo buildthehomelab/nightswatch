@@ -24,7 +24,7 @@ It monitors:
 - **CVE feed:** NIST NVD vulnerability database, filtered by keywords you configure
 - **Weather:** via wttr.in (optional)
 
-Issues auto-escalate with age. Keyboard-first navigation. Everything persists to localStorage — no backend required.
+Issues auto-escalate with age. Keyboard-first navigation. Everything persists to localStorage with no backend required.
 
 > **Demo** — set `DEMO=true` in `.env.local` to run with mock data. No TrueNAS needed.
 
