@@ -320,6 +320,10 @@ Output format: "4d" | "12h" | "45m" | "30s"
 | `nightswatch:customize` | CustomizePanel | all UI settings object |
 | `nightswatch:ignored` | App | `[[ignoreKey, label], ...]` tuples |
 | `nightswatch:phrase:{arr[0]}` | pickPhrase | `{idx, ts}` — last picked index + timestamp (1-min TTL per phrase set) |
+| `nightswatch:cleanSince` | App | ISO timestamp of last crit-clear (drives rank/streak) |
+| `nightswatch:lastCritAt` | App | ISO timestamp when most recent crit appeared (cleared on crit-clear) |
+| `nightswatch:bgImage` | App | data URL or empty string for custom background image |
+| `nightswatch:toured` | App | `"1"` if user has opened CustomizePanel at least once |
 | `truenas:releaseCache` | truenas.js | `{[image]: {version, fetchedAt}}` (4h TTL) |
 | `truenas:stoppedSince` | truenas.js | `[[appName, timestamp], ...]` tuples |
 | `truenas:firstSeen` | truenas.js | `{[issueKey]: timestamp}` — per-issue first-seen (cpu-temp, pool-cap, etc.) |
