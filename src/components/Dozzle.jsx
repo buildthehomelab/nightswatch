@@ -134,7 +134,7 @@ function DozzleIframe({ open, onClose, placement }) {
   );
 }
 
-function DozzleDemo({ open, onClose, initialContainer }) {
+function DozzleDemo({ open, onClose, initialContainer, placement }) {
   const [active, setActive] = useState(initialContainer || "sonarr");
   const [filter, setFilter] = useState("");
   const [showInfo, setShowInfo] = useState(true);
@@ -199,7 +199,7 @@ function DozzleDemo({ open, onClose, initialContainer }) {
   return (
     <>
       <div className={`dozzle-scrim${open ? " open" : ""}`} onClick={onClose} />
-      <aside className={`dozzle${open ? " open" : ""}`} aria-hidden={!open}>
+      <aside className={`dozzle${open ? " open" : ""}`} data-placement={placement || "bottom"} aria-hidden={!open}>
         <div className="dozzle-hd">
           <div className="dozzle-title">
             <span className="dozzle-label">dozzle</span>
