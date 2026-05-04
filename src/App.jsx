@@ -150,7 +150,7 @@ function GearIcon() {
   );
 }
 
-function Ambient({ now, wanUp, uptime, rank, cleanSince, weather, showWeather, showWan, showUptime, showRank, showNas, showNasName, showNasLoad, showNasCpuTemp, showNasMemory, showNasApps, showNasPools, showNasNet, showDate, placement, nasData, toured, onOpenCustomize }) {
+function Ambient({ now, wanUp, uptime, rank, cleanSince, weather, weatherForecast, showWeather, showWan, showUptime, showRank, showNas, showNasName, showNasLoad, showNasCpuTemp, showNasMemory, showNasApps, showNasPools, showNasNet, showDate, placement, nasData, toured, onOpenCustomize }) {
   const pools    = Array.isArray(nasData?.pools) ? nasData.pools : [];
   const apps     = Array.isArray(nasData?.apps)  ? nasData.apps  : [];
   const running  = apps.filter(a => a.state === 'RUNNING').length;
@@ -236,7 +236,7 @@ function Ambient({ now, wanUp, uptime, rank, cleanSince, weather, showWeather, s
           </span>
         )}
         {showWeather && (
-          <span className="item">
+          <span className="item" onMouseEnter={(e) => openPopover('weather', e)} onMouseLeave={scheduleClose}>
             <span className="k">outside</span>
             <span className="v">{weather}</span>
           </span>
@@ -273,6 +273,7 @@ function Ambient({ now, wanUp, uptime, rank, cleanSince, weather, showWeather, s
         nasData={nasData}
         cleanSince={cleanSince}
         now={now}
+        weatherForecast={weatherForecast}
         onMouseEnter={cancelClose}
         onMouseLeave={scheduleClose}
       />
@@ -573,6 +574,7 @@ export default function App() {
   const [wanDownSince, setWanDownSince] = useState(null);
   const wanFailCount = useRef(0);
   const [weather, setWeather] = useState("—");
+  const [weatherForecast, setWeatherForecast] = useState(null);
 
   useEffect(() => {
     if (!WEATHER_LOCATION) return;
@@ -583,6 +585,11 @@ export default function App() {
         // "⛅ +12°C" → strip leading +, collapse spaces, lowercase → "⛅ 12°c"
         const clean = text.replace(/^\+/, '').replace(/\s+/g, ' ').trim().toLowerCase();
         setWeather(clean || '—');
+      } catch {}
+      try {
+        const r2 = await fetch(`/wttr/${encodeURIComponent(WEATHER_LOCATION)}?format=j1`);
+        const json = await r2.json();
+        setWeatherForecast(json);
       } catch {}
     };
     poll();
@@ -843,6 +850,7 @@ export default function App() {
           rank={rank}
           cleanSince={cleanSince}
           weather={weather}
+          weatherForecast={weatherForecast}
           showWeather={t.showWeather}
           showWan={t.showWan}
           showUptime={t.showUptime}
