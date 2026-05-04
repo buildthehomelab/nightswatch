@@ -10,7 +10,7 @@ State is driven by `visibleIssues.length` and severity in `App.jsx`.
 
 ```
 visibleIssues.length === 0
-  → healthy: centered hero phrase + running services count
+  → healthy: centered hero phrase (time-of-day bucket)
 
 visibleIssues has items, none are crit
   → warnings: masthead + ranked issue list
