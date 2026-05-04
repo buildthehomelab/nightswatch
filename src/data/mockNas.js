@@ -79,7 +79,7 @@ export const MOCK_NAS_STAGES = [
 
 export const MOCK_NAS_DATA = {
   info: {
-    hostname: 'patronus',
+    hostname: 'truenas',
     uptime_seconds: 86400 * 12 + 3600 * 4 + 60 * 22,
     loadavg: [1.42, 1.31, 1.18],
     cores: 8,
