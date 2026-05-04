@@ -19,10 +19,10 @@ A silence-first homelab status dashboard. When everything is healthy, you see a 
 | **Critical** | Same as warnings, but critical issues sort first |
 
 It monitors:
-- **WAN connectivity** — probes 1.1.1.1 and 8.8.8.8 every 30s, requires 3 consecutive failures before marking down
-- **TrueNAS SCALE** — pool health, capacity, CPU/disk temps, memory, stopped apps, app updates, system updates, SMART alerts
-- **CVE feed** — NIST NVD vulnerability database, filtered by keywords you configure
-- **Weather** — via wttr.in (optional)
+- **WAN connectivity:** probes 1.1.1.1 and 8.8.8.8 every 30s, requires 3 consecutive failures before marking down
+- **TrueNAS SCALE:** pool health, capacity, CPU/disk temps, memory, stopped apps, app updates, system updates, SMART alerts
+- **CVE feed:** NIST NVD vulnerability database, filtered by keywords you configure
+- **Weather:** via wttr.in (optional)
 
 Issues auto-escalate with age. Keyboard-first navigation. Everything persists to localStorage — no backend required.
 
