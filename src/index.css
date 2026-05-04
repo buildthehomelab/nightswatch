@@ -675,14 +675,7 @@ body.has-bg-image.density-compact .issue { padding: 11px 16px; }
 }
 
 .dozzle-side {
-  width: 160px;
-  flex-shrink: 0;
-  border-right: 1px solid var(--rule);
-  overflow-y: auto;
-  padding: 12px 0;
-  display: flex;
-  flex-direction: column;
-  gap: 16px;
+  display: none;
 }
 .dozzle-group { display: flex; flex-direction: column; }
 .dozzle-grp-label {
