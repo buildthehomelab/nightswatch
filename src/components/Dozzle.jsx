@@ -104,7 +104,7 @@ function buildInitialLines(containerId) {
   return lines;
 }
 
-function DozzleIframe({ open, onClose }) {
+function DozzleIframe({ open, onClose, placement }) {
   useEffect(() => {
     if (!open) return;
     const onKey = (e) => { if (e.key === "Escape") onClose(); };
@@ -115,7 +115,7 @@ function DozzleIframe({ open, onClose }) {
   return (
     <>
       <div className={`dozzle-scrim${open ? " open" : ""}`} onClick={onClose} />
-      <aside className={`dozzle${open ? " open" : ""}`} aria-hidden={!open}>
+      <aside className={`dozzle${open ? " open" : ""}`} data-placement={placement || "bottom"} aria-hidden={!open}>
         <div className="dozzle-hd">
           <div className="dozzle-title">
             <span className="dozzle-label">logs</span>
