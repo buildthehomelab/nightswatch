@@ -54,7 +54,7 @@ A "service" in Nightswatch is a file in `src/services/` that:
   label:       string,          // short badge text (e.g. "pool degraded")
   headline:    string,          // one sentence, ends with a period
   source:      string,          // "service · subsystem"
-  firstSeenTs: number | null,   // timestamp — drives age-based escalation
+  firstSeenTs: number | null,   // timestamp; drives age-based escalation
   when:        string,          // human-readable age (e.g. "2h unresolved")
   description: string,          // full detail, multi-line OK, \n respected
   logs:        { t: string, level: 'info'|'warn'|'err', text: string }[],
