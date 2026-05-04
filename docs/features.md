@@ -90,6 +90,7 @@ A configurable footer/header strip shows live NAS stats at a glance:
 - Load average
 - CPU temperature (colored at warn/crit thresholds)
 - Free memory
+- Network throughput (↓rx ↑tx)
 - Running apps / total apps
 - Per-pool usage with colored status dots
 
