@@ -1,5 +1,12 @@
 # Changelog
 
+## [0.1.4](https://github.com/buildthehomelab/nightswatch/compare/v0.1.3...v0.1.4) (2026-05-04)
+
+
+### Bug Fixes
+
+* add proxy_ssl_trusted_certificate for wttr.in proxy ([344bc50](https://github.com/buildthehomelab/nightswatch/commit/344bc50d727a05e60c1dd3b901cf5963974c67a0))
+
 ## [0.1.3](https://github.com/buildthehomelab/nightswatch/compare/v0.1.2...v0.1.3) (2026-05-04)
 
 
