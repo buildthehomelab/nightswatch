@@ -26,7 +26,7 @@ It monitors:
 
 Issues auto-escalate with age. Keyboard-first navigation. Everything persists to localStorage with no backend required.
 
-> **Demo** — set `DEMO=true` in `.env.local` to run with mock data. No TrueNAS needed.
+> **Demo:** set `DEMO=true` in `.env.local` to run with mock data. No TrueNAS needed.
 
 ---
 
