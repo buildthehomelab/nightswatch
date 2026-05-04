@@ -38,7 +38,7 @@ Issues auto-escalate with age. Keyboard-first navigation. Everything persists to
 git clone https://github.com/your-username/nightswatch.git
 cd nightswatch
 cp .env.example .env.local
-# edit .env.local — at minimum set TRUENAS_HOST, TRUENAS_PORT, TRUENAS_KEY
+# edit .env.local: set TRUENAS_HOST, TRUENAS_PORT, and TRUENAS_KEY at minimum
 docker compose up
 ```
 
@@ -52,7 +52,7 @@ cd nightswatch
 npm install
 npm run setup          # installs git hooks (run once)
 cp .env.example .env.local
-# edit .env.local — at minimum set TRUENAS_HOST, TRUENAS_PORT, TRUENAS_KEY
+# edit .env.local: set TRUENAS_HOST, TRUENAS_PORT, and TRUENAS_KEY at minimum
 npm run dev
 ```
 
