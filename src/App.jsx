@@ -3,14 +3,16 @@ import Dozzle from './components/Dozzle';
 import AmbientPopover from './components/AmbientPopover';
 import { useTrueNas, nasIssues, fmtUptime, fmtAge, fmtBytes, fmtRate, UI as NAS_UI, POOL_WARN_PCT, POOL_CRIT_PCT, CPU_WARN_C, CPU_CRIT_C } from './services/truenas';
 import { useCve, cveIssues, BASE_CVE_KEYWORDS } from './services/cve';
+import { CVE_FIXTURES, ISSUE_FIXTURES } from './data/fixtures';
+import { MOCK_NAS_STAGES } from './data/mockNas';
+import { DEMO, WEATHER_LOCATION } from './nwenv';
+import {
+  useCustomize, CustomizePanel, CustomizeColumn, CustomizeSection, CustomizeRadio, CustomizeToggle, BgImagePicker,
+} from './components/CustomizePanel';
 
 const SERVICE_CVE_KEYWORDS = {
   enableTruenas: 'truenas',
 };
-import { CVE_FIXTURES, ISSUE_FIXTURES } from './data/fixtures';
-import { MOCK_NAS_STAGES } from './data/mockNas';
-
-import { DEMO, WEATHER_LOCATION as _WEATHER_LOCATION } from './nwenv';
 
 const DEMO_STAGES = DEMO ? [
   { issues: [],                               nasData: MOCK_NAS_STAGES[0], duration: 10_000 },
@@ -18,11 +20,6 @@ const DEMO_STAGES = DEMO ? [
   { issues: [ISSUE_FIXTURES.warnings[0]],     nasData: MOCK_NAS_STAGES[2], duration: 8_000  },
   { issues: ISSUE_FIXTURES.critical,          nasData: MOCK_NAS_STAGES[3], duration: 13_000 },
 ] : null;
-import {
-  useCustomize, CustomizePanel, CustomizeColumn, CustomizeSection, CustomizeRadio, CustomizeToggle, BgImagePicker,
-} from './components/CustomizePanel';
-
-const WEATHER_LOCATION = _WEATHER_LOCATION;
 
 if (DEMO) document.title = 'Nightswatch [demo]';
 
