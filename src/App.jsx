@@ -38,6 +38,8 @@ function saveIgnored(map) {
   try { localStorage.setItem(LS_IGNORED_KEY, JSON.stringify([...map])); } catch {}
 }
 
+const SEV_ORDER = { crit: 0, warn: 1, info: 2 };
+
 const ISSUE_TO_CONTAINER = {
   "wan-down": "pihole",
 };
@@ -734,7 +736,13 @@ export default function App() {
   }, [wanUp, wanDownSince, nasData, nasErr, cveData, cveErr, cveKeywords, t.enableTruenas, t.enableCve, demoStage]);
 
   const visibleIssues = useMemo(
-    () => issues.filter(i => !i.ignoreKey || !ignored.has(i.ignoreKey)),
+    () => issues
+      .filter(i => !i.ignoreKey || !ignored.has(i.ignoreKey))
+      .sort((a, b) => {
+        const sevDiff = (SEV_ORDER[a.severity] ?? 3) - (SEV_ORDER[b.severity] ?? 3);
+        if (sevDiff !== 0) return sevDiff;
+        return (b.firstSeenTs ?? Date.now()) - (a.firstSeenTs ?? Date.now());
+      }),
     [issues, ignored]
   );
 
