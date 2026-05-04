@@ -219,6 +219,18 @@ body {
 }
 .ap-app-ver { color: var(--ink-3); white-space: nowrap; font-size: 10.5px; margin-left: auto; }
 
+/* ── Network iface breakdown ─────────────────────────── */
+.ap-net-iface { margin-bottom: 4px; }
+.ap-net-iface:last-child { margin-bottom: 0; }
+.ap-net-iface-name {
+  font-family: var(--sans);
+  font-size: 10px; font-weight: 600;
+  color: var(--ink-3);
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  margin-bottom: 2px;
+}
+
 /* ── Rank popover ────────────────────────────────────── */
 .rk-wrap { width: 100%; }
 .rk-header { display: flex; justify-content: space-between; align-items: baseline; margin-bottom: 5px; }
