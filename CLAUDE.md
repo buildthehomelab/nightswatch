@@ -71,7 +71,7 @@ Three top-level states driven by `issues.length` and severity:
 | `j` / `k` | Navigate issues (j=prev, k=next — intentional, not vim-standard) |
 | `Enter` | Expand/collapse focused issue |
 | `1` / `2` / `3` | Filter critical / warning / advisory severity |
-| `` ` `` / `h` / `?` | Toggle CustomizePanel (shortcuts table lives inside it) |
+| `h` / `?` | Toggle CustomizePanel (shortcuts table lives inside it) |
 | `l` | Open Dozzle log viewer |
 | `r` | Refresh (force re-render) |
 | `Esc` | Close CustomizePanel |
