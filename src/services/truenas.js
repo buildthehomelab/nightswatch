@@ -1,21 +1,21 @@
 import { useState, useEffect, useRef } from 'react';
 import { MOCK_NAS_DATA } from '../data/mockNas';
+import {
+  DEMO as _DEMO,
+  POOL_WARN_PCT, POOL_CRIT_PCT,
+  CPU_WARN_C, CPU_CRIT_C,
+  DISK_WARN_C, DISK_CRIT_C,
+  MEM_WARN_PCT, MEM_CRIT_PCT,
+  LOAD_WARN, LOAD_CRIT,
+  SCRUB_STALE_DAYS,
+  STOPPED_HIDE_MINUTES as STOPPED_HIDE_MINUTES_NW,
+} from '../nwenv';
+export { POOL_WARN_PCT, POOL_CRIT_PCT, CPU_WARN_C, CPU_CRIT_C };
 
 const _rawUI = import.meta.env.VITE_TRUENAS_URL ?? "";
 export const UI = _rawUI && !_rawUI.startsWith("https://") ? `https://${_rawUI.replace(/^https?:\/\//, "")}` : _rawUI;
 const API = "/truenas/api/v2.0";
-const STOPPED_HIDE_MINUTES = Number(import.meta.env.VITE_STOPPED_APP_HIDE_MINUTES ?? 0) || 0;
-export const POOL_WARN_PCT = Number(import.meta.env.VITE_POOL_WARN_PCT ?? 80) || 80;
-export const POOL_CRIT_PCT = Number(import.meta.env.VITE_POOL_CRIT_PCT ?? 90) || 90;
-export const CPU_WARN_C  = Number(import.meta.env.VITE_CPU_WARN_C  ?? 70) || 70;
-export const CPU_CRIT_C  = Number(import.meta.env.VITE_CPU_CRIT_C  ?? 85) || 85;
-const DISK_WARN_C        = Number(import.meta.env.VITE_DISK_WARN_C  ?? 45) || 45;
-const DISK_CRIT_C        = Number(import.meta.env.VITE_DISK_CRIT_C  ?? 55) || 55;
-const MEM_WARN_PCT       = Number(import.meta.env.VITE_MEM_WARN_PCT       ?? 80) || 80;
-const MEM_CRIT_PCT       = Number(import.meta.env.VITE_MEM_CRIT_PCT       ?? 90) || 90;
-const LOAD_WARN          = Number(import.meta.env.VITE_LOAD_WARN           ?? 4)  || 4;
-const LOAD_CRIT          = Number(import.meta.env.VITE_LOAD_CRIT           ?? 8)  || 8;
-const SCRUB_STALE_DAYS   = Number(import.meta.env.VITE_SCRUB_STALE_DAYS    ?? 30) || 30;
+const STOPPED_HIDE_MINUTES = STOPPED_HIDE_MINUTES_NW;
 
 const RELEASE_TTL        = 4 * 60 * 60 * 1000;
 const LS_RELEASE_KEY     = 'truenas:releaseCache';
@@ -414,7 +414,7 @@ function lsSave(map) {
 
 // ── Hook ──────────────────────────────────────────────────
 
-const DEMO = import.meta.env.DEMO === 'true';
+const DEMO = _DEMO;
 
 export function useTrueNas(enabled = true) {
   const [data, setData] = useState(DEMO ? MOCK_NAS_DATA : null);
