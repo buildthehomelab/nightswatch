@@ -64,4 +64,4 @@ See `docs/design.md` for the full reference. CSS custom properties on `:root`, s
 
 ## TrueNAS version
 
-Currently targets **TrueNAS SCALE 25.10.x** (REST API v2.0). TrueNAS 26 removes REST — see `docs/truenas-v26.md` before upgrading.
+Currently targets **TrueNAS SCALE 25.10.x** (REST API v2.0). TrueNAS 26 removes REST; see `docs/truenas-v26.md` before upgrading.
