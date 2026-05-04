@@ -27,7 +27,7 @@ Monitors: WAN (1.1.1.1 / 8.8.8.8), TrueNAS SCALE (pools, temps, apps, SMART, upd
 **Pre-built image (fastest):**
 
 ```sh
-curl -o docker-compose.yml https://raw.githubusercontent.com/hybridlabs-dev/nightswatch/main/docker-compose.example.yml
+curl -o docker-compose.yml https://raw.githubusercontent.com/buildthehomelab/nightswatch/main/docker-compose.example.yml
 # edit: set TRUENAS_HOST, TRUENAS_PORT, TRUENAS_KEY
 docker compose up -d
 ```
@@ -44,7 +44,7 @@ docker compose up            # or: npm run dev
 **From source:**
 
 ```sh
-git clone https://github.com/hybridlabs-dev/nightswatch.git && cd nightswatch
+git clone https://github.com/buildthehomelab/nightswatch.git && cd nightswatch
 cp .env.example .env.local   # fill in values
 docker compose up            # dev: HTTPS port 5173
 ```
@@ -98,8 +98,8 @@ docker compose -f docker-compose.prod.yml --env-file .env.local up -d
 **GHCR image tags:**
 
 ```
-ghcr.io/hybridlabs-dev/nightswatch:latest
-ghcr.io/hybridlabs-dev/nightswatch:0.1
+ghcr.io/buildthehomelab/nightswatch:latest
+ghcr.io/buildthehomelab/nightswatch:0.1
 ```
 
 ---
