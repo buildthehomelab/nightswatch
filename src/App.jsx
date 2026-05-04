@@ -150,7 +150,7 @@ function GearIcon() {
   );
 }
 
-function Ambient({ now, wanUp, uptime, rank, cleanSince, weather, weatherForecast, startTimeMs, nasUptimeSeconds, nasVersion, showWeather, showWan, showUptime, showRank, showNas, showNasName, showNasLoad, showNasCpuTemp, showNasMemory, showNasApps, showNasPools, showNasNet, showDate, placement, nasData, toured, onOpenCustomize }) {
+function Ambient({ now, wanUp, wanDownSince, uptime, rank, cleanSince, weather, weatherForecast, startTimeMs, nasUptimeSeconds, nasVersion, showWeather, showWan, showUptime, showRank, showNas, showNasName, showNasLoad, showNasCpuTemp, showNasMemory, showNasApps, showNasPools, showNasNet, showDate, placement, nasData, toured, onOpenCustomize }) {
   const pools    = Array.isArray(nasData?.pools) ? nasData.pools : [];
   const apps     = Array.isArray(nasData?.apps)  ? nasData.apps  : [];
   const running  = apps.filter(a => a.state === 'RUNNING').length;
@@ -242,7 +242,7 @@ function Ambient({ now, wanUp, uptime, rank, cleanSince, weather, weatherForecas
           </span>
         )}
         {showWan && (
-          <span className="item">
+          <span className="item" onMouseEnter={(e) => openPopover('wan', e)} onMouseLeave={scheduleClose}>
             <span className="k">wan</span>
             <span className={`dot ${wanUp ? "" : "crit"}`}></span>
             <span className="v">{wanUp ? "up" : "down"}</span>
@@ -277,6 +277,8 @@ function Ambient({ now, wanUp, uptime, rank, cleanSince, weather, weatherForecas
         startTimeMs={startTimeMs}
         nasUptimeSeconds={nasUptimeSeconds}
         nasVersion={nasVersion}
+        wanUp={wanUp}
+        wanDownSince={wanDownSince}
         onMouseEnter={cancelClose}
         onMouseLeave={scheduleClose}
       />
