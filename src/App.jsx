@@ -292,7 +292,7 @@ function rankForDays(days) {
 
 const HEALTHY_MILESTONES = [7, 14, 30, 60, 90, 180, 365];
 
-function Healthy({ uptime, nasData, now, cleanSince }) {
+function Healthy({ now, cleanSince }) {
   const pool = healthyPhrasePool(now);
   const bucketKey = pool[0];
   const [phrase, setPhrase] = useState(() => pickPhrase(pool));
@@ -305,8 +305,6 @@ function Healthy({ uptime, nasData, now, cleanSince }) {
     const id = setInterval(() => setPhrase(pickPhrase(healthyPhrasePool(new Date()))), 60 * 60 * 1000);
     return () => clearInterval(id);
   }, []);
-  const apps = Array.isArray(nasData?.apps) ? nasData.apps : [];
-  const running = apps.filter(a => a.state === 'RUNNING').length;
   const cleanDays = cleanSince ? Math.floor((now - new Date(cleanSince)) / 86_400_000) : null;
   const milestoneNote = cleanDays != null && HEALTHY_MILESTONES.includes(cleanDays)
     ? `${cleanDays} days without incident`
@@ -318,11 +316,11 @@ function Healthy({ uptime, nasData, now, cleanSince }) {
           <em>{phrase}</em>
         </p>
       </div>
-      <div className="sub rise rise-d2">
-        {running > 0 && <><span>{running} services healthy</span><span className="sep">·</span></>}
-        <span>{uptime} uptime</span>
-        {milestoneNote && <><span className="sep">·</span><span className="milestone">{milestoneNote}</span></>}
-      </div>
+      {milestoneNote && (
+        <div className="sub rise rise-d2">
+          <span className="milestone">{milestoneNote}</span>
+        </div>
+      )}
     </section>
   );
 }
