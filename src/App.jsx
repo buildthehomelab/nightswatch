@@ -61,6 +61,9 @@ const CUSTOMIZE_DEFAULTS = {
   showRank: true,
   ambientPlacement: "bottom",
   bgImage: "",
+  bgFit: "cover",
+  bgPosition: "center",
+  bgDim: 0,
 };
 
 const MASTHEAD_STALE_MS = 4 * 60 * 60 * 1000;
