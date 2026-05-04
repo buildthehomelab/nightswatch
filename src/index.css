@@ -380,7 +380,7 @@ body.has-bg-image .issues .section-label { border-bottom: none; }
   transition: background-color .15s ease;
 }
 .issue:hover { background: var(--paper-2); margin: 0 -16px; padding: 18px 16px; }
-.issue.focused { background: var(--paper-2); margin: 0 -16px; padding: 18px 16px; outline: none; }
+.issue.focused { background: var(--paper-2); margin: 0 -16px; padding: 18px 16px; outline: none; box-shadow: inset 3px 0 0 var(--accent); }
 .density-compact .issue { padding: 11px 0; }
 .density-compact .issue:hover { padding: 11px 16px; }
 .density-compact .issue.focused { padding: 11px 16px; }
