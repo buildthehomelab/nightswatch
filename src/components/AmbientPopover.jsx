@@ -187,6 +187,85 @@ function RankDetail({ cleanSince }) {
   );
 }
 
+const WX_EMOJI = {
+  113: '☀️', 116: '⛅', 119: '☁️', 122: '☁️',
+  143: '🌫️', 176: '🌦️', 179: '🌨️', 182: '🌧️', 185: '🌧️',
+  200: '⛈️', 227: '🌨️', 230: '❄️', 248: '🌫️', 260: '🌫️',
+  263: '🌦️', 266: '🌦️', 281: '🌧️', 284: '🌧️',
+  293: '🌦️', 296: '🌧️', 299: '🌧️', 302: '🌧️', 305: '🌧️', 308: '🌧️',
+  311: '🌧️', 314: '🌧️', 317: '🌨️', 320: '🌨️',
+  323: '🌨️', 326: '🌨️', 329: '🌨️', 332: '🌨️', 335: '🌨️', 338: '❄️',
+  350: '🌧️', 353: '🌦️', 356: '🌧️', 359: '🌧️',
+  362: '🌨️', 365: '🌨️', 368: '🌨️', 371: '🌨️',
+  374: '🌧️', 377: '🌧️', 386: '⛈️', 389: '⛈️', 392: '⛈️', 395: '⛈️',
+};
+function wxEmoji(code) { return WX_EMOJI[+code] ?? '🌡️'; }
+
+const DAY_SHORT = ['Sun','Mon','Tue','Wed','Thu','Fri','Sat'];
+
+function WeatherDetail({ forecast }) {
+  if (!forecast) return (
+    <>
+      <Head label="weather" />
+      <div className="ap-body"><div className="rk-empty">loading…</div></div>
+    </>
+  );
+  const cur = forecast.current_condition?.[0];
+  const days = forecast.weather ?? [];
+  const desc = cur?.weatherDesc?.[0]?.value ?? '';
+  const humidity = cur?.humidity;
+  const wind = cur?.windspeedKmph;
+  const windDir = cur?.winddir16Point ?? '';
+  const feelsLike = cur?.FeelsLikeC;
+  const temp = cur?.temp_C;
+  const precip = cur?.precipMM;
+
+  return (
+    <>
+      <Head label="weather" />
+      <div className="ap-body">
+        {cur && (
+          <div className="wth-current">
+            <div className="wth-cur-main">
+              <span className="wth-cur-emoji">{wxEmoji(cur.weatherCode)}</span>
+              <div className="wth-cur-temps">
+                <span className="wth-cur-temp">{temp}°</span>
+                <span className="wth-cur-feels">feels {feelsLike}°</span>
+              </div>
+            </div>
+            <div className="wth-cur-desc">{desc.toLowerCase()}</div>
+            <div className="ap-rule" />
+            <Row k="humidity"  v={humidity ? `${humidity}%` : null} />
+            <Row k={`wind ${windDir.toLowerCase()}`} v={wind ? `${wind} km/h` : null} />
+            {precip !== undefined && <Row k="precip"    v={`${precip} mm`} />}
+          </div>
+        )}
+        {days.length > 0 && (
+          <>
+            <div className="ap-rule" />
+            <div className="wth-forecast">
+              {days.map((d, i) => {
+                const date    = new Date(d.date);
+                const dayName = i === 0 ? 'today' : DAY_SHORT[date.getDay()];
+                const code    = d.hourly?.[4]?.weatherCode ?? d.hourly?.[0]?.weatherCode;
+                return (
+                  <div key={d.date} className="wth-day">
+                    <span className="wth-day-name">{dayName}</span>
+                    <span className="wth-day-icon">{wxEmoji(code)}</span>
+                    <span className="wth-day-hi">{d.maxtempC}°</span>
+                    <span className="wth-day-sep">/</span>
+                    <span className="wth-day-lo">{d.mintempC}°</span>
+                  </div>
+                );
+              })}
+            </div>
+          </>
+        )}
+      </div>
+    </>
+  );
+}
+
 function PoolDetail({ pool }) {
   const pct = pool.size ? Math.round((pool.allocated / pool.size) * 100) : null;
   const cls = pool.status !== 'ONLINE' || pct >= POOL_CRIT_PCT ? 'crit' : pct >= POOL_WARN_PCT ? 'warn' : '';
@@ -208,27 +287,29 @@ function PoolDetail({ pool }) {
   );
 }
 
-export default function AmbientPopover({ chip, anchor, placement, nasData, cleanSince, now, onMouseEnter, onMouseLeave }) {
+export default function AmbientPopover({ chip, anchor, placement, nasData, cleanSince, now, weatherForecast, onMouseEnter, onMouseLeave }) {
   if (!chip || !anchor) return null;
 
   const pools = Array.isArray(nasData?.pools) ? nasData.pools : [];
   const pool  = pools.find(p => p.name === chip);
 
   let content = null;
-  if      (chip === 'load') content = <LoadDetail info={nasData?.info} />;
-  else if (chip === 'cpu')  content = <CpuDetail  cpuTemp={nasData?.cpuTemp} cores={nasData?.info?.cores} />;
-  else if (chip === 'mem')  content = <MemDetail  physmem={nasData?.info?.physmem} memFree={nasData?.memFree} arcSize={nasData?.arcSize} />;
-  else if (chip === 'net')  content = <NetDetail  netStats={nasData?.netStats} />;
-  else if (chip === 'apps') content = <AppsDetail apps={nasData?.apps ?? []} />;
-  else if (chip === 'rank') content = <RankDetail cleanSince={cleanSince} now={now} />;
-  else if (pool)            content = <PoolDetail pool={pool} />;
+  if      (chip === 'load')    content = <LoadDetail    info={nasData?.info} />;
+  else if (chip === 'cpu')     content = <CpuDetail     cpuTemp={nasData?.cpuTemp} cores={nasData?.info?.cores} />;
+  else if (chip === 'mem')     content = <MemDetail     physmem={nasData?.info?.physmem} memFree={nasData?.memFree} arcSize={nasData?.arcSize} />;
+  else if (chip === 'net')     content = <NetDetail     netStats={nasData?.netStats} />;
+  else if (chip === 'apps')    content = <AppsDetail    apps={nasData?.apps ?? []} />;
+  else if (chip === 'rank')    content = <RankDetail    cleanSince={cleanSince} now={now} />;
+  else if (chip === 'weather') content = <WeatherDetail forecast={weatherForecast} />;
+  else if (pool)               content = <PoolDetail    pool={pool} />;
 
   if (!content) return null;
 
-  const isApps  = chip === 'apps';
-  const isRank  = chip === 'rank';
-  const popWidth = isApps || isRank ? 220 : 180;
-  const left = isRank
+  const isApps    = chip === 'apps';
+  const isRank    = chip === 'rank';
+  const isWeather = chip === 'weather';
+  const popWidth = isWeather ? 210 : isApps || isRank ? 220 : 180;
+  const left = (isRank || isWeather)
     ? Math.max(8, anchor.right - popWidth)
     : Math.min(anchor.left, window.innerWidth - popWidth - 8);
   const style = { left, width: popWidth };
