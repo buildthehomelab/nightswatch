@@ -10,7 +10,7 @@ Thanks for your interest. Nightswatch is a small, opinionated project. Contribut
 - **No new dependencies** without a strong reason. The stack is React 18 + Vite 5 + vanilla CSS. Keep it that way.
 - **No Tailwind, no CSS-in-JS.** Styling lives in `src/index.css` as CSS custom properties.
 - **No state management libraries.** `useState` / `useRef` / `useMemo` is the whole stack.
-- **Services are pure.** Files in `src/services/` export data and hooks — no JSX.
+- **Services are pure.** Files in `src/services/` export data and hooks, with no JSX.
 
 ---
 
