@@ -44,7 +44,7 @@ docker compose up            # or: npm run dev
 **From source:**
 
 ```sh
-git clone https://github.com/hybridlabs-dev/nightswatch.git && cd nightswatch
+git clone https://github.com/buildthehomelab/nightswatch.git && cd nightswatch
 cp .env.example .env.local   # fill in values
 docker compose up            # dev: HTTPS port 5173
 ```
