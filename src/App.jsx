@@ -859,7 +859,10 @@ export default function App() {
             onChange={(v) => setTweak("theme", v)}
           />
           <CustomizeSection label="Background" />
-          <BgImagePicker value={t.bgImage} onChange={(v) => setTweak("bgImage", v)} />
+          <BgImagePicker
+            image={t.bgImage} fit={t.bgFit} position={t.bgPosition} dim={t.bgDim}
+            onChange={(edits) => setTweak(edits)}
+          />
         </CustomizeColumn>
         <CustomizeColumn>
           <CustomizeSection label="Ambient strip" />
