@@ -352,7 +352,23 @@ export function CustomizeRadio({ label, value, options, onChange }) {
   );
 }
 
-export function BgImagePicker({ value, onChange }) {
+const FIT_OPTS = [
+  { value: 'cover',   label: 'fill' },
+  { value: 'contain', label: 'fit'  },
+  { value: 'tile',    label: 'tile' },
+];
+const POS_GRID = [
+  ['left top',    'center top',    'right top'   ],
+  ['left center', 'center',        'right center'],
+  ['left bottom', 'center bottom', 'right bottom'],
+];
+const DIM_OPTS = [
+  { value: 0,    label: 'off'  },
+  { value: 0.3,  label: 'mid'  },
+  { value: 0.55, label: 'dark' },
+];
+
+export function BgImagePicker({ image, fit, position, dim, onChange }) {
   const id = useId();
   const [err, setErr] = useState('');
 
@@ -360,23 +376,77 @@ export function BgImagePicker({ value, onChange }) {
     const file = e.target.files?.[0];
     if (!file) return;
     const reader = new FileReader();
-    reader.onload = (ev) => { onChange(ev.target.result); setErr(''); };
+    reader.onload = (ev) => { onChange({ bgImage: ev.target.result }); setErr(''); };
     reader.onerror = () => setErr('Failed to read file');
     reader.readAsDataURL(file);
     e.target.value = '';
   };
 
+  const fitIdx = Math.max(0, FIT_OPTS.findIndex(o => o.value === fit));
+  const dimIdx = Math.max(0, DIM_OPTS.findIndex(o => o.value === dim));
+
   return (
     <div className="twk-row">
       <input id={id} type="file" accept="image/*" style={{ display: 'none' }} onChange={handleFile} />
-      {value ? (
-        <div className="twk-bg-preview">
-          <img className="twk-bg-thumb" src={value} alt="" />
-          <button type="button" className="twk-bg-btn" onClick={() => onChange('')}>remove</button>
+
+      {!image ? (
+        <label htmlFor={id} className="twk-bg-upload">↑ upload image</label>
+      ) : (<>
+        <div className="twk-bg-thumb-wrap">
+          <img className="twk-bg-thumb" src={image} alt="" />
+          <label htmlFor={id} className="twk-bg-swap">swap</label>
         </div>
-      ) : (
-        <label htmlFor={id} className="twk-bg-btn" style={{ display: 'inline-block' }}>upload image</label>
-      )}
+
+        <div className="twk-bg-ctrl">
+          <span className="twk-bg-lbl">fit</span>
+          <div className="twk-seg">
+            <div className="twk-seg-thumb" style={{
+              left: `calc(2px + ${fitIdx} * (100% - 4px) / 3)`,
+              width: `calc((100% - 4px) / 3)`,
+            }} />
+            {FIT_OPTS.map(o => (
+              <button key={o.value} type="button" role="radio" aria-checked={o.value === fit}
+                      onClick={() => onChange({ bgFit: o.value })}>
+                {o.label}
+              </button>
+            ))}
+          </div>
+        </div>
+
+        {fit !== 'tile' && (
+          <div className="twk-bg-ctrl" style={{ alignItems: 'flex-start' }}>
+            <span className="twk-bg-lbl" style={{ paddingTop: 5 }}>pos</span>
+            <div className="twk-bg-pos-grid">
+              {POS_GRID.map(row => row.map(pos => (
+                <button key={pos} type="button" className="twk-bg-pos-dot"
+                        aria-pressed={position === pos}
+                        onClick={() => onChange({ bgPosition: pos })} />
+              )))}
+            </div>
+          </div>
+        )}
+
+        <div className="twk-bg-ctrl">
+          <span className="twk-bg-lbl">dim</span>
+          <div className="twk-seg">
+            <div className="twk-seg-thumb" style={{
+              left: `calc(2px + ${dimIdx} * (100% - 4px) / 3)`,
+              width: `calc((100% - 4px) / 3)`,
+            }} />
+            {DIM_OPTS.map(o => (
+              <button key={o.value} type="button" role="radio" aria-checked={o.value === dim}
+                      onClick={() => onChange({ bgDim: o.value })}>
+                {o.label}
+              </button>
+            ))}
+          </div>
+        </div>
+
+        <button type="button" className="twk-bg-remove" onClick={() => onChange({ bgImage: '' })}>
+          remove image
+        </button>
+      </>)}
+
       {err && <div className="twk-bg-err">{err}</div>}
     </div>
   );
