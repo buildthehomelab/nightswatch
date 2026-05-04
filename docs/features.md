@@ -20,7 +20,7 @@ The entire UI shifts based on what's wrong:
 
 | State | What you see |
 |-------|-------------|
-| **Healthy** | Centered hero phrase + running service count + uptime |
+| **Healthy** | Centered hero phrase (time-of-day bucket, rotates hourly) |
 | **Warnings** | Sarcastic masthead phrase + ranked issue list |
 | **Critical** | Same as warnings — critical issues sort first |
 
