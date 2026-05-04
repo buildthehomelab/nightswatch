@@ -137,13 +137,21 @@ Key variables:
 
 ## Deployment
 
-Nightswatch is a static SPA. Build with `npm run build` and serve `dist/` from any static host or reverse proxy.
+### Docker (recommended)
 
-**Reverse proxy requirement:** The Vite dev server proxy that injects the TrueNAS API key only runs during `npm run dev` / `npm run preview`. For production, you need a reverse proxy (nginx, Caddy, Traefik) to:
-1. Serve the static `dist/` files
-2. Forward `/truenas/*` to your TrueNAS instance with the API key header injected
+```sh
+docker compose -f docker-compose.prod.yml --env-file .env.local build
+docker compose -f docker-compose.prod.yml --env-file .env.local up -d
+```
 
-Example nginx snippet:
+The container serves HTTP on port 8080 and handles the TrueNAS proxy internally — no external reverse proxy required for the proxy layer. Point your existing proxy (Traefik, Nginx Proxy Manager, Caddy) at port 8080 for HTTPS termination and domain routing.
+
+Set `PORT=` in your environment to map a different host port.
+
+### Manual
+
+Build with `npm run build` and serve `dist/` behind a reverse proxy that forwards `/truenas/*` to your TrueNAS instance with the API key header injected:
+
 ```nginx
 location /truenas/ {
     proxy_pass https://nas.local/;
