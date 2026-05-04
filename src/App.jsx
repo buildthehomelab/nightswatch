@@ -847,7 +847,7 @@ export default function App() {
       />
 
       <CustomizePanel side={t.ambientPlacement === "bottom" ? "top" : "bottom"}>
-        <CustomizeColumn>
+        <CustomizeColumn wide>
           <CustomizeSection label="Theme" />
           <CustomizeRadio
             label="Theme"
