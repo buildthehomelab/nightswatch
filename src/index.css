@@ -630,7 +630,8 @@ body.has-bg-image.density-compact .issue { padding: 11px 16px; }
 }
 .dozzle.open { transform: translateY(0); }
 .dozzle--fullscreen {
-  top: 0; height: auto;
+  inset: 0;
+  height: auto;
   border-left: 1px solid var(--rule);
   border-top: none;
   transform: translateX(100%);
