@@ -93,8 +93,8 @@ Key variables:
 |---|---|
 | Framework | React 18 |
 | Build | Vite 5 |
-| Styling | CSS custom properties — no Tailwind, no CSS-in-JS |
-| State | `useState` / `useRef` / `useMemo` — no external library |
+| Styling | CSS custom properties (no Tailwind, no CSS-in-JS) |
+| State | `useState` / `useRef` / `useMemo`, no external library |
 | Fonts | Barlow Condensed (display) + Rubik (UI) + JetBrains Mono (data) |
 | Theme | Light / dark via `data-theme` on `<html>` |
 
