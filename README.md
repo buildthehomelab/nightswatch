@@ -83,7 +83,7 @@ Key variables:
 | `CVE_KEYWORDS` | Optional | Comma-separated NVD search terms (e.g. `plex,nginx`) |
 | `DEMO` | No | `true` to run with mock data |
 
-> **Security note:** `TRUENAS_KEY` and `TRUENAS_HOST` have no `VITE_` prefix — they are injected at the Vite proxy layer and never sent to the browser.
+> **Security note:** `TRUENAS_KEY` and `TRUENAS_HOST` have no `VITE_` prefix; they are injected at the Vite proxy layer and never sent to the browser.
 
 ---
 
