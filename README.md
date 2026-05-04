@@ -32,6 +32,20 @@ Issues auto-escalate with age. Keyboard-first navigation. Everything persists to
 
 ## Quick start
 
+### Docker (recommended)
+
+```sh
+git clone https://github.com/your-username/nightswatch.git
+cd nightswatch
+cp .env.example .env.local
+# edit .env.local — at minimum set TRUENAS_HOST, TRUENAS_PORT, TRUENAS_KEY
+docker compose up
+```
+
+Open `https://localhost:5173` (self-signed cert — the TrueNAS proxy requires HTTPS).
+
+### Without Docker
+
 ```sh
 git clone https://github.com/your-username/nightswatch.git
 cd nightswatch
@@ -42,14 +56,12 @@ cp .env.example .env.local
 npm run dev
 ```
 
-Open `https://localhost:5173` (self-signed cert — the TrueNAS proxy requires HTTPS).
-
 ### Demo mode (no TrueNAS required)
 
 ```sh
 cp .env.example .env.local
 # set DEMO=true in .env.local
-npm run dev
+docker compose up      # or: npm run dev
 ```
 
 ---
