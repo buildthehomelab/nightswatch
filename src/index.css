@@ -678,7 +678,7 @@ body.has-bg-image.density-compact .issue { padding: 11px 16px; }
 }
 .dozzle-close {
   appearance: none; border: 0; background: transparent;
-  color: var(--ink-3); font-size: 12px; font-weight: 600;
+  color: var(--ok); font-size: 12px; font-weight: 600;
   cursor: default; padding: 0; margin-left: auto;
   transition: color 0.12s;
 }
