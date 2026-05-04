@@ -160,7 +160,7 @@ location /truenas/ {
 }
 ```
 
-Gate the entire dashboard behind your existing reverse-proxy auth (Authelia, Authentik, Tailscale) — it exposes operational controls.
+Gate the entire dashboard behind your existing reverse-proxy auth (Authelia, Authentik, Tailscale), as it exposes operational controls.
 
 ---
 
