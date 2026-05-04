@@ -413,6 +413,15 @@ function IssueList({ issues, onOpenLogs, onIgnore }) {
   const [openId, setOpenId] = useState(null);
   const [focusedIndex, setFocusedIndex] = useState(null);
   const [filterSev, setFilterSev] = useState(null);
+  const [fadingKey, setFadingKey] = useState(null);
+
+  const handleIgnoreWithAnimation = (key, label) => {
+    setFadingKey(key);
+    setTimeout(() => {
+      onIgnore(key, label);
+      setFadingKey(null);
+    }, 320);
+  };
 
   const filtered = filterSev ? issues.filter(i => i.severity === filterSev) : issues;
 
@@ -495,13 +504,14 @@ function IssueList({ issues, onOpenLogs, onIgnore }) {
           index={i}
           isOpen={openId === issue.id}
           isFocused={focusedIndex === i}
+          isFading={fadingKey === issue.ignoreKey}
           onToggle={() => {
             const isClosing = openId === issue.id;
             setFocusedIndex(isClosing ? null : i);
             setOpenId(isClosing ? null : issue.id);
           }}
           onOpenLogs={onOpenLogs}
-          onIgnore={onIgnore}
+          onIgnore={handleIgnoreWithAnimation}
         />
       ))}
     </section>
