@@ -337,7 +337,7 @@ function Logs({ lines }) {
   );
 }
 
-function Issue({ issue, isOpen, isFocused, onToggle, index, onOpenLogs, onIgnore }) {
+function Issue({ issue, isOpen, isFocused, isFading, onToggle, index, onOpenLogs, onIgnore }) {
   const ref = useRef(null);
   useEffect(() => {
     if (isFocused) ref.current?.scrollIntoView({ block: "nearest", behavior: "smooth" });
@@ -352,7 +352,7 @@ function Issue({ issue, isOpen, isFocused, onToggle, index, onOpenLogs, onIgnore
   return (
     <div
       ref={ref}
-      className={`issue ${issue.severity} ${isOpen ? "open" : ""} ${isFocused ? "focused" : ""} rise`}
+      className={`issue ${issue.severity} ${isOpen ? "open" : ""} ${isFocused ? "focused" : ""} ${isFading ? "ignoring" : ""} rise`}
       style={{ animationDelay: `${0.05 + index * 0.04}s` }}
       data-issue-id={issue.id}
       onClick={onToggle}
