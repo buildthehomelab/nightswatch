@@ -27,7 +27,7 @@ Monitors: WAN (1.1.1.1 / 8.8.8.8), TrueNAS SCALE (pools, temps, apps, SMART, upd
 **Pre-built image (fastest):**
 
 ```sh
-curl -o docker-compose.yml https://raw.githubusercontent.com/hybridlabs-dev/nightswatch/main/docker-compose.example.yml
+curl -o docker-compose.yml https://raw.githubusercontent.com/buildthehomelab/nightswatch/main/docker-compose.example.yml
 # edit: set TRUENAS_HOST, TRUENAS_PORT, TRUENAS_KEY
 docker compose up -d
 ```
