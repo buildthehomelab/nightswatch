@@ -16,7 +16,7 @@ A silence-first homelab status dashboard. When everything is healthy, you see a 
 |---|---|
 | **Healthy** | Centered italic phrase. Almost nothing. |
 | **Warnings** | Sarcastic one-liner + ranked issue list |
-| **Critical** | Same — critical issues always sort first |
+| **Critical** | Same as warnings, but critical issues sort first |
 
 It monitors:
 - **WAN connectivity** — probes 1.1.1.1 and 8.8.8.8 every 30s, requires 3 consecutive failures before marking down
