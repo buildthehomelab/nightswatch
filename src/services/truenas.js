@@ -320,11 +320,16 @@ async function fetchNetStats(hdrs) {
     if (!Array.isArray(json)) return null;
 
     let rx = 0, tx = 0;
-    for (const entry of json) {
-      const vals = lastNetVals(entry);
-      if (vals) { rx += vals[0]; tx += vals[1]; }
+    const ifaceStats = [];
+    for (let i = 0; i < ifaces.length; i++) {
+      const vals = lastNetVals(json[i]);
+      if (vals) {
+        rx += vals[0];
+        tx += vals[1];
+        ifaceStats.push({ name: ifaces[i], rx: vals[0], tx: vals[1] });
+      }
     }
-    return { rx, tx };
+    return { rx, tx, ifaces: ifaceStats };
   } catch { return null; }
 }
 
