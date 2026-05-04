@@ -1,6 +1,6 @@
 # Contributing to Nightswatch
 
-Thanks for your interest. Nightswatch is a small, opinionated project — contributions that sharpen its focus are welcome. Sprawl is not.
+Thanks for your interest. Nightswatch is a small, opinionated project. Contributions that sharpen its focus are welcome. Sprawl is not.
 
 ---
 
