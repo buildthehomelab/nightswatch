@@ -2,7 +2,7 @@
 
 *the order that mans the wall, speaks only when the threat is real*
 
-A silence-first homelab status dashboard. When everything is healthy, you see a single quiet phrase. When something needs attention, it appears as a ranked list of incidents. No noise, no always-on widgets.
+Silence-first homelab status dashboard. Healthy = one quiet phrase. Something wrong = ranked issue list.
 
 ![License](https://img.shields.io/badge/license-MIT-blue.svg)
 ![React](https://img.shields.io/badge/React-18-61dafb.svg)
@@ -10,124 +10,61 @@ A silence-first homelab status dashboard. When everything is healthy, you see a 
 
 ---
 
-## What it does
-
-| State | What you see |
+| State | Display |
 |---|---|
-| **Healthy** | Centered italic phrase. Almost nothing. |
-| **Warnings** | Sarcastic one-liner + ranked issue list |
-| **Critical** | Same as warnings, but critical issues sort first |
+| **Healthy** | Centered italic phrase |
+| **Warnings** | One-liner + ranked issue list |
+| **Critical** | Same; critical issues sort first |
 
-It monitors:
-- **WAN connectivity:** probes 1.1.1.1 and 8.8.8.8 every 30s, requires 3 consecutive failures before marking down
-- **TrueNAS SCALE:** pool health, capacity, CPU/disk temps, memory, stopped apps, app updates, system updates, SMART alerts
-- **CVE feed:** NIST NVD vulnerability database, filtered by keywords you configure
-- **Weather:** via wttr.in (optional)
-
-Issues auto-escalate with age. Keyboard-first navigation. Everything persists to localStorage with no backend required.
-
-> **Demo:** set `DEMO=true` in `.env.local` to run with mock data. No TrueNAS needed.
+Monitors: WAN (1.1.1.1 / 8.8.8.8), TrueNAS SCALE (pools, temps, apps, SMART, updates), NIST NVD CVE feed, weather (optional). Issues auto-escalate with age. No backend required.
 
 ---
 
 ## Quick start
 
-### Pre-built image (fastest)
+**Pre-built image (fastest):**
 
 ```sh
 curl -o docker-compose.yml https://raw.githubusercontent.com/hybridlabs-dev/nightswatch/main/docker-compose.example.yml
-# edit docker-compose.yml: set TRUENAS_HOST, TRUENAS_PORT, TRUENAS_KEY
+# edit: set TRUENAS_HOST, TRUENAS_PORT, TRUENAS_KEY
 docker compose up -d
 ```
 
 Open `http://localhost:8080`.
 
-### From source (dev / contributors)
+**Demo mode (no TrueNAS):**
 
 ```sh
-git clone https://github.com/hybridlabs-dev/nightswatch.git
-cd nightswatch
-cp .env.example .env.local
-# edit .env.local: set TRUENAS_HOST, TRUENAS_PORT, and TRUENAS_KEY at minimum
-docker compose up
+cp .env.example .env.local   # set DEMO=true
+docker compose up            # or: npm run dev
 ```
 
-Open `https://localhost:5173` (self-signed cert; the TrueNAS proxy requires HTTPS).
-
-### Without Docker
+**From source:**
 
 ```sh
-git clone https://github.com/your-username/nightswatch.git
-cd nightswatch
-npm install
-npm run setup          # installs git hooks (run once)
-cp .env.example .env.local
-# edit .env.local: set TRUENAS_HOST, TRUENAS_PORT, and TRUENAS_KEY at minimum
-npm run dev
-```
-
-### Demo mode (no TrueNAS required)
-
-```sh
-cp .env.example .env.local
-# set DEMO=true in .env.local
-docker compose up      # or: npm run dev
+git clone https://github.com/hybridlabs-dev/nightswatch.git && cd nightswatch
+cp .env.example .env.local   # fill in values
+docker compose up            # dev: HTTPS port 5173
 ```
 
 ---
 
 ## Configuration
 
-Copy `.env.example` to `.env.local` and fill in the values you need. All options are documented in `.env.example`.
-
-Key variables:
+Copy `.env.example` to `.env.local`. All options documented there.
 
 | Variable | Required | Description |
 |---|---|---|
-| `TRUENAS_HOST` | For TrueNAS | Hostname or IP of your NAS |
-| `TRUENAS_PORT` | For TrueNAS | HTTPS port (default 443) |
-| `TRUENAS_KEY` | For TrueNAS | API key from TrueNAS Settings → API Keys |
-| `TRUENAS_UI_URL` | Optional | Browser-facing URL override for TrueNAS links. Only needed for split DNS; derived from `TRUENAS_HOST`/`TRUENAS_PORT` if unset. |
-| `DOZZLE_URL` | Optional | URL of your Dozzle instance for log viewing |
-| `WEATHER_LOCATION` | Optional | City name or coordinates for wttr.in |
-| `CVE_KEYWORDS` | Optional | Comma-separated NVD search terms (e.g. `plex,nginx`) |
-| `DEMO` | No | `true` to run with mock data |
+| `TRUENAS_HOST` | TrueNAS | Hostname or IP |
+| `TRUENAS_PORT` | TrueNAS | HTTPS port (default 443) |
+| `TRUENAS_KEY` | TrueNAS | API key from TrueNAS Settings > API Keys |
+| `TRUENAS_UI_URL` | Optional | Browser-facing URL override (split DNS) |
+| `DOZZLE_URL` | Optional | Dozzle instance URL for log viewing |
+| `WEATHER_LOCATION` | Optional | City name or coordinates (wttr.in) |
+| `CVE_KEYWORDS` | Optional | Comma-separated NVD terms (e.g. `plex,nginx`) |
+| `DEMO` | No | `true` for mock data |
 
-> **Security note:** `TRUENAS_KEY` and `TRUENAS_HOST` have no `VITE_` prefix; they are injected at the Vite proxy layer and never sent to the browser.
-
----
-
-## Stack
-
-| Layer | Choice |
-|---|---|
-| Framework | React 18 |
-| Build | Vite 5 |
-| Styling | CSS custom properties (no Tailwind, no CSS-in-JS) |
-| State | `useState` / `useRef` / `useMemo`, no external library |
-| Fonts | Barlow Condensed (display) + Rubik (UI) + JetBrains Mono (data) |
-| Theme | Light / dark via `data-theme` on `<html>` |
-
----
-
-## Scripts
-
-| Command | Description |
-|---|---|
-| `npm run dev` | Start dev server (HTTPS, port 5173) |
-| `npm run build` | Production build → `dist/` |
-| `npm run preview` | Preview production build |
-| `npm run lint` | ESLint (React + hooks rules) |
-| `npm run test` | Vitest |
-| `npm run setup` | Install git hooks (run once after cloning) |
-
-**Docker:**
-
-| Command | Description |
-|---|---|
-| `docker compose up` | Dev server with HMR (HTTPS, port 5173) |
-| `docker compose -f docker-compose.prod.yml --env-file .env.local build` | Build production image |
-| `docker compose -f docker-compose.prod.yml --env-file .env.local up -d` | Run production container (HTTP, port 8080) |
+> `TRUENAS_KEY` and `TRUENAS_HOST` have no `VITE_` prefix; injected at proxy layer, never sent to browser.
 
 ---
 
@@ -147,69 +84,28 @@ Key variables:
 
 ## Deployment
 
-### Pre-built image (recommended)
+Container serves HTTP on port 8080. Point a reverse proxy (Traefik, Caddy, Nginx Proxy Manager) at it for HTTPS and domain routing. Gate behind auth (Authelia, Authentik, Tailscale): this dashboard exposes NAS operational state and should not be public.
 
-No cloning or building required. Copy [`docker-compose.example.yml`](docker-compose.example.yml), fill in your values, and run:
-
-```sh
-curl -o docker-compose.yml https://raw.githubusercontent.com/hybridlabs-dev/nightswatch/main/docker-compose.example.yml
-# edit docker-compose.yml: set TRUENAS_HOST, TRUENAS_PORT, TRUENAS_KEY
-docker compose up -d
-```
-
-The image is published to GHCR on every release:
-
-```
-ghcr.io/hybridlabs-dev/nightswatch:latest   # most recent release
-ghcr.io/hybridlabs-dev/nightswatch:0.1      # minor-pinned
-ghcr.io/hybridlabs-dev/nightswatch:0.1.0    # exact version
-```
-
-### Build from source
+**Prod build from source:**
 
 ```sh
-git clone https://github.com/hybridlabs-dev/nightswatch.git
-cd nightswatch
-cp .env.example .env.local
-# edit .env.local: set TRUENAS_HOST, TRUENAS_PORT, TRUENAS_KEY
 docker compose -f docker-compose.prod.yml --env-file .env.local build
 docker compose -f docker-compose.prod.yml --env-file .env.local up -d
 ```
 
-### Notes
+**GHCR image tags:**
 
-The container serves HTTP on port 8080. Point your existing reverse proxy (Traefik, Nginx Proxy Manager, Caddy) at port 8080 for HTTPS termination and domain routing. No external proxy is required otherwise.
-
-Set `PORT=` in your environment to map a different host port.
-
-Gate the entire dashboard behind your reverse-proxy auth layer (Authelia, Authentik, Tailscale). The dashboard exposes NAS operational state and should not be public.
-
-### Manual (no Docker)
-
-Build with `npm run build` and serve `dist/` behind a reverse proxy that forwards `/truenas/*` to your TrueNAS instance with the API key header injected:
-
-```nginx
-location /truenas/ {
-    proxy_pass https://nas.local/;
-    proxy_set_header Authorization "Bearer your-api-key";
-    proxy_ssl_verify off;
-}
+```
+ghcr.io/hybridlabs-dev/nightswatch:latest
+ghcr.io/hybridlabs-dev/nightswatch:0.1
 ```
 
 ---
 
-## TrueNAS v26 note
+## TrueNAS v26 warning
 
-TrueNAS 26.0 removes the REST API (`/api/v2.0`) entirely in favour of JSON-RPC over WebSocket. **Do not upgrade your NAS to v26 before the migration is complete.** See [`docs/truenas-v26.md`](docs/truenas-v26.md) for the full breakdown.
-
----
-
-## Contributing
-
-See [`CONTRIBUTING.md`](CONTRIBUTING.md).
+TrueNAS 26.0 removes REST (`/api/v2.0`) entirely. Do not upgrade before migration is complete. See [`docs/truenas-v26.md`](docs/truenas-v26.md).
 
 ---
 
-## License
-
-[MIT](LICENSE)
+[Contributing](CONTRIBUTING.md) | [MIT License](LICENSE)
