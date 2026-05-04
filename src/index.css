@@ -642,6 +642,7 @@ body.has-bg-image.density-compact .issue { padding: 11px 16px; }
 }
 .dozzle--fullscreen[data-placement="top"] {
   flex-direction: column;
+  transform: translateX(100%);
 }
 .dozzle--fullscreen[data-placement="top"] .dozzle-hd {
   border-top: none;
