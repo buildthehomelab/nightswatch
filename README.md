@@ -77,7 +77,7 @@ Key variables:
 | `TRUENAS_HOST` | For TrueNAS | Hostname or IP of your NAS |
 | `TRUENAS_PORT` | For TrueNAS | HTTPS port (default 443) |
 | `TRUENAS_KEY` | For TrueNAS | API key from TrueNAS Settings → API Keys |
-| `TRUENAS_UI_URL` | Optional | Browser-facing URL override for TrueNAS links — only needed for split DNS. Derived from `TRUENAS_HOST`/`TRUENAS_PORT` if unset. |
+| `TRUENAS_UI_URL` | Optional | Browser-facing URL override for TrueNAS links. Only needed for split DNS; derived from `TRUENAS_HOST`/`TRUENAS_PORT` if unset. |
 | `DOZZLE_URL` | Optional | URL of your Dozzle instance for log viewing |
 | `WEATHER_LOCATION` | Optional | City name or coordinates for wttr.in |
 | `CVE_KEYWORDS` | Optional | Comma-separated NVD search terms (e.g. `plex,nginx`) |
