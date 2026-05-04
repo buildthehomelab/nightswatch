@@ -16,6 +16,16 @@ Thanks for your interest. Nightswatch is a small, opinionated project — contri
 
 ## Setup
 
+**Docker:**
+```sh
+git clone https://github.com/your-username/nightswatch.git
+cd nightswatch
+cp .env.example .env.local
+# fill in your values, or set DEMO=true
+docker compose up
+```
+
+**Without Docker:**
 ```sh
 git clone https://github.com/your-username/nightswatch.git
 cd nightswatch
