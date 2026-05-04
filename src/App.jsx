@@ -19,7 +19,7 @@ const DEMO_STAGES = DEMO ? [
   { issues: ISSUE_FIXTURES.critical,          nasData: MOCK_NAS_STAGES[3], duration: 13_000 },
 ] : null;
 import {
-  useCustomize, CustomizePanel, CustomizeColumn, CustomizeSection, CustomizeRadio, CustomizeToggle,
+  useCustomize, CustomizePanel, CustomizeColumn, CustomizeSection, CustomizeRadio, CustomizeToggle, BgImagePicker,
 } from './components/CustomizePanel';
 
 const WEATHER_LOCATION = import.meta.env.VITE_WEATHER_LOCATION ?? "";
@@ -60,6 +60,7 @@ const CUSTOMIZE_DEFAULTS = {
   showDate: true,
   showRank: true,
   ambientPlacement: "bottom",
+  bgImage: "",
 };
 
 const MASTHEAD_STALE_MS = 4 * 60 * 60 * 1000;
@@ -621,6 +622,20 @@ export default function App() {
     document.body.className = "density-compact";
   }, [t.theme]);
 
+  useEffect(() => {
+    if (t.bgImage) {
+      document.body.style.backgroundImage = `url(${t.bgImage})`;
+      document.body.style.backgroundSize = 'cover';
+      document.body.style.backgroundPosition = 'center';
+      document.body.style.backgroundAttachment = 'fixed';
+    } else {
+      document.body.style.removeProperty('background-image');
+      document.body.style.removeProperty('background-size');
+      document.body.style.removeProperty('background-position');
+      document.body.style.removeProperty('background-attachment');
+    }
+  }, [t.bgImage]);
+
   const issues = useMemo(() => {
     const liveIssues = [
       ...nasIssues(nasData),
@@ -829,6 +844,8 @@ export default function App() {
             ]}
             onChange={(v) => setTweak("theme", v)}
           />
+          <CustomizeSection label="Background" />
+          <BgImagePicker value={t.bgImage} onChange={(v) => setTweak("bgImage", v)} />
         </CustomizeColumn>
         <CustomizeColumn>
           <CustomizeSection label="Ambient strip" />
