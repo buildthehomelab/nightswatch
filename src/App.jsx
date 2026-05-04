@@ -504,7 +504,7 @@ function IssueList({ issues, onOpenLogs, onIgnore }) {
           index={i}
           isOpen={openId === issue.id}
           isFocused={focusedIndex === i}
-          isFading={fadingKey === issue.ignoreKey}
+          isFading={fadingKey !== null && fadingKey === issue.ignoreKey}
           onToggle={() => {
             const isClosing = openId === issue.id;
             setFocusedIndex(isClosing ? null : i);
