@@ -107,7 +107,7 @@ The project has a voice: dry, sardonic, a little tired. Keep it in that register
 
 - No comments unless the *why* is non-obvious
 - No TypeScript (plain JS)
-- No default exports from services — named exports only
+- No default exports from services, named exports only
 - Prefer editing existing files over adding new ones
 
 Run `npm run lint` before submitting a PR. The pre-commit hook does this automatically.
