@@ -634,6 +634,18 @@ body.has-bg-image.density-compact .issue { padding: 11px 16px; }
   border-left: 1px solid var(--rule);
   border-top: none;
   transform: translateX(100%);
+  flex-direction: column-reverse;
+}
+.dozzle--fullscreen .dozzle-hd {
+  border-bottom: none;
+  border-top: 1px solid var(--rule);
+}
+.dozzle--fullscreen[data-placement="top"] {
+  flex-direction: column;
+}
+.dozzle--fullscreen[data-placement="top"] .dozzle-hd {
+  border-top: none;
+  border-bottom: 1px solid var(--rule);
 }
 .dozzle--fullscreen.open { transform: translateX(0); }
 
