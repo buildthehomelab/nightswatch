@@ -1,5 +1,7 @@
 #!/bin/sh
 # Auto-commit hook for Claude Code. Picks conventional commit prefix from changed file paths.
+BRANCH=$(git rev-parse --abbrev-ref HEAD)
+[ "$BRANCH" = "main" ] && echo "Auto-commit skipped on main" && exit 0
 git add -A
 git diff --cached --quiet && exit 0
 
