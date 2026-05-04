@@ -187,6 +187,40 @@ function RankDetail({ cleanSince }) {
   );
 }
 
+function WanDetail({ wanUp, wanDownSince, now }) {
+  const downMs = !wanUp && wanDownSince ? now - wanDownSince.getTime() : null;
+
+  function fmtDur(ms) {
+    const s = Math.floor(ms / 1000);
+    const m = Math.floor(s / 60);
+    const h = Math.floor(m / 60);
+    const d = Math.floor(h / 24);
+    if (d)  return `${d}d ${h % 24}h`;
+    if (h)  return `${h}h ${m % 60}m`;
+    if (m)  return `${m}m`;
+    return `${s}s`;
+  }
+
+  const sinceFmt = wanDownSince
+    ? wanDownSince.toLocaleTimeString(undefined, { hour: '2-digit', minute: '2-digit', hour12: false })
+    : null;
+
+  return (
+    <>
+      <Head label="wan connectivity" />
+      <div className="ap-body">
+        <Row k="status" v={wanUp ? 'up' : 'down'} cls={wanUp ? 'ok' : 'crit'} />
+        {!wanUp && sinceFmt && <Row k="since"    v={sinceFmt} />}
+        {!wanUp && downMs != null && <Row k="duration" v={fmtDur(downMs)} cls="crit" />}
+        <div className="ap-rule" />
+        <Row k="probes"    v="1.1.1.1 · 8.8.8.8" />
+        <Row k="interval"  v="30s" />
+        {wanUp && <Row k="threshold" v="3 failures" />}
+      </div>
+    </>
+  );
+}
+
 function UptimeDetail({ nasUptimeSeconds, nasVersion, startTimeMs, now }) {
   const isNas   = nasUptimeSeconds != null;
   const totalMs = isNas ? nasUptimeSeconds * 1000 : now - startTimeMs;
@@ -332,7 +366,7 @@ function PoolDetail({ pool }) {
   );
 }
 
-export default function AmbientPopover({ chip, anchor, placement, nasData, cleanSince, now, weatherForecast, startTimeMs, nasUptimeSeconds, nasVersion, onMouseEnter, onMouseLeave }) {
+export default function AmbientPopover({ chip, anchor, placement, nasData, cleanSince, now, weatherForecast, startTimeMs, nasUptimeSeconds, nasVersion, wanUp, wanDownSince, onMouseEnter, onMouseLeave }) {
   if (!chip || !anchor) return null;
 
   const pools = Array.isArray(nasData?.pools) ? nasData.pools : [];
@@ -347,6 +381,7 @@ export default function AmbientPopover({ chip, anchor, placement, nasData, clean
   else if (chip === 'rank')    content = <RankDetail    cleanSince={cleanSince} now={now} />;
   else if (chip === 'weather') content = <WeatherDetail forecast={weatherForecast} />;
   else if (chip === 'uptime')  content = <UptimeDetail  nasUptimeSeconds={nasUptimeSeconds} nasVersion={nasVersion} startTimeMs={startTimeMs} now={now} />;
+  else if (chip === 'wan')     content = <WanDetail     wanUp={wanUp} wanDownSince={wanDownSince} now={now} />;
   else if (pool)               content = <PoolDetail    pool={pool} />;
 
   if (!content) return null;
