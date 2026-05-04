@@ -390,8 +390,9 @@ export default function AmbientPopover({ chip, anchor, placement, nasData, clean
   const isRank    = chip === 'rank';
   const isWeather = chip === 'weather';
   const isUptime  = chip === 'uptime';
-  const popWidth = isWeather ? 210 : isApps || isRank || isUptime ? 220 : 180;
-  const left = (isRank || isWeather || isUptime)
+  const isWan     = chip === 'wan';
+  const popWidth = isWeather ? 210 : isApps || isRank || isUptime ? 220 : isWan ? 200 : 180;
+  const left = (isRank || isWeather || isUptime || isWan)
     ? Math.max(8, anchor.right - popWidth)
     : Math.min(anchor.left, window.innerWidth - popWidth - 8);
   const style = { left, width: popWidth };
