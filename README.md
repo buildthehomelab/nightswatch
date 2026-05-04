@@ -42,7 +42,7 @@ cp .env.example .env.local
 docker compose up
 ```
 
-Open `https://localhost:5173` (self-signed cert — the TrueNAS proxy requires HTTPS).
+Open `https://localhost:5173` (self-signed cert; the TrueNAS proxy requires HTTPS).
 
 ### Without Docker
 
