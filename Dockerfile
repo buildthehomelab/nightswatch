@@ -50,6 +50,26 @@ COPY nginx/entrypoint.sh /docker-entrypoint-custom.sh
 COPY --from=builder /app/dist /usr/share/nginx/html
 RUN chmod +x /docker-entrypoint-custom.sh
 EXPOSE 80
-ENV TRUENAS_HOST="" TRUENAS_PORT="443" TRUENAS_KEY=""
+ENV TRUENAS_HOST="" \
+    TRUENAS_PORT="443" \
+    TRUENAS_KEY="" \
+    DEMO="false" \
+    WEATHER_LOCATION="" \
+    DOZZLE_URL="" \
+    CVE_KEYWORDS="" \
+    CVE_DAYS_BACK="30" \
+    CVE_MIN_CVSS="4.0" \
+    POOL_WARN_PCT="80" \
+    POOL_CRIT_PCT="90" \
+    CPU_WARN_C="70" \
+    CPU_CRIT_C="85" \
+    DISK_WARN_C="45" \
+    DISK_CRIT_C="55" \
+    MEM_WARN_PCT="80" \
+    MEM_CRIT_PCT="90" \
+    LOAD_WARN="4" \
+    LOAD_CRIT="8" \
+    SCRUB_STALE_DAYS="30" \
+    STOPPED_APP_HIDE_MINUTES="60"
 ENTRYPOINT ["/docker-entrypoint-custom.sh"]
 CMD ["nginx", "-g", "daemon off;"]
