@@ -39,7 +39,7 @@ export const MOCK_NAS_STAGES = [
     cpuTemp:    51,
     memFree:    21.2e9,
     arcSize:    6.6e9,
-    netStats:   { rx: 18.7 * 1024 * 1024, tx: 5.3 * 1024 * 1024 },
+    netStats:   { rx: 18.7 * 1024 * 1024, tx: 5.3 * 1024 * 1024, ifaces: [{ name: 'igb0', rx: 17.4 * 1024 * 1024, tx: 4.9 * 1024 * 1024 }, { name: 'igb1', rx: 1.3 * 1024 * 1024, tx: 0.4 * 1024 * 1024 }] },
     pools: [
       { name: 'tank',   status: 'ONLINE', size: 12*1e12, allocated: 5.0*1e12,  scan: { function: 'SCRUB', state: 'FINISHED', errors: 0, end_time: now - 7 * 86400_000 } },
       { name: 'nvme',   status: 'ONLINE', size:  2*1e12, allocated: 0.6*1e12,  scan: { function: 'SCRUB', state: 'FINISHED', errors: 0, end_time: now - 7 * 86400_000 } },
