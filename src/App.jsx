@@ -170,7 +170,7 @@ function Ambient({ now, wanUp, wanDownSince, uptime, rank, cleanSince, weather, 
     setPopoverAnchor(e.currentTarget.getBoundingClientRect());
   };
   const scheduleClose = () => {
-    closeTimerRef.current = setTimeout(() => setPopoverChip(null), 150);
+    closeTimerRef.current = setTimeout(() => setPopoverChip(null), 250);
   };
   const cancelClose = () => clearTimeout(closeTimerRef.current);
 
