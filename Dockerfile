@@ -52,7 +52,6 @@ RUN chmod +x /docker-entrypoint-custom.sh
 EXPOSE 80
 ENV TRUENAS_HOST="" \
     TRUENAS_PORT="443" \
-    TRUENAS_KEY="" \
     DEMO="false" \
     WEATHER_LOCATION="" \
     DOZZLE_URL="" \
