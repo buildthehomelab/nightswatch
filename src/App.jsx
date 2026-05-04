@@ -1,4 +1,4 @@
-import { useState, useEffect, useRef, useMemo } from 'react';
+import { useState, useEffect, useRef, useMemo, useCallback } from 'react';
 import Dozzle from './components/Dozzle';
 import AmbientPopover from './components/AmbientPopover';
 import { useTrueNas, nasIssues, fmtUptime, fmtAge, fmtBytes, fmtRate, UI as NAS_UI, POOL_WARN_PCT, POOL_CRIT_PCT, CPU_WARN_C, CPU_CRIT_C } from './services/truenas';
@@ -60,7 +60,6 @@ const CUSTOMIZE_DEFAULTS = {
   showDate: true,
   showRank: true,
   ambientPlacement: "bottom",
-  bgImage: "",
   bgFit: "cover",
   bgPosition: "center",
   bgDim: 0,
@@ -290,10 +289,9 @@ function rankForDays(days) {
   return 'Initiate';
 }
 
-const HEALTHY_MILESTONES = [7, 14, 30, 60, 90, 180, 365];
 
-function Healthy({ now, cleanSince }) {
-  const pool = healthyPhrasePool(now);
+function Healthy() {
+  const pool = healthyPhrasePool(new Date());
   const bucketKey = pool[0];
   const [phrase, setPhrase] = useState(() => pickPhrase(pool));
   const mounted = useRef(false);
@@ -305,10 +303,6 @@ function Healthy({ now, cleanSince }) {
     const id = setInterval(() => setPhrase(pickPhrase(healthyPhrasePool(new Date()))), 60 * 60 * 1000);
     return () => clearInterval(id);
   }, []);
-  const cleanDays = cleanSince ? Math.floor((now - new Date(cleanSince)) / 86_400_000) : null;
-  const milestoneNote = cleanDays != null && HEALTHY_MILESTONES.includes(cleanDays)
-    ? `${cleanDays} days without incident`
-    : null;
   return (
     <section className="healthy">
       <div className="rise rise-d1">
@@ -316,11 +310,6 @@ function Healthy({ now, cleanSince }) {
           <em>{phrase}</em>
         </p>
       </div>
-      {milestoneNote && (
-        <div className="sub rise rise-d2">
-          <span className="milestone">{milestoneNote}</span>
-        </div>
-      )}
     </section>
   );
 }
@@ -357,6 +346,7 @@ function Issue({ issue, isOpen, isFocused, onToggle, index, onOpenLogs, onIgnore
       ref={ref}
       className={`issue ${issue.severity} ${isOpen ? "open" : ""} ${isFocused ? "focused" : ""} rise`}
       style={{ animationDelay: `${0.05 + index * 0.04}s` }}
+      data-issue-id={issue.id}
       onClick={onToggle}
     >
       <div className="severity">{issue.label}</div>
@@ -424,6 +414,19 @@ function IssueList({ issues, onOpenLogs, onIgnore }) {
   }, [filterSev]);
 
   useEffect(() => {
+    if (!openId) return;
+    const handler = (e) => {
+      const openEl = document.querySelector(`[data-issue-id="${openId}"]`);
+      if (openEl && !openEl.contains(e.target)) {
+        setOpenId(null);
+        setFocusedIndex(null);
+      }
+    };
+    document.addEventListener('mousedown', handler);
+    return () => document.removeEventListener('mousedown', handler);
+  }, [openId]);
+
+  useEffect(() => {
     const onKey = (e) => {
       if (["INPUT", "TEXTAREA"].includes(document.activeElement?.tagName)) return;
       if (e.key === "j" || e.key === "J") {
@@ -463,7 +466,7 @@ function IssueList({ issues, onOpenLogs, onIgnore }) {
   if (infos) chips.push({ sev: "info", label: `${infos} advisor${infos > 1 ? "ies" : "y"}` });
 
   return (
-    <section className="issues">
+    <section className={`issues${filtered.length === 0 ? ' empty' : ''}`}>
       <div className="section-label rise">
         <span className="count">
           {chips.map((c, i) => (
@@ -484,7 +487,11 @@ function IssueList({ issues, onOpenLogs, onIgnore }) {
           index={i}
           isOpen={openId === issue.id}
           isFocused={focusedIndex === i}
-          onToggle={() => { setFocusedIndex(i); setOpenId(openId === issue.id ? null : issue.id); }}
+          onToggle={() => {
+            const isClosing = openId === issue.id;
+            setFocusedIndex(isClosing ? null : i);
+            setOpenId(isClosing ? null : issue.id);
+          }}
           onOpenLogs={onOpenLogs}
           onIgnore={onIgnore}
         />
@@ -497,7 +504,7 @@ const SHORTCUTS = [
   { key: "j / k",    desc: "navigate issues" },
   { key: "enter",    desc: "expand / collapse issue" },
   { key: "1 / 2 / 3", desc: "filter critical / warning / advisory" },
-  { key: "h  /  ?", desc: "toggle this panel" },
+  { key: "` / h",   desc: "toggle this panel" },
   { key: "l",             desc: "open log viewer" },
   { key: "r",             desc: "refresh status" },
   { key: "esc",      desc: "close overlay" },
@@ -516,6 +523,16 @@ export default function App() {
   const [cleanSince, setCleanSince] = useState(() =>
     DEMO ? new Date(Date.now() - 8 * 24 * 60 * 60 * 1000).toISOString() : localStorage.getItem(LS_CLEAN_KEY)
   );
+  const [bgImage, setBgImage] = useState(() => {
+    try { return localStorage.getItem('nightswatch:bgImage') ?? ''; } catch { return ''; }
+  });
+  const handleBgImageChange = useCallback((img) => {
+    setBgImage(img);
+    try {
+      if (img) localStorage.setItem('nightswatch:bgImage', img);
+      else localStorage.removeItem('nightswatch:bgImage');
+    } catch {}
+  }, []);
   const [demoStage, setDemoStage] = useState(0);
 
   useEffect(() => {
@@ -620,14 +637,14 @@ export default function App() {
 
   useEffect(() => {
     document.documentElement.setAttribute("data-theme", t.theme);
-    document.body.className = "density-compact";
-  }, [t.theme]);
+    document.body.className = `density-compact${bgImage ? ' has-bg-image' : ''}`;
+  }, [t.theme, bgImage]);
 
   useEffect(() => {
-    if (t.bgImage) {
+    if (bgImage) {
       const dim = t.bgDim ?? 0;
       const dimLayer = dim > 0 ? `linear-gradient(rgba(0,0,0,${dim}),rgba(0,0,0,${dim})),` : '';
-      document.body.style.backgroundImage = `${dimLayer}url(${t.bgImage})`;
+      document.body.style.backgroundImage = `${dimLayer}url(${bgImage})`;
       const fit = t.bgFit ?? 'cover';
       if (fit === 'tile') {
         document.body.style.backgroundSize = 'auto';
@@ -646,7 +663,7 @@ export default function App() {
         document.body.style.removeProperty(p);
       }
     }
-  }, [t.bgImage, t.bgFit, t.bgPosition, t.bgDim]);
+  }, [bgImage, t.bgFit, t.bgPosition, t.bgDim]);
 
   const issues = useMemo(() => {
     const liveIssues = [
@@ -796,7 +813,7 @@ export default function App() {
       <div className="page">
 
         {isHealthy ? (
-          <Healthy now={now} cleanSince={cleanSince} />
+          <Healthy />
         ) : (
           <>
             <div className="masthead">
@@ -858,7 +875,8 @@ export default function App() {
           />
           <CustomizeSection label="Background" />
           <BgImagePicker
-            image={t.bgImage} fit={t.bgFit} position={t.bgPosition} dim={t.bgDim}
+            image={bgImage} fit={t.bgFit} position={t.bgPosition} dim={t.bgDim}
+            onImageChange={handleBgImageChange}
             onChange={(edits) => setTweak(edits)}
           />
         </CustomizeColumn>

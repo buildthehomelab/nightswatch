@@ -245,7 +245,7 @@ export function CustomizePanel({ side = 'top', children }) {
   useEffect(() => {
     const onKey = (e) => {
       if (['INPUT', 'TEXTAREA'].includes(document.activeElement?.tagName)) return;
-      if (e.key === 'h' || e.key === 'H' || e.key === '?') setOpen(v => !v);
+      if (e.key === '`' || e.key === 'h' || e.key === 'H') setOpen(v => !v);
       else if (e.key === 'Escape') setOpen(false);
     };
     window.addEventListener('keydown', onKey);
@@ -368,7 +368,7 @@ const DIM_OPTS = [
   { value: 0.55, label: 'dark' },
 ];
 
-export function BgImagePicker({ image, fit, position, dim, onChange }) {
+export function BgImagePicker({ image, fit, position, dim, onImageChange, onChange }) {
   const id = useId();
   const [err, setErr] = useState('');
 
@@ -376,7 +376,21 @@ export function BgImagePicker({ image, fit, position, dim, onChange }) {
     const file = e.target.files?.[0];
     if (!file) return;
     const reader = new FileReader();
-    reader.onload = (ev) => { onChange({ bgImage: ev.target.result }); setErr(''); };
+    reader.onload = (ev) => {
+      const img = new Image();
+      img.onload = () => {
+        const MAX = 1920;
+        const scale = Math.min(1, MAX / Math.max(img.width, img.height));
+        const canvas = document.createElement('canvas');
+        canvas.width  = Math.round(img.width  * scale);
+        canvas.height = Math.round(img.height * scale);
+        canvas.getContext('2d').drawImage(img, 0, 0, canvas.width, canvas.height);
+        onImageChange(canvas.toDataURL('image/jpeg', 0.85));
+        setErr('');
+      };
+      img.onerror = () => setErr('Failed to load image');
+      img.src = ev.target.result;
+    };
     reader.onerror = () => setErr('Failed to read file');
     reader.readAsDataURL(file);
     e.target.value = '';
@@ -442,7 +456,7 @@ export function BgImagePicker({ image, fit, position, dim, onChange }) {
           </div>
         </div>
 
-        <button type="button" className="twk-bg-remove" onClick={() => onChange({ bgImage: '' })}>
+        <button type="button" className="twk-bg-remove" onClick={() => onImageChange('')}>
           remove image
         </button>
       </>)}

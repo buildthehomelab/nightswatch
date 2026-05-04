@@ -287,6 +287,8 @@ body {
 .issues .section-label {
   grid-column: 1 / -1;
 }
+.issues.empty .section-label { border-bottom: none; }
+body.has-bg-image .issues .section-label { border-bottom: none; }
 .section-label {
   font-family: var(--sans);
   font-size: 12px;
@@ -328,6 +330,19 @@ body {
 .density-compact .issue { padding: 11px 0; }
 .density-compact .issue:hover { padding: 11px 16px; }
 .density-compact .issue.focused { padding: 11px 16px; }
+
+/* always-on issue panel when a wallpaper is active */
+body.has-bg-image .issue {
+  background: rgba(255,255,255,0.82);
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+  margin: 0 -16px;
+  padding: 18px 16px;
+}
+body.has-bg-image.density-compact .issue { padding: 11px 16px; }
+[data-theme="dark"] body.has-bg-image .issue {
+  background: rgba(31, 28, 40, 0.82);
+}
 
 [data-theme="dark"] .issue.focused {
   background: #2a2040;
