@@ -3,3 +3,9 @@ compatibility_date = "2024-09-23"
 
 [assets]
 directory = "./dist"
+
+[env.production]
+name = "nightswatch"
+
+[env.preview]
+name = "nightswatch-preview"
