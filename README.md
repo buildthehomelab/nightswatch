@@ -81,7 +81,7 @@ Key variables:
 | `DOZZLE_URL` | Optional | URL of your Dozzle instance for log viewing |
 | `WEATHER_LOCATION` | Optional | City name or coordinates for wttr.in |
 | `CVE_KEYWORDS` | Optional | Comma-separated NVD search terms (e.g. `plex,nginx`) |
-| `DEMO` | — | `true` to run with mock data |
+| `DEMO` | No | `true` to run with mock data |
 
 > **Security note:** `TRUENAS_KEY` and `TRUENAS_HOST` have no `VITE_` prefix — they are injected at the Vite proxy layer and never sent to the browser.
 
