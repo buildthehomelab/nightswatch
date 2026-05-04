@@ -287,7 +287,7 @@ function WeatherDetail({ forecast }) {
   if (!forecast) return (
     <>
       <Head label="weather" />
-      <div className="ap-body"><div className="rk-empty">loading…</div></div>
+      <div className="ap-body"><div className="ap-empty">loading…</div></div>
     </>
   );
   const cur = forecast.current_condition?.[0];
