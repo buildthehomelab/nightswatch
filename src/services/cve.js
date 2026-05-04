@@ -1,4 +1,5 @@
 import { useState, useEffect } from 'react';
+import { CVE_KEYWORDS_RAW, CVE_DAYS_BACK, CVE_MIN_CVSS } from '../nwenv';
 
 const NVD_BASE      = 'https://services.nvd.nist.gov/rest/json/cves/2.0';
 const POLL_INTERVAL = 60 * 60 * 1000;
@@ -6,7 +7,6 @@ const CACHE_TTL     = 60 * 60 * 1000;
 const LS_CACHE_KEY  = 'cve:cache';
 const LS_FIRST_SEEN = 'cve:firstSeen';
 
-import { CVE_KEYWORDS_RAW, CVE_DAYS_BACK, CVE_MIN_CVSS } from '../nwenv';
 export const BASE_CVE_KEYWORDS = CVE_KEYWORDS_RAW.split(',').map(s => s.trim()).filter(Boolean);
 
 // ── localStorage ──────────────────────────────────────────
