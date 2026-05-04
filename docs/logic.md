@@ -104,8 +104,8 @@ either succeeds:
 
 both fail:
   wanFailCount++
-  wanFailCount === 2 → capture wanDownSince = new Date()
   wanFailCount >= 3  → wanUp = false  (3 consecutive failures required)
+  first time wanFailCount hits 3 → capture wanDownSince = new Date()
 ```
 
 Requires 3 consecutive failures to avoid false positives from transient network blips.
