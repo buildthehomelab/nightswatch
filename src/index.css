@@ -691,6 +691,7 @@ body.has-bg-image.density-compact .issue { padding: 11px 16px; }
 }
 .dozzle-frame {
   flex: 1;
+  min-height: 0;
   border: none;
   background: var(--paper-2);
 }
