@@ -213,9 +213,10 @@ function WanDetail({ wanUp, wanDownSince, now }) {
         {!wanUp && sinceFmt && <Row k="since"    v={sinceFmt} />}
         {!wanUp && downMs != null && <Row k="duration" v={fmtDur(downMs)} cls="crit" />}
         <div className="ap-rule" />
-        <Row k="probes"    v="1.1.1.1 · 8.8.8.8" />
+        <Row k="probe 1"   v="1.1.1.1" />
+        <Row k="probe 2"   v="8.8.8.8" />
         <Row k="interval"  v="30s" />
-        {wanUp && <Row k="threshold" v="3 failures" />}
+        {wanUp && <Row k="threshold" v="3 fails" />}
       </div>
     </>
   );
