@@ -1,5 +1,12 @@
 # Changelog
 
+## [0.1.3](https://github.com/buildthehomelab/nightswatch/compare/v0.1.2...v0.1.3) (2026-05-04)
+
+
+### Bug Fixes
+
+* update README build-from-source instructions ([0b08d4a](https://github.com/buildthehomelab/nightswatch/commit/0b08d4af5c036e01e535bc6b5b7354fc06bd0b30))
+
 ## [0.1.2](https://github.com/buildthehomelab/nightswatch/compare/v0.1.1...v0.1.2) (2026-05-04)
 
 
