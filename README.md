@@ -112,3 +112,7 @@ See [`docs/truenas-v26.md`](docs/truenas-v26.md).
 ---
 
 [Contributing](CONTRIBUTING.md) | [MIT License](LICENSE)
+
+---
+
+Bundled wallpaper via [r/wallpaper](https://www.reddit.com/r/wallpaper).
