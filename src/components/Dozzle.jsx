@@ -237,9 +237,9 @@ function DozzleDemo({ open, onClose, initialContainer, placement }) {
                 value={filter}
                 onChange={(e) => setFilter(e.target.value)}
               />
-              <span className={`dozzle-chip${showInfo ? " on" : ""}`} onClick={() => setShowInfo(!showInfo)}>info</span>
-              <span className={`dozzle-chip${showWarn ? " on" : ""}`} onClick={() => setShowWarn(!showWarn)}>warn</span>
-              <span className={`dozzle-chip${showErr  ? " on" : ""}`} onClick={() => setShowErr(!showErr)}>err</span>
+              <button type="button" className={`dozzle-chip${showInfo ? " on" : ""}`} onClick={() => setShowInfo(!showInfo)}>info</button>
+              <button type="button" className={`dozzle-chip${showWarn ? " on" : ""}`} onClick={() => setShowWarn(!showWarn)}>warn</button>
+              <button type="button" className={`dozzle-chip${showErr  ? " on" : ""}`} onClick={() => setShowErr(!showErr)}>err</button>
             </div>
 
             <div className="dozzle-stream" ref={streamRef}>
