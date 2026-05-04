@@ -2,7 +2,7 @@
 
 *the order that mans the wall, speaks only when the threat is real*
 
-React + Vite SPA. Minimal, attention-driven homelab status page. Silence is the default — UI shows only what needs operator attention.
+React + Vite SPA. Minimal, attention-driven homelab status page. Silence is the default: UI shows only what needs operator attention.
 
 ## Stack
 
