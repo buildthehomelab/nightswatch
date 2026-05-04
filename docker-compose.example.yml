@@ -3,7 +3,7 @@
 
 services:
   nightswatch:
-    image: ghcr.io/hybridlabs-dev/nightswatch:latest
+    image: ghcr.io/buildthehomelab/nightswatch:latest
     environment:
       # ── Required ────────────────────────────────────────────────────────────
       TRUENAS_HOST: your-nas-hostname-or-ip
