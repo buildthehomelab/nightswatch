@@ -18,6 +18,10 @@ const RANK_LADDER = [
   { name: 'Lord Commander', days: 100 },
 ];
 
+function Head({ label }) {
+  return <div className="ap-head">{label}</div>;
+}
+
 function Row({ k, v, cls }) {
   return (
     <div className="ap-row">
@@ -27,27 +31,49 @@ function Row({ k, v, cls }) {
   );
 }
 
+function MiniBar({ pct, cls }) {
+  return (
+    <div className="ap-mini-bar">
+      <div className="ap-mini-bar-track">
+        <div className={`ap-mini-bar-fill${cls ? ' ' + cls : ''}`} style={{ width: `${Math.min(100, pct ?? 0)}%` }} />
+      </div>
+    </div>
+  );
+}
+
 function LoadDetail({ info }) {
   const [l1, l5, l15] = info?.loadavg ?? [];
+  const cores = info?.cores ?? 1;
+  const loadPct = l1 != null ? Math.round((l1 / cores) * 100) : null;
+  const barCls = loadPct >= 90 ? 'crit' : loadPct >= 70 ? 'warn' : '';
   return (
     <>
-      <Row k="1m"    v={l1?.toFixed(2)} />
-      <Row k="5m"    v={l5?.toFixed(2)} />
-      <Row k="15m"   v={l15?.toFixed(2)} />
-      {info?.cores != null && <Row k="cores" v={info.cores} />}
+      <Head label="system load" />
+      <div className="ap-body">
+        {loadPct != null && <MiniBar pct={loadPct} cls={barCls} />}
+        <Row k="1m"    v={l1?.toFixed(2)} />
+        <Row k="5m"    v={l5?.toFixed(2)} />
+        <Row k="15m"   v={l15?.toFixed(2)} />
+        {info?.cores != null && <Row k="cores" v={info.cores} />}
+      </div>
     </>
   );
 }
 
 function CpuDetail({ cpuTemp, cores }) {
   const cls = cpuTemp == null ? '' : cpuTemp >= CPU_CRIT_C ? 'crit' : cpuTemp >= CPU_WARN_C ? 'warn' : '';
+  const pct = cpuTemp != null ? Math.round((cpuTemp / CPU_CRIT_C) * 100) : null;
   return (
     <>
-      <Row k="temp"  v={cpuTemp != null ? `${cpuTemp}°C` : null} cls={cls} />
-      {cores != null && <Row k="cores" v={cores} />}
-      <div className="ap-rule" />
-      <Row k="warn↑" v={`${CPU_WARN_C}°C`} />
-      <Row k="crit↑" v={`${CPU_CRIT_C}°C`} />
+      <Head label="cpu temperature" />
+      <div className="ap-body">
+        {pct != null && <MiniBar pct={pct} cls={cls} />}
+        <Row k="temp"  v={cpuTemp != null ? `${cpuTemp}°C` : null} cls={cls} />
+        {cores != null && <Row k="cores" v={cores} />}
+        <div className="ap-rule" />
+        <Row k="warn↑" v={`${CPU_WARN_C}°C`} />
+        <Row k="crit↑" v={`${CPU_CRIT_C}°C`} />
+      </div>
     </>
   );
 }
@@ -55,12 +81,17 @@ function CpuDetail({ cpuTemp, cores }) {
 function MemDetail({ physmem, memFree, arcSize }) {
   const used = physmem != null && memFree != null ? physmem - memFree : null;
   const usedPct = physmem && used != null ? Math.round((used / physmem) * 100) : null;
+  const barCls = usedPct >= 90 ? 'crit' : usedPct >= 75 ? 'warn' : '';
   return (
     <>
-      <Row k="total" v={fmtBytes(physmem)} />
-      <Row k="free"  v={fmtBytes(memFree)} />
-      {arcSize != null && <Row k="arc"  v={fmtBytes(arcSize)} />}
-      {usedPct != null && <Row k="used" v={`${usedPct}%`} />}
+      <Head label="memory" />
+      <div className="ap-body">
+        {usedPct != null && <MiniBar pct={usedPct} cls={barCls} />}
+        <Row k="total" v={fmtBytes(physmem)} />
+        <Row k="free"  v={fmtBytes(memFree)} />
+        {arcSize != null && <Row k="arc"  v={fmtBytes(arcSize)} />}
+        {usedPct != null && <Row k="used" v={`${usedPct}%`} cls={barCls || undefined} />}
+      </div>
     </>
   );
 }
@@ -68,8 +99,11 @@ function MemDetail({ physmem, memFree, arcSize }) {
 function NetDetail({ netStats }) {
   return (
     <>
-      <Row k="↓ rx" v={fmtRate(netStats?.rx)} />
-      <Row k="↑ tx" v={fmtRate(netStats?.tx)} />
+      <Head label="network" />
+      <div className="ap-body">
+        <Row k="↓ rx" v={fmtRate(netStats?.rx)} />
+        <Row k="↑ tx" v={fmtRate(netStats?.tx)} />
+      </div>
     </>
   );
 }
@@ -77,11 +111,12 @@ function NetDetail({ netStats }) {
 function AppsDetail({ apps }) {
   const running = apps.filter(a => a.state === 'RUNNING');
   const other   = apps.filter(a => a.state !== 'RUNNING');
-  const renderGroup = (items, label) => items.length === 0 ? null : (
+  const renderGroup = (items, isRunning) => items.length === 0 ? null : (
     <div className="ap-group">
-      <div className="ap-group-label">{label} ({items.length})</div>
+      <div className="ap-group-label">{isRunning ? 'running' : 'stopped'} ({items.length})</div>
       {items.map(a => (
         <div key={a.name} className="ap-app-row">
+          <span className={`ap-app-dot${isRunning ? ' running' : ''}`} />
           <span className="ap-app-name">{a.name}</span>
           {a.human_version && <span className="ap-app-ver">{a.human_version}</span>}
         </div>
@@ -89,11 +124,16 @@ function AppsDetail({ apps }) {
     </div>
   );
   return (
-    <div className="ap-apps">
-      {renderGroup(running, 'running')}
-      {other.length > 0 && running.length > 0 && <div className="ap-rule" />}
-      {renderGroup(other, 'stopped')}
-    </div>
+    <>
+      <Head label={`apps · ${running.length}/${apps.length} running`} />
+      <div className="ap-body">
+        <div className="ap-apps">
+          {renderGroup(running, true)}
+          {other.length > 0 && running.length > 0 && <div className="ap-rule" />}
+          {renderGroup(other, false)}
+        </div>
+      </div>
+    </>
   );
 }
 
@@ -115,25 +155,35 @@ function RankDetail({ cleanSince }) {
     remaining = to - elapsed;
   }
 
-  if (elapsed == null) return <div className="rk-empty">no streak</div>;
+  if (elapsed == null) return (
+    <>
+      <Head label="rank" />
+      <div className="ap-body"><div className="rk-empty">no streak</div></div>
+    </>
+  );
 
   return (
-    <div className="rk-wrap">
-      <div className="rk-header">
-        <span className="rk-name">{currentRank.name}</span>
-        <span className="rk-pct">{progress}%</span>
+    <>
+      <Head label="rank" />
+      <div className="ap-body">
+        <div className="rk-wrap">
+          <div className="rk-header">
+            <span className="rk-name">{currentRank.name}</span>
+            <span className="rk-pct">{progress}%</span>
+          </div>
+          <div className="rk-bar-track">
+            <div className="rk-bar-fill" style={{ width: `${progress}%` }} />
+          </div>
+          <div className="rk-footer">
+            <span className="rk-streak">clean for {fmtClean(elapsed)}</span>
+            {nextRank
+              ? <span className="rk-next">→ {nextRank.name} in {fmtClean(remaining)}</span>
+              : <span className="rk-max">max rank</span>
+            }
+          </div>
+        </div>
       </div>
-      <div className="rk-bar-track">
-        <div className="rk-bar-fill" style={{ width: `${progress}%` }} />
-      </div>
-      <div className="rk-footer">
-        <span className="rk-streak">clean for {fmtClean(elapsed)}</span>
-        {nextRank
-          ? <span className="rk-next">→ {nextRank.name} in {fmtClean(remaining)}</span>
-          : <span className="rk-max">max rank</span>
-        }
-      </div>
-    </div>
+    </>
   );
 }
 
@@ -144,12 +194,16 @@ function PoolDetail({ pool }) {
   const scrubAge  = scrubDate ? Math.floor((Date.now() - scrubDate) / 86_400_000) : null;
   return (
     <>
-      <Row k="status" v={pool.status} cls={pool.status !== 'ONLINE' ? 'crit' : 'ok'} />
-      <Row k="used"   v={pct != null ? `${pct}%` : null} cls={cls} />
-      <Row k="alloc"  v={fmtBytes(pool.allocated)} />
-      <Row k="total"  v={fmtBytes(pool.size)} />
-      {scrubAge != null && <Row k="scrub" v={scrubAge === 0 ? 'today' : `${scrubAge}d ago`} />}
-      {pool.scan?.errors > 0 && <Row k="errors" v={pool.scan.errors} cls="crit" />}
+      <Head label={pool.name} />
+      <div className="ap-body">
+        {pct != null && <MiniBar pct={pct} cls={cls} />}
+        <Row k="status" v={pool.status} cls={pool.status !== 'ONLINE' ? 'crit' : 'ok'} />
+        <Row k="used"   v={pct != null ? `${pct}%` : null} cls={cls || undefined} />
+        <Row k="alloc"  v={fmtBytes(pool.allocated)} />
+        <Row k="total"  v={fmtBytes(pool.size)} />
+        {scrubAge != null && <Row k="scrub" v={scrubAge === 0 ? 'today' : `${scrubAge}d ago`} />}
+        {pool.scan?.errors > 0 && <Row k="errors" v={pool.scan.errors} cls="crit" />}
+      </div>
     </>
   );
 }
@@ -173,11 +227,11 @@ export default function AmbientPopover({ chip, anchor, placement, nasData, clean
 
   const isApps  = chip === 'apps';
   const isRank  = chip === 'rank';
-  const popWidth = isApps || isRank ? 220 : 160;
+  const popWidth = isApps || isRank ? 220 : 180;
   const left = isRank
     ? Math.max(8, anchor.right - popWidth)
     : Math.min(anchor.left, window.innerWidth - popWidth - 8);
-  const style = { left };
+  const style = { left, width: popWidth };
   if (placement === 'bottom') {
     style.bottom = window.innerHeight - anchor.top + 8;
   } else {
