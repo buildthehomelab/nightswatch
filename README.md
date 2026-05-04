@@ -144,7 +144,7 @@ docker compose -f docker-compose.prod.yml --env-file .env.local build
 docker compose -f docker-compose.prod.yml --env-file .env.local up -d
 ```
 
-The container serves HTTP on port 8080 and handles the TrueNAS proxy internally — no external reverse proxy required for the proxy layer. Point your existing proxy (Traefik, Nginx Proxy Manager, Caddy) at port 8080 for HTTPS termination and domain routing.
+The container serves HTTP on port 8080 and handles the TrueNAS proxy internally; no external reverse proxy is required. Point your existing proxy (Traefik, Nginx Proxy Manager, Caddy) at port 8080 for HTTPS termination and domain routing.
 
 Set `PORT=` in your environment to map a different host port.
 
