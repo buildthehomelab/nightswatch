@@ -244,8 +244,8 @@ function Ambient({ now, wanUp, wanDownSince, uptime, rank, cleanSince, weather, 
         {showWan && (
           <span className="item" onMouseEnter={(e) => openPopover('wan', e)} onMouseLeave={scheduleClose}>
             <span className="k">wan</span>
-            <span className={`dot ${wanUp ? "" : "crit"}`}></span>
-            <span className="v">{wanUp ? "up" : "down"}</span>
+            <span className={`dot${wanUp ? "" : " crit"}`}></span>
+            <span className={`v${wanUp ? "" : " crit"}`}>{wanUp ? "up" : "down"}</span>
           </span>
         )}
         {showUptime && (
