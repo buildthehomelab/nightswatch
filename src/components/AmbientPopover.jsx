@@ -187,6 +187,51 @@ function RankDetail({ cleanSince }) {
   );
 }
 
+function UptimeDetail({ nasUptimeSeconds, nasVersion, startTimeMs, now }) {
+  const isNas   = nasUptimeSeconds != null;
+  const totalMs = isNas ? nasUptimeSeconds * 1000 : now - startTimeMs;
+
+  const d = Math.floor(totalMs / 86_400_000);
+  const h = Math.floor((totalMs % 86_400_000) / 3_600_000);
+  const m = Math.floor((totalMs % 3_600_000) / 60_000);
+  const exact = [d && `${d}d`, h && `${h}h`, (m || (!d && !h)) && `${m}m`]
+    .filter(Boolean).join(' ');
+
+  const bootDate = isNas ? new Date(now - nasUptimeSeconds * 1000) : null;
+  const bootFmt  = bootDate
+    ? bootDate.toLocaleDateString(undefined, { weekday: 'short', month: 'short', day: 'numeric' })
+      + ' · '
+      + bootDate.toLocaleTimeString(undefined, { hour: '2-digit', minute: '2-digit', hour12: false })
+    : null;
+
+  const sessionFmt = new Date(startTimeMs)
+    .toLocaleTimeString(undefined, { hour: '2-digit', minute: '2-digit', hour12: false });
+
+  const ageDays  = Math.floor(totalMs / 86_400_000);
+  const ageHours = Math.floor(totalMs / 3_600_000);
+  const ageStr   = ageDays >= 1
+    ? `${ageDays} day${ageDays !== 1 ? 's' : ''} ago`
+    : ageHours >= 1
+    ? `${ageHours} hour${ageHours !== 1 ? 's' : ''} ago`
+    : 'less than an hour ago';
+
+  const versionShort = nasVersion ? nasVersion.replace(/^TrueNAS-/, '') : null;
+
+  return (
+    <>
+      <Head label={isNas ? 'nas uptime' : 'session uptime'} />
+      <div className="ap-body">
+        <Row k="uptime"     v={exact} />
+        {bootFmt      && <Row k="booted"     v={bootFmt} />}
+        {versionShort && <Row k="version"    v={versionShort} />}
+        <div className="ap-rule" />
+        <Row k="tab opened" v={sessionFmt} />
+        {isNas && <Row k="boot" v={ageStr} />}
+      </div>
+    </>
+  );
+}
+
 const WX_EMOJI = {
   113: '☀️', 116: '⛅', 119: '☁️', 122: '☁️',
   143: '🌫️', 176: '🌦️', 179: '🌨️', 182: '🌧️', 185: '🌧️',
@@ -287,7 +332,7 @@ function PoolDetail({ pool }) {
   );
 }
 
-export default function AmbientPopover({ chip, anchor, placement, nasData, cleanSince, now, weatherForecast, onMouseEnter, onMouseLeave }) {
+export default function AmbientPopover({ chip, anchor, placement, nasData, cleanSince, now, weatherForecast, startTimeMs, nasUptimeSeconds, nasVersion, onMouseEnter, onMouseLeave }) {
   if (!chip || !anchor) return null;
 
   const pools = Array.isArray(nasData?.pools) ? nasData.pools : [];
@@ -301,6 +346,7 @@ export default function AmbientPopover({ chip, anchor, placement, nasData, clean
   else if (chip === 'apps')    content = <AppsDetail    apps={nasData?.apps ?? []} />;
   else if (chip === 'rank')    content = <RankDetail    cleanSince={cleanSince} now={now} />;
   else if (chip === 'weather') content = <WeatherDetail forecast={weatherForecast} />;
+  else if (chip === 'uptime')  content = <UptimeDetail  nasUptimeSeconds={nasUptimeSeconds} nasVersion={nasVersion} startTimeMs={startTimeMs} now={now} />;
   else if (pool)               content = <PoolDetail    pool={pool} />;
 
   if (!content) return null;
