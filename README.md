@@ -88,11 +88,11 @@ Copy `.env.example` to `.env.local`. All options documented there.
 
 Container serves HTTP on port 8080. Point a reverse proxy (Traefik, Caddy, Nginx Proxy Manager) at it for HTTPS and domain routing. Gate behind auth (Authelia, Authentik, Tailscale): this dashboard exposes NAS operational state and should not be public.
 
-**Prod build from source:**
+**Build from source:**
 
 ```sh
-docker compose -f docker-compose.prod.yml --env-file .env.local build
-docker compose -f docker-compose.prod.yml --env-file .env.local up -d
+docker build --target runtime -t nightswatch .
+docker run -e TRUENAS_HOST=nas.local -e TRUENAS_KEY=your-key -p 8080:80 nightswatch
 ```
 
 **GHCR image tags:**
