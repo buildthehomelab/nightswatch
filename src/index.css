@@ -608,17 +608,27 @@ body.has-bg-image.density-compact .issue { padding: 11px 16px; }
 .dozzle-scrim.open { pointer-events: auto; }
 .dozzle {
   position: fixed;
-  top: 0; left: 0; right: 0; bottom: 0;
+  left: 0; right: 0; bottom: 0;
+  height: 240px;
   background: var(--paper);
   z-index: 101;
   display: flex;
   flex-direction: column;
-  transform: translateX(100%);
+  transform: translateY(calc(100% + 1px));
   transition: transform .3s cubic-bezier(.4, 0, .2, 1);
-  border-left: 1px solid var(--rule);
+  border-top: 1px solid var(--rule);
   font-family: var(--sans);
+  font-size: 12px;
+  font-weight: 500;
+  color: var(--ink-3);
 }
-.dozzle.open { transform: translateX(0); }
+.dozzle[data-placement="top"] {
+  top: 0; bottom: auto;
+  border-top: none;
+  border-bottom: 1px solid var(--rule);
+  transform: translateY(calc(-100% - 1px));
+}
+.dozzle.open { transform: translateY(0); }
 
 .dozzle-hd {
   display: flex;
