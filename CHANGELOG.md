@@ -1,5 +1,17 @@
 # Changelog
 
+## [0.9.0](https://github.com/buildthehomelab/nightswatch/compare/v0.8.5...v0.9.0) (2026-05-05)
+
+
+### Features
+
+* **demo:** live container metrics and log stream for sandbox panels ([#68](https://github.com/buildthehomelab/nightswatch/issues/68)) ([7f497ad](https://github.com/buildthehomelab/nightswatch/commit/7f497adeebd3cb1fd4e184919723532405426a37))
+
+
+### Bug Fixes
+
+* **demo:** respect enableTruenas toggle for issues, ambient strip, and uptime ([#66](https://github.com/buildthehomelab/nightswatch/issues/66)) ([825a163](https://github.com/buildthehomelab/nightswatch/commit/825a163d023e7a75b33a36bfdd4847a97ba31302))
+
 ## [0.8.5](https://github.com/buildthehomelab/nightswatch/compare/v0.8.4...v0.8.5) (2026-05-05)
 
 
