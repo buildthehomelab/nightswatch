@@ -71,6 +71,6 @@ ENV TRUENAS_HOST="" \
     LOAD_CRIT="8" \
     SCRUB_STALE_DAYS="30" \
     STOPPED_APP_HIDE_MINUTES="60" \
-    ENABLE_DOCKER="false"
+    ENABLE_DOCKER=""
 ENTRYPOINT ["/docker-entrypoint-custom.sh"]
 CMD ["nginx", "-g", "daemon off;"]
