@@ -521,7 +521,7 @@ const SHORTCUTS = [
   { key: "j / k",    desc: "navigate issues" },
   { key: "enter",    desc: "expand / collapse issue" },
   { key: "1 / 2 / 3", desc: "filter critical / warning / advisory" },
-  { key: "`",        desc: "toggle this panel" },
+  { key: "` / ;",    desc: "toggle this panel" },
   { key: "h",        desc: "open left panel" },
   { key: "l",        desc: "open right panel" },
   { key: "r",             desc: "refresh status" },
