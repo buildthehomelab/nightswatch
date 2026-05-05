@@ -396,7 +396,6 @@ function DockerDetail({ dockerData }) {
   };
 
   const fmtCpu = (pct) => pct == null ? null : `${pct < 0.1 ? '<0.1' : pct.toFixed(1)}%`;
-  const fmtMem = (mb)  => mb  == null ? null : mb >= 1024 ? `${(mb / 1024).toFixed(1)}g` : `${Math.round(mb)}m`;
 
   return (
     <>
@@ -427,15 +426,13 @@ function DockerDetail({ dockerData }) {
               {sortedRunning.map(c => {
                 const name = containerName(c);
                 const cpu  = fmtCpu(c._cpuPct);
-                const mem  = fmtMem(c._memMB);
                 const ver  = c._version ?? null;
                 return (
                   <div key={c.Id} className="ap-app-row">
                     <span className="ap-app-dot running" />
                     <span className="ap-app-name">{name}</span>
-                    {ver  && <span className="ap-app-ver ap-app-imgver">{ver}</span>}
-                    {cpu  && <span className="ap-app-ver ap-app-cpu">{cpu}</span>}
-                    {mem  && <span className="ap-app-ver ap-app-mem">{mem}</span>}
+                    {ver && <span className="ap-app-ver ap-app-imgver">{ver}</span>}
+                    {cpu && <span className="ap-app-ver ap-app-cpu">{cpu}</span>}
                   </div>
                 );
               })}
