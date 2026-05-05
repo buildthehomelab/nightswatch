@@ -142,9 +142,10 @@ Every action has a keyboard shortcut. Mouse optional.
 | `j` / `k` | Navigate issues up / down |
 | `Enter` | Expand / collapse focused issue |
 | `1` / `2` / `3` | Filter critical / warning / advisory |
-| `l` | Open / close log viewer |
+| `h` | Open / close left panel |
+| `l` | Open / close right panel |
 | `r` | Force refresh |
-| `` ` `` / `h` / `?` | Open settings panel |
+| `` ` `` | Open settings panel |
 | `Esc` | Close overlay |
 
 Severity filter chips are also clickable for mouse users.
