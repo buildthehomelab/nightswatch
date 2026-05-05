@@ -153,7 +153,7 @@ function GearIcon() {
   );
 }
 
-function Ambient({ now, wanUp, wanDownSince, uptime, rank, cleanSince, weather, weatherForecast, startTimeMs, nasUptimeSeconds, nasVersion, showWeather, showWan, showUptime, showRank, showNas, showNasName, showNasLoad, showNasCpuTemp, showNasMemory, showNasApps, showNasPools, showNasNet, showDate, placement, nasData, toured, onOpenCustomize }) {
+function Ambient({ now, wanUp, wanDownSince, uptime, rank, cleanSince, weather, weatherForecast, startTimeMs, nasUptimeSeconds, nasVersion, showWeather, showWan, showUptime, showRank, showNas, showNasName, showNasLoad, showNasCpuTemp, showNasMemory, showNasApps, showNasPools, showNasNet, showDate, showDocker, placement, nasData, dockerData, toured, onOpenCustomize }) {
   const pools    = Array.isArray(nasData?.pools) ? nasData.pools : [];
   const apps     = Array.isArray(nasData?.apps)  ? nasData.apps  : [];
   const running  = apps.filter(a => a.state === 'RUNNING').length;
@@ -161,7 +161,18 @@ function Ambient({ now, wanUp, wanDownSince, uptime, rank, cleanSince, weather, 
   const hostname = nasData?.info?.hostname ?? 'nas';
   const cpuTemp  = nasData?.cpuTemp ?? null;
   const cpuCls   = cpuTemp == null ? '' : cpuTemp >= CPU_CRIT_C ? ' crit' : cpuTemp >= CPU_WARN_C ? ' warn' : '';
-  const memFree = nasData?.memFree ?? null;
+  const memFree  = nasData?.memFree ?? null;
+
+  const dockerContainers  = dockerData?.containers ?? [];
+  const dockerTotal       = dockerContainers.length;
+  const dockerRunning     = dockerContainers.filter(c => c.State === 'running').length;
+  const dockerWorstCls    = dockerContainers.some(c =>
+    c.State === 'restarting' ||
+    (c.State === 'running' && /unhealthy/i.test(c.Status ?? '')) ||
+    (c.State === 'exited' && /Exited \([^0]\d*\)/.test(c.Status ?? ''))
+  ) ? ' crit' : dockerContainers.some(c =>
+    c.State === 'exited' && c.HostConfig?.RestartPolicy?.Name !== 'no'
+  ) ? ' warn' : '';
 
   const [popoverChip, setPopoverChip] = useState(null);
   const [popoverAnchor, setPopoverAnchor] = useState(null);
@@ -179,55 +190,64 @@ function Ambient({ now, wanUp, wanDownSince, uptime, rank, cleanSince, weather, 
 
   return (
     <footer className="ambient rise" data-placement={placement}>
-      {showNas && nasData && (
+      {((showNas && nasData) || (showDocker && dockerData)) && (
         <div className="left">
-          {showNasName && (
-            <span className="item">
-              <a href={NAS_UI} target="_blank" rel="noopener noreferrer" className="ambient-link">{hostname}</a>
-            </span>
-          )}
-          {showNasLoad && load1 && (
-            <span className="item item-pop" onMouseEnter={(e) => openPopover('load', e)} onMouseLeave={scheduleClose}>
-              <span className="k">load</span><span className="v">{load1}</span>
-            </span>
-          )}
-          {showNasCpuTemp && cpuTemp != null && (
-            <span className="item item-pop" onMouseEnter={(e) => openPopover('cpu', e)} onMouseLeave={scheduleClose}>
-              <span className="k">cpu</span>
-              <span className={`v${cpuCls}`}>{cpuTemp}°C</span>
-            </span>
-          )}
-          {showNasMemory && memFree != null && (
-            <span className="item item-pop" onMouseEnter={(e) => openPopover('mem', e)} onMouseLeave={scheduleClose}>
-              <span className="k">mem free</span>
-              <span className="v">{fmtBytes(memFree)}</span>
-            </span>
-          )}
-          {showNasNet && nasData?.netStats && (
-            <span className="item item-pop" onMouseEnter={(e) => openPopover('net', e)} onMouseLeave={scheduleClose}>
-              <span className="k">net</span>
-              <span className="v">↓{fmtRate(nasData.netStats.rx)} ↑{fmtRate(nasData.netStats.tx)}</span>
-            </span>
-          )}
-          {showNasApps && apps.length > 0 && (
-            <span className="item item-pop" onMouseEnter={(e) => openPopover('apps', e)} onMouseLeave={scheduleClose}>
-              <span className="k">apps</span>
-              <span className="v">{running}/{apps.length}</span>
-            </span>
-          )}
-          {showNasPools && pools.map(pool => {
-            const pct    = pool.size ? Math.round((pool.allocated / pool.size) * 100) : null;
-            const ok     = pool.status === 'ONLINE';
-            const dotCls = !ok || pct >= POOL_CRIT_PCT ? ' crit' : pct >= POOL_WARN_PCT ? ' warn' : '';
-            const valCls = !ok || pct >= POOL_CRIT_PCT ? ' crit' : pct >= POOL_WARN_PCT ? ' warn' : '';
-            return (
-              <span key={pool.name} className="item item-pop" onMouseEnter={(e) => openPopover(pool.name, e)} onMouseLeave={scheduleClose}>
-                <span className={`dot${dotCls}`} />
-                <span className="k">{pool.name}</span>
-                <span className={`v${valCls}`}>{pct != null ? `${pct}%` : '—'}</span>
+          {showNas && nasData && <>
+            {showNasName && (
+              <span className="item">
+                <a href={NAS_UI} target="_blank" rel="noopener noreferrer" className="ambient-link">{hostname}</a>
               </span>
-            );
-          })}
+            )}
+            {showNasLoad && load1 && (
+              <span className="item item-pop" onMouseEnter={(e) => openPopover('load', e)} onMouseLeave={scheduleClose}>
+                <span className="k">load</span><span className="v">{load1}</span>
+              </span>
+            )}
+            {showNasCpuTemp && cpuTemp != null && (
+              <span className="item item-pop" onMouseEnter={(e) => openPopover('cpu', e)} onMouseLeave={scheduleClose}>
+                <span className="k">cpu</span>
+                <span className={`v${cpuCls}`}>{cpuTemp}°C</span>
+              </span>
+            )}
+            {showNasMemory && memFree != null && (
+              <span className="item item-pop" onMouseEnter={(e) => openPopover('mem', e)} onMouseLeave={scheduleClose}>
+                <span className="k">mem free</span>
+                <span className="v">{fmtBytes(memFree)}</span>
+              </span>
+            )}
+            {showNasNet && nasData?.netStats && (
+              <span className="item item-pop" onMouseEnter={(e) => openPopover('net', e)} onMouseLeave={scheduleClose}>
+                <span className="k">net</span>
+                <span className="v">↓{fmtRate(nasData.netStats.rx)} ↑{fmtRate(nasData.netStats.tx)}</span>
+              </span>
+            )}
+            {showNasApps && apps.length > 0 && (
+              <span className="item item-pop" onMouseEnter={(e) => openPopover('apps', e)} onMouseLeave={scheduleClose}>
+                <span className="k">apps</span>
+                <span className="v">{running}/{apps.length}</span>
+              </span>
+            )}
+            {showNasPools && pools.map(pool => {
+              const pct    = pool.size ? Math.round((pool.allocated / pool.size) * 100) : null;
+              const ok     = pool.status === 'ONLINE';
+              const dotCls = !ok || pct >= POOL_CRIT_PCT ? ' crit' : pct >= POOL_WARN_PCT ? ' warn' : '';
+              const valCls = !ok || pct >= POOL_CRIT_PCT ? ' crit' : pct >= POOL_WARN_PCT ? ' warn' : '';
+              return (
+                <span key={pool.name} className="item item-pop" onMouseEnter={(e) => openPopover(pool.name, e)} onMouseLeave={scheduleClose}>
+                  <span className={`dot${dotCls}`} />
+                  <span className="k">{pool.name}</span>
+                  <span className={`v${valCls}`}>{pct != null ? `${pct}%` : '—'}</span>
+                </span>
+              );
+            })}
+          </>}
+          {showDocker && dockerData && (
+            <span className="item item-pop" onMouseEnter={(e) => openPopover('docker', e)} onMouseLeave={scheduleClose}>
+              <span className={`dot${dockerWorstCls}`} />
+              <span className="k">docker</span>
+              <span className={`v${dockerWorstCls}`}>{dockerRunning}/{dockerTotal}</span>
+            </span>
+          )}
         </div>
       )}
 
