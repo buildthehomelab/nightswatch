@@ -48,11 +48,11 @@ const CUSTOMIZE_DEFAULTS = {
   showWeather: false,
   showWan: true,
   showUptime: true,
-  enableTruenas: DEMO,
+  enableTruenas: false,
   enableCve: false,
-  enableDocker: DEMO || ENABLE_DOCKER,
-  showNas: DEMO,
-  showDocker: DEMO || ENABLE_DOCKER,
+  enableDocker: ENABLE_DOCKER,
+  showNas: false,
+  showDocker: ENABLE_DOCKER,
   showNasName: true,
   showNasLoad: true,
   showNasCpuTemp: true,
@@ -322,7 +322,7 @@ function rankForDays(days) {
 }
 
 
-function Healthy() {
+function Healthy({ demoGuide, onConfigure }) {
   const pool = healthyPhrasePool(new Date());
   const bucketKey = pool[0];
   const [phrase, setPhrase] = useState(() => pickPhrase(pool));
@@ -342,6 +342,15 @@ function Healthy() {
           <em>{phrase}</em>
         </p>
       </div>
+      {demoGuide && (
+        <p className="sub rise rise-d2">
+          <span className="demo-badge">demo</span>
+          <span className="sep">·</span>
+          <button className="demo-configure-btn" onClick={onConfigure}>
+            enable integrations in the panel to explore ›
+          </button>
+        </p>
+      )}
     </section>
   );
 }
@@ -806,13 +815,17 @@ export default function App() {
 
   const issues = useMemo(() => {
     const liveIssues = [
-      ...nasIssues(nasData),
+      ...(t.enableTruenas ? nasIssues(nasData) : []),
       ...cveIssues(cveData, cveKeywords),
       ...dockerIssues(dockerData),
       ...(DEMO && t.enableCve
         ? demoStage >= 3 ? CVE_FIXTURES : demoStage >= 2 ? [CVE_FIXTURES[1]] : []
         : []),
-      ...(DEMO_STAGES ? DEMO_STAGES.slice(0, demoStage + 1).flatMap(s => s.issues) : []),
+      ...(DEMO_STAGES ? DEMO_STAGES.slice(0, demoStage + 1).flatMap(s => s.issues).filter(issue => {
+        if (!t.enableTruenas && issue.source?.startsWith('truenas')) return false;
+        if (!t.enableDocker  && issue.source?.startsWith('docker'))  return false;
+        return true;
+      }) : []),
     ];
     if (t.enableTruenas && nasErr) {
       liveIssues.unshift({
@@ -901,7 +914,7 @@ export default function App() {
 
 
   const uptime = useMemo(() => {
-    if (nasData?.info?.uptime_seconds != null) return fmtUptime(nasData.info.uptime_seconds);
+    if (t.enableTruenas && nasData?.info?.uptime_seconds != null) return fmtUptime(nasData.info.uptime_seconds);
     const secs = Math.floor((now - startTime.current) / 1000);
     if (secs < 60) return `${secs}s`;
     const mins = Math.floor(secs / 60);
@@ -910,7 +923,7 @@ export default function App() {
     if (hours < 24) return `${hours}h`;
     const days = Math.floor(hours / 24);
     return `${days}d`;
-  }, [now, nasData]);
+  }, [now, nasData, t.enableTruenas]);
 
   const isHealthy = visibleIssues.length === 0;
   const hasCrit = visibleIssues.some(i => i.severity === 'crit');
@@ -974,7 +987,10 @@ export default function App() {
       <div className="page">
 
         {isHealthy ? (
-          <Healthy />
+          <Healthy
+            demoGuide={DEMO && !toured}
+            onConfigure={() => { markTourred(); window.postMessage({ type: '__activate_edit_mode' }, '*'); }}
+          />
         ) : (
           <>
             <div className="masthead">
@@ -999,8 +1015,8 @@ export default function App() {
           weather={weather}
           weatherForecast={weatherForecast}
           startTimeMs={startTime.current}
-          nasUptimeSeconds={nasData?.info?.uptime_seconds ?? null}
-          nasVersion={nasData?.info?.version ?? null}
+          nasUptimeSeconds={t.enableTruenas ? (nasData?.info?.uptime_seconds ?? null) : null}
+          nasVersion={t.enableTruenas ? (nasData?.info?.version ?? null) : null}
           showWeather={t.showWeather}
           showWan={t.showWan}
           showUptime={t.showUptime}
@@ -1016,7 +1032,7 @@ export default function App() {
           showDate={t.showDate}
           showDocker={t.showDocker}
           placement={t.ambientPlacement}
-          nasData={nasData}
+          nasData={t.enableTruenas ? nasData : null}
           dockerData={dockerData}
           toured={toured}
           onOpenCustomize={() => { markTourred(); window.postMessage({ type: '__activate_edit_mode' }, '*'); }}
