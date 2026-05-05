@@ -1,7 +1,7 @@
 import { useEffect } from 'react';
 import { DEMO } from '../nwenv';
 
-export default function SandboxPanel({ open, onClose, url, label }) {
+export default function SandboxPanel({ open, onClose, url, label, side = 'right' }) {
   useEffect(() => {
     if (!open) return;
     const onKey = (e) => { if (e.key === 'Escape') onClose(); };
@@ -17,7 +17,7 @@ export default function SandboxPanel({ open, onClose, url, label }) {
   return (
     <>
       <div className={`sbx-scrim${open ? ' open' : ''}`} onClick={onClose} />
-      <aside className={`sbx${open ? ' open' : ''}`} aria-hidden={!open}>
+      <aside className={`sbx sbx--${side}${open ? ' open' : ''}`} aria-hidden={!open}>
         <div className="sbx-hd">
           <div className="sbx-title">
             <span className="sbx-label">{label || 'panel'}</span>
