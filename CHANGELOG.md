@@ -1,5 +1,12 @@
 # Changelog
 
+## [0.8.5](https://github.com/buildthehomelab/nightswatch/compare/v0.8.4...v0.8.5) (2026-05-05)
+
+
+### Bug Fixes
+
+* **ci:** prevent race condition cancelling main push builds ([#64](https://github.com/buildthehomelab/nightswatch/issues/64)) ([21b8237](https://github.com/buildthehomelab/nightswatch/commit/21b8237e2101afba5962c20961e88e80331b07b4))
+
 ## [0.8.4](https://github.com/buildthehomelab/nightswatch/compare/v0.8.3...v0.8.4) (2026-05-05)
 
 
