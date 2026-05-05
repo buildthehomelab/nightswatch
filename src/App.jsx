@@ -336,6 +336,85 @@ function Logs({ lines }) {
   );
 }
 
+function LoadDetail({ load1, load5, load15, cores, pct, trend, runningApps, jobs, warnAt, critAt }) {
+  const barMax  = critAt * 2;
+  const fillPct = Math.min((load1 / barMax) * 100, 100);
+  const warnPct = Math.min((warnAt / barMax) * 100, 100);
+  const critPct = Math.min((critAt / barMax) * 100, 100);
+  const cls     = load1 >= critAt ? 'crit' : 'warn';
+
+  return (
+    <div className="ld">
+      <div className="ld-stats">
+        <div className="ld-stat">
+          <span className="ld-stat-k">1-min</span>
+          <span className={`ld-stat-v ld-stat-v--${cls}`}>{load1.toFixed(2)}</span>
+        </div>
+        <div className="ld-stat">
+          <span className="ld-stat-k">5-min</span>
+          <span className="ld-stat-v">{load5 != null ? load5.toFixed(2) : '—'}</span>
+        </div>
+        <div className="ld-stat">
+          <span className="ld-stat-k">15-min</span>
+          <span className="ld-stat-v">{load15 != null ? load15.toFixed(2) : '—'}</span>
+        </div>
+        {cores != null && (
+          <div className="ld-stat">
+            <span className="ld-stat-k">cores</span>
+            <span className="ld-stat-v">{cores}</span>
+          </div>
+        )}
+        {pct != null && (
+          <div className="ld-stat">
+            <span className="ld-stat-k">saturation</span>
+            <span className={`ld-stat-v ld-stat-v--${cls}`}>{pct}%</span>
+          </div>
+        )}
+      </div>
+
+      <div className="ld-bar-wrap">
+        <div className="ld-bar-track">
+          <div className={`ld-bar-fill ld-bar-fill--${cls}`} style={{ width: `${fillPct}%` }} />
+          <div className="ld-bar-marker ld-bar-marker--warn" style={{ left: `${warnPct}%` }} title={`warn ≥${warnAt}`} />
+          {critPct < 98 && (
+            <div className="ld-bar-marker ld-bar-marker--crit" style={{ left: `${critPct}%` }} title={`crit ≥${critAt}`} />
+          )}
+        </div>
+        <div className="ld-bar-foot">
+          <span className={`ld-bar-pct ld-bar-pct--${cls}`}>{load1.toFixed(2)}{trend ? ` ${trend}` : ''}</span>
+          <span className="ld-bar-thr">warn ≥{warnAt} · crit ≥{critAt}</span>
+        </div>
+      </div>
+
+      {jobs.length > 0 && (
+        <div className="ld-section">
+          <span className="ld-section-label">active jobs</span>
+          <div className="ld-jobs">
+            {jobs.map((j, i) => (
+              <div key={i} className="ld-job">
+                <span className="ld-job-method">{j.method}</span>
+                {j.pct != null && <span className="ld-job-pct">{j.pct}%</span>}
+                {j.desc && <span className="ld-job-desc">{j.desc}</span>}
+              </div>
+            ))}
+          </div>
+        </div>
+      )}
+
+      {runningApps.length > 0 && (
+        <div className="ld-section">
+          <span className="ld-section-label">running apps</span>
+          <div className="ld-chips">
+            {runningApps.map(name => (
+              <span key={name} className="ld-chip">{name}</span>
+            ))}
+          </div>
+        </div>
+      )}
+    </div>
+  );
+}
+
 function Issue({ issue, isOpen, isFocused, isFading, onToggle, index, onOpenPanel, onIgnore }) {
   const ref = useRef(null);
   useEffect(() => {
@@ -371,7 +450,10 @@ function Issue({ issue, isOpen, isFocused, isFading, onToggle, index, onOpenPane
       <div className="details">
         <div className="details-inner" onClick={(e) => e.stopPropagation()}>
           <Logs lines={issue.logs} />
-          <div className="description">{issue.description}</div>
+          {issue.detail?.type === 'load'
+            ? <LoadDetail {...issue.detail} />
+            : <div className="description">{issue.description}</div>
+          }
           <div className="actions">
             {issue.actions.map((a) => {
               if (typeof a === "object" && a !== null) {
