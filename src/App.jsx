@@ -865,7 +865,7 @@ export default function App() {
       return [wanIssue, ...liveIssues];
     }
     return liveIssues;
-  }, [wanUp, wanDownSince, nasData, nasErr, cveData, cveErr, cveKeywords, t.enableTruenas, t.enableCve, demoStage]);
+  }, [wanUp, wanDownSince, nasData, nasErr, cveData, cveErr, cveKeywords, dockerData, dockerErr, t.enableTruenas, t.enableCve, t.enableDocker, demoStage]);
 
   const visibleIssues = useMemo(
     () => issues
