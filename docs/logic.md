@@ -223,9 +223,10 @@ All handlers skip when an INPUT or TEXTAREA is focused.
 | `1` | IssueList | Toggle critical severity filter |
 | `2` | IssueList | Toggle warning severity filter |
 | `3` | IssueList | Toggle info severity filter |
-| `l` | App | Toggle Dozzle log viewer |
+| `h` | App | Toggle left sandbox panel |
+| `l` | App | Toggle right sandbox panel |
 | `r` | App | Refresh (force re-render + new timestamp) |
-| `` ` `` / `h` / `?` | CustomizePanel | Toggle CustomizePanel (keyboard shortcuts table lives inside it) |
+| `` ` `` | CustomizePanel | Toggle CustomizePanel (keyboard shortcuts table lives inside it) |
 | `Esc` | CustomizePanel | Close CustomizePanel |
 
 > **Note:** `j` = prev, `k` = next. Intentional inversion from vim convention.
