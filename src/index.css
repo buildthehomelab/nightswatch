@@ -218,9 +218,12 @@ body {
   flex: 1; min-width: 0;
 }
 .ap-app-ver { color: var(--ink-3); white-space: nowrap; font-size: 10.5px; margin-left: auto; }
-.ap-app-row .ap-app-imgver { margin-left: auto; color: var(--ink-2); font-size: 10px; }
-.ap-app-row .ap-app-cpu    { margin-left: 0; color: var(--ink-3); font-size: 10px; }
-.ap-app-row .ap-app-mem    { margin-left: 0; color: var(--ink-3); font-size: 10px; }
+.ap-app-row .ap-app-imgver {
+  margin-left: auto; color: var(--ink-2); font-size: 10px;
+  max-width: 108px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap;
+}
+.ap-app-row .ap-app-cpu { margin-left: 0; color: var(--ink-3); font-size: 10px; flex-shrink: 0; }
+.ap-app-name { min-width: 36px; }
 .ap-subhead {
   font-size: 9.5px; font-weight: 600; letter-spacing: .06em;
   text-transform: uppercase; color: var(--ink-3);
