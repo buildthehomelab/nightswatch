@@ -33,7 +33,7 @@ export default function SandboxPanel({ open, onClose, url, label, side = 'right'
               src={open ? url : undefined}
               title={label || 'panel'}
               className="sbx-frame"
-              sandbox="allow-scripts allow-same-origin allow-forms"
+              sandbox="allow-scripts allow-same-origin allow-forms allow-popups allow-popups-to-escape-sandbox"
               referrerPolicy="no-referrer"
             />
           )}
