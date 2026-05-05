@@ -124,8 +124,10 @@ export default defineConfig(({ mode }) => {
       'import.meta.env.VITE_CVE_KEYWORDS':             JSON.stringify(env.CVE_KEYWORDS ?? ''),
       'import.meta.env.VITE_APP_VERSION':               JSON.stringify(pkg.version),
       'import.meta.env.DEMO':                          JSON.stringify(env.DEMO ?? 'false'),
+      'import.meta.env.VITE_DOCKER_UI_URL':            JSON.stringify(env.DOCKER_UI_URL ?? ''),
+      'import.meta.env.VITE_DOCKER_RESTART_WARN':      JSON.stringify(env.DOCKER_RESTART_WARN ?? '5'),
     },
-    plugins: [react(), basicSsl(), truenasProxyPlugin(env.TRUENAS_KEY, env.TRUENAS_HOST, env.TRUENAS_PORT)],
+    plugins: [react(), basicSsl(), truenasProxyPlugin(env.TRUENAS_KEY, env.TRUENAS_HOST, env.TRUENAS_PORT), dockerProxyPlugin(env.DOCKER_SOCKET, env.DOCKER_HOST, env.DOCKER_PORT)],
     server: {
       proxy: {
         '/wttr': {
