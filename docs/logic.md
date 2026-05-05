@@ -262,17 +262,19 @@ Opens automatically if URL contains `?dev`. Toggle with backtick / `h` / `?`.
 
 **Ignored panel** shows only currently active ignored issues — ones whose `ignoreKey` exists in the current `issues` array. Historical/stale ignored keys are silently filtered out of the display (but remain in localStorage until manually cleared).
 
+**Panels section** has two text inputs for left and right sandbox panel URLs. Values persist via `useCustomize`/localStorage under `sandboxLeftUrl` and `sandboxRightUrl`.
+
 ---
 
-## 7. Issue → Dozzle Container Map
+## 7. Issue → Panel Map
 
-"Open in dozzle ›" button appears when `ISSUE_TO_CONTAINER[issue.id]` exists.
+"Open in panel ›" button appears when `ISSUE_TO_RIGHT_PANEL[issue.id]` is truthy. Opens the right sandbox panel.
 
-| Issue ID | Dozzle Container |
-|----------|-----------------|
-| `wan-down` | `pihole` |
+| Issue ID | Opens |
+|----------|-------|
+| `wan-down` | right panel |
 
-Only `wan-down` is wired — it's the only live issue ID that matches. All `nasIssues()` IDs (`nas-app-*`, `nas-pool-*`, etc.) are unmapped; the button won't appear for TrueNAS issues until entries are added.
+Only `wan-down` is wired. All `nasIssues()` IDs are unmapped; the button won't appear for TrueNAS issues until entries are added.
 
 ---
 
