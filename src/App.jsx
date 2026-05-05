@@ -1096,12 +1096,12 @@ export default function App() {
             <CustomizeToggle label="Ambient Strip" value={t.showDocker} onChange={(v) => setTweak("showDocker", v)} />
           )}
           <CustomizeSection label="Security advisories" />
-          <CustomizeToggle label="CVE feed" value={t.enableCve} onChange={(v) => setTweak("enableCve", v)} />
+          <CustomizeToggle label="CVE Feed" value={t.enableCve} onChange={(v) => setTweak("enableCve", v)} />
         </CustomizeColumn>
         <CustomizeColumn wide>
           <CustomizeSection label="Panels" />
-          <CustomizeInput label="left panel" value={t.sandboxLeftUrl} onChange={(v) => setTweak("sandboxLeftUrl", v)} placeholder="https://…" />
-          <CustomizeInput label="right panel" value={t.sandboxRightUrl} onChange={(v) => setTweak("sandboxRightUrl", v)} placeholder="https://…" />
+          <CustomizeInput label="Left Panel" value={t.sandboxLeftUrl} onChange={(v) => setTweak("sandboxLeftUrl", v)} placeholder="https://…" />
+          <CustomizeInput label="Right Panel" value={t.sandboxRightUrl} onChange={(v) => setTweak("sandboxRightUrl", v)} placeholder="https://…" />
         </CustomizeColumn>
         <CustomizeColumn>
           <CustomizeSection label="Ignored" />
