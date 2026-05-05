@@ -200,6 +200,17 @@ const __CUSTOMIZE_STYLE = `
     color: var(--ink-3); opacity: 0.35;
     letter-spacing: 0.06em;
   }
+  .twk-input {
+    width: 100%; box-sizing: border-box;
+    appearance: none; border: 1px solid var(--rule);
+    background: var(--paper-2); color: var(--ink);
+    font-family: var(--mono); font-size: 11px;
+    padding: 5px 8px; border-radius: 3px; outline: none;
+    transition: border-color 0.12s;
+  }
+  .twk-input::placeholder { color: var(--ink-3); }
+  .twk-input:focus { border-color: var(--accent); }
+
   .twk-src {
     font-family: var(--mono); font-size: 9px;
     color: var(--ink-3); opacity: 0.35;
