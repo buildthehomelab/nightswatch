@@ -1,5 +1,12 @@
 # Changelog
 
+## [0.8.3](https://github.com/buildthehomelab/nightswatch/compare/v0.8.2...v0.8.3) (2026-05-05)
+
+
+### Bug Fixes
+
+* change ENABLE_DOCKER default to empty so auto-detect fires ([#58](https://github.com/buildthehomelab/nightswatch/issues/58)) ([f114580](https://github.com/buildthehomelab/nightswatch/commit/f114580366b8c129347b6642bf69af0efa753adf))
+
 ## [0.8.2](https://github.com/buildthehomelab/nightswatch/compare/v0.8.1...v0.8.2) (2026-05-05)
 
 
