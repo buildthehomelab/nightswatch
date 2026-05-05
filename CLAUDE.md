@@ -17,11 +17,13 @@ React + Vite SPA. Minimal, attention-driven homelab status page. Silence is the 
 | `src/App.jsx` | Root: state, keyboard handlers, issue assembly, all UI layout |
 | `src/services/truenas.js` | TrueNAS API client + `nasIssues()` issue translation + utils, no JSX |
 | `src/services/cve.js` | NVD CVE feed client + `useCve()` hook + `cveIssues()` issue translation, no JSX |
+| `src/services/docker.js` | Docker API client + `useDocker()` hook + `dockerIssues()` issue translation + `extractVersion()`, no JSX |
 | `src/components/AmbientPopover.jsx` | Popover detail panels for ambient strip chips |
 | `src/components/Dozzle.jsx` | Log viewer overlay: `DozzleIframe` (real) or `DozzleDemo` (mock, `DEMO=true`) |
 | `src/components/CustomizePanel.jsx` | Settings panel (theme/density/feature toggles) |
 | `src/data/fixtures.js` | Static fixture issues for demo states |
 | `src/data/mockNas.js` | Mock TrueNAS API response for offline dev |
+| `src/data/mockDocker.js` | Mock Docker API response for demo/offline dev |
 | `src/index.css` | All styles, design tokens, theme vars |
 
 ## Docs
