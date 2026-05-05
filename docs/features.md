@@ -96,6 +96,60 @@ A configurable footer/header strip shows live NAS stats at a glance:
 
 ---
 
+## Docker Integration
+
+Monitors a Docker daemon — via Unix socket (same-host) or a socat TCP bridge — and surfaces container health problems as issues.
+
+### Connection methods
+
+| Method | Config | Use case |
+|--------|--------|----------|
+| Unix socket | `DOCKER_SOCKET=/var/run/docker.sock` | Nightswatch runs on the Docker host |
+| TCP bridge | `DOCKER_HOST=docker.local` + `DOCKER_PORT=2375` | Remote host; socat forwards the socket over TCP |
+
+`DOCKER_SOCKET` takes precedence when both are set. The connection is proxied server-side (same pattern as TrueNAS); the raw socket is never exposed to the browser.
+
+### What it monitors
+
+| Condition | Severity | Notes |
+|-----------|----------|-------|
+| Health check failing (`unhealthy`) | critical | Immediate; tracks first-seen for age display |
+| Exited with non-zero code | critical | OOM kill (137) and segfault (139) get specific labels |
+| Container in active restart loop | critical | `State: restarting` |
+| Exited cleanly (code 0), restart policy set | warning | Escalates to critical after 4 hours |
+| Running with restart count ≥ threshold | warning | Escalates to critical after 4 hours; threshold via `DOCKER_RESTART_WARN` (default 5) |
+
+Containers that exit cleanly with restart policy `no` (one-shot jobs) generate no issue.
+
+### Ambient strip chip
+
+When Docker is enabled and the ambient strip is on, a `docker N/M` chip shows running vs total containers with a colored status dot (green = all clear, yellow = warning, red = critical).
+
+Hovering the chip opens a popover showing:
+
+- Summary counts (running, stopped, paused) and engine version
+- Non-running containers with their state and severity color
+- **Running containers** sorted by CPU usage (highest first) — each showing the container name and the actual running image version extracted from OCI or LinuxServer `build_version` labels, not just the compose tag
+- List is scrollable; up to 10 visible at once
+
+### Issue shape
+
+Each Docker issue includes:
+
+- Container name, image, status string
+- First-seen timestamp with age display
+- `ignoreKey` scoped to the container + incident timestamp (re-fires if the container crashes again)
+- Optional "open portainer" action link (requires `DOCKER_UI_URL`)
+
+### localStorage keys
+
+| Key | Contents |
+|-----|---------|
+| `docker:firstSeen` | `{[issueId]: timestamp}` — per-issue first-seen for unhealthy / bad-exit / crashloop |
+| `docker:stoppedSince` | `{[containerName]: isoDate}` — when each container last transitioned to non-running |
+
+---
+
 ## CVE Security Advisory Feed
 
 Pulls live vulnerability data from the **NIST National Vulnerability Database (NVD)** and surfaces CVEs relevant to your stack as dashboard issues.
