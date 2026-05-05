@@ -24,3 +24,5 @@ export const LOAD_WARN            = num ('LOAD_WARN',                import.meta
 export const LOAD_CRIT            = num ('LOAD_CRIT',                import.meta.env.VITE_LOAD_CRIT,                8);
 export const SCRUB_STALE_DAYS     = num ('SCRUB_STALE_DAYS',         import.meta.env.VITE_SCRUB_STALE_DAYS,         30);
 export const STOPPED_HIDE_MINUTES = num ('STOPPED_APP_HIDE_MINUTES', import.meta.env.VITE_STOPPED_APP_HIDE_MINUTES,  0);
+export const DOCKER_UI_URL        = str ('DOCKER_UI_URL',             import.meta.env.VITE_DOCKER_UI_URL);
+export const DOCKER_RESTART_WARN  = num ('DOCKER_RESTART_WARN',       import.meta.env.VITE_DOCKER_RESTART_WARN,          5);
