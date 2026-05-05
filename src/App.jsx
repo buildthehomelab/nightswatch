@@ -902,6 +902,7 @@ export default function App() {
         onClose={() => setLeftOpen(false)}
         url={t.sandboxLeftUrl}
         label="left panel"
+        side="left"
       />
       <SandboxPanel
         open={rightOpen}
