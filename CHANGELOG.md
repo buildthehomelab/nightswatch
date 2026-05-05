@@ -1,5 +1,34 @@
 # Changelog
 
+## [0.7.0](https://github.com/buildthehomelab/nightswatch/compare/v0.6.0...v0.7.0) (2026-05-05)
+
+
+### Features
+
+* Docker socket integration ([1d4f498](https://github.com/buildthehomelab/nightswatch/commit/1d4f498a37498bdb1fc9c40d77258c5628ee8d6b))
+* src/App.jsx ([4854ec2](https://github.com/buildthehomelab/nightswatch/commit/4854ec2ccf4a39a22eca8179fe7772571327c1d1))
+* src/App.jsx ([84d6d9a](https://github.com/buildthehomelab/nightswatch/commit/84d6d9a214c8a4549b3fbabfbaf360372fe5dc4c))
+* src/App.jsx ([3047165](https://github.com/buildthehomelab/nightswatch/commit/304716512fd02b1bbf6ad5b17f7318fd801c8deb))
+* src/App.jsx ([5816689](https://github.com/buildthehomelab/nightswatch/commit/581668974de7afdbe2d29c3cc6ea579fa3dfc0bf))
+* src/App.jsx ([1c0e895](https://github.com/buildthehomelab/nightswatch/commit/1c0e89503a232c6cfdd9884c32950a26758b5c23))
+* src/App.jsx ([d9a49fb](https://github.com/buildthehomelab/nightswatch/commit/d9a49fb2b6583496981e4a79b9f759384717d629))
+* src/App.jsx ([bb9194d](https://github.com/buildthehomelab/nightswatch/commit/bb9194d4c08f27cddcba717999e35307c6e0699b))
+* src/components/AmbientPopover.jsx ([91ab4b4](https://github.com/buildthehomelab/nightswatch/commit/91ab4b4a1e78e228400c8ac037e8b6afb4234af2))
+* src/components/AmbientPopover.jsx ([01e7202](https://github.com/buildthehomelab/nightswatch/commit/01e72021329368b8535d2a8548415a72c8ffb2d9))
+* src/components/AmbientPopover.jsx ([93d250b](https://github.com/buildthehomelab/nightswatch/commit/93d250bc7f5a3314284eb28b2b27c3bb63398d88))
+* src/components/AmbientPopover.jsx ([f955093](https://github.com/buildthehomelab/nightswatch/commit/f955093d6a51fabffa583be9ed390fe43c93e6cb))
+* src/data/mockDocker.js ([ad493a9](https://github.com/buildthehomelab/nightswatch/commit/ad493a98691562bc1ca7b60b9bb7745a4abec36c))
+* src/data/mockDocker.js ([59462d8](https://github.com/buildthehomelab/nightswatch/commit/59462d8a7b44aebb7eba38e15c6ea9e470d8fd60))
+* src/index.css ([38139e9](https://github.com/buildthehomelab/nightswatch/commit/38139e90bf80c3bdec63207eba4539f90e66d548))
+* src/index.css ([cf2e194](https://github.com/buildthehomelab/nightswatch/commit/cf2e1949abd8987198b61ad5d51f83da3e2b94c6))
+* src/index.css ([133cf45](https://github.com/buildthehomelab/nightswatch/commit/133cf4573f3de00c7a8d3935a0732fd2bd5b76b4))
+* src/index.css ([de3df96](https://github.com/buildthehomelab/nightswatch/commit/de3df9600e9a07014aadd0270dc997c89a4556a5))
+* src/index.css ([1c01d5b](https://github.com/buildthehomelab/nightswatch/commit/1c01d5bfaeaca80d2f9c348b44e9993fcfdf1a74))
+* src/nwenv.js ([2113a3c](https://github.com/buildthehomelab/nightswatch/commit/2113a3c1495688afee655e6c1be02fd379050a23))
+* src/services/docker.js ([919c5c7](https://github.com/buildthehomelab/nightswatch/commit/919c5c7ea65f6e4680b33bc5ed1c402288dacb2b))
+* src/services/docker.js ([f5aed0f](https://github.com/buildthehomelab/nightswatch/commit/f5aed0f97d7bedc55f832034caa87d6053db3faa))
+* src/services/docker.js ([149031f](https://github.com/buildthehomelab/nightswatch/commit/149031f117b7b72bb69c7f74192a4949d8675885))
+
 ## [0.6.0](https://github.com/buildthehomelab/nightswatch/compare/v0.5.1...v0.6.0) (2026-05-05)
 
 
