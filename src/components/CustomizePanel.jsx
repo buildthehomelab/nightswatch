@@ -310,6 +310,22 @@ export function CustomizeSection({ label, children }) {
   );
 }
 
+export function CustomizeInput({ label, value, onChange, placeholder }) {
+  return (
+    <div className="twk-row">
+      <div className="twk-lbl"><span>{label}</span></div>
+      <input
+        type="text"
+        className="twk-input"
+        value={value}
+        onChange={(e) => onChange(e.target.value)}
+        placeholder={placeholder ?? ''}
+        spellCheck={false}
+      />
+    </div>
+  );
+}
+
 export function CustomizeRow({ label, value, children, inline = false }) {
   return (
     <div className={inline ? 'twk-row twk-row-h' : 'twk-row'}>
