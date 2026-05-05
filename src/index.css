@@ -215,7 +215,7 @@ body {
 .ap-app-name {
   color: var(--ink-2);
   overflow: hidden; text-overflow: ellipsis; white-space: nowrap;
-  flex: 1; min-width: 0;
+  flex: 1; min-width: 36px;
 }
 .ap-app-ver { color: var(--ink-3); white-space: nowrap; font-size: 10.5px; margin-left: auto; }
 .ap-app-row .ap-app-imgver {
