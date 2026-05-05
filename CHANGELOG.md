@@ -1,5 +1,12 @@
 # Changelog
 
+## [0.8.2](https://github.com/buildthehomelab/nightswatch/compare/v0.8.1...v0.8.2) (2026-05-05)
+
+
+### Bug Fixes
+
+* handle existing GID when granting nginx Docker socket access ([#56](https://github.com/buildthehomelab/nightswatch/issues/56)) ([33a5b24](https://github.com/buildthehomelab/nightswatch/commit/33a5b249ef9bad4e0a7ad030207044cc45c298df))
+
 ## [0.8.1](https://github.com/buildthehomelab/nightswatch/compare/v0.8.0...v0.8.1) (2026-05-05)
 
 
