@@ -349,6 +349,11 @@ Configured in `vite.config.js`. Applies to both dev and preview servers.
 | `VITE_CVE_KEYWORDS` | `.env.local` | Comma-separated NVD keyword list (e.g. `truenas,plex,nginx`) |
 | `VITE_CVE_DAYS_BACK` | `.env.local` | Days back to query NVD (default 30) |
 | `VITE_CVE_MIN_CVSS` | `.env.local` | Minimum CVSS score to surface as issue (default 4.0) |
+| `DOCKER_SOCKET` | `.env.local` (no `VITE_` prefix) | Unix socket path on Docker host; proxy connects directly |
+| `DOCKER_HOST` | `.env.local` (no `VITE_` prefix) | TCP hostname for socat bridge (used when `DOCKER_SOCKET` not set) |
+| `DOCKER_PORT` | `.env.local` (no `VITE_` prefix) | TCP port for socat bridge (default 2375) |
+| `VITE_DOCKER_UI_URL` | `.env.local` | Portainer URL; shown as action link in Docker issue detail panels |
+| `VITE_DOCKER_RESTART_WARN` | `.env.local` | Restart count threshold for high-restart issue (default 5) |
 
 ---
 
