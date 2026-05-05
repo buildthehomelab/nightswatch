@@ -1093,9 +1093,7 @@ export default function App() {
           <CustomizeSection label="Docker" />
           <CustomizeToggle label="Enable"   value={t.enableDocker}  onChange={(v) => setTweak("enableDocker", v)} />
           {t.enableDocker && (
-            <div className="twk-subgroup">
-              <CustomizeToggle label="Ambient Strip" value={t.showDocker} onChange={(v) => setTweak("showDocker", v)} />
-            </div>
+            <CustomizeToggle label="Ambient Strip" value={t.showDocker} onChange={(v) => setTweak("showDocker", v)} />
           )}
           <CustomizeSection label="Security advisories" />
           <CustomizeToggle label="CVE feed" value={t.enableCve} onChange={(v) => setTweak("enableCve", v)} />
