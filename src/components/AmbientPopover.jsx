@@ -428,11 +428,17 @@ function DockerDetail({ dockerData }) {
                 const cpu  = fmtCpu(c._cpuPct);
                 const ver  = c._version ?? null;
                 return (
-                  <div key={c.Id} className="ap-app-row">
+                  <div key={c.Id} className="ap-app-row ap-docker-row">
                     <span className="ap-app-dot running" />
-                    <span className="ap-app-name">{name}</span>
-                    {ver && <span className="ap-app-ver ap-app-imgver">{ver}</span>}
-                    {cpu && <span className="ap-app-ver ap-app-cpu">{cpu}</span>}
+                    <div className="ap-docker-info">
+                      <span className="ap-docker-name">{name}</span>
+                      {(ver || cpu) && (
+                        <div className="ap-docker-meta">
+                          {ver && <span className="ap-docker-ver">{ver}</span>}
+                          {cpu && <span className="ap-docker-cpu">{cpu}</span>}
+                        </div>
+                      )}
+                    </div>
                   </div>
                 );
               })}
