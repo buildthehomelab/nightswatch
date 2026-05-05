@@ -63,7 +63,7 @@ export const MOCK_NAS_STAGES = [
   },
   // Stage 3: critical — high load, high temp, tanks filling (under threshold to avoid duplicates with ISSUE_FIXTURES)
   {
-    info:       { ...DEMO_INFO_BASE, loadavg: [2.84, 2.61, 2.33] },
+    info:       { ...DEMO_INFO_BASE, loadavg: [4.93, 2.08, 1.27] },
     cpuTemp:    68, // just under CPU_WARN_C (70) — visually hot, no duplicate issue
     memFree:    12.1e9,
     arcSize:    7.8e9,
