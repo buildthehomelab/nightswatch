@@ -1,5 +1,13 @@
 # Changelog
 
+## [0.5.1](https://github.com/buildthehomelab/nightswatch/compare/v0.5.0...v0.5.1) (2026-05-05)
+
+
+### Bug Fixes
+
+* allow popups in sandbox panels ([55e1019](https://github.com/buildthehomelab/nightswatch/commit/55e1019a62b926a3fa9ee1b3f7662ae416843754))
+* allow popups in sandbox panels ([9d58d0f](https://github.com/buildthehomelab/nightswatch/commit/9d58d0ff30fc5750ba3f92d370bb984dc0b74458))
+
 ## [0.5.0](https://github.com/buildthehomelab/nightswatch/compare/v0.4.0...v0.5.0) (2026-05-05)
 
 
