@@ -384,6 +384,8 @@ Output format: "4d" | "12h" | "45m" | "30s"
 | `truenas:firstSeen` | truenas.js | `{[issueKey]: timestamp}` — per-issue first-seen (cpu-temp, pool-cap, etc.) |
 | `cve:cache` | cve.js | `{[keyword]: {fetchedAt, vulnerabilities[]}}` (1h TTL per keyword) |
 | `cve:firstSeen` | cve.js | `{[cveId]: timestamp}` — when each CVE was first seen by this client |
+| `docker:firstSeen` | docker.js | `{[issueId]: timestamp}` — per-issue first-seen for unhealthy / bad-exit / crashloop / high-restart |
+| `docker:stoppedSince` | docker.js | `{[containerName]: isoDate}` — when each container last went non-running |
 
 ---
 
