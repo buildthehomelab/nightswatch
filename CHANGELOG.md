@@ -1,5 +1,13 @@
 # Changelog
 
+## [0.2.0](https://github.com/buildthehomelab/nightswatch/compare/v0.1.4...v0.2.0) (2026-05-05)
+
+
+### Features
+
+* add subtle source link to CustomizePanel ([2385b6f](https://github.com/buildthehomelab/nightswatch/commit/2385b6f2c44d08e3f9f64e23495602c0b3483c09))
+* add subtle source link to CustomizePanel ([2ef62bc](https://github.com/buildthehomelab/nightswatch/commit/2ef62bcb46cf5627821a339d933fbadb5d05f2dd))
+
 ## [0.1.4](https://github.com/buildthehomelab/nightswatch/compare/v0.1.3...v0.1.4) (2026-05-04)
 
 
