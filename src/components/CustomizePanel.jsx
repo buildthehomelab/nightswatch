@@ -281,7 +281,10 @@ export function CustomizePanel({ side = 'top', children }) {
       {open && <div className="twk-scrim" onClick={dismiss} />}
       <div className={`twk-drawer${open ? ' open' : ''}`} data-side={side} data-noncommentable="">
         <div className="twk-body">{children}</div>
-        <a className="twk-src" href="https://github.com/buildthehomelab/nightswatch" target="_blank" rel="noopener noreferrer">source</a>
+        <div className="twk-footer">
+          <span className="twk-ver">v{import.meta.env.VITE_APP_VERSION}</span>
+          <a className="twk-src" href="https://github.com/buildthehomelab/nightswatch" target="_blank" rel="noopener noreferrer">source</a>
+        </div>
       </div>
     </>
   );
