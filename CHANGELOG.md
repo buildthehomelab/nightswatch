@@ -1,5 +1,12 @@
 # Changelog
 
+## [0.8.4](https://github.com/buildthehomelab/nightswatch/compare/v0.8.3...v0.8.4) (2026-05-05)
+
+
+### Bug Fixes
+
+* capitalize Left Panel, Right Panel, CVE Feed in CustomizePanel ([#62](https://github.com/buildthehomelab/nightswatch/issues/62)) ([cb6da01](https://github.com/buildthehomelab/nightswatch/commit/cb6da0133b3203d1f9490ed90a20642a7559e266))
+
 ## [0.8.3](https://github.com/buildthehomelab/nightswatch/compare/v0.8.2...v0.8.3) (2026-05-05)
 
 
