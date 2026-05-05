@@ -1,5 +1,14 @@
 # Changelog
 
+## [0.4.0](https://github.com/buildthehomelab/nightswatch/compare/v0.3.0...v0.4.0) (2026-05-05)
+
+
+### Features
+
+* show app version in CustomizePanel footer ([70fa284](https://github.com/buildthehomelab/nightswatch/commit/70fa28416cb1a9d5828cb129f3bec4d1f854be8a))
+* src/components/CustomizePanel.jsx ([664082a](https://github.com/buildthehomelab/nightswatch/commit/664082ac0227631dbfc84c1c3c0e5984d0232cb1))
+* src/components/CustomizePanel.jsx ([1b41b93](https://github.com/buildthehomelab/nightswatch/commit/1b41b93fe4a84e4e7557d62c598d8f8d8085b7cc))
+
 ## [0.3.0](https://github.com/buildthehomelab/nightswatch/compare/v0.2.0...v0.3.0) (2026-05-05)
 
 
