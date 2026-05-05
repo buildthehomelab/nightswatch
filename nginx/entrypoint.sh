@@ -56,9 +56,13 @@ ENVEOF
 # The socket GID varies per host; detect it dynamically rather than hardcoding 999.
 if [ "${ENABLE_DOCKER}" = "true" ] && [ -S /var/run/docker.sock ]; then
   DOCKER_GID=$(stat -c '%g' /var/run/docker.sock)
-  addgroup -g "$DOCKER_GID" dockersock 2>/dev/null || true
-  adduser nginx dockersock 2>/dev/null || true
-  echo "[nightswatch] Docker socket GID=${DOCKER_GID} granted to nginx worker" >&2
+  DOCKER_GROUP=$(getent group "$DOCKER_GID" 2>/dev/null | cut -d: -f1)
+  if [ -z "$DOCKER_GROUP" ]; then
+    addgroup -g "$DOCKER_GID" dockersock
+    DOCKER_GROUP=dockersock
+  fi
+  adduser nginx "$DOCKER_GROUP" 2>/dev/null || true
+  echo "[nightswatch] Docker socket GID=${DOCKER_GID} (group=${DOCKER_GROUP}) granted to nginx worker" >&2
 elif [ "${ENABLE_DOCKER}" = "true" ]; then
   echo "[nightswatch] WARNING: ENABLE_DOCKER=true but /var/run/docker.sock not found — mount the socket" >&2
 fi
