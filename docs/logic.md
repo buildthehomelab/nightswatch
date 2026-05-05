@@ -296,7 +296,8 @@ Configured in `vite.config.js`. Applies to both dev and preview servers.
 | `TRUENAS_HOST` | `.env.local` (no `VITE_` prefix) | Proxy target hostname (e.g. `nas.local`) |
 | `TRUENAS_PORT` | `.env.local` (no `VITE_` prefix) | Proxy target port (e.g. `443`) |
 | `VITE_TRUENAS_URL` | `.env.local` | TrueNAS UI base URL for hostname link in ambient strip |
-| `VITE_DOZZLE_URL` | `.env.local` | Dozzle iframe base URL; empty = blank iframe (mock mode) |
+| `VITE_SANDBOX_LEFT_URL` | `.env.local` | Left panel iframe URL; empty = key has no effect |
+| `VITE_SANDBOX_RIGHT_URL` | `.env.local` | Right panel iframe URL; empty = key has no effect |
 | `VITE_STOPPED_APP_HIDE_MINUTES` | `.env.local` | Minutes before stopped apps hidden from NAS strip (default 60) |
 | `VITE_WEATHER_LOCATION` | `.env.local` | Location string for wttr.in weather; empty = weather disabled |
 | `VITE_CVE_KEYWORDS` | `.env.local` | Comma-separated NVD keyword list (e.g. `truenas,plex,nginx`) |
