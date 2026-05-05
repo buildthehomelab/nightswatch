@@ -17,7 +17,7 @@ services:
       # CVE_KEYWORDS: plex,nginx,proxmox      # comma-separated NVD search terms
       # CVE_MIN_CVSS: 4.0                     # minimum CVSS score (default 4.0)
       # DEMO: "true"                          # mock data, no TrueNAS needed
-      # ENABLE_DOCKER: "true"                # enable Docker monitoring (requires socket volume below)
+      # ENABLE_DOCKER: "false"              # set to "false" to suppress Docker monitoring even if socket is mounted
       # DOCKER_UI_URL: https://portainer.local  # browser-facing Docker UI URL
       # DOCKER_RESTART_WARN: 5              # restart count threshold for warnings
     volumes:
