@@ -48,11 +48,11 @@ const CUSTOMIZE_DEFAULTS = {
   showWeather: false,
   showWan: true,
   showUptime: true,
-  enableTruenas: DEMO,
+  enableTruenas: false,
   enableCve: false,
-  enableDocker: DEMO || ENABLE_DOCKER,
-  showNas: DEMO,
-  showDocker: DEMO || ENABLE_DOCKER,
+  enableDocker: ENABLE_DOCKER,
+  showNas: false,
+  showDocker: ENABLE_DOCKER,
   showNasName: true,
   showNasLoad: true,
   showNasCpuTemp: true,
@@ -322,7 +322,7 @@ function rankForDays(days) {
 }
 
 
-function Healthy() {
+function Healthy({ demoGuide, onConfigure }) {
   const pool = healthyPhrasePool(new Date());
   const bucketKey = pool[0];
   const [phrase, setPhrase] = useState(() => pickPhrase(pool));
@@ -342,6 +342,15 @@ function Healthy() {
           <em>{phrase}</em>
         </p>
       </div>
+      {demoGuide && (
+        <p className="sub rise rise-d2">
+          <span className="demo-badge">demo</span>
+          <span className="sep">·</span>
+          <button className="demo-configure-btn" onClick={onConfigure}>
+            enable integrations in the panel to explore ›
+          </button>
+        </p>
+      )}
     </section>
   );
 }
@@ -978,7 +987,10 @@ export default function App() {
       <div className="page">
 
         {isHealthy ? (
-          <Healthy />
+          <Healthy
+            demoGuide={DEMO && !toured}
+            onConfigure={() => { markTourred(); window.postMessage({ type: '__activate_edit_mode' }, '*'); }}
+          />
         ) : (
           <>
             <div className="masthead">

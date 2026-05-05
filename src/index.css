@@ -361,6 +361,36 @@ body {
 .healthy .sub .sep { color: var(--rule); }
 .healthy .sub .milestone { color: var(--ok); font-weight: 600; }
 .rank { color: var(--ok); font-weight: 600; letter-spacing: 0.01em; }
+.demo-badge {
+  font-family: var(--mono);
+  font-size: 10px;
+  font-weight: 600;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--ink-3);
+  border: 1px solid var(--rule);
+  border-radius: 3px;
+  padding: 1px 5px;
+}
+.demo-configure-btn {
+  appearance: none;
+  background: none;
+  border: none;
+  font-family: var(--sans);
+  font-size: 14px;
+  font-weight: 500;
+  color: var(--ink-2);
+  cursor: pointer;
+  padding: 0;
+  text-decoration: underline;
+  text-decoration-color: var(--rule);
+  text-underline-offset: 3px;
+  transition: color .15s, text-decoration-color .15s;
+}
+.demo-configure-btn:hover {
+  color: var(--ink);
+  text-decoration-color: var(--ink-3);
+}
 
 /* ── Issue list ──────────────────────────────────────── */
 .issues {
