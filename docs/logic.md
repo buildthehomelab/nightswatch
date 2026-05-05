@@ -330,6 +330,7 @@ Configured in `vite.config.js`. Applies to both dev and preview servers.
 | Route | Target | Notes |
 |-------|--------|-------|
 | `/truenas/*` | `$TRUENAS_HOST:$TRUENAS_PORT` | Injects `Authorization: Bearer $TRUENAS_KEY`; strips hop-by-hop headers; `rejectUnauthorized: false` |
+| `/docker/*` | `$DOCKER_SOCKET` or `$DOCKER_HOST:$DOCKER_PORT` | Unix socket (same-host) or TCP bridge (socat); raw socket never exposed to browser |
 | `/wttr/*` | `https://wttr.in` | Rewrites path; User-Agent spoofed to `curl/7.88.1` |
 | GitHub API | `https://api.github.com` | Direct (public, no proxy) |
 
