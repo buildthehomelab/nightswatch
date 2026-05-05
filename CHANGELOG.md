@@ -1,5 +1,13 @@
 # Changelog
 
+## [0.8.0](https://github.com/buildthehomelab/nightswatch/compare/v0.7.0...v0.8.0) (2026-05-05)
+
+
+### Features
+
+* docker socket mount in compose files ([d223287](https://github.com/buildthehomelab/nightswatch/commit/d2232873f452ee5ef684abe2367327dd60c0b33f))
+* docker socket mount in compose files ([7bb48ff](https://github.com/buildthehomelab/nightswatch/commit/7bb48ff23773498abb305f16747d426aae9a68c2))
+
 ## [0.7.0](https://github.com/buildthehomelab/nightswatch/compare/v0.6.0...v0.7.0) (2026-05-05)
 
 
