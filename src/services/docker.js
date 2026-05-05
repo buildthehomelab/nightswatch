@@ -80,15 +80,6 @@ async function fetchContainerStats(id) {
   } catch { return null; }
 }
 
-async function fetchImageLabels(imageId) {
-  try {
-    const r = await fetch(`${DOCKER_API}/images/${imageId}/json`);
-    if (!r.ok) return null;
-    const d = await r.json();
-    return d.Config?.Labels ?? null;
-  } catch { return null; }
-}
-
 function calcCpuPct(s) {
   if (!s) return null;
   const cpu    = s.cpu_stats?.cpu_usage?.total_usage    ?? 0;
@@ -135,24 +126,15 @@ async function fetchDockerData() {
   const info = infoRes.ok ? await infoRes.json() : null;
   const containers = Array.isArray(raw) ? raw : [];
 
-  const running       = containers.filter(c => c.State === 'running');
-  const uniqueImgIds  = [...new Set(running.map(c => c.ImageID).filter(Boolean))];
-
-  const [statsArr, labelsArr] = await Promise.all([
-    Promise.all(running.map(c => fetchContainerStats(c.Id))),
-    Promise.all(uniqueImgIds.map(id => fetchImageLabels(id))),
-  ]);
-
-  const statsMap  = new Map(running.map((c, i) => [c.Id,      statsArr[i]]));
-  const labelsMap = new Map(uniqueImgIds.map((id, i) => [id,  labelsArr[i]]));
+  const running = containers.filter(c => c.State === 'running');
+  const statsArr = await Promise.all(running.map(c => fetchContainerStats(c.Id)));
+  const statsMap = new Map(running.map((c, i) => [c.Id, statsArr[i]]));
 
   const enriched = containers.map(c => ({
     ...c,
     _cpuPct:  calcCpuPct(statsMap.get(c.Id)) ?? null,
     _memMB:   calcMemMB(statsMap.get(c.Id))  ?? null,
-    _version: c.State === 'running'
-      ? extractVersion(labelsMap.get(c.ImageID), c.Image)
-      : null,
+    _version: c.State === 'running' ? extractVersion(c.Labels, c.Image) : null,
   }));
 
   return { containers: enriched, info };
