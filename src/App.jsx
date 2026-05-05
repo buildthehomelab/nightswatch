@@ -171,7 +171,7 @@ function Ambient({ now, wanUp, wanDownSince, uptime, rank, cleanSince, weather, 
     (c.State === 'running' && /unhealthy/i.test(c.Status ?? '')) ||
     (c.State === 'exited' && /Exited \([^0]\d*\)/.test(c.Status ?? ''))
   ) ? ' crit' : dockerContainers.some(c =>
-    c.State === 'exited' && c.HostConfig?.RestartPolicy?.Name !== 'no'
+    c.State === 'exited' && (c.HostConfig?.RestartPolicy?.Name ?? 'no') !== 'no'
   ) ? ' warn' : '';
 
   const [popoverChip, setPopoverChip] = useState(null);
