@@ -72,6 +72,7 @@ export default defineConfig(({ mode }) => {
       'import.meta.env.VITE_DOZZLE_URL':               JSON.stringify(env.DOZZLE_URL ?? ''),
       'import.meta.env.VITE_WEATHER_LOCATION':         JSON.stringify(env.WEATHER_LOCATION ?? ''),
       'import.meta.env.VITE_CVE_KEYWORDS':             JSON.stringify(env.CVE_KEYWORDS ?? ''),
+      'import.meta.env.VITE_APP_VERSION':               JSON.stringify(pkg.version),
       'import.meta.env.DEMO':                          JSON.stringify(env.DEMO ?? 'false'),
     },
     plugins: [react(), basicSsl(), truenasProxyPlugin(env.TRUENAS_KEY, env.TRUENAS_HOST, env.TRUENAS_PORT)],
