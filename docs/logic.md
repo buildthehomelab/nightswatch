@@ -156,7 +156,49 @@ CPU temp:        warn → crit if (temp ≥ 85°C)
 
 ---
 
-## 4b. CVE Issue Derivation
+## 4b. Docker Issue Derivation
+
+**Poll interval**: every 30 seconds via `useDocker()` hook.
+**API**: `/docker/*` (proxied — same pattern as TrueNAS; see §8).
+
+Each poll calls `/containers/json?all=true` and `/info` in parallel, then fetches per-container stats (`/containers/{id}/stats?stream=false&one-shot=true`) for running containers. Version info is read from `c.Labels` in the list response — no extra image-inspect requests needed.
+
+`dockerIssues(dockerData)` in `services/docker.js` derives issues:
+
+### Issue Rules
+
+| Issue | Trigger | Severity | Notes |
+|-------|---------|----------|-------|
+| Unhealthy | `State: running` + `Status` matches `/unhealthy/i` | crit | Immediate; first-seen tracked |
+| Bad exit | `State: exited` + exit code ≠ 0 | crit | code 137 → "OOM kill"; code 139 → "segfault" |
+| Crashloop | `State: restarting` | crit | Immediate |
+| Clean stop | `State: exited`, exit 0, restart policy ≠ `no` | warn → crit | Escalates at 4h via `stoppedSince` |
+| High restarts | `State: running`, `RestartCount ≥ DOCKER_RESTART_WARN` | warn → crit | Escalates at 4h via first-seen |
+
+Containers exiting with code 0 and restart policy `no` (intentional one-shot jobs) are silently ignored.
+
+### Ambient strip dot logic
+
+The docker chip dot mirrors the issue logic: crit color if any restarting/unhealthy/bad-exit container; warn color if any exited container with a non-`no` restart policy (using `?? 'no'` fallback, matching the issue logic exactly).
+
+### Version extraction (`extractVersion`)
+
+Priority order for `c.Labels`:
+1. `build_version` (LinuxServer format: `"... version:- 1.2.3-ls45 ..."`)
+2. `org.opencontainers.image.version` (OCI standard)
+3. `version`
+4. Fallback: tag extracted from `c.Image` (e.g. `latest`)
+
+### localStorage keys
+
+| Key | Contents |
+|-----|---------|
+| `docker:firstSeen` | `{[issueId]: timestamp}` — first-seen for unhealthy / bad-exit / crashloop / high-restart issues |
+| `docker:stoppedSince` | `{[containerName]: isoDate}` — when each container last went non-running (drives clean-stop age) |
+
+---
+
+## 4c. CVE Issue Derivation
 
 **Poll interval**: every 60 minutes via `useCve()` hook.  
 **API**: `https://services.nvd.nist.gov/rest/json/cves/2.0` (direct, no proxy).  
