@@ -1097,8 +1097,6 @@ export default function App() {
               <CustomizeToggle label="Ambient Strip" value={t.showDocker} onChange={(v) => setTweak("showDocker", v)} />
             </div>
           )}
-        </CustomizeColumn>
-        <CustomizeColumn>
           <CustomizeSection label="Security advisories" />
           <CustomizeToggle label="CVE feed" value={t.enableCve} onChange={(v) => setTweak("enableCve", v)} />
         </CustomizeColumn>
