@@ -1,5 +1,24 @@
 # Changelog
 
+## [0.5.0](https://github.com/buildthehomelab/nightswatch/compare/v0.4.0...v0.5.0) (2026-05-05)
+
+
+### Features
+
+* replace Dozzle with dual configurable sandbox panels ([ba2de61](https://github.com/buildthehomelab/nightswatch/commit/ba2de6194eae78129109350da17fd129f00a7939))
+* src/App.jsx ([f1f124f](https://github.com/buildthehomelab/nightswatch/commit/f1f124f763af60a6c2828a9092604b2e2d85c04e))
+* src/App.jsx ([82be6df](https://github.com/buildthehomelab/nightswatch/commit/82be6dfd66b7b524375e19120197309e1ed45ea6))
+* src/App.jsx ([a259975](https://github.com/buildthehomelab/nightswatch/commit/a259975e23e37bee785d41e83d6a6021e8ff498b))
+* src/components/CustomizePanel.jsx ([bbded62](https://github.com/buildthehomelab/nightswatch/commit/bbded627d3b30a7e19bc1d43da243c27c3bd8eaa))
+* src/components/CustomizePanel.jsx ([2c60ff9](https://github.com/buildthehomelab/nightswatch/commit/2c60ff97247e21d3c666be93d8ea4062c475e762))
+* src/components/CustomizePanel.jsx ([b92b7c0](https://github.com/buildthehomelab/nightswatch/commit/b92b7c0d94f239518fbe964f5dfbb18d48c3f3a4))
+* src/components/CustomizePanel.jsx ([4012b80](https://github.com/buildthehomelab/nightswatch/commit/4012b80f5a226badbb3e0bc3390a056add5f62fc))
+* src/components/SandboxPanel.jsx ([11244f0](https://github.com/buildthehomelab/nightswatch/commit/11244f0f5524b1617d736774040fafc45e31c3a2))
+* src/components/SandboxPanel.jsx ([aa02170](https://github.com/buildthehomelab/nightswatch/commit/aa021702ff9c3834a68c63ff4df1647dc99a5c11))
+* src/index.css ([c697cec](https://github.com/buildthehomelab/nightswatch/commit/c697cecf23c2900da2a105015bf41378b6471b5a))
+* src/index.css ([1d8e00c](https://github.com/buildthehomelab/nightswatch/commit/1d8e00cdd0e52cf34ae47beff731abb5ffd8012e))
+* src/nwenv.js ([892f149](https://github.com/buildthehomelab/nightswatch/commit/892f1493027beec41e70e188ce8716d673218630))
+
 ## [0.4.0](https://github.com/buildthehomelab/nightswatch/compare/v0.3.0...v0.4.0) (2026-05-05)
 
 
