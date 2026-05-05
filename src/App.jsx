@@ -3,6 +3,7 @@ import SandboxPanel from './components/SandboxPanel';
 import AmbientPopover from './components/AmbientPopover';
 import { useTrueNas, nasIssues, fmtUptime, fmtAge, fmtBytes, fmtRate, UI as NAS_UI, POOL_WARN_PCT, POOL_CRIT_PCT, CPU_WARN_C, CPU_CRIT_C } from './services/truenas';
 import { useCve, cveIssues, BASE_CVE_KEYWORDS } from './services/cve';
+import { useDocker, dockerIssues, UI as DOCKER_UI } from './services/docker';
 import { CVE_FIXTURES, ISSUE_FIXTURES } from './data/fixtures';
 import { MOCK_NAS_STAGES } from './data/mockNas';
 import { DEMO, WEATHER_LOCATION, SANDBOX_LEFT_URL, SANDBOX_RIGHT_URL } from './nwenv';
@@ -12,6 +13,7 @@ import {
 
 const SERVICE_CVE_KEYWORDS = {
   enableTruenas: 'truenas',
+  enableDocker:  'docker',
 };
 
 const DEMO_STAGES = DEMO ? [
@@ -48,7 +50,9 @@ const CUSTOMIZE_DEFAULTS = {
   showUptime: true,
   enableTruenas: DEMO,
   enableCve: false,
+  enableDocker: DEMO,
   showNas: DEMO,
+  showDocker: DEMO,
   showNasName: true,
   showNasLoad: true,
   showNasCpuTemp: true,
@@ -665,8 +669,9 @@ export default function App() {
       .map(([, kw]) => kw);
     const all = [...BASE_CVE_KEYWORDS, ...extras];
     return [...new Set(all)];
-  }, [t.enableTruenas]);
+  }, [t.enableTruenas, t.enableDocker]);
   const { data: cveData, err: cveErr } = useCve(t.enableCve, cveKeywords);
+  const { data: dockerData, err: dockerErr } = useDocker(t.enableDocker);
   const [wanUp, setWanUp] = useState(true);
   const [wanDownSince, setWanDownSince] = useState(null);
   const wanFailCount = useRef(0);
@@ -782,6 +787,7 @@ export default function App() {
     const liveIssues = [
       ...nasIssues(nasData),
       ...cveIssues(cveData, cveKeywords),
+      ...dockerIssues(dockerData),
       ...(DEMO && t.enableCve
         ? demoStage >= 3 ? CVE_FIXTURES : demoStage >= 2 ? [CVE_FIXTURES[1]] : []
         : []),
@@ -817,6 +823,21 @@ export default function App() {
         logs: [{ t: "—", level: "warn", text: `[cve] fetch failed: ${cveErr}` }],
         ignoreKey: null,
         actions: [{ label: "nvd status ›", href: "https://nvd.nist.gov/" }],
+      });
+    }
+    if (t.enableDocker && dockerErr) {
+      liveIssues.unshift({
+        id: "docker-unreachable",
+        severity: "warn",
+        label: "docker offline",
+        headline: "Cannot reach Docker daemon.",
+        source: "docker · api",
+        firstSeenTs: null,
+        when: "now",
+        description: `Docker API is unreachable. Check that DOCKER_SOCKET or DOCKER_HOST/DOCKER_PORT are configured.\n\nError: ${dockerErr}`,
+        logs: [{ t: "—", level: "err", text: `[docker] fetch failed: ${dockerErr}` }],
+        ignoreKey: null,
+        actions: [...(DOCKER_UI ? [{ label: "open portainer ›", href: DOCKER_UI }] : [])],
       });
     }
     if (!wanUp) {
