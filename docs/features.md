@@ -121,6 +121,12 @@ Monitors a Docker daemon — via Unix socket (same-host) or a socat TCP bridge �
 
 Containers that exit cleanly with restart policy `no` (one-shot jobs) generate no issue.
 
+### Docker-only mode: host metrics
+
+Docker-only users (no TrueNAS) get container issue monitoring and the `docker N/M` ambient chip, but **no host metrics** in the ambient strip. Load average, free memory, CPU temperature, and network throughput all come from the TrueNAS integration. The Docker API's `/info` endpoint exposes only static values (`MemTotal`, `NCPU`) — not real-time usage.
+
+To surface host metrics without TrueNAS, the planned approach is a `/proc` bind mount: mounting the host's `/proc` (and optionally `/sys`) into the Nightswatch container read-only, then reading `loadavg`, `meminfo`, and `net/dev` via a lightweight server-side proxy endpoint. This keeps raw filesystem paths off the browser entirely. See the tracking issue for implementation details.
+
 ### Ambient strip chip
 
 When Docker is enabled and the ambient strip is on, a `docker N/M` chip shows running vs total containers with a colored status dot (green = all clear, yellow = warning, red = critical).
