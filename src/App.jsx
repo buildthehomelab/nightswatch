@@ -736,13 +736,13 @@ export default function App() {
       if (["INPUT", "TEXTAREA"].includes(document.activeElement?.tagName)) return;
       if (e.key === "h" || e.key === "H") {
         e.preventDefault();
-        if (!t.sandboxLeftUrl) return;
+        if (!DEMO && !t.sandboxLeftUrl) return;
         setRightOpen(false);
         setLeftOpen(v => !v);
         if (!toured) markTourred();
       } else if (e.key === "l" || e.key === "L") {
         e.preventDefault();
-        if (!t.sandboxRightUrl) return;
+        if (!DEMO && !t.sandboxRightUrl) return;
         setLeftOpen(false);
         setRightOpen(v => !v);
       } else if (e.key === "r" || e.key === "R") {
