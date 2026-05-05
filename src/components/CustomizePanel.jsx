@@ -190,13 +190,21 @@ const __CUSTOMIZE_STYLE = `
   .twk-bg-remove:hover { color: var(--crit); border-color: var(--crit); }
   .twk-bg-err { font-family: var(--sans); font-size: 10px; color: var(--crit); margin-top: 4px; }
 
-  .twk-src {
+  .twk-footer {
     position: absolute; bottom: 7px; right: 12px;
+    display: flex; align-items: baseline; gap: 10px;
+    pointer-events: auto;
+  }
+  .twk-ver {
+    font-family: var(--mono); font-size: 9px;
+    color: var(--ink-3); opacity: 0.35;
+    letter-spacing: 0.06em;
+  }
+  .twk-src {
     font-family: var(--mono); font-size: 9px;
     color: var(--ink-3); opacity: 0.35;
     text-decoration: none; letter-spacing: 0.06em;
     transition: opacity 0.15s;
-    pointer-events: auto;
   }
   .twk-src:hover { opacity: 0.75; }
 
