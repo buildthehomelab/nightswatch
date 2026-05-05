@@ -1,5 +1,18 @@
 # Changelog
 
+## [0.3.0](https://github.com/buildthehomelab/nightswatch/compare/v0.2.0...v0.3.0) (2026-05-05)
+
+
+### Features
+
+* src/nwenv.js ([62b65a4](https://github.com/buildthehomelab/nightswatch/commit/62b65a46a97c836e15b2f90222acfa32bedae0ce))
+* src/services/truenas.js ([f33357c](https://github.com/buildthehomelab/nightswatch/commit/f33357cc8f4382aaec50e6bfcbd58a378666ecf8))
+
+
+### Bug Fixes
+
+* inject TrueNAS UI URL at runtime via window.__NW_ENV__ ([35aa383](https://github.com/buildthehomelab/nightswatch/commit/35aa383333874111b8d3e2bc1fa593cb8b106b6f))
+
 ## [0.2.0](https://github.com/buildthehomelab/nightswatch/compare/v0.1.4...v0.2.0) (2026-05-05)
 
 
