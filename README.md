@@ -83,7 +83,7 @@ Copy `.env.example` to `.env.local`. All options documented there.
 | `h` | Open left panel |
 | `l` | Open right panel |
 | `r` | Force refresh |
-| `` ` `` | Open settings panel |
+| `` ` `` / `;` | Open settings panel |
 | `Esc` | Close overlay |
 
 ---
