@@ -988,7 +988,7 @@ export default function App() {
 
       </div>
 
-      {(t.showWeather || t.showWan || t.showUptime || t.showNas || t.showDate || t.showRank) && (
+      {(t.showWeather || t.showWan || t.showUptime || t.showNas || t.showDate || t.showRank || t.showDocker) && (
         <Ambient
           now={now}
           wanUp={wanUp}
@@ -1014,8 +1014,10 @@ export default function App() {
           showNasPools={t.showNasPools}
           showNasNet={t.showNasNet}
           showDate={t.showDate}
+          showDocker={t.showDocker}
           placement={t.ambientPlacement}
           nasData={nasData}
+          dockerData={dockerData}
           toured={toured}
           onOpenCustomize={() => { markTourred(); window.postMessage({ type: '__activate_edit_mode' }, '*'); }}
         />
