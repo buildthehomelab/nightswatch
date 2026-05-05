@@ -1,5 +1,7 @@
 import { useEffect } from 'react';
 import { DEMO } from '../nwenv';
+import DemoMetrics from './DemoMetrics';
+import DemoLogs from './DemoLogs';
 
 export default function SandboxPanel({ open, onClose, url, label, side = 'right' }) {
   useEffect(() => {
@@ -9,10 +11,16 @@ export default function SandboxPanel({ open, onClose, url, label, side = 'right'
     return () => window.removeEventListener('keydown', onKey);
   }, [open, onClose]);
 
-  const hostname = (() => {
-    if (!url) return '';
-    try { return new URL(url).hostname; } catch { return url; }
-  })();
+  const hostname = DEMO
+    ? (side === 'left' ? 'docker.local' : 'logs.local')
+    : (() => {
+        if (!url) return '';
+        try { return new URL(url).hostname; } catch { return url; }
+      })();
+
+  const displayLabel = DEMO
+    ? (side === 'left' ? 'containers' : 'logs')
+    : (label || 'panel');
 
   return (
     <>
@@ -20,13 +28,15 @@ export default function SandboxPanel({ open, onClose, url, label, side = 'right'
       <aside className={`sbx sbx--${side}${open ? ' open' : ''}`} aria-hidden={!open}>
         <div className="sbx-hd">
           <div className="sbx-title">
-            <span className="sbx-label">{label || 'panel'}</span>
+            <span className="sbx-label">{displayLabel}</span>
             {hostname && <span className="sbx-url">{hostname}</span>}
           </div>
           <button className="sbx-close" onClick={onClose}>close · esc</button>
         </div>
         <div className="sbx-body">
-          {DEMO || !url ? (
+          {DEMO ? (
+            side === 'left' ? <DemoMetrics /> : <DemoLogs />
+          ) : !url ? (
             <div className="sbx-placeholder">no url configured — set one in customize</div>
           ) : (
             <iframe
