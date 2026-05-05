@@ -61,9 +61,12 @@ Copy `.env.example` to `.env.local`. All options documented there.
 | `TRUENAS_PORT` | TrueNAS | HTTPS port (default 443) |
 | `TRUENAS_KEY` | TrueNAS | [API key](https://www.truenas.com/docs/scale/toptoolbar/managingapikeys/) from TrueNAS Settings > API Keys |
 | `TRUENAS_UI_URL` | Optional | Browser-facing URL override (split DNS) |
-| `DOZZLE_URL` | Optional | Dozzle instance URL for log viewing |
+| `SANDBOX_LEFT_URL` | Optional | URL for left panel (`h` key) |
+| `SANDBOX_RIGHT_URL` | Optional | URL for right panel (`l` key) |
 | `WEATHER_LOCATION` | Optional | City name or coordinates (wttr.in) |
 | `CVE_KEYWORDS` | Optional | Comma-separated NVD terms (e.g. `plex,nginx`) |
+| `CVE_MIN_CVSS` | Optional | Minimum CVSS score to surface (default 4.0) |
+| `CVE_DAYS_BACK` | Optional | Days back to search NVD (default 30) |
 | `DEMO` | No | `true` for mock data |
 
 > `TRUENAS_KEY` and `TRUENAS_HOST` have no `VITE_` prefix; injected at proxy layer, never sent to browser.
@@ -77,9 +80,10 @@ Copy `.env.example` to `.env.local`. All options documented there.
 | `j` / `k` | Navigate issues |
 | `Enter` | Expand / collapse focused issue |
 | `1` / `2` / `3` | Filter critical / warning / advisory |
-| `l` | Open log viewer |
+| `h` | Open left panel |
+| `l` | Open right panel |
 | `r` | Force refresh |
-| `` ` `` / `h` | Open settings panel |
+| `` ` `` / `;` | Open settings panel |
 | `Esc` | Close overlay |
 
 ---
@@ -99,7 +103,7 @@ docker run -e TRUENAS_HOST=nas.local -e TRUENAS_KEY=your-key -p 8080:80 nightswa
 
 ```
 ghcr.io/buildthehomelab/nightswatch:latest
-ghcr.io/buildthehomelab/nightswatch:0.1
+ghcr.io/buildthehomelab/nightswatch:0.5
 ```
 
 ---

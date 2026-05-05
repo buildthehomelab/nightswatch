@@ -53,8 +53,9 @@ Three top-level states driven by `issues.length` and severity:
 | `j` / `k` | Navigate issues (j=prev, k=next) |
 | `Enter` | Expand/collapse focused issue |
 | `1` / `2` / `3` | Filter critical / warning / advisory severity |
-| `` ` `` / `h` | Toggle CustomizePanel |
-| `l` | Open Dozzle log viewer |
+| `` ` `` / `;` | Toggle CustomizePanel |
+| `h` | Open left panel |
+| `l` | Open right panel |
 | `r` | Refresh |
 | `Esc` | Close overlay |
 
