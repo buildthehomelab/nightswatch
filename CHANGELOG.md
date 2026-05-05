@@ -1,5 +1,13 @@
 # Changelog
 
+## [0.6.0](https://github.com/buildthehomelab/nightswatch/compare/v0.5.1...v0.6.0) (2026-05-05)
+
+
+### Features
+
+* replace load alert text dump with structured detail panel ([5960bdd](https://github.com/buildthehomelab/nightswatch/commit/5960bdd22ea4e766e15b4eb14bfefa134fef1c0d))
+* structured detail panel for system load alert ([687c229](https://github.com/buildthehomelab/nightswatch/commit/687c229ec9153cf9041739716b6c1233518f1eb8))
+
 ## [0.5.1](https://github.com/buildthehomelab/nightswatch/compare/v0.5.0...v0.5.1) (2026-05-05)
 
 
