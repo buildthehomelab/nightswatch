@@ -294,6 +294,7 @@ function Ambient({ now, wanUp, wanDownSince, uptime, rank, cleanSince, weather, 
         anchor={popoverAnchor}
         placement={placement}
         nasData={nasData}
+        dockerData={dockerData}
         cleanSince={cleanSince}
         now={now}
         weatherForecast={weatherForecast}
