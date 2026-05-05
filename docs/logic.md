@@ -236,7 +236,7 @@ All handlers skip when an INPUT or TEXTAREA is focused.
 ## 6. CustomizePanel Settings
 
 localStorage key: `nightswatch:customize`  
-Opens automatically if URL contains `?dev`. Toggle with backtick / `h` / `?`.
+Opens automatically if URL contains `?dev`. Toggle with backtick.
 
 | Key | Default | Effect |
 |-----|---------|--------|
