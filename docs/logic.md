@@ -200,6 +200,8 @@ Priority order for `c.Labels`:
 
 ## 4c. CVE Issue Derivation
 
+
+
 **Poll interval**: every 60 minutes via `useCve()` hook.  
 **API**: `https://services.nvd.nist.gov/rest/json/cves/2.0` (direct, no proxy).  
 **Cache TTL**: 1 hour per keyword, stored in `cve:cache`.
