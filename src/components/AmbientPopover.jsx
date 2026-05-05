@@ -1,4 +1,5 @@
 import { fmtBytes, fmtRate, CPU_WARN_C, CPU_CRIT_C, POOL_WARN_PCT, POOL_CRIT_PCT } from '../services/truenas';
+import { containerName } from '../services/docker';
 
 function fmtClean(ms) {
   const s = Math.floor(ms / 1000);
@@ -373,6 +374,56 @@ function WeatherDetail({ forecast }) {
   );
 }
 
+function DockerDetail({ dockerData }) {
+  if (!dockerData) return (
+    <>
+      <Head label="docker" />
+      <div className="ap-body"><div className="ap-empty">loading…</div></div>
+    </>
+  );
+
+  const containers = dockerData.containers ?? [];
+  const info       = dockerData.info ?? null;
+  const running    = containers.filter(c => c.State === 'running');
+  const nonRunning = containers.filter(c => c.State !== 'running');
+
+  const badgeCls = (state) => {
+    if (state === 'restarting') return ' crit';
+    if (state === 'exited')     return ' warn';
+    return '';
+  };
+
+  return (
+    <>
+      <Head label={`docker · ${running.length}/${containers.length}`} />
+      <div className="ap-body">
+        <Row k="running"  v={String(info?.ContainersRunning  ?? running.length)} />
+        <Row k="stopped"  v={String(info?.ContainersStopped  ?? nonRunning.filter(c => c.State === 'exited').length)} />
+        {(info?.ContainersPaused ?? 0) > 0 && <Row k="paused" v={String(info.ContainersPaused)} />}
+        {info?.ServerVersion && <Row k="engine" v={info.ServerVersion} />}
+        {nonRunning.length > 0 && (
+          <>
+            <div className="ap-rule" />
+            <div className="ap-apps">
+              {nonRunning.map(c => {
+                const name = containerName(c);
+                const cls  = badgeCls(c.State);
+                return (
+                  <div key={c.Id} className="ap-app-row">
+                    <span className={`ap-app-dot${cls}`} />
+                    <span className="ap-app-name">{name}</span>
+                    <span className={`ap-app-ver${cls}`}>{c.State}</span>
+                  </div>
+                );
+              })}
+            </div>
+          </>
+        )}
+      </div>
+    </>
+  );
+}
+
 function PoolDetail({ pool }) {
   const pct = pool.size ? Math.round((pool.allocated / pool.size) * 100) : null;
   const cls = pool.status !== 'ONLINE' || pct >= POOL_CRIT_PCT ? 'crit' : pct >= POOL_WARN_PCT ? 'warn' : '';
@@ -394,7 +445,7 @@ function PoolDetail({ pool }) {
   );
 }
 
-export default function AmbientPopover({ chip, anchor, placement, nasData, cleanSince, now, weatherForecast, startTimeMs, nasUptimeSeconds, nasVersion, wanUp, wanDownSince, onMouseEnter, onMouseLeave }) {
+export default function AmbientPopover({ chip, anchor, placement, nasData, dockerData, cleanSince, now, weatherForecast, startTimeMs, nasUptimeSeconds, nasVersion, wanUp, wanDownSince, onMouseEnter, onMouseLeave }) {
   if (!chip || !anchor) return null;
 
   const pools = Array.isArray(nasData?.pools) ? nasData.pools : [];
@@ -410,6 +461,7 @@ export default function AmbientPopover({ chip, anchor, placement, nasData, clean
   else if (chip === 'weather') content = <WeatherDetail forecast={weatherForecast} />;
   else if (chip === 'uptime')  content = <UptimeDetail  nasUptimeSeconds={nasUptimeSeconds} nasVersion={nasVersion} startTimeMs={startTimeMs} now={now} />;
   else if (chip === 'wan')     content = <WanDetail     wanUp={wanUp} wanDownSince={wanDownSince} now={now} />;
+  else if (chip === 'docker')  content = <DockerDetail  dockerData={dockerData} />;
   else if (pool)               content = <PoolDetail    pool={pool} />;
 
   if (!content) return null;
@@ -420,8 +472,9 @@ export default function AmbientPopover({ chip, anchor, placement, nasData, clean
   const isUptime  = chip === 'uptime';
   const isWan     = chip === 'wan';
   const isNet     = chip === 'net';
-  const popWidth = isWeather ? 210 : isApps || isRank || isUptime ? 220 : isWan || isNet ? 200 : 180;
-  const left = (isRank || isWeather || isUptime || isWan || isNet)
+  const isDocker  = chip === 'docker';
+  const popWidth = isWeather ? 210 : isApps || isRank || isUptime || isDocker ? 220 : isWan || isNet ? 200 : 180;
+  const left = (isRank || isWeather || isUptime || isWan || isNet || isDocker)
     ? Math.max(8, anchor.right - popWidth)
     : Math.min(anchor.left, window.innerWidth - popWidth - 8);
   const style = { left, width: popWidth };
