@@ -52,6 +52,17 @@ window.__NW_ENV__ = {
 };
 ENVEOF
 
+# Grant nginx worker access to the Docker socket at runtime by matching its GID.
+# The socket GID varies per host; detect it dynamically rather than hardcoding 999.
+if [ "${ENABLE_DOCKER}" = "true" ] && [ -S /var/run/docker.sock ]; then
+  DOCKER_GID=$(stat -c '%g' /var/run/docker.sock)
+  addgroup -g "$DOCKER_GID" dockersock 2>/dev/null || true
+  adduser nginx dockersock 2>/dev/null || true
+  echo "[nightswatch] Docker socket GID=${DOCKER_GID} granted to nginx worker" >&2
+elif [ "${ENABLE_DOCKER}" = "true" ]; then
+  echo "[nightswatch] WARNING: ENABLE_DOCKER=true but /var/run/docker.sock not found — mount the socket" >&2
+fi
+
 # Explicit var list → envsubst only touches these three.
 # nginx's own $uri, $remote_addr, $proxy_add_x_forwarded_for etc. are preserved.
 envsubst '${TRUENAS_HOST} ${TRUENAS_PORT} ${TRUENAS_KEY}' \
