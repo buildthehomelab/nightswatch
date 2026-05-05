@@ -6,7 +6,8 @@ const bool = (key, imp)           => (E[key] ?? imp ?? 'false') === 'true';
 
 export const DEMO                 = bool('DEMO',                     import.meta.env.DEMO);
 export const WEATHER_LOCATION     = str ('WEATHER_LOCATION',         import.meta.env.VITE_WEATHER_LOCATION);
-export const DOZZLE_URL           = str ('DOZZLE_URL',               import.meta.env.VITE_DOZZLE_URL);
+export const SANDBOX_LEFT_URL     = str ('SANDBOX_LEFT_URL',         import.meta.env.VITE_SANDBOX_LEFT_URL);
+export const SANDBOX_RIGHT_URL    = str ('SANDBOX_RIGHT_URL',        import.meta.env.VITE_SANDBOX_RIGHT_URL);
 export const TRUENAS_URL          = str ('TRUENAS_URL',              import.meta.env.VITE_TRUENAS_URL);
 export const CVE_KEYWORDS_RAW     = str ('CVE_KEYWORDS',             import.meta.env.VITE_CVE_KEYWORDS);
 export const CVE_DAYS_BACK        = num ('CVE_DAYS_BACK',            import.meta.env.VITE_CVE_DAYS_BACK,            30);
