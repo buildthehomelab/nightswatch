@@ -8,6 +8,7 @@ export const MOCK_DOCKER_DATA = {
       Status: 'Up 3 days (healthy)',
       RestartCount: 0,
       HostConfig: { RestartPolicy: { Name: 'unless-stopped' } },
+      _cpuPct: 18.4, _memMB: 1840, _version: '1.40.3.8994',
     },
     {
       Id: 'b2c3d4e5f6a1',
@@ -17,6 +18,7 @@ export const MOCK_DOCKER_DATA = {
       Status: 'Up 2 days (healthy)',
       RestartCount: 0,
       HostConfig: { RestartPolicy: { Name: 'unless-stopped' } },
+      _cpuPct: 3.1, _memMB: 220, _version: '4.0.9.2244-ls231',
     },
     {
       Id: 'c3d4e5f6a1b2',
@@ -26,6 +28,7 @@ export const MOCK_DOCKER_DATA = {
       Status: 'Up 1 day (unhealthy)',
       RestartCount: 0,
       HostConfig: { RestartPolicy: { Name: 'unless-stopped' } },
+      _cpuPct: 1.8, _memMB: 175, _version: '5.11.0.9244-ls221',
     },
     {
       Id: 'd4e5f6a1b2c3',
@@ -35,6 +38,7 @@ export const MOCK_DOCKER_DATA = {
       Status: 'Restarting (1) 2 seconds ago',
       RestartCount: 15,
       HostConfig: { RestartPolicy: { Name: 'unless-stopped' } },
+      _cpuPct: null, _memMB: null, _version: null,
     },
     {
       Id: 'e5f6a1b2c3d4',
@@ -44,6 +48,7 @@ export const MOCK_DOCKER_DATA = {
       Status: 'Exited (137) 3 hours ago',
       RestartCount: 0,
       HostConfig: { RestartPolicy: { Name: 'unless-stopped' } },
+      _cpuPct: null, _memMB: null, _version: null,
     },
     {
       Id: 'f6a1b2c3d4e5',
@@ -53,6 +58,7 @@ export const MOCK_DOCKER_DATA = {
       Status: 'Up 10 days (healthy)',
       RestartCount: 0,
       HostConfig: { RestartPolicy: { Name: 'always' } },
+      _cpuPct: 0.3, _memMB: 48, _version: '2.21.3',
     },
     {
       Id: 'a1b2c3d4e5f7',
@@ -62,6 +68,7 @@ export const MOCK_DOCKER_DATA = {
       Status: 'Up 5 days (healthy)',
       RestartCount: 6,
       HostConfig: { RestartPolicy: { Name: 'unless-stopped' } },
+      _cpuPct: 0.7, _memMB: 92, _version: '2.11.3',
     },
     {
       Id: 'b2c3d4e5f6a2',
@@ -71,6 +78,7 @@ export const MOCK_DOCKER_DATA = {
       Status: 'Exited (0) 30 minutes ago',
       RestartCount: 0,
       HostConfig: { RestartPolicy: { Name: 'no' } },
+      _cpuPct: null, _memMB: null, _version: null,
     },
   ],
   info: {
