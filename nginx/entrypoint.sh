@@ -13,10 +13,24 @@ if [ -z "${TRUENAS_KEY}" ] && [ "${DEMO}" != "true" ]; then
   echo "[nightswatch] WARNING: TRUENAS_KEY not set — TrueNAS calls will 401" >&2
 fi
 
+# Resolve the browser-facing TrueNAS URL: explicit override > host+port fallback.
+if [ -n "${TRUENAS_UI_URL}" ]; then
+  _NW_TRUENAS_URL="${TRUENAS_UI_URL}"
+elif [ -n "${TRUENAS_HOST}" ]; then
+  if [ -z "${TRUENAS_PORT}" ] || [ "${TRUENAS_PORT}" = "443" ]; then
+    _NW_TRUENAS_URL="https://${TRUENAS_HOST}"
+  else
+    _NW_TRUENAS_URL="https://${TRUENAS_HOST}:${TRUENAS_PORT}"
+  fi
+else
+  _NW_TRUENAS_URL=""
+fi
+
 # Inject runtime config as a JS global before the React bundle loads.
 cat > /usr/share/nginx/html/__nwenv.js <<ENVEOF
 window.__NW_ENV__ = {
   DEMO: "${DEMO}",
+  TRUENAS_URL: "${_NW_TRUENAS_URL}",
   WEATHER_LOCATION: "${WEATHER_LOCATION}",
   DOZZLE_URL: "${DOZZLE_URL}",
   CVE_KEYWORDS: "${CVE_KEYWORDS}",
