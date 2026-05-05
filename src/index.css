@@ -218,6 +218,15 @@ body {
   flex: 1; min-width: 0;
 }
 .ap-app-ver { color: var(--ink-3); white-space: nowrap; font-size: 10.5px; margin-left: auto; }
+.ap-app-row .ap-app-imgver { margin-left: auto; color: var(--ink-2); font-size: 10px; }
+.ap-app-row .ap-app-cpu    { margin-left: 0; color: var(--ink-3); font-size: 10px; }
+.ap-app-row .ap-app-mem    { margin-left: 0; color: var(--ink-3); font-size: 10px; }
+.ap-subhead {
+  font-size: 9.5px; font-weight: 600; letter-spacing: .06em;
+  text-transform: uppercase; color: var(--ink-3);
+  margin: 5px 0 2px; padding-top: 4px;
+  border-top: 1px solid var(--rule);
+}
 
 /* ── Network iface breakdown ─────────────────────────── */
 .ap-net-iface { margin-bottom: 4px; }
