@@ -44,9 +44,12 @@ Three top-level states driven by `issues.length` and severity:
 `issues` array in App is assembled from:
 1. Live TrueNAS issues via `nasIssues(nasData)` (when `enableTruenas`)
 2. Live CVE issues via `cveIssues(cveData)` (when `enableCve`)
-3. Error sentinel issues for unreachable NAS or NVD APIs
-4. WAN issue prepended first (highest priority) when offline
-5. Fixture issues injected in DEMO mode
+3. Live Docker issues via `dockerIssues(dockerData)` (when `enableDocker`)
+4. Error sentinel issues for unreachable NAS, NVD, or Docker APIs
+5. WAN issue prepended first (highest priority) when offline
+6. Fixture issues injected in DEMO mode
+
+Docker issues cover: unhealthy health checks (crit), non-zero exit codes (crit, with OOM/segfault labels), active crashloops (crit), clean stops with a restart policy (warn → crit at 4h), and high restart counts (warn → crit at 4h). The Docker proxy in `vite.config.js` forwards `/docker/*` to either a Unix socket (`DOCKER_SOCKET`) or TCP bridge (`DOCKER_HOST`:`DOCKER_PORT`). Each poll also fetches per-container CPU stats and reads image version labels from `c.Labels` (no extra requests needed; the containers list already includes them).
 
 ## Keyboard shortcuts
 
