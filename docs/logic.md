@@ -156,10 +156,55 @@ CPU temp:        warn → crit if (temp ≥ 85°C)
 
 ---
 
-## 4b. CVE Issue Derivation
+## 4b. Docker Issue Derivation
 
-**Poll interval**: every 60 minutes via `useCve()` hook.  
-**API**: `https://services.nvd.nist.gov/rest/json/cves/2.0` (direct, no proxy).  
+**Poll interval**: every 30 seconds via `useDocker()` hook.
+**API**: `/docker/*` (proxied — same pattern as TrueNAS; see §8).
+
+Each poll calls `/containers/json?all=true` and `/info` in parallel, then fetches per-container stats (`/containers/{id}/stats?stream=false&one-shot=true`) for running containers. Version info is read from `c.Labels` in the list response — no extra image-inspect requests needed.
+
+`dockerIssues(dockerData)` in `services/docker.js` derives issues:
+
+### Issue Rules
+
+| Issue | Trigger | Severity | Notes |
+|-------|---------|----------|-------|
+| Unhealthy | `State: running` + `Status` matches `/unhealthy/i` | crit | Immediate; first-seen tracked |
+| Bad exit | `State: exited` + exit code ≠ 0 | crit | code 137 → "OOM kill"; code 139 → "segfault" |
+| Crashloop | `State: restarting` | crit | Immediate |
+| Clean stop | `State: exited`, exit 0, restart policy ≠ `no` | warn → crit | Escalates at 4h via `stoppedSince` |
+| High restarts | `State: running`, `RestartCount ≥ DOCKER_RESTART_WARN` | warn → crit | Escalates at 4h via first-seen |
+
+Containers exiting with code 0 and restart policy `no` (intentional one-shot jobs) are silently ignored.
+
+### Ambient strip dot logic
+
+The docker chip dot mirrors the issue logic: crit color if any restarting/unhealthy/bad-exit container; warn color if any exited container with a non-`no` restart policy (using `?? 'no'` fallback, matching the issue logic exactly).
+
+### Version extraction (`extractVersion`)
+
+Priority order for `c.Labels`:
+1. `build_version` (LinuxServer format: `"... version:- 1.2.3-ls45 ..."`)
+2. `org.opencontainers.image.version` (OCI standard)
+3. `version`
+4. Fallback: tag extracted from `c.Image` (e.g. `latest`)
+
+### localStorage keys
+
+| Key | Contents |
+|-----|---------|
+| `docker:firstSeen` | `{[issueId]: timestamp}` — first-seen for unhealthy / bad-exit / crashloop / high-restart issues |
+| `docker:stoppedSince` | `{[containerName]: isoDate}` — when each container last went non-running (drives clean-stop age) |
+
+---
+
+## 4c. CVE Issue Derivation
+
+
+
+**Poll interval**: every 60 minutes via `useCve()` hook.
+**API**: `https://services.nvd.nist.gov/rest/json/cves/2.0` (direct, no proxy).
+
 **Cache TTL**: 1 hour per keyword, stored in `cve:cache`.
 
 ### Keyword Assembly
@@ -285,6 +330,7 @@ Configured in `vite.config.js`. Applies to both dev and preview servers.
 | Route | Target | Notes |
 |-------|--------|-------|
 | `/truenas/*` | `$TRUENAS_HOST:$TRUENAS_PORT` | Injects `Authorization: Bearer $TRUENAS_KEY`; strips hop-by-hop headers; `rejectUnauthorized: false` |
+| `/docker/*` | `$DOCKER_SOCKET` or `$DOCKER_HOST:$DOCKER_PORT` | Unix socket (same-host) or TCP bridge (socat); raw socket never exposed to browser |
 | `/wttr/*` | `https://wttr.in` | Rewrites path; User-Agent spoofed to `curl/7.88.1` |
 | GitHub API | `https://api.github.com` | Direct (public, no proxy) |
 
@@ -303,6 +349,11 @@ Configured in `vite.config.js`. Applies to both dev and preview servers.
 | `VITE_CVE_KEYWORDS` | `.env.local` | Comma-separated NVD keyword list (e.g. `truenas,plex,nginx`) |
 | `VITE_CVE_DAYS_BACK` | `.env.local` | Days back to query NVD (default 30) |
 | `VITE_CVE_MIN_CVSS` | `.env.local` | Minimum CVSS score to surface as issue (default 4.0) |
+| `DOCKER_SOCKET` | `.env.local` (no `VITE_` prefix) | Unix socket path on Docker host; proxy connects directly |
+| `DOCKER_HOST` | `.env.local` (no `VITE_` prefix) | TCP hostname for socat bridge (used when `DOCKER_SOCKET` not set) |
+| `DOCKER_PORT` | `.env.local` (no `VITE_` prefix) | TCP port for socat bridge (default 2375) |
+| `VITE_DOCKER_UI_URL` | `.env.local` | Portainer URL; shown as action link in Docker issue detail panels |
+| `VITE_DOCKER_RESTART_WARN` | `.env.local` | Restart count threshold for high-restart issue (default 5) |
 
 ---
 
@@ -333,6 +384,8 @@ Output format: "4d" | "12h" | "45m" | "30s"
 | `truenas:firstSeen` | truenas.js | `{[issueKey]: timestamp}` — per-issue first-seen (cpu-temp, pool-cap, etc.) |
 | `cve:cache` | cve.js | `{[keyword]: {fetchedAt, vulnerabilities[]}}` (1h TTL per keyword) |
 | `cve:firstSeen` | cve.js | `{[cveId]: timestamp}` — when each CVE was first seen by this client |
+| `docker:firstSeen` | docker.js | `{[issueId]: timestamp}` — per-issue first-seen for unhealthy / bad-exit / crashloop / high-restart |
+| `docker:stoppedSince` | docker.js | `{[containerName]: isoDate}` — when each container last went non-running |
 
 ---
 

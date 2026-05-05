@@ -17,11 +17,13 @@ React + Vite SPA. Minimal, attention-driven homelab status page. Silence is the 
 | `src/App.jsx` | Root: state, keyboard handlers, issue assembly, all UI layout |
 | `src/services/truenas.js` | TrueNAS API client + `nasIssues()` issue translation + utils, no JSX |
 | `src/services/cve.js` | NVD CVE feed client + `useCve()` hook + `cveIssues()` issue translation, no JSX |
+| `src/services/docker.js` | Docker API client + `useDocker()` hook + `dockerIssues()` issue translation + `extractVersion()`, no JSX |
 | `src/components/AmbientPopover.jsx` | Popover detail panels for ambient strip chips |
 | `src/components/Dozzle.jsx` | Log viewer overlay: `DozzleIframe` (real) or `DozzleDemo` (mock, `DEMO=true`) |
 | `src/components/CustomizePanel.jsx` | Settings panel (theme/density/feature toggles) |
 | `src/data/fixtures.js` | Static fixture issues for demo states |
 | `src/data/mockNas.js` | Mock TrueNAS API response for offline dev |
+| `src/data/mockDocker.js` | Mock Docker API response for demo/offline dev |
 | `src/index.css` | All styles, design tokens, theme vars |
 
 ## Docs
@@ -42,9 +44,12 @@ Three top-level states driven by `issues.length` and severity:
 `issues` array in App is assembled from:
 1. Live TrueNAS issues via `nasIssues(nasData)` (when `enableTruenas`)
 2. Live CVE issues via `cveIssues(cveData)` (when `enableCve`)
-3. Error sentinel issues for unreachable NAS or NVD APIs
-4. WAN issue prepended first (highest priority) when offline
-5. Fixture issues injected in DEMO mode
+3. Live Docker issues via `dockerIssues(dockerData)` (when `enableDocker`)
+4. Error sentinel issues for unreachable NAS, NVD, or Docker APIs
+5. WAN issue prepended first (highest priority) when offline
+6. Fixture issues injected in DEMO mode
+
+Docker issues cover: unhealthy health checks (crit), non-zero exit codes (crit, with OOM/segfault labels), active crashloops (crit), clean stops with a restart policy (warn → crit at 4h), and high restart counts (warn → crit at 4h). The Docker proxy in `vite.config.js` forwards `/docker/*` to either a Unix socket (`DOCKER_SOCKET`) or TCP bridge (`DOCKER_HOST`:`DOCKER_PORT`). Each poll also fetches per-container CPU stats and reads image version labels from `c.Labels` (no extra requests needed; the containers list already includes them).
 
 ## Keyboard shortcuts
 

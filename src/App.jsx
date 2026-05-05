@@ -3,6 +3,7 @@ import SandboxPanel from './components/SandboxPanel';
 import AmbientPopover from './components/AmbientPopover';
 import { useTrueNas, nasIssues, fmtUptime, fmtAge, fmtBytes, fmtRate, UI as NAS_UI, POOL_WARN_PCT, POOL_CRIT_PCT, CPU_WARN_C, CPU_CRIT_C } from './services/truenas';
 import { useCve, cveIssues, BASE_CVE_KEYWORDS } from './services/cve';
+import { useDocker, dockerIssues, UI as DOCKER_UI } from './services/docker';
 import { CVE_FIXTURES, ISSUE_FIXTURES } from './data/fixtures';
 import { MOCK_NAS_STAGES } from './data/mockNas';
 import { DEMO, WEATHER_LOCATION, SANDBOX_LEFT_URL, SANDBOX_RIGHT_URL } from './nwenv';
@@ -12,6 +13,7 @@ import {
 
 const SERVICE_CVE_KEYWORDS = {
   enableTruenas: 'truenas',
+  enableDocker:  'docker',
 };
 
 const DEMO_STAGES = DEMO ? [
@@ -48,7 +50,9 @@ const CUSTOMIZE_DEFAULTS = {
   showUptime: true,
   enableTruenas: DEMO,
   enableCve: false,
+  enableDocker: DEMO,
   showNas: DEMO,
+  showDocker: DEMO,
   showNasName: true,
   showNasLoad: true,
   showNasCpuTemp: true,
@@ -149,7 +153,7 @@ function GearIcon() {
   );
 }
 
-function Ambient({ now, wanUp, wanDownSince, uptime, rank, cleanSince, weather, weatherForecast, startTimeMs, nasUptimeSeconds, nasVersion, showWeather, showWan, showUptime, showRank, showNas, showNasName, showNasLoad, showNasCpuTemp, showNasMemory, showNasApps, showNasPools, showNasNet, showDate, placement, nasData, toured, onOpenCustomize }) {
+function Ambient({ now, wanUp, wanDownSince, uptime, rank, cleanSince, weather, weatherForecast, startTimeMs, nasUptimeSeconds, nasVersion, showWeather, showWan, showUptime, showRank, showNas, showNasName, showNasLoad, showNasCpuTemp, showNasMemory, showNasApps, showNasPools, showNasNet, showDate, showDocker, placement, nasData, dockerData, toured, onOpenCustomize }) {
   const pools    = Array.isArray(nasData?.pools) ? nasData.pools : [];
   const apps     = Array.isArray(nasData?.apps)  ? nasData.apps  : [];
   const running  = apps.filter(a => a.state === 'RUNNING').length;
@@ -157,7 +161,18 @@ function Ambient({ now, wanUp, wanDownSince, uptime, rank, cleanSince, weather, 
   const hostname = nasData?.info?.hostname ?? 'nas';
   const cpuTemp  = nasData?.cpuTemp ?? null;
   const cpuCls   = cpuTemp == null ? '' : cpuTemp >= CPU_CRIT_C ? ' crit' : cpuTemp >= CPU_WARN_C ? ' warn' : '';
-  const memFree = nasData?.memFree ?? null;
+  const memFree  = nasData?.memFree ?? null;
+
+  const dockerContainers  = dockerData?.containers ?? [];
+  const dockerTotal       = dockerContainers.length;
+  const dockerRunning     = dockerContainers.filter(c => c.State === 'running').length;
+  const dockerWorstCls    = dockerContainers.some(c =>
+    c.State === 'restarting' ||
+    (c.State === 'running' && /unhealthy/i.test(c.Status ?? '')) ||
+    (c.State === 'exited' && /Exited \([^0]\d*\)/.test(c.Status ?? ''))
+  ) ? ' crit' : dockerContainers.some(c =>
+    c.State === 'exited' && (c.HostConfig?.RestartPolicy?.Name ?? 'no') !== 'no'
+  ) ? ' warn' : '';
 
   const [popoverChip, setPopoverChip] = useState(null);
   const [popoverAnchor, setPopoverAnchor] = useState(null);
@@ -175,55 +190,64 @@ function Ambient({ now, wanUp, wanDownSince, uptime, rank, cleanSince, weather, 
 
   return (
     <footer className="ambient rise" data-placement={placement}>
-      {showNas && nasData && (
+      {((showNas && nasData) || (showDocker && dockerData)) && (
         <div className="left">
-          {showNasName && (
-            <span className="item">
-              <a href={NAS_UI} target="_blank" rel="noopener noreferrer" className="ambient-link">{hostname}</a>
-            </span>
-          )}
-          {showNasLoad && load1 && (
-            <span className="item item-pop" onMouseEnter={(e) => openPopover('load', e)} onMouseLeave={scheduleClose}>
-              <span className="k">load</span><span className="v">{load1}</span>
-            </span>
-          )}
-          {showNasCpuTemp && cpuTemp != null && (
-            <span className="item item-pop" onMouseEnter={(e) => openPopover('cpu', e)} onMouseLeave={scheduleClose}>
-              <span className="k">cpu</span>
-              <span className={`v${cpuCls}`}>{cpuTemp}°C</span>
-            </span>
-          )}
-          {showNasMemory && memFree != null && (
-            <span className="item item-pop" onMouseEnter={(e) => openPopover('mem', e)} onMouseLeave={scheduleClose}>
-              <span className="k">mem free</span>
-              <span className="v">{fmtBytes(memFree)}</span>
-            </span>
-          )}
-          {showNasNet && nasData?.netStats && (
-            <span className="item item-pop" onMouseEnter={(e) => openPopover('net', e)} onMouseLeave={scheduleClose}>
-              <span className="k">net</span>
-              <span className="v">↓{fmtRate(nasData.netStats.rx)} ↑{fmtRate(nasData.netStats.tx)}</span>
-            </span>
-          )}
-          {showNasApps && apps.length > 0 && (
-            <span className="item item-pop" onMouseEnter={(e) => openPopover('apps', e)} onMouseLeave={scheduleClose}>
-              <span className="k">apps</span>
-              <span className="v">{running}/{apps.length}</span>
-            </span>
-          )}
-          {showNasPools && pools.map(pool => {
-            const pct    = pool.size ? Math.round((pool.allocated / pool.size) * 100) : null;
-            const ok     = pool.status === 'ONLINE';
-            const dotCls = !ok || pct >= POOL_CRIT_PCT ? ' crit' : pct >= POOL_WARN_PCT ? ' warn' : '';
-            const valCls = !ok || pct >= POOL_CRIT_PCT ? ' crit' : pct >= POOL_WARN_PCT ? ' warn' : '';
-            return (
-              <span key={pool.name} className="item item-pop" onMouseEnter={(e) => openPopover(pool.name, e)} onMouseLeave={scheduleClose}>
-                <span className={`dot${dotCls}`} />
-                <span className="k">{pool.name}</span>
-                <span className={`v${valCls}`}>{pct != null ? `${pct}%` : '—'}</span>
+          {showNas && nasData && <>
+            {showNasName && (
+              <span className="item">
+                <a href={NAS_UI} target="_blank" rel="noopener noreferrer" className="ambient-link">{hostname}</a>
               </span>
-            );
-          })}
+            )}
+            {showNasLoad && load1 && (
+              <span className="item item-pop" onMouseEnter={(e) => openPopover('load', e)} onMouseLeave={scheduleClose}>
+                <span className="k">load</span><span className="v">{load1}</span>
+              </span>
+            )}
+            {showNasCpuTemp && cpuTemp != null && (
+              <span className="item item-pop" onMouseEnter={(e) => openPopover('cpu', e)} onMouseLeave={scheduleClose}>
+                <span className="k">cpu</span>
+                <span className={`v${cpuCls}`}>{cpuTemp}°C</span>
+              </span>
+            )}
+            {showNasMemory && memFree != null && (
+              <span className="item item-pop" onMouseEnter={(e) => openPopover('mem', e)} onMouseLeave={scheduleClose}>
+                <span className="k">mem free</span>
+                <span className="v">{fmtBytes(memFree)}</span>
+              </span>
+            )}
+            {showNasNet && nasData?.netStats && (
+              <span className="item item-pop" onMouseEnter={(e) => openPopover('net', e)} onMouseLeave={scheduleClose}>
+                <span className="k">net</span>
+                <span className="v">↓{fmtRate(nasData.netStats.rx)} ↑{fmtRate(nasData.netStats.tx)}</span>
+              </span>
+            )}
+            {showNasApps && apps.length > 0 && (
+              <span className="item item-pop" onMouseEnter={(e) => openPopover('apps', e)} onMouseLeave={scheduleClose}>
+                <span className="k">apps</span>
+                <span className="v">{running}/{apps.length}</span>
+              </span>
+            )}
+            {showNasPools && pools.map(pool => {
+              const pct    = pool.size ? Math.round((pool.allocated / pool.size) * 100) : null;
+              const ok     = pool.status === 'ONLINE';
+              const dotCls = !ok || pct >= POOL_CRIT_PCT ? ' crit' : pct >= POOL_WARN_PCT ? ' warn' : '';
+              const valCls = !ok || pct >= POOL_CRIT_PCT ? ' crit' : pct >= POOL_WARN_PCT ? ' warn' : '';
+              return (
+                <span key={pool.name} className="item item-pop" onMouseEnter={(e) => openPopover(pool.name, e)} onMouseLeave={scheduleClose}>
+                  <span className={`dot${dotCls}`} />
+                  <span className="k">{pool.name}</span>
+                  <span className={`v${valCls}`}>{pct != null ? `${pct}%` : '—'}</span>
+                </span>
+              );
+            })}
+          </>}
+          {showDocker && dockerData && (
+            <span className="item item-pop" onMouseEnter={(e) => openPopover('docker', e)} onMouseLeave={scheduleClose}>
+              <span className={`dot${dockerWorstCls}`} />
+              <span className="k">docker</span>
+              <span className={`v${dockerWorstCls}`}>{dockerRunning}/{dockerTotal}</span>
+            </span>
+          )}
         </div>
       )}
 
@@ -270,6 +294,7 @@ function Ambient({ now, wanUp, wanDownSince, uptime, rank, cleanSince, weather, 
         anchor={popoverAnchor}
         placement={placement}
         nasData={nasData}
+        dockerData={dockerData}
         cleanSince={cleanSince}
         now={now}
         weatherForecast={weatherForecast}
@@ -665,8 +690,9 @@ export default function App() {
       .map(([, kw]) => kw);
     const all = [...BASE_CVE_KEYWORDS, ...extras];
     return [...new Set(all)];
-  }, [t.enableTruenas]);
+  }, [t.enableTruenas, t.enableDocker]);
   const { data: cveData, err: cveErr } = useCve(t.enableCve, cveKeywords);
+  const { data: dockerData, err: dockerErr } = useDocker(t.enableDocker);
   const [wanUp, setWanUp] = useState(true);
   const [wanDownSince, setWanDownSince] = useState(null);
   const wanFailCount = useRef(0);
@@ -782,6 +808,7 @@ export default function App() {
     const liveIssues = [
       ...nasIssues(nasData),
       ...cveIssues(cveData, cveKeywords),
+      ...dockerIssues(dockerData),
       ...(DEMO && t.enableCve
         ? demoStage >= 3 ? CVE_FIXTURES : demoStage >= 2 ? [CVE_FIXTURES[1]] : []
         : []),
@@ -819,6 +846,21 @@ export default function App() {
         actions: [{ label: "nvd status ›", href: "https://nvd.nist.gov/" }],
       });
     }
+    if (t.enableDocker && dockerErr) {
+      liveIssues.unshift({
+        id: "docker-unreachable",
+        severity: "warn",
+        label: "docker offline",
+        headline: "Cannot reach Docker daemon.",
+        source: "docker · api",
+        firstSeenTs: null,
+        when: "now",
+        description: `Docker API is unreachable. Check that DOCKER_SOCKET or DOCKER_HOST/DOCKER_PORT are configured.\n\nError: ${dockerErr}`,
+        logs: [{ t: "—", level: "err", text: `[docker] fetch failed: ${dockerErr}` }],
+        ignoreKey: null,
+        actions: [...(DOCKER_UI ? [{ label: "open portainer ›", href: DOCKER_UI }] : [])],
+      });
+    }
     if (!wanUp) {
       const since = wanDownSince
         ? wanDownSince.toLocaleTimeString(undefined, { hour: "2-digit", minute: "2-digit", hour12: false })
@@ -844,7 +886,7 @@ export default function App() {
       return [wanIssue, ...liveIssues];
     }
     return liveIssues;
-  }, [wanUp, wanDownSince, nasData, nasErr, cveData, cveErr, cveKeywords, t.enableTruenas, t.enableCve, demoStage]);
+  }, [wanUp, wanDownSince, nasData, nasErr, cveData, cveErr, cveKeywords, dockerData, dockerErr, t.enableTruenas, t.enableCve, t.enableDocker, demoStage]);
 
   const visibleIssues = useMemo(
     () => issues
@@ -946,7 +988,7 @@ export default function App() {
 
       </div>
 
-      {(t.showWeather || t.showWan || t.showUptime || t.showNas || t.showDate || t.showRank) && (
+      {(t.showWeather || t.showWan || t.showUptime || t.showNas || t.showDate || t.showRank || t.showDocker) && (
         <Ambient
           now={now}
           wanUp={wanUp}
@@ -972,8 +1014,10 @@ export default function App() {
           showNasPools={t.showNasPools}
           showNasNet={t.showNasNet}
           showDate={t.showDate}
+          showDocker={t.showDocker}
           placement={t.ambientPlacement}
           nasData={nasData}
+          dockerData={dockerData}
           toured={toured}
           onOpenCustomize={() => { markTourred(); window.postMessage({ type: '__activate_edit_mode' }, '*'); }}
         />
@@ -1044,6 +1088,15 @@ export default function App() {
               <CustomizeToggle label="Pools"    value={t.showNasPools}   onChange={(v) => setTweak("showNasPools", v)} />
             </div>
           </>}
+        </CustomizeColumn>
+        <CustomizeColumn>
+          <CustomizeSection label="Docker" />
+          <CustomizeToggle label="Enable"   value={t.enableDocker}  onChange={(v) => setTweak("enableDocker", v)} />
+          {t.enableDocker && (
+            <div className="twk-subgroup">
+              <CustomizeToggle label="Ambient Strip" value={t.showDocker} onChange={(v) => setTweak("showDocker", v)} />
+            </div>
+          )}
         </CustomizeColumn>
         <CustomizeColumn>
           <CustomizeSection label="Security advisories" />

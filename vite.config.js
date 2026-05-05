@@ -2,6 +2,7 @@ import { defineConfig, loadEnv } from 'vite'
 import react from '@vitejs/plugin-react'
 import basicSsl from '@vitejs/plugin-basic-ssl'
 import https from 'node:https'
+import http from 'node:http'
 import fs from 'node:fs'
 
 const pkg = JSON.parse(fs.readFileSync(new URL('./package.json', import.meta.url), 'utf-8'))
@@ -53,6 +54,54 @@ function truenasProxyPlugin(key, host, port) {
   }
 }
 
+function dockerProxyPlugin(socket, host, port) {
+  if (!socket && !host) return { name: 'docker-proxy' };
+
+  function middleware(req, res) {
+    const upstreamPath = req.url.replace(/^\/docker/, '');
+    const { 'accept-encoding': _ae, connection: _conn, 'transfer-encoding': _te, ...fwdHeaders } = req.headers;
+
+    const options = socket
+      ? {
+          socketPath: socket,
+          path: upstreamPath,
+          method: req.method,
+          headers: { ...fwdHeaders, host: 'localhost' },
+          timeout: 8000,
+        }
+      : {
+          hostname: host,
+          port: Number(port ?? 2375),
+          path: upstreamPath,
+          method: req.method,
+          headers: { ...fwdHeaders, host },
+          timeout: 8000,
+        };
+
+    const proxyReq = http.request(options, (proxyRes) => {
+      res.writeHead(proxyRes.statusCode, proxyRes.headers);
+      proxyRes.pipe(res);
+    });
+
+    proxyReq.on('timeout', () => proxyReq.destroy(new Error('upstream timeout')));
+    proxyReq.on('error', (err) => {
+      console.error('[docker-proxy] upstream error:', err.message);
+      if (!res.headersSent) {
+        res.writeHead(502, { 'content-type': 'application/json' });
+      }
+      res.end(JSON.stringify({ error: 'docker proxy error', detail: err.message }));
+    });
+
+    req.pipe(proxyReq);
+  }
+
+  return {
+    name: 'docker-proxy',
+    configureServer(server)        { server.middlewares.use('/docker', middleware); },
+    configurePreviewServer(server) { server.middlewares.use('/docker', middleware); },
+  };
+}
+
 export default defineConfig(({ mode }) => {
   const env = loadEnv(mode, process.cwd(), '')
   const truenasUrl = env.TRUENAS_UI_URL
@@ -75,8 +124,10 @@ export default defineConfig(({ mode }) => {
       'import.meta.env.VITE_CVE_KEYWORDS':             JSON.stringify(env.CVE_KEYWORDS ?? ''),
       'import.meta.env.VITE_APP_VERSION':               JSON.stringify(pkg.version),
       'import.meta.env.DEMO':                          JSON.stringify(env.DEMO ?? 'false'),
+      'import.meta.env.VITE_DOCKER_UI_URL':            JSON.stringify(env.DOCKER_UI_URL ?? ''),
+      'import.meta.env.VITE_DOCKER_RESTART_WARN':      JSON.stringify(env.DOCKER_RESTART_WARN ?? '5'),
     },
-    plugins: [react(), basicSsl(), truenasProxyPlugin(env.TRUENAS_KEY, env.TRUENAS_HOST, env.TRUENAS_PORT)],
+    plugins: [react(), basicSsl(), truenasProxyPlugin(env.TRUENAS_KEY, env.TRUENAS_HOST, env.TRUENAS_PORT), dockerProxyPlugin(env.DOCKER_SOCKET, env.DOCKER_HOST, env.DOCKER_PORT)],
     server: {
       proxy: {
         '/wttr': {

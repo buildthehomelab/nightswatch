@@ -215,9 +215,28 @@ body {
 .ap-app-name {
   color: var(--ink-2);
   overflow: hidden; text-overflow: ellipsis; white-space: nowrap;
-  flex: 1; min-width: 0;
+  flex: 1; min-width: 36px;
 }
 .ap-app-ver { color: var(--ink-3); white-space: nowrap; font-size: 10.5px; margin-left: auto; }
+.ap-docker-row { align-items: flex-start; }
+.ap-docker-info { flex: 1; min-width: 0; }
+.ap-docker-name {
+  display: block; color: var(--ink-2);
+  white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
+}
+.ap-docker-meta { display: flex; align-items: center; gap: 6px; margin-top: 1px; }
+.ap-docker-ver {
+  color: var(--ink-3); font-size: 10px;
+  flex: 1; min-width: 0;
+  white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
+}
+.ap-docker-cpu { color: var(--ink-3); font-size: 10px; flex-shrink: 0; margin-left: auto; }
+.ap-subhead {
+  font-size: 9.5px; font-weight: 600; letter-spacing: .06em;
+  text-transform: uppercase; color: var(--ink-3);
+  margin: 5px 0 2px; padding-top: 4px;
+  border-top: 1px solid var(--rule);
+}
 
 /* ── Network iface breakdown ─────────────────────────── */
 .ap-net-iface { margin-bottom: 4px; }

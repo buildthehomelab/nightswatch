@@ -18,7 +18,7 @@ Silence-first homelab status dashboard. Healthy = one quiet phrase. Something wr
 | **Warnings** | One-liner + ranked issue list |
 | **Critical** | Same; critical issues sort first |
 
-Monitors: WAN (1.1.1.1 / 8.8.8.8), TrueNAS SCALE (pools, temps, apps, SMART, updates), NIST NVD CVE feed, weather (optional). Issues auto-escalate with age. No backend required.
+Monitors: WAN (1.1.1.1 / 8.8.8.8), TrueNAS SCALE (pools, temps, apps, SMART, updates), Docker (container health, crashes, restarts), NIST NVD CVE feed, weather (optional). Issues auto-escalate with age. No backend required.
 
 ---
 
@@ -67,6 +67,11 @@ Copy `.env.example` to `.env.local`. All options documented there.
 | `CVE_KEYWORDS` | Optional | Comma-separated NVD terms (e.g. `plex,nginx`) |
 | `CVE_MIN_CVSS` | Optional | Minimum CVSS score to surface (default 4.0) |
 | `CVE_DAYS_BACK` | Optional | Days back to search NVD (default 30) |
+| `DOCKER_SOCKET` | Docker | Unix socket path on the Docker host (e.g. `/var/run/docker.sock`) |
+| `DOCKER_HOST` | Docker | TCP hostname when using a socat bridge (e.g. `docker.local`) |
+| `DOCKER_PORT` | Docker | TCP port for socat bridge (default 2375) |
+| `DOCKER_UI_URL` | Optional | Portainer or similar UI URL — shown in issue action buttons |
+| `DOCKER_RESTART_WARN` | Optional | Restart count threshold for high-restart warning (default 5) |
 | `DEMO` | No | `true` for mock data |
 
 > `TRUENAS_KEY` and `TRUENAS_HOST` have no `VITE_` prefix; injected at proxy layer, never sent to browser.
