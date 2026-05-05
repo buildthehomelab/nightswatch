@@ -263,7 +263,7 @@ export function CustomizePanel({ side = 'top', children }) {
   useEffect(() => {
     const onKey = (e) => {
       if (['INPUT', 'TEXTAREA'].includes(document.activeElement?.tagName)) return;
-      if (e.key === '`' || e.key === 'h' || e.key === 'H') setOpen(v => !v);
+      if (e.key === '`') setOpen(v => !v);
       else if (e.key === 'Escape') setOpen(false);
     };
     window.addEventListener('keydown', onKey);
