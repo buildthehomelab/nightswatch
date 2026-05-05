@@ -812,7 +812,11 @@ export default function App() {
       ...(DEMO && t.enableCve
         ? demoStage >= 3 ? CVE_FIXTURES : demoStage >= 2 ? [CVE_FIXTURES[1]] : []
         : []),
-      ...(DEMO_STAGES ? DEMO_STAGES.slice(0, demoStage + 1).flatMap(s => s.issues) : []),
+      ...(DEMO_STAGES ? DEMO_STAGES.slice(0, demoStage + 1).flatMap(s => s.issues).filter(issue => {
+        if (!t.enableTruenas && issue.source?.startsWith('truenas')) return false;
+        if (!t.enableDocker  && issue.source?.startsWith('docker'))  return false;
+        return true;
+      }) : []),
     ];
     if (t.enableTruenas && nasErr) {
       liveIssues.unshift({
