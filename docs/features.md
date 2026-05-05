@@ -122,13 +122,14 @@ Each CVE issue links directly to its NVD detail page.
 
 ---
 
-## Log Viewer Integration
+## Sandbox Panels
 
-Press `l` to open the **Dozzle** log viewer as a full-screen overlay — no tab switching, no context loss.
+Two configurable iframe panels slide in from the right: left panel (`h`) and right panel (`l`). Point them at any internal tool: logs, dashboards, admin UIs.
 
-- Configured via `VITE_DOZZLE_URL`; falls back to a blank mock overlay in demo mode
-- Issue actions can open Dozzle focused on a specific container (e.g. WAN down → pihole logs)
-- Press `l` or `Esc` to dismiss
+- URLs set via `SANDBOX_LEFT_URL` / `SANDBOX_RIGHT_URL` env vars or in the Customize panel (persisted to localStorage)
+- Only one panel can be open at a time; opening one closes the other
+- Issue actions can open the right panel (e.g. WAN down)
+- Press the same key or `Esc` to dismiss; empty URL: key has no effect
 
 ---
 
