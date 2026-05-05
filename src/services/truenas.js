@@ -9,10 +9,11 @@ import {
   LOAD_WARN, LOAD_CRIT,
   SCRUB_STALE_DAYS,
   STOPPED_HIDE_MINUTES as STOPPED_HIDE_MINUTES_NW,
+  TRUENAS_URL,
 } from '../nwenv';
 export { POOL_WARN_PCT, POOL_CRIT_PCT, CPU_WARN_C, CPU_CRIT_C };
 
-const _rawUI = import.meta.env.VITE_TRUENAS_URL ?? "";
+const _rawUI = TRUENAS_URL ?? "";
 export const UI = _rawUI && !_rawUI.startsWith("https://") ? `https://${_rawUI.replace(/^https?:\/\//, "")}` : _rawUI;
 const API = "/truenas/api/v2.0";
 const STOPPED_HIDE_MINUTES = STOPPED_HIDE_MINUTES_NW;
