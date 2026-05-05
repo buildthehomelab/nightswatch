@@ -702,13 +702,19 @@ body.has-bg-image.density-compact .issue { padding: 11px 16px; }
   z-index: 101;
   display: flex;
   flex-direction: column-reverse;
-  border-left: 1px solid var(--rule);
-  transform: translateX(100%);
   transition: transform .3s cubic-bezier(.4, 0, .2, 1);
   font-family: var(--sans);
   font-size: 12px;
   font-weight: 500;
   color: var(--ink-3);
+}
+.sbx--right {
+  border-left: 1px solid var(--rule);
+  transform: translateX(100%);
+}
+.sbx--left {
+  border-right: 1px solid var(--rule);
+  transform: translateX(-100%);
 }
 .sbx.open { transform: translateX(0); }
 
