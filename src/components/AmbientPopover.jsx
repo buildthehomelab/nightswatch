@@ -387,11 +387,16 @@ function DockerDetail({ dockerData }) {
   const running    = containers.filter(c => c.State === 'running');
   const nonRunning = containers.filter(c => c.State !== 'running');
 
+  const sortedRunning = [...running].sort((a, b) => (b._cpuPct ?? -1) - (a._cpuPct ?? -1));
+
   const badgeCls = (state) => {
     if (state === 'restarting') return ' crit';
     if (state === 'exited')     return ' warn';
     return '';
   };
+
+  const fmtCpu = (pct) => pct == null ? null : `${pct < 0.1 ? '<0.1' : pct.toFixed(1)}%`;
+  const fmtMem = (mb)  => mb  == null ? null : mb >= 1024 ? `${(mb / 1024).toFixed(1)}g` : `${Math.round(mb)}m`;
 
   return (
     <>
@@ -401,7 +406,7 @@ function DockerDetail({ dockerData }) {
         <Row k="stopped"  v={String(info?.ContainersStopped  ?? nonRunning.filter(c => c.State === 'exited').length)} />
         {(info?.ContainersPaused ?? 0) > 0 && <Row k="paused" v={String(info.ContainersPaused)} />}
         {info?.ServerVersion && <Row k="engine" v={info.ServerVersion} />}
-        {nonRunning.length > 0 && (
+        {(nonRunning.length > 0 || sortedRunning.length > 0) && (
           <>
             <div className="ap-rule" />
             <div className="ap-apps">
@@ -413,6 +418,24 @@ function DockerDetail({ dockerData }) {
                     <span className={`ap-app-dot${cls}`} />
                     <span className="ap-app-name">{name}</span>
                     <span className={`ap-app-ver${cls}`}>{c.State}</span>
+                  </div>
+                );
+              })}
+              {nonRunning.length > 0 && sortedRunning.length > 0 && (
+                <div className="ap-subhead">running</div>
+              )}
+              {sortedRunning.map(c => {
+                const name = containerName(c);
+                const cpu  = fmtCpu(c._cpuPct);
+                const mem  = fmtMem(c._memMB);
+                const ver  = c._version ?? null;
+                return (
+                  <div key={c.Id} className="ap-app-row">
+                    <span className="ap-app-dot running" />
+                    <span className="ap-app-name">{name}</span>
+                    {ver  && <span className="ap-app-ver ap-app-imgver">{ver}</span>}
+                    {cpu  && <span className="ap-app-ver ap-app-cpu">{cpu}</span>}
+                    {mem  && <span className="ap-app-ver ap-app-mem">{mem}</span>}
                   </div>
                 );
               })}
