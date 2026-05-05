@@ -6,7 +6,7 @@ import { useCve, cveIssues, BASE_CVE_KEYWORDS } from './services/cve';
 import { useDocker, dockerIssues, UI as DOCKER_UI } from './services/docker';
 import { CVE_FIXTURES, ISSUE_FIXTURES } from './data/fixtures';
 import { MOCK_NAS_STAGES } from './data/mockNas';
-import { DEMO, WEATHER_LOCATION, SANDBOX_LEFT_URL, SANDBOX_RIGHT_URL } from './nwenv';
+import { DEMO, WEATHER_LOCATION, SANDBOX_LEFT_URL, SANDBOX_RIGHT_URL, ENABLE_DOCKER } from './nwenv';
 import {
   useCustomize, CustomizePanel, CustomizeColumn, CustomizeSection, CustomizeRadio, CustomizeToggle, CustomizeInput, BgImagePicker,
 } from './components/CustomizePanel';
@@ -50,9 +50,9 @@ const CUSTOMIZE_DEFAULTS = {
   showUptime: true,
   enableTruenas: DEMO,
   enableCve: false,
-  enableDocker: DEMO,
+  enableDocker: DEMO || ENABLE_DOCKER,
   showNas: DEMO,
-  showDocker: DEMO,
+  showDocker: DEMO || ENABLE_DOCKER,
   showNasName: true,
   showNasLoad: true,
   showNasCpuTemp: true,
