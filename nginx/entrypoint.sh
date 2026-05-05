@@ -26,6 +26,11 @@ else
   _NW_TRUENAS_URL=""
 fi
 
+# Auto-enable Docker monitoring when the socket is mounted, unless explicitly suppressed.
+if [ -S /var/run/docker.sock ] && [ "${ENABLE_DOCKER}" != "false" ]; then
+  ENABLE_DOCKER=true
+fi
+
 # Inject runtime config as a JS global before the React bundle loads.
 cat > /usr/share/nginx/html/__nwenv.js <<ENVEOF
 window.__NW_ENV__ = {
