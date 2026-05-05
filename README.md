@@ -18,7 +18,7 @@ Silence-first homelab status dashboard. Healthy = one quiet phrase. Something wr
 | **Warnings** | One-liner + ranked issue list |
 | **Critical** | Same; critical issues sort first |
 
-Monitors: WAN (1.1.1.1 / 8.8.8.8), TrueNAS SCALE (pools, temps, apps, SMART, updates), NIST NVD CVE feed, weather (optional). Issues auto-escalate with age. No backend required.
+Monitors: WAN (1.1.1.1 / 8.8.8.8), TrueNAS SCALE (pools, temps, apps, SMART, updates), Docker (container health, crashes, restarts), NIST NVD CVE feed, weather (optional). Issues auto-escalate with age. No backend required.
 
 ---
 
