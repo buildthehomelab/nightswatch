@@ -806,7 +806,7 @@ export default function App() {
 
   const issues = useMemo(() => {
     const liveIssues = [
-      ...nasIssues(nasData),
+      ...(t.enableTruenas ? nasIssues(nasData) : []),
       ...cveIssues(cveData, cveKeywords),
       ...dockerIssues(dockerData),
       ...(DEMO && t.enableCve
@@ -901,7 +901,7 @@ export default function App() {
 
 
   const uptime = useMemo(() => {
-    if (nasData?.info?.uptime_seconds != null) return fmtUptime(nasData.info.uptime_seconds);
+    if (t.enableTruenas && nasData?.info?.uptime_seconds != null) return fmtUptime(nasData.info.uptime_seconds);
     const secs = Math.floor((now - startTime.current) / 1000);
     if (secs < 60) return `${secs}s`;
     const mins = Math.floor(secs / 60);
@@ -910,7 +910,7 @@ export default function App() {
     if (hours < 24) return `${hours}h`;
     const days = Math.floor(hours / 24);
     return `${days}d`;
-  }, [now, nasData]);
+  }, [now, nasData, t.enableTruenas]);
 
   const isHealthy = visibleIssues.length === 0;
   const hasCrit = visibleIssues.some(i => i.severity === 'crit');
@@ -999,8 +999,8 @@ export default function App() {
           weather={weather}
           weatherForecast={weatherForecast}
           startTimeMs={startTime.current}
-          nasUptimeSeconds={nasData?.info?.uptime_seconds ?? null}
-          nasVersion={nasData?.info?.version ?? null}
+          nasUptimeSeconds={t.enableTruenas ? (nasData?.info?.uptime_seconds ?? null) : null}
+          nasVersion={t.enableTruenas ? (nasData?.info?.version ?? null) : null}
           showWeather={t.showWeather}
           showWan={t.showWan}
           showUptime={t.showUptime}
@@ -1016,7 +1016,7 @@ export default function App() {
           showDate={t.showDate}
           showDocker={t.showDocker}
           placement={t.ambientPlacement}
-          nasData={nasData}
+          nasData={t.enableTruenas ? nasData : null}
           dockerData={dockerData}
           toured={toured}
           onOpenCustomize={() => { markTourred(); window.postMessage({ type: '__activate_edit_mode' }, '*'); }}
