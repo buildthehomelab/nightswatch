@@ -223,9 +223,10 @@ All handlers skip when an INPUT or TEXTAREA is focused.
 | `1` | IssueList | Toggle critical severity filter |
 | `2` | IssueList | Toggle warning severity filter |
 | `3` | IssueList | Toggle info severity filter |
-| `l` | App | Toggle Dozzle log viewer |
+| `h` | App | Toggle left sandbox panel |
+| `l` | App | Toggle right sandbox panel |
 | `r` | App | Refresh (force re-render + new timestamp) |
-| `` ` `` / `h` / `?` | CustomizePanel | Toggle CustomizePanel (keyboard shortcuts table lives inside it) |
+| `` ` `` | CustomizePanel | Toggle CustomizePanel (keyboard shortcuts table lives inside it) |
 | `Esc` | CustomizePanel | Close CustomizePanel |
 
 > **Note:** `j` = prev, `k` = next. Intentional inversion from vim convention.
@@ -235,7 +236,7 @@ All handlers skip when an INPUT or TEXTAREA is focused.
 ## 6. CustomizePanel Settings
 
 localStorage key: `nightswatch:customize`  
-Opens automatically if URL contains `?dev`. Toggle with backtick / `h` / `?`.
+Opens automatically if URL contains `?dev`. Toggle with backtick.
 
 | Key | Default | Effect |
 |-----|---------|--------|
@@ -261,17 +262,19 @@ Opens automatically if URL contains `?dev`. Toggle with backtick / `h` / `?`.
 
 **Ignored panel** shows only currently active ignored issues — ones whose `ignoreKey` exists in the current `issues` array. Historical/stale ignored keys are silently filtered out of the display (but remain in localStorage until manually cleared).
 
+**Panels section** has two text inputs for left and right sandbox panel URLs. Values persist via `useCustomize`/localStorage under `sandboxLeftUrl` and `sandboxRightUrl`.
+
 ---
 
-## 7. Issue → Dozzle Container Map
+## 7. Issue → Panel Map
 
-"Open in dozzle ›" button appears when `ISSUE_TO_CONTAINER[issue.id]` exists.
+"Open in panel ›" button appears when `ISSUE_TO_RIGHT_PANEL[issue.id]` is truthy. Opens the right sandbox panel.
 
-| Issue ID | Dozzle Container |
-|----------|-----------------|
-| `wan-down` | `pihole` |
+| Issue ID | Opens |
+|----------|-------|
+| `wan-down` | right panel |
 
-Only `wan-down` is wired — it's the only live issue ID that matches. All `nasIssues()` IDs (`nas-app-*`, `nas-pool-*`, etc.) are unmapped; the button won't appear for TrueNAS issues until entries are added.
+Only `wan-down` is wired. All `nasIssues()` IDs are unmapped; the button won't appear for TrueNAS issues until entries are added.
 
 ---
 
@@ -293,7 +296,8 @@ Configured in `vite.config.js`. Applies to both dev and preview servers.
 | `TRUENAS_HOST` | `.env.local` (no `VITE_` prefix) | Proxy target hostname (e.g. `nas.local`) |
 | `TRUENAS_PORT` | `.env.local` (no `VITE_` prefix) | Proxy target port (e.g. `443`) |
 | `VITE_TRUENAS_URL` | `.env.local` | TrueNAS UI base URL for hostname link in ambient strip |
-| `VITE_DOZZLE_URL` | `.env.local` | Dozzle iframe base URL; empty = blank iframe (mock mode) |
+| `VITE_SANDBOX_LEFT_URL` | `.env.local` | Left panel iframe URL; empty = key has no effect |
+| `VITE_SANDBOX_RIGHT_URL` | `.env.local` | Right panel iframe URL; empty = key has no effect |
 | `VITE_STOPPED_APP_HIDE_MINUTES` | `.env.local` | Minutes before stopped apps hidden from NAS strip (default 60) |
 | `VITE_WEATHER_LOCATION` | `.env.local` | Location string for wttr.in weather; empty = weather disabled |
 | `VITE_CVE_KEYWORDS` | `.env.local` | Comma-separated NVD keyword list (e.g. `truenas,plex,nginx`) |
@@ -341,6 +345,6 @@ Output format: "4d" | "12h" | "45m" | "30s"
 | `services/cve.js` | NVD API poll (direct) | `cveData`, `cveIssues()` — pure data, no JSX |
 | `CustomizePanel.jsx` | keyboard, localStorage | `[settings, setSettings]` via `useCustomize()` |
 | `AmbientPopover.jsx` | chip id, anchor rect, nasData | hover detail panels for ambient strip chips |
-| `Dozzle.jsx` | `open` prop, `VITE_DOZZLE_URL` | iframe log viewer overlay |
+| `SandboxPanel.jsx` | `open`, `url`, `label` props | configurable iframe panel overlay (left or right) |
 | `src/data/fixtures.js` | — | static demo issues for healthy/warnings/critical states |
 | `src/data/mockNas.js` | — | mock TrueNAS API response for offline dev |

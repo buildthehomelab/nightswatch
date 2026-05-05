@@ -1,13 +1,13 @@
 import { useState, useEffect, useRef, useMemo, useCallback } from 'react';
-import Dozzle from './components/Dozzle';
+import SandboxPanel from './components/SandboxPanel';
 import AmbientPopover from './components/AmbientPopover';
 import { useTrueNas, nasIssues, fmtUptime, fmtAge, fmtBytes, fmtRate, UI as NAS_UI, POOL_WARN_PCT, POOL_CRIT_PCT, CPU_WARN_C, CPU_CRIT_C } from './services/truenas';
 import { useCve, cveIssues, BASE_CVE_KEYWORDS } from './services/cve';
 import { CVE_FIXTURES, ISSUE_FIXTURES } from './data/fixtures';
 import { MOCK_NAS_STAGES } from './data/mockNas';
-import { DEMO, WEATHER_LOCATION } from './nwenv';
+import { DEMO, WEATHER_LOCATION, SANDBOX_LEFT_URL, SANDBOX_RIGHT_URL } from './nwenv';
 import {
-  useCustomize, CustomizePanel, CustomizeColumn, CustomizeSection, CustomizeRadio, CustomizeToggle, BgImagePicker,
+  useCustomize, CustomizePanel, CustomizeColumn, CustomizeSection, CustomizeRadio, CustomizeToggle, CustomizeInput, BgImagePicker,
 } from './components/CustomizePanel';
 
 const SERVICE_CVE_KEYWORDS = {
@@ -37,8 +37,8 @@ function saveIgnored(map) {
 
 const SEV_ORDER = { crit: 0, warn: 1, info: 2 };
 
-const ISSUE_TO_CONTAINER = {
-  "wan-down": "pihole",
+const ISSUE_TO_RIGHT_PANEL = {
+  "wan-down": true,
 };
 
 const CUSTOMIZE_DEFAULTS = {
@@ -58,6 +58,8 @@ const CUSTOMIZE_DEFAULTS = {
   showNasNet: true,
   showDate: true,
   showRank: true,
+  sandboxLeftUrl: SANDBOX_LEFT_URL,
+  sandboxRightUrl: SANDBOX_RIGHT_URL,
   ambientPlacement: "bottom",
   bgFit: "cover",
   bgPosition: "center",
@@ -334,7 +336,7 @@ function Logs({ lines }) {
   );
 }
 
-function Issue({ issue, isOpen, isFocused, isFading, onToggle, index, onOpenLogs, onIgnore }) {
+function Issue({ issue, isOpen, isFocused, isFading, onToggle, index, onOpenPanel, onIgnore }) {
   const ref = useRef(null);
   useEffect(() => {
     if (isFocused) ref.current?.scrollIntoView({ block: "nearest", behavior: "smooth" });
@@ -392,11 +394,11 @@ function Issue({ issue, isOpen, isFocused, isFading, onToggle, index, onOpenLogs
                 ignore ›
               </button>
             )}
-            {ISSUE_TO_CONTAINER[issue.id] && (
+            {ISSUE_TO_RIGHT_PANEL[issue.id] && (
               <button
-                onClick={(e) => { e.stopPropagation(); onOpenLogs(ISSUE_TO_CONTAINER[issue.id]); }}
+                onClick={(e) => { e.stopPropagation(); onOpenPanel(); }}
               >
-                open in dozzle ›
+                open in panel ›
               </button>
             )}
           </div>
@@ -406,7 +408,7 @@ function Issue({ issue, isOpen, isFocused, isFading, onToggle, index, onOpenLogs
   );
 }
 
-function IssueList({ issues, onOpenLogs, onIgnore }) {
+function IssueList({ issues, onOpenPanel, onIgnore }) {
   const [openId, setOpenId] = useState(null);
   const [focusedIndex, setFocusedIndex] = useState(null);
   const [filterSev, setFilterSev] = useState(null);
@@ -507,7 +509,7 @@ function IssueList({ issues, onOpenLogs, onIgnore }) {
             setFocusedIndex(isClosing ? null : i);
             setOpenId(isClosing ? null : issue.id);
           }}
-          onOpenLogs={onOpenLogs}
+          onOpenPanel={onOpenPanel}
           onIgnore={handleIgnoreWithAnimation}
         />
       ))}
@@ -519,8 +521,9 @@ const SHORTCUTS = [
   { key: "j / k",    desc: "navigate issues" },
   { key: "enter",    desc: "expand / collapse issue" },
   { key: "1 / 2 / 3", desc: "filter critical / warning / advisory" },
-  { key: "` / h",   desc: "toggle this panel" },
-  { key: "l",             desc: "open log viewer" },
+  { key: "` / ;",    desc: "toggle this panel" },
+  { key: "h",        desc: "open left panel" },
+  { key: "l",        desc: "open right panel" },
   { key: "r",             desc: "refresh status" },
   { key: "esc",      desc: "close overlay" },
 ];
@@ -532,8 +535,8 @@ export default function App() {
   const [now, setNow] = useState(new Date());
   const [toured, setTourred] = useState(() => !!localStorage.getItem('nightswatch:toured'));
   const markTourred = () => { setTourred(true); localStorage.setItem('nightswatch:toured', '1'); };
-  const [dozzleOpen, setDozzleOpen] = useState(false);
-  const [dozzleContainer, setDozzleContainer] = useState(null);
+  const [leftOpen, setLeftOpen] = useState(false);
+  const [rightOpen, setRightOpen] = useState(false);
   const [ignored, setIgnored] = useState(() => loadIgnored());
   const [cleanSince, setCleanSince] = useState(() =>
     DEMO ? new Date(Date.now() - 8 * 24 * 60 * 60 * 1000).toISOString() : localStorage.getItem(LS_CLEAN_KEY)
@@ -609,25 +612,32 @@ export default function App() {
     return () => clearInterval(id);
   }, []);
 
-  const openLogs = (container) => { setDozzleContainer(container || null); setDozzleOpen(true); };
+  const openRightPanel = () => { setLeftOpen(false); setRightOpen(true); };
 
   useEffect(() => {
     const onKey = (e) => {
       if (["INPUT", "TEXTAREA"].includes(document.activeElement?.tagName)) return;
-      if (e.key === "l" || e.key === "L") {
+      if (e.key === "h" || e.key === "H") {
         e.preventDefault();
-        if (dozzleOpen) { setDozzleOpen(false); return; }
-        openLogs();
+        if (!t.sandboxLeftUrl) return;
+        setRightOpen(false);
+        setLeftOpen(v => !v);
+        if (!toured) markTourred();
+      } else if (e.key === "l" || e.key === "L") {
+        e.preventDefault();
+        if (!t.sandboxRightUrl) return;
+        setLeftOpen(false);
+        setRightOpen(v => !v);
       } else if (e.key === "r" || e.key === "R") {
         e.preventDefault();
         setNow(new Date());
-      } else if (!toured && (e.key === 'h' || e.key === 'H' || e.key === '?')) {
+      } else if (!toured && e.key === '?') {
         markTourred();
       }
     };
     window.addEventListener("keydown", onKey);
     return () => window.removeEventListener("keydown", onKey);
-  }, [dozzleOpen, toured]);
+  }, [leftOpen, rightOpen, toured, t.sandboxLeftUrl, t.sandboxRightUrl]);
 
   useEffect(() => {
     const id = setInterval(() => setNow(new Date()), 30_000);
@@ -848,7 +858,7 @@ export default function App() {
                 {mastheadPhrase(visibleIssues, ignored)}
               </h1>
             </div>
-            <IssueList issues={visibleIssues} onOpenLogs={openLogs} onIgnore={handleIgnore} />
+            <IssueList issues={visibleIssues} onOpenPanel={openRightPanel} onIgnore={handleIgnore} />
           </>
         )}
 
@@ -887,11 +897,18 @@ export default function App() {
         />
       )}
 
-      <Dozzle
-        open={dozzleOpen}
-        onClose={() => setDozzleOpen(false)}
-        initialContainer={dozzleContainer}
-        placement={t.ambientPlacement}
+      <SandboxPanel
+        open={leftOpen}
+        onClose={() => setLeftOpen(false)}
+        url={t.sandboxLeftUrl}
+        label="left panel"
+        side="left"
+      />
+      <SandboxPanel
+        open={rightOpen}
+        onClose={() => setRightOpen(false)}
+        url={t.sandboxRightUrl}
+        label="right panel"
       />
 
       <CustomizePanel side={t.ambientPlacement === "bottom" ? "top" : "bottom"}>
@@ -949,6 +966,11 @@ export default function App() {
         <CustomizeColumn>
           <CustomizeSection label="Security advisories" />
           <CustomizeToggle label="CVE feed" value={t.enableCve} onChange={(v) => setTweak("enableCve", v)} />
+        </CustomizeColumn>
+        <CustomizeColumn wide>
+          <CustomizeSection label="Panels" />
+          <CustomizeInput label="left panel" value={t.sandboxLeftUrl} onChange={(v) => setTweak("sandboxLeftUrl", v)} placeholder="https://…" />
+          <CustomizeInput label="right panel" value={t.sandboxRightUrl} onChange={(v) => setTweak("sandboxRightUrl", v)} placeholder="https://…" />
         </CustomizeColumn>
         <CustomizeColumn>
           <CustomizeSection label="Ignored" />

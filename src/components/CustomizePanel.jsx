@@ -200,6 +200,17 @@ const __CUSTOMIZE_STYLE = `
     color: var(--ink-3); opacity: 0.35;
     letter-spacing: 0.06em;
   }
+  .twk-input {
+    width: 100%; box-sizing: border-box;
+    appearance: none; border: 1px solid var(--rule);
+    background: var(--paper-2); color: var(--ink);
+    font-family: var(--mono); font-size: 11px;
+    padding: 5px 8px; border-radius: 3px; outline: none;
+    transition: border-color 0.12s;
+  }
+  .twk-input::placeholder { color: var(--ink-3); }
+  .twk-input:focus { border-color: var(--accent); }
+
   .twk-src {
     font-family: var(--mono); font-size: 9px;
     color: var(--ink-3); opacity: 0.35;
@@ -263,7 +274,7 @@ export function CustomizePanel({ side = 'top', children }) {
   useEffect(() => {
     const onKey = (e) => {
       if (['INPUT', 'TEXTAREA'].includes(document.activeElement?.tagName)) return;
-      if (e.key === '`' || e.key === 'h' || e.key === 'H') setOpen(v => !v);
+      if (e.key === '`' || e.key === ';') setOpen(v => !v);
       else if (e.key === 'Escape') setOpen(false);
     };
     window.addEventListener('keydown', onKey);
@@ -296,6 +307,22 @@ export function CustomizeSection({ label, children }) {
       <div className="twk-sect">{label}</div>
       {children}
     </>
+  );
+}
+
+export function CustomizeInput({ label, value, onChange, placeholder }) {
+  return (
+    <div className="twk-row">
+      <div className="twk-lbl"><span>{label}</span></div>
+      <input
+        type="text"
+        className="twk-input"
+        value={value}
+        onChange={(e) => onChange(e.target.value)}
+        placeholder={placeholder ?? ''}
+        spellCheck={false}
+      />
+    </div>
   );
 }
 
