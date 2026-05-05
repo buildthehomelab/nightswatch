@@ -71,6 +71,58 @@ function parseExitCode(status) {
   return m ? Number(m[1]) : null;
 }
 
+// ── Stats + image enrichment ──────────────────────────────
+
+async function fetchContainerStats(id) {
+  try {
+    const r = await fetch(`${DOCKER_API}/containers/${id}/stats?stream=false&one-shot=true`);
+    return r.ok ? r.json() : null;
+  } catch { return null; }
+}
+
+async function fetchImageLabels(imageId) {
+  try {
+    const r = await fetch(`${DOCKER_API}/images/${imageId}/json`);
+    if (!r.ok) return null;
+    const d = await r.json();
+    return d.Config?.Labels ?? null;
+  } catch { return null; }
+}
+
+function calcCpuPct(s) {
+  if (!s) return null;
+  const cpu    = s.cpu_stats?.cpu_usage?.total_usage    ?? 0;
+  const preCpu = s.precpu_stats?.cpu_usage?.total_usage ?? 0;
+  const sys    = s.cpu_stats?.system_cpu_usage    ?? 0;
+  const preSys = s.precpu_stats?.system_cpu_usage ?? 0;
+  const cpus   = s.cpu_stats?.online_cpus ?? s.cpu_stats?.cpu_usage?.percpu_usage?.length ?? 1;
+  const sysDelta = sys - preSys;
+  if (sysDelta <= 0) return 0;
+  return Math.max(0, ((cpu - preCpu) / sysDelta) * cpus * 100);
+}
+
+function calcMemMB(s) {
+  if (!s?.memory_stats?.usage) return null;
+  const cache = s.memory_stats.stats?.inactive_file ?? s.memory_stats.stats?.cache ?? 0;
+  return (s.memory_stats.usage - cache) / (1024 * 1024);
+}
+
+export function extractVersion(labels, image) {
+  if (labels) {
+    const ls = labels['build_version'];
+    if (ls) {
+      const m = ls.match(/version[:\s-]+(\S+)/i);
+      if (m) return m[1];
+    }
+    const oci = labels['org.opencontainers.image.version'];
+    if (oci) return oci;
+    const v = labels['version'];
+    if (v) return v;
+  }
+  const tag = (image ?? '').split(':').pop() ?? '';
+  return tag || '?';
+}
+
 // ── Fetch ─────────────────────────────────────────────────
 
 async function fetchDockerData() {
@@ -79,9 +131,31 @@ async function fetchDockerData() {
     fetch(`${DOCKER_API}/info`),
   ]);
   if (!containersRes.ok) throw new Error(`HTTP ${containersRes.status}`);
-  const containers = await containersRes.json();
+  const raw  = await containersRes.json();
   const info = infoRes.ok ? await infoRes.json() : null;
-  return { containers: Array.isArray(containers) ? containers : [], info };
+  const containers = Array.isArray(raw) ? raw : [];
+
+  const running       = containers.filter(c => c.State === 'running');
+  const uniqueImgIds  = [...new Set(running.map(c => c.ImageID).filter(Boolean))];
+
+  const [statsArr, labelsArr] = await Promise.all([
+    Promise.all(running.map(c => fetchContainerStats(c.Id))),
+    Promise.all(uniqueImgIds.map(id => fetchImageLabels(id))),
+  ]);
+
+  const statsMap  = new Map(running.map((c, i) => [c.Id,      statsArr[i]]));
+  const labelsMap = new Map(uniqueImgIds.map((id, i) => [id,  labelsArr[i]]));
+
+  const enriched = containers.map(c => ({
+    ...c,
+    _cpuPct:  calcCpuPct(statsMap.get(c.Id)) ?? null,
+    _memMB:   calcMemMB(statsMap.get(c.Id))  ?? null,
+    _version: c.State === 'running'
+      ? extractVersion(labelsMap.get(c.ImageID), c.Image)
+      : null,
+  }));
+
+  return { containers: enriched, info };
 }
 
 // ── Hook ──────────────────────────────────────────────────
