@@ -1,5 +1,12 @@
 # Changelog
 
+## [0.10.0](https://github.com/buildthehomelab/nightswatch/compare/v0.9.0...v0.10.0) (2026-05-08)
+
+
+### Features
+
+* **rank:** richer ladder, crit history, peak rank, and popover redesign ([#72](https://github.com/buildthehomelab/nightswatch/issues/72)) ([2364dc4](https://github.com/buildthehomelab/nightswatch/commit/2364dc45596ec110cdbd1eb92959d792008112cd))
+
 ## [0.9.0](https://github.com/buildthehomelab/nightswatch/compare/v0.8.5...v0.9.0) (2026-05-05)
 
 
