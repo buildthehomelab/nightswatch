@@ -153,7 +153,7 @@ function GearIcon() {
   );
 }
 
-function Ambient({ now, wanUp, wanDownSince, uptime, rank, cleanSince, weather, weatherForecast, startTimeMs, nasUptimeSeconds, nasVersion, showWeather, showWan, showUptime, showRank, showNas, showNasName, showNasLoad, showNasCpuTemp, showNasMemory, showNasApps, showNasPools, showNasNet, showDate, showDocker, placement, nasData, dockerData, toured, onOpenCustomize }) {
+function Ambient({ now, wanUp, wanDownSince, uptime, rank, cleanSince, critHistory, peakRank, weather, weatherForecast, startTimeMs, nasUptimeSeconds, nasVersion, showWeather, showWan, showUptime, showRank, showNas, showNasName, showNasLoad, showNasCpuTemp, showNasMemory, showNasApps, showNasPools, showNasNet, showDate, showDocker, placement, nasData, dockerData, toured, onOpenCustomize }) {
   const pools    = Array.isArray(nasData?.pools) ? nasData.pools : [];
   const apps     = Array.isArray(nasData?.apps)  ? nasData.apps  : [];
   const running  = apps.filter(a => a.state === 'RUNNING').length;
@@ -296,6 +296,8 @@ function Ambient({ now, wanUp, wanDownSince, uptime, rank, cleanSince, weather, 
         nasData={nasData}
         dockerData={dockerData}
         cleanSince={cleanSince}
+        critHistory={critHistory}
+        peakRank={peakRank}
         now={now}
         weatherForecast={weatherForecast}
         startTimeMs={startTimeMs}
@@ -310,15 +312,28 @@ function Ambient({ now, wanUp, wanDownSince, uptime, rank, cleanSince, weather, 
   );
 }
 
-const LS_CLEAN_KEY = 'nightswatch:cleanSince';
-const LS_LAST_CRIT_KEY = 'nightswatch:lastCritAt';
+const LS_CLEAN_KEY        = 'nightswatch:cleanSince';
+const LS_LAST_CRIT_KEY    = 'nightswatch:lastCritAt';
+const LS_CRIT_HISTORY_KEY = 'nightswatch:critHistory';
+const LS_PEAK_RANK_KEY    = 'nightswatch:peakRank';
+
+const RANK_LADDER = [
+  { name: 'Initiate',      days: 0   },
+  { name: 'Steward',       days: 1   },
+  { name: 'Builder',       days: 3   },
+  { name: 'Ranger',        days: 7   },
+  { name: 'Senior Ranger', days: 21  },
+  { name: 'First Ranger',  days: 30  },
+  { name: 'Commander',     days: 60  },
+  { name: 'Lord Commander',days: 100 },
+  { name: 'The Old Bear',  days: 365 },
+];
 
 function rankForDays(days) {
-  if (days >= 100) return 'Lord Commander';
-  if (days >= 30)  return 'First Ranger';
-  if (days >= 7)   return 'Ranger';
-  if (days >= 1)   return 'Steward';
-  return 'Initiate';
+  for (let i = RANK_LADDER.length - 1; i >= 0; i--) {
+    if (days >= RANK_LADDER[i].days) return RANK_LADDER[i].name;
+  }
+  return RANK_LADDER[0].name;
 }
 
 
@@ -657,6 +672,14 @@ export default function App() {
   const [cleanSince, setCleanSince] = useState(() =>
     DEMO ? new Date(Date.now() - 8 * 24 * 60 * 60 * 1000).toISOString() : localStorage.getItem(LS_CLEAN_KEY)
   );
+  const [critHistory, setCritHistory] = useState(() => {
+    if (DEMO) return [];
+    try { return JSON.parse(localStorage.getItem(LS_CRIT_HISTORY_KEY) ?? '[]'); } catch { return []; }
+  });
+  const [peakRank, setPeakRank] = useState(() => {
+    if (DEMO) return null;
+    try { return JSON.parse(localStorage.getItem(LS_PEAK_RANK_KEY) ?? 'null'); } catch { return null; }
+  });
   const [bgImage, setBgImage] = useState(() => {
     try { return localStorage.getItem('nightswatch:bgImage') ?? ''; } catch { return ''; }
   });
@@ -965,13 +988,21 @@ export default function App() {
     const prev = prevHasCritRef.current;
     prevHasCritRef.current = hasCrit;
     if (!prev && hasCrit) {
+      const raw = localStorage.getItem(LS_CLEAN_KEY);
+      const fromDays = raw ? Math.floor((Date.now() - new Date(raw).getTime()) / 86_400_000) : 0;
+      const fromRank = rankForDays(fromDays);
+      const entry = { at: new Date().toISOString(), fromRank, fromDays };
+      setCritHistory(prev => {
+        const next = [...prev, entry];
+        try { localStorage.setItem(LS_CRIT_HISTORY_KEY, JSON.stringify(next)); } catch {}
+        return next;
+      });
       localStorage.removeItem(LS_CLEAN_KEY);
       localStorage.setItem(LS_LAST_CRIT_KEY, new Date().toISOString());
       setCleanSince(null);
     } else if (prev && !hasCrit) {
       const ts = new Date().toISOString();
       localStorage.setItem(LS_CLEAN_KEY, ts);
-      localStorage.removeItem(LS_LAST_CRIT_KEY);
       setCleanSince(ts);
     }
   }, [hasCrit]);
@@ -981,6 +1012,18 @@ export default function App() {
     const days = Math.floor((+now - new Date(cleanSince).getTime()) / 86_400_000);
     return rankForDays(days);
   }, [cleanSince, now]);
+
+  useEffect(() => {
+    if (DEMO || !cleanSince) return;
+    const days = Math.floor((Date.now() - new Date(cleanSince).getTime()) / 86_400_000);
+    const rankIdx = RANK_LADDER.findIndex(r => r.name === rank);
+    const peakIdx = peakRank ? RANK_LADDER.findIndex(r => r.name === peakRank.rank) : -1;
+    if (rankIdx > peakIdx) {
+      const next = { rank, days, achievedAt: new Date().toISOString() };
+      setPeakRank(next);
+      try { localStorage.setItem(LS_PEAK_RANK_KEY, JSON.stringify(next)); } catch {}
+    }
+  }, [rank, cleanSince]); // eslint-disable-line react-hooks/exhaustive-deps
 
   return (
     <>
@@ -1012,6 +1055,8 @@ export default function App() {
           uptime={uptime}
           rank={rank}
           cleanSince={cleanSince}
+          critHistory={critHistory}
+          peakRank={peakRank}
           weather={weather}
           weatherForecast={weatherForecast}
           startTimeMs={startTime.current}

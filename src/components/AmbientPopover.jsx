@@ -14,9 +14,13 @@ function fmtClean(ms) {
 const RANK_LADDER = [
   { name: 'Initiate',       days: 0   },
   { name: 'Steward',        days: 1   },
+  { name: 'Builder',        days: 3   },
   { name: 'Ranger',         days: 7   },
+  { name: 'Senior Ranger',  days: 21  },
   { name: 'First Ranger',   days: 30  },
+  { name: 'Commander',      days: 60  },
   { name: 'Lord Commander', days: 100 },
+  { name: 'The Old Bear',   days: 365 },
 ];
 
 function Head({ label }) {
@@ -165,7 +169,7 @@ function AppsDetail({ apps }) {
   );
 }
 
-function RankDetail({ cleanSince }) {
+function RankDetail({ cleanSince, critHistory, peakRank }) {
   const elapsed     = cleanSince ? Date.now() - new Date(cleanSince).getTime() : null;
   const elapsedDays = elapsed != null ? elapsed / 86_400_000 : null;
 
@@ -183,10 +187,20 @@ function RankDetail({ cleanSince }) {
     remaining = to - elapsed;
   }
 
+  const lastCrit = critHistory?.length > 0 ? critHistory[critHistory.length - 1] : null;
+  const showPeak = peakRank && peakRank.rank !== currentRank.name;
+
   if (elapsed == null) return (
     <>
       <Head label="rank" />
-      <div className="ap-body"><div className="rk-empty">no streak</div></div>
+      <div className="ap-body">
+        <div className="rk-empty">no streak</div>
+        {lastCrit && (
+          <div className="rk-history">
+            <span className="rk-fell">fell {critHistory.length}× · last from {lastCrit.fromRank} ({lastCrit.fromDays}d)</span>
+          </div>
+        )}
+      </div>
     </>
   );
 
@@ -195,20 +209,41 @@ function RankDetail({ cleanSince }) {
       <Head label="rank" />
       <div className="ap-body">
         <div className="rk-wrap">
-          <div className="rk-header">
+          <div className="rk-ladder">
+            {RANK_LADDER.map((r, i) => (
+              <div
+                key={r.name}
+                className={`rk-pip rk-pip--${i < currentIdx ? 'done' : i === currentIdx ? 'current' : 'future'}`}
+                title={`${r.name} (${r.days}d)`}
+              />
+            ))}
+          </div>
+          <div className="rk-name-row">
             <span className="rk-name">{currentRank.name}</span>
-            <span className="rk-pct">{progress}%</span>
+            {nextRank && <span className="rk-pct">{progress}%</span>}
           </div>
-          <div className="rk-bar-track">
-            <div className="rk-bar-fill" style={{ width: `${progress}%` }} />
-          </div>
+          {nextRank && (
+            <div className="rk-bar-track">
+              <div className="rk-bar-fill" style={{ width: `${progress}%` }} />
+            </div>
+          )}
           <div className="rk-footer">
-            <span className="rk-streak">clean for {fmtClean(elapsed)}</span>
+            <span className="rk-streak">clean {fmtClean(elapsed)}</span>
             {nextRank
-              ? <span className="rk-next">→ {nextRank.name} in {fmtClean(remaining)}</span>
+              ? <span className="rk-next">→ {nextRank.name} {fmtClean(remaining)}</span>
               : <span className="rk-max">max rank</span>
             }
           </div>
+          {(showPeak || lastCrit) && (
+            <div className="rk-history">
+              {showPeak && (
+                <span className="rk-peak">best: {peakRank.rank} · {peakRank.days}d</span>
+              )}
+              {lastCrit && (
+                <span className="rk-fell">fell {critHistory.length}× · last from {lastCrit.fromRank} ({lastCrit.fromDays}d)</span>
+              )}
+            </div>
+          )}
         </div>
       </div>
     </>
@@ -471,7 +506,7 @@ function PoolDetail({ pool }) {
   );
 }
 
-export default function AmbientPopover({ chip, anchor, placement, nasData, dockerData, cleanSince, now, weatherForecast, startTimeMs, nasUptimeSeconds, nasVersion, wanUp, wanDownSince, onMouseEnter, onMouseLeave }) {
+export default function AmbientPopover({ chip, anchor, placement, nasData, dockerData, cleanSince, critHistory, peakRank, now, weatherForecast, startTimeMs, nasUptimeSeconds, nasVersion, wanUp, wanDownSince, onMouseEnter, onMouseLeave }) {
   if (!chip || !anchor) return null;
 
   const pools = Array.isArray(nasData?.pools) ? nasData.pools : [];
@@ -483,7 +518,7 @@ export default function AmbientPopover({ chip, anchor, placement, nasData, docke
   else if (chip === 'mem')     content = <MemDetail     physmem={nasData?.info?.physmem} memFree={nasData?.memFree} arcSize={nasData?.arcSize} />;
   else if (chip === 'net')     content = <NetDetail     netStats={nasData?.netStats} />;
   else if (chip === 'apps')    content = <AppsDetail    apps={nasData?.apps ?? []} />;
-  else if (chip === 'rank')    content = <RankDetail    cleanSince={cleanSince} now={now} />;
+  else if (chip === 'rank')    content = <RankDetail    cleanSince={cleanSince} critHistory={critHistory} peakRank={peakRank} now={now} />;
   else if (chip === 'weather') content = <WeatherDetail forecast={weatherForecast} />;
   else if (chip === 'uptime')  content = <UptimeDetail  nasUptimeSeconds={nasUptimeSeconds} nasVersion={nasVersion} startTimeMs={startTimeMs} now={now} />;
   else if (chip === 'wan')     content = <WanDetail     wanUp={wanUp} wanDownSince={wanDownSince} now={now} />;
