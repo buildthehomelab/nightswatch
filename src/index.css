@@ -252,23 +252,35 @@ body {
 
 /* ── Rank popover ────────────────────────────────────── */
 .rk-wrap { width: 100%; }
-.rk-header { display: flex; justify-content: space-between; align-items: baseline; margin-bottom: 5px; }
-.rk-name { font-family: var(--sans); font-size: 12px; font-weight: 600; color: var(--ok); }
+.rk-ladder { display: flex; gap: 4px; align-items: center; margin-bottom: 9px; }
+.rk-pip {
+  width: 5px; height: 5px; border-radius: 50%; flex-shrink: 0;
+  background: var(--rule);
+  transition: background .2s;
+}
+.rk-pip--done    { background: var(--ok); opacity: 0.35; }
+.rk-pip--current { background: var(--ok); width: 7px; height: 7px; }
+.rk-pip--future  { background: var(--rule); }
+.rk-name-row { display: flex; justify-content: space-between; align-items: baseline; margin-bottom: 5px; }
+.rk-name { font-family: var(--display); font-size: 18px; font-weight: 700; color: var(--ok); letter-spacing: 0.5px; text-transform: uppercase; line-height: 1; }
 .rk-pct  { font-family: var(--mono); font-size: 10px; color: var(--ink-3); }
 .rk-bar-track {
-  width: 100%; height: 3px;
+  width: 100%; height: 2px;
   background: var(--rule); border-radius: 9999px; overflow: hidden;
-  margin-bottom: 8px;
+  margin-bottom: 7px;
 }
 .rk-bar-fill {
   height: 100%; background: var(--ok); border-radius: 9999px;
   transition: width .3s ease;
 }
-.rk-footer { display: flex; justify-content: space-between; align-items: baseline; gap: 12px; }
-.rk-streak { font-family: var(--mono); font-size: 11px; color: var(--ink-2); white-space: nowrap; }
-.rk-next   { font-family: var(--mono); font-size: 10.5px; color: var(--ink-3); white-space: nowrap; }
-.rk-max    { font-family: var(--sans); font-size: 10px; font-weight: 600; color: var(--ok); text-transform: uppercase; letter-spacing: 0.05em; }
+.rk-footer { display: flex; justify-content: space-between; align-items: baseline; gap: 8px; }
+.rk-streak { font-family: var(--mono); font-size: 10.5px; color: var(--ink-2); white-space: nowrap; }
+.rk-next   { font-family: var(--mono); font-size: 10px; color: var(--ink-3); white-space: nowrap; }
+.rk-max    { font-family: var(--mono); font-size: 10px; color: var(--ok); }
 .rk-empty  { font-family: var(--mono); font-size: 11.5px; color: var(--ink-3); }
+.rk-history { display: flex; flex-direction: column; gap: 3px; margin-top: 7px; padding-top: 7px; border-top: 1px solid var(--rule); }
+.rk-peak   { font-family: var(--mono); font-size: 10px; color: var(--ok); }
+.rk-fell   { font-family: var(--mono); font-size: 10px; color: var(--ink-3); }
 .ap-empty  { font-family: var(--mono); font-size: 11.5px; color: var(--ink-3); }
 
 /* ── Weather popover ─────────────────────────────────── */
