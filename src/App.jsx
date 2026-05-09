@@ -431,7 +431,7 @@ function LoadDetail({ load1, load5, load15, cores, pct, trend, runningApps, jobs
 
       <div className="ld-bar-wrap">
         <div className="ld-bar-track">
-          <div className={`ld-bar-fill ld-bar-fill--${cls}`} style={{ width: `${fillPct}%` }} />
+          <div className={`ld-bar-fill ld-bar-fill--${cls}`} style={{ transform: `scaleX(${fillPct / 100})` }} />
           <div className="ld-bar-marker ld-bar-marker--warn" style={{ left: `${warnPct}%` }} />
           {critPct < 98 && (
             <div className="ld-bar-marker ld-bar-marker--crit" style={{ left: `${critPct}%` }} />

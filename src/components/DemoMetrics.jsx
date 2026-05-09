@@ -75,7 +75,7 @@ export default function DemoMetrics() {
                 <td style={{ padding: '8px 12px 8px 0' }}>
                   <div style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
                     <div style={{ flex: 1, height: 3, background: 'var(--rule)', borderRadius: 2, overflow: 'hidden' }}>
-                      <div style={{ height: '100%', width: `${cpuPct}%`, background: cpuColor, borderRadius: 2, transition: 'width 1.8s ease' }} />
+                      <div style={{ height: '100%', width: '100%', background: cpuColor, borderRadius: 2, transformOrigin: 'left center', transform: `scaleX(${cpuPct / 100})`, transition: 'transform 1.8s ease' }} />
                     </div>
                     <span style={{ color: 'var(--ink-3)', minWidth: 34, textAlign: 'right' }}>{cpuPct.toFixed(1)}%</span>
                   </div>
@@ -83,7 +83,7 @@ export default function DemoMetrics() {
                 <td style={{ padding: '8px 0' }}>
                   <div style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
                     <div style={{ flex: 1, height: 3, background: 'var(--rule)', borderRadius: 2, overflow: 'hidden' }}>
-                      <div style={{ height: '100%', width: `${memPct}%`, background: memColor, borderRadius: 2, transition: 'width 1.8s ease' }} />
+                      <div style={{ height: '100%', width: '100%', background: memColor, borderRadius: 2, transformOrigin: 'left center', transform: `scaleX(${memPct / 100})`, transition: 'transform 1.8s ease' }} />
                     </div>
                     <span style={{ color: 'var(--ink-3)', minWidth: 72, textAlign: 'right', whiteSpace: 'nowrap' }}>
                       {(s.liveMem / 1024).toFixed(1)} / {(s.limit / 1024).toFixed(0)} GB
