@@ -552,7 +552,7 @@ body.has-bg-image.density-compact .issue { padding: 11px 16px; }
   font-family: var(--sans);
   font-size: 18px;
   font-weight: 600;
-  line-height: 1.30;
+  line-height: 1.35;
   color: var(--ink);
   letter-spacing: -0.15px;
 }
