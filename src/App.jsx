@@ -188,6 +188,13 @@ function Ambient({ now, wanUp, wanDownSince, uptime, rank, cleanSince, critHisto
   };
   const cancelClose = () => clearTimeout(closeTimerRef.current);
 
+  const keyPopover = (chipId) => (e) => {
+    if (e.key === 'Enter' || e.key === ' ') {
+      e.preventDefault();
+      openPopover(chipId, e);
+    }
+  };
+
   return (
     <footer className="ambient rise" data-placement={placement}>
       {((showNas && nasData) || (showDocker && dockerData)) && (
@@ -199,30 +206,30 @@ function Ambient({ now, wanUp, wanDownSince, uptime, rank, cleanSince, critHisto
               </span>
             )}
             {showNasLoad && load1 && (
-              <span className="item item-pop" onMouseEnter={(e) => openPopover('load', e)} onMouseLeave={scheduleClose}>
+              <span className="item item-pop" role="button" tabIndex="0" onMouseEnter={(e) => openPopover('load', e)} onMouseLeave={scheduleClose} onFocus={(e) => openPopover('load', e)} onKeyDown={keyPopover('load')} onBlur={scheduleClose}>
                 <span className="k">load</span><span className="v">{load1}</span>
               </span>
             )}
             {showNasCpuTemp && cpuTemp != null && (
-              <span className="item item-pop" onMouseEnter={(e) => openPopover('cpu', e)} onMouseLeave={scheduleClose}>
+              <span className="item item-pop" role="button" tabIndex="0" onMouseEnter={(e) => openPopover('cpu', e)} onMouseLeave={scheduleClose} onFocus={(e) => openPopover('cpu', e)} onKeyDown={keyPopover('cpu')} onBlur={scheduleClose}>
                 <span className="k">cpu</span>
                 <span className={`v${cpuCls}`}>{cpuTemp}°C</span>
               </span>
             )}
             {showNasMemory && memFree != null && (
-              <span className="item item-pop" onMouseEnter={(e) => openPopover('mem', e)} onMouseLeave={scheduleClose}>
+              <span className="item item-pop" role="button" tabIndex="0" onMouseEnter={(e) => openPopover('mem', e)} onMouseLeave={scheduleClose} onFocus={(e) => openPopover('mem', e)} onKeyDown={keyPopover('mem')} onBlur={scheduleClose}>
                 <span className="k">mem free</span>
                 <span className="v">{fmtBytes(memFree)}</span>
               </span>
             )}
             {showNasNet && nasData?.netStats && (
-              <span className="item item-pop" onMouseEnter={(e) => openPopover('net', e)} onMouseLeave={scheduleClose}>
+              <span className="item item-pop" role="button" tabIndex="0" onMouseEnter={(e) => openPopover('net', e)} onMouseLeave={scheduleClose} onFocus={(e) => openPopover('net', e)} onKeyDown={keyPopover('net')} onBlur={scheduleClose}>
                 <span className="k">net</span>
                 <span className="v">↓{fmtRate(nasData.netStats.rx)} ↑{fmtRate(nasData.netStats.tx)}</span>
               </span>
             )}
             {showNasApps && apps.length > 0 && (
-              <span className="item item-pop" onMouseEnter={(e) => openPopover('apps', e)} onMouseLeave={scheduleClose}>
+              <span className="item item-pop" role="button" tabIndex="0" onMouseEnter={(e) => openPopover('apps', e)} onMouseLeave={scheduleClose} onFocus={(e) => openPopover('apps', e)} onKeyDown={keyPopover('apps')} onBlur={scheduleClose}>
                 <span className="k">apps</span>
                 <span className="v">{running}/{apps.length}</span>
               </span>
@@ -233,7 +240,7 @@ function Ambient({ now, wanUp, wanDownSince, uptime, rank, cleanSince, critHisto
               const dotCls = !ok || pct >= POOL_CRIT_PCT ? ' crit' : pct >= POOL_WARN_PCT ? ' warn' : '';
               const valCls = !ok || pct >= POOL_CRIT_PCT ? ' crit' : pct >= POOL_WARN_PCT ? ' warn' : '';
               return (
-                <span key={pool.name} className="item item-pop" onMouseEnter={(e) => openPopover(pool.name, e)} onMouseLeave={scheduleClose}>
+                <span key={pool.name} className="item item-pop" role="button" tabIndex="0" onMouseEnter={(e) => openPopover(pool.name, e)} onMouseLeave={scheduleClose} onFocus={(e) => openPopover(pool.name, e)} onKeyDown={keyPopover(pool.name)} onBlur={scheduleClose}>
                   <span className={`dot${dotCls}`} />
                   <span className="k">{pool.name}</span>
                   <span className={`v${valCls}`}>{pct != null ? `${pct}%` : '—'}</span>
@@ -242,7 +249,7 @@ function Ambient({ now, wanUp, wanDownSince, uptime, rank, cleanSince, critHisto
             })}
           </>}
           {showDocker && dockerData && (
-            <span className="item item-pop" onMouseEnter={(e) => openPopover('docker', e)} onMouseLeave={scheduleClose}>
+            <span className="item item-pop" role="button" tabIndex="0" onMouseEnter={(e) => openPopover('docker', e)} onMouseLeave={scheduleClose} onFocus={(e) => openPopover('docker', e)} onKeyDown={keyPopover('docker')} onBlur={scheduleClose}>
               <span className={`dot${dockerWorstCls}`} />
               <span className="k">docker</span>
               <span className={`v${dockerWorstCls}`}>{dockerRunning}/{dockerTotal}</span>
@@ -259,26 +266,26 @@ function Ambient({ now, wanUp, wanDownSince, uptime, rank, cleanSince, critHisto
           </span>
         )}
         {showWeather && (
-          <span className="item item-pop" onMouseEnter={(e) => openPopover('weather', e)} onMouseLeave={scheduleClose}>
+          <span className="item item-pop" role="button" tabIndex="0" onMouseEnter={(e) => openPopover('weather', e)} onMouseLeave={scheduleClose} onFocus={(e) => openPopover('weather', e)} onKeyDown={keyPopover('weather')} onBlur={scheduleClose}>
             <span className="k">outside</span>
             <span className="v">{weather}</span>
           </span>
         )}
         {showWan && (
-          <span className="item item-pop" onMouseEnter={(e) => openPopover('wan', e)} onMouseLeave={scheduleClose}>
+          <span className="item item-pop" role="button" tabIndex="0" onMouseEnter={(e) => openPopover('wan', e)} onMouseLeave={scheduleClose} onFocus={(e) => openPopover('wan', e)} onKeyDown={keyPopover('wan')} onBlur={scheduleClose}>
             <span className="k">wan</span>
             <span className={`dot${wanUp ? "" : " crit"}`}></span>
             <span className={`v${wanUp ? "" : " crit"}`}>{wanUp ? "up" : "down"}</span>
           </span>
         )}
         {showUptime && (
-          <span className="item item-pop" onMouseEnter={(e) => openPopover('uptime', e)} onMouseLeave={scheduleClose}>
+          <span className="item item-pop" role="button" tabIndex="0" onMouseEnter={(e) => openPopover('uptime', e)} onMouseLeave={scheduleClose} onFocus={(e) => openPopover('uptime', e)} onKeyDown={keyPopover('uptime')} onBlur={scheduleClose}>
             <span className="k">uptime</span>
             <span className="v">{uptime}</span>
           </span>
         )}
         {showRank && rank && (
-          <span className="item item-pop" onMouseEnter={(e) => openPopover('rank', e)} onMouseLeave={scheduleClose}>
+          <span className="item item-pop" role="button" tabIndex="0" onMouseEnter={(e) => openPopover('rank', e)} onMouseLeave={scheduleClose} onFocus={(e) => openPopover('rank', e)} onKeyDown={keyPopover('rank')} onBlur={scheduleClose}>
             <span className="k">rank</span>
             <span className="v rank">{rank}</span>
           </span>
@@ -286,6 +293,7 @@ function Ambient({ now, wanUp, wanDownSince, uptime, rank, cleanSince, critHisto
         <button
           className={`ambient-help${!toured ? ' ambient-help-first' : ''}`}
           onClick={onOpenCustomize}
+          aria-label="Customize"
           title="Customize (h / ?)"
         >{toured ? <GearIcon /> : 'configure ›'}</button>
       </div>
@@ -423,10 +431,10 @@ function LoadDetail({ load1, load5, load15, cores, pct, trend, runningApps, jobs
 
       <div className="ld-bar-wrap">
         <div className="ld-bar-track">
-          <div className={`ld-bar-fill ld-bar-fill--${cls}`} style={{ width: `${fillPct}%` }} />
-          <div className="ld-bar-marker ld-bar-marker--warn" style={{ left: `${warnPct}%` }} title={`warn ≥${warnAt}`} />
+          <div className={`ld-bar-fill ld-bar-fill--${cls}`} style={{ transform: `scaleX(${fillPct / 100})` }} />
+          <div className="ld-bar-marker ld-bar-marker--warn" style={{ left: `${warnPct}%` }} />
           {critPct < 98 && (
-            <div className="ld-bar-marker ld-bar-marker--crit" style={{ left: `${critPct}%` }} title={`crit ≥${critAt}`} />
+            <div className="ld-bar-marker ld-bar-marker--crit" style={{ left: `${critPct}%` }} />
           )}
         </div>
         <div className="ld-bar-foot">
@@ -464,7 +472,7 @@ function LoadDetail({ load1, load5, load15, cores, pct, trend, runningApps, jobs
   );
 }
 
-function Issue({ issue, isOpen, isFocused, isFading, onToggle, index, onOpenPanel, onIgnore }) {
+function Issue({ issue, isOpen, isFocused, isFading, onToggle, onFocusNative, index, onOpenPanel, onIgnore }) {
   const ref = useRef(null);
   useEffect(() => {
     if (isFocused) ref.current?.scrollIntoView({ block: "nearest", behavior: "smooth" });
@@ -476,25 +484,37 @@ function Issue({ issue, isOpen, isFocused, isFading, onToggle, index, onOpenPane
     return () => clearTimeout(id);
   }, [isOpen]);
 
+  const handleKeyDown = (e) => {
+    if ((e.key === 'Enter' || e.key === ' ') && e.target === ref.current) {
+      e.preventDefault();
+      onToggle();
+    }
+  };
+
   return (
     <div
       ref={ref}
+      role="button"
+      tabIndex="0"
+      aria-expanded={isOpen}
       className={`issue ${issue.severity} ${isOpen ? "open" : ""} ${isFocused ? "focused" : ""} ${isFading ? "ignoring" : ""} rise`}
       style={{ animationDelay: `${0.05 + index * 0.04}s` }}
       data-issue-id={issue.id}
       onClick={onToggle}
+      onKeyDown={handleKeyDown}
+      onFocus={onFocusNative}
     >
       <div className="severity">{issue.label}</div>
       <div className="body">
         <div className="headline">
           {issue.headline}
-          <span className="chev">›</span>
+          <span className="chev" aria-hidden="true">›</span>
         </div>
         <div className="meta">
           <span className="source">{issue.source}</span>
         </div>
       </div>
-      <div className="when">{issue.when}</div>
+      <time className="when" dateTime={issue.firstSeenTs ? new Date(issue.firstSeenTs).toISOString() : undefined}>{issue.when}</time>
 
       <div className="details">
         <div className="details-inner" onClick={(e) => e.stopPropagation()}>
@@ -615,14 +635,16 @@ function IssueList({ issues, onOpenPanel, onIgnore }) {
   return (
     <section className={`issues${filtered.length === 0 ? ' empty' : ''}`}>
       <div className="section-label rise">
-        <span className="count">
+        <span className="count" aria-live="polite" aria-atomic="true">
           {chips.map((c, i) => (
             <span key={c.sev}>
               {i > 0 && <span className="sep"> · </span>}
-              <span
+              <button
+                type="button"
                 className={`filter-chip filter-chip-${c.sev}${filterSev === c.sev ? " active" : ""}`}
+                aria-pressed={filterSev === c.sev}
                 onClick={() => toggle(c.sev)}
-              >{c.label}</span>
+              >{c.label}</button>
             </span>
           ))}
         </span>
@@ -640,6 +662,7 @@ function IssueList({ issues, onOpenPanel, onIgnore }) {
             setFocusedIndex(isClosing ? null : i);
             setOpenId(isClosing ? null : issue.id);
           }}
+          onFocusNative={() => setFocusedIndex(i)}
           onOpenPanel={onOpenPanel}
           onIgnore={handleIgnoreWithAnimation}
         />
@@ -1027,7 +1050,7 @@ export default function App() {
 
   return (
     <>
-      <div className="page">
+      <main className="page">
 
         {isHealthy ? (
           <Healthy
@@ -1045,7 +1068,7 @@ export default function App() {
           </>
         )}
 
-      </div>
+      </main>
 
       {(t.showWeather || t.showWan || t.showUptime || t.showNas || t.showDate || t.showRank || t.showDocker) && (
         <Ambient

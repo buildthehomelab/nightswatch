@@ -16,7 +16,8 @@ function truenasProxyPlugin(key, host, port) {
   function middleware(req, res) {
     const upstreamPath = req.url.replace(/^\/truenas/, '')
     // Strip hop-by-hop and encoding headers; TrueNAS returns plain JSON without them
-    const { 'accept-encoding': _ae, connection: _conn, 'transfer-encoding': _te, ...fwdHeaders } = req.headers
+    const { 'accept-encoding': _ae, connection: _conn, 'transfer-encoding': _te, ...raw } = req.headers
+    const fwdHeaders = Object.fromEntries(Object.entries(raw).filter(([k]) => !k.startsWith(':')))
     const proxyReq = https.request({
       hostname: target,
       port:     targetPort,
@@ -59,7 +60,8 @@ function dockerProxyPlugin(socket, host, port) {
 
   function middleware(req, res) {
     const upstreamPath = req.url.replace(/^\/docker/, '');
-    const { 'accept-encoding': _ae, connection: _conn, 'transfer-encoding': _te, ...fwdHeaders } = req.headers;
+    const { 'accept-encoding': _ae, connection: _conn, 'transfer-encoding': _te, ...raw } = req.headers;
+    const fwdHeaders = Object.fromEntries(Object.entries(raw).filter(([k]) => !k.startsWith(':')));
 
     const options = socket
       ? {

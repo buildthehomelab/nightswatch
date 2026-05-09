@@ -35,7 +35,7 @@ export default function DemoMetrics() {
   const avgCpu = stats.reduce((a, s) => a + s.liveCpu, 0) / stats.length;
 
   return (
-    <div style={{ flex: 1, overflowY: 'auto', padding: '24px 48px', fontFamily: 'var(--mono)', fontSize: 11 }}>
+    <div style={{ flex: 1, overflowY: 'auto', padding: '24px 48px', fontFamily: 'var(--mono)', fontSize: 12 }}>
       <div style={{ display: 'flex', gap: 32, marginBottom: 20 }}>
         {[
           { label: 'containers', value: SERVICES.length + ' running' },
@@ -43,7 +43,7 @@ export default function DemoMetrics() {
           { label: 'mem used', value: (totalMem / 1024).toFixed(1) + ' GB' },
         ].map(({ label, value }) => (
           <div key={label}>
-            <div style={{ fontSize: 9, letterSpacing: '0.08em', textTransform: 'uppercase', color: 'var(--ink-3)', marginBottom: 3 }}>{label}</div>
+            <div style={{ fontSize: 11, letterSpacing: '0.08em', textTransform: 'uppercase', color: 'var(--ink-3)', marginBottom: 3 }}>{label}</div>
             <div style={{ fontSize: 15, fontWeight: 500, color: 'var(--ink-2)' }}>{value}</div>
           </div>
         ))}
@@ -75,7 +75,7 @@ export default function DemoMetrics() {
                 <td style={{ padding: '8px 12px 8px 0' }}>
                   <div style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
                     <div style={{ flex: 1, height: 3, background: 'var(--rule)', borderRadius: 2, overflow: 'hidden' }}>
-                      <div style={{ height: '100%', width: `${cpuPct}%`, background: cpuColor, borderRadius: 2, transition: 'width 1.8s ease' }} />
+                      <div style={{ height: '100%', width: '100%', background: cpuColor, borderRadius: 2, transformOrigin: 'left center', transform: `scaleX(${cpuPct / 100})`, transition: 'transform 1.8s ease' }} />
                     </div>
                     <span style={{ color: 'var(--ink-3)', minWidth: 34, textAlign: 'right' }}>{cpuPct.toFixed(1)}%</span>
                   </div>
@@ -83,7 +83,7 @@ export default function DemoMetrics() {
                 <td style={{ padding: '8px 0' }}>
                   <div style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
                     <div style={{ flex: 1, height: 3, background: 'var(--rule)', borderRadius: 2, overflow: 'hidden' }}>
-                      <div style={{ height: '100%', width: `${memPct}%`, background: memColor, borderRadius: 2, transition: 'width 1.8s ease' }} />
+                      <div style={{ height: '100%', width: '100%', background: memColor, borderRadius: 2, transformOrigin: 'left center', transform: `scaleX(${memPct / 100})`, transition: 'transform 1.8s ease' }} />
                     </div>
                     <span style={{ color: 'var(--ink-3)', minWidth: 72, textAlign: 'right', whiteSpace: 'nowrap' }}>
                       {(s.liveMem / 1024).toFixed(1)} / {(s.limit / 1024).toFixed(0)} GB

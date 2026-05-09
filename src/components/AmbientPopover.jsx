@@ -40,7 +40,7 @@ function MiniBar({ pct, cls }) {
   return (
     <div className="ap-mini-bar">
       <div className="ap-mini-bar-track">
-        <div className={`ap-mini-bar-fill${cls ? ' ' + cls : ''}`} style={{ width: `${Math.min(100, pct ?? 0)}%` }} />
+        <div className={`ap-mini-bar-fill${cls ? ' ' + cls : ''}`} style={{ transform: `scaleX(${Math.min(100, pct ?? 0) / 100})` }} />
       </div>
     </div>
   );
@@ -224,7 +224,7 @@ function RankDetail({ cleanSince, critHistory, peakRank }) {
           </div>
           {nextRank && (
             <div className="rk-bar-track">
-              <div className="rk-bar-fill" style={{ width: `${progress}%` }} />
+              <div className="rk-bar-fill" style={{ transform: `scaleX(${progress / 100})` }} />
             </div>
           )}
           <div className="rk-footer">
