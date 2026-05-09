@@ -73,15 +73,15 @@ export default function DemoLogs() {
       overflowY: 'auto',
       padding: '16px 48px',
       fontFamily: 'var(--mono)',
-      fontSize: 11.5,
+      fontSize: 12,
       lineHeight: 1.65,
       background: 'var(--paper-2)',
     }}>
       {lines.map(l => (
         <div key={l.id} style={{ display: 'flex', gap: 10, alignItems: 'baseline', minWidth: 0 }}>
-          <span style={{ color: 'var(--ink-3)', flexShrink: 0, fontSize: 11 }}>{l.ts}</span>
+          <span style={{ color: 'var(--ink-3)', flexShrink: 0, fontSize: 12 }}>{l.ts}</span>
           <span style={{ color: 'var(--ink-3)', flexShrink: 0, minWidth: 78, textAlign: 'right' }}>{l.c}</span>
-          <span style={{ color: LVL_COLOR[l.lvl], flexShrink: 0, minWidth: 36, fontSize: 11 }}>{l.lvl}</span>
+          <span style={{ color: LVL_COLOR[l.lvl], flexShrink: 0, minWidth: 36, fontSize: 12 }}>{l.lvl}</span>
           <span style={{ color: 'var(--ink-2)' }}>{l.msg}</span>
         </div>
       ))}

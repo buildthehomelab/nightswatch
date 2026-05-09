@@ -35,7 +35,7 @@ export default function DemoMetrics() {
   const avgCpu = stats.reduce((a, s) => a + s.liveCpu, 0) / stats.length;
 
   return (
-    <div style={{ flex: 1, overflowY: 'auto', padding: '24px 48px', fontFamily: 'var(--mono)', fontSize: 11 }}>
+    <div style={{ flex: 1, overflowY: 'auto', padding: '24px 48px', fontFamily: 'var(--mono)', fontSize: 12 }}>
       <div style={{ display: 'flex', gap: 32, marginBottom: 20 }}>
         {[
           { label: 'containers', value: SERVICES.length + ' running' },
@@ -43,7 +43,7 @@ export default function DemoMetrics() {
           { label: 'mem used', value: (totalMem / 1024).toFixed(1) + ' GB' },
         ].map(({ label, value }) => (
           <div key={label}>
-            <div style={{ fontSize: 9, letterSpacing: '0.08em', textTransform: 'uppercase', color: 'var(--ink-3)', marginBottom: 3 }}>{label}</div>
+            <div style={{ fontSize: 11, letterSpacing: '0.08em', textTransform: 'uppercase', color: 'var(--ink-3)', marginBottom: 3 }}>{label}</div>
             <div style={{ fontSize: 15, fontWeight: 500, color: 'var(--ink-2)' }}>{value}</div>
           </div>
         ))}
