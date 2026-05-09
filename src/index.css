@@ -115,6 +115,11 @@ body {
   padding: 2px 5px;
   margin: -2px -5px;
 }
+.ambient .item-pop:focus-visible {
+  outline: 2px solid var(--accent);
+  outline-offset: 3px;
+  border-radius: 4px;
+}
 .ambient-help {
   appearance: none;
   border: 1px solid transparent;
@@ -428,11 +433,20 @@ body.has-bg-image .issues .section-label { border-bottom: none; }
 }
 .section-label .count { color: var(--ink-2); white-space: nowrap; margin-left: auto; }
 .filter-chip {
+  appearance: none;
+  border: none;
+  background: transparent;
+  font: inherit;
+  color: inherit;
   cursor: pointer;
   border-radius: 4px;
   padding: 1px 4px;
   margin: 0 -4px;
   transition: color .15s, background .15s;
+}
+.filter-chip:focus-visible {
+  outline: 2px solid var(--accent);
+  outline-offset: 2px;
 }
 .filter-chip:hover { color: var(--ink); background: var(--paper-2); }
 .filter-chip-crit.active { color: var(--crit); background: rgba(168,48,96,0.08); }
@@ -968,3 +982,12 @@ body.has-bg-image.density-compact .issue { padding: 11px 16px; }
 .rise-d1 { animation-delay: .05s; }
 .rise-d2 { animation-delay: .12s; }
 .rise-d3 { animation-delay: .19s; }
+
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+}

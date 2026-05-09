@@ -483,6 +483,7 @@ export function BgImagePicker({ image, fit, position, dim, onImageChange, onChan
               {POS_GRID.map(row => row.map(pos => (
                 <button key={pos} type="button" className="twk-bg-pos-dot"
                         aria-pressed={position === pos}
+                        aria-label={pos}
                         onClick={() => onChange({ bgPosition: pos })} />
               )))}
             </div>
