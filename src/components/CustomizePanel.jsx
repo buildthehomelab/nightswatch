@@ -244,6 +244,21 @@ const __CUSTOMIZE_STYLE = `
     .twk-bg-pos-dot { width: 36px; height: 36px; }
   }
 
+  @media (max-width: 480px) {
+    .twk-body {
+      flex-direction: column;
+      overflow-x: hidden;
+      overflow-y: auto;
+    }
+    .twk-col {
+      min-width: 0;
+      width: 100%;
+      flex-shrink: 1;
+    }
+    .twk-col-wide { min-width: 0; }
+    .twk-col-push { margin-left: 0; }
+  }
+
 `;
 
 const CUSTOMIZE_LS_KEY = 'nightswatch:customize';
