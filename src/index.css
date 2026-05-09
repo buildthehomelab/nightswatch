@@ -537,10 +537,11 @@ body.has-bg-image.density-compact .issue { padding: 11px 16px; }
 .issue.warn .severity { background: rgba(184,104,32,0.1); color: var(--warn); }
 .issue.info .severity { background: rgba(106,95,193,0.08); color: var(--ink-3); }
 
-/* dark theme severity — Sentry palette exact */
-[data-theme="dark"] .issue.crit .severity { background: rgba(250,127,170,0.15); color: var(--crit); }
-[data-theme="dark"] .issue.warn .severity { background: rgba(255,178,135,0.15); color: var(--warn); }
-[data-theme="dark"] .issue.info .severity { background: rgba(255,255,255,0.07); color: var(--ink-3); }
+/* dark theme severity — opaque composites of (tint × 0.15) over --paper #1f1633
+   so the scanner never alpha-strips badge bg to the same value as badge text */
+[data-theme="dark"] .issue.crit .severity { background: #402645; color: var(--crit); }
+[data-theme="dark"] .issue.warn .severity { background: #412d40; color: var(--warn); }
+[data-theme="dark"] .issue.info .severity { background: #2f2641; color: var(--ink-3); }
 
 .issue .body {
   display: flex;
