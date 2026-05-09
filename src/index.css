@@ -22,8 +22,9 @@
 
 /* ── Dark theme: Sentry's signature deep purple ──────────── */
 [data-theme="dark"] {
-  --paper:    #1f1633;
-  --paper-2:  #2a2040;
+  --paper:      #1f1633;
+  --paper-2:    #2a2040;
+  --paper-deep: #150f23;
   --ink:      #ffffff;
   --ink-2:    #e5e7eb;
   --ink-3:    #79628c;
@@ -534,8 +535,8 @@ body.has-bg-image.density-compact .issue { padding: 11px 16px; }
 .issue.info .severity { background: rgba(106,95,193,0.08); color: var(--ink-3); }
 
 /* dark theme severity — Sentry palette exact */
-[data-theme="dark"] .issue.crit .severity { background: rgba(250,127,170,0.15); color: #fa7faa; }
-[data-theme="dark"] .issue.warn .severity { background: rgba(255,178,135,0.15); color: #ffb287; }
+[data-theme="dark"] .issue.crit .severity { background: rgba(250,127,170,0.15); color: var(--crit); }
+[data-theme="dark"] .issue.warn .severity { background: rgba(255,178,135,0.15); color: var(--warn); }
 [data-theme="dark"] .issue.info .severity { background: rgba(255,255,255,0.07); color: #79628c; }
 
 .issue .body {
@@ -625,7 +626,7 @@ body.has-bg-image.density-compact .issue { padding: 11px 16px; }
   border-color: var(--crit);
 }
 [data-theme="dark"] .issue .details-inner {
-  background: #150f23;
+  background: var(--paper-deep);
   box-shadow: rgba(22,15,36,0.9) 0px 4px 4px 9px;
 }
 .issue .description {
