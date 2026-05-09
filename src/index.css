@@ -1,6 +1,6 @@
 /* ── Light theme: Sentry brand on white ─────────────────── */
 :root {
-  --paper:    #ffffff;
+  --paper:    #fefeff;
   --paper-2:  #f5f2ff;
   --ink:      #1f1633;
   --ink-2:    #584872;
@@ -472,7 +472,7 @@ body.has-bg-image .issues .section-label { border-bottom: none; }
   transition: background-color .15s ease;
 }
 .issue:hover { background: var(--paper-2); margin: 0 -16px; padding: 18px 16px; }
-.issue.focused { background: var(--paper-2); margin: 0 -16px; padding: 18px 16px; outline: none; box-shadow: inset 3px 0 0 var(--accent); }
+.issue.focused { background: var(--paper-2); margin: 0 -16px; padding: 18px 16px; outline: none; box-shadow: inset 0 0 0 1.5px var(--accent); }
 .density-compact .issue { padding: 11px 0; }
 .density-compact .issue:hover { padding: 11px 16px; }
 .density-compact .issue.focused { padding: 11px 16px; }
@@ -490,8 +490,11 @@ body.has-bg-image.density-compact .issue { padding: 11px 16px; }
   background: rgba(31, 28, 40, 0.82);
 }
 
-[data-theme="dark"] .issue.focused { background: #2a2040; }
+[data-theme="dark"] .issue.focused { background: #2a2040; box-shadow: inset 0 0 0 1.5px var(--accent); }
 [data-theme="dark"] .density-compact .issue.focused { background: #2a2040; }
+[data-theme="dark"] .issue.crit { background: rgba(250,127,170,0.045); }
+[data-theme="dark"] .issue.crit:hover { background: rgba(250,127,170,0.085); }
+[data-theme="dark"] .issue.crit.focused { background: rgba(250,127,170,0.085); }
 
 .issue .severity {
   font-family: var(--sans);
@@ -517,7 +520,9 @@ body.has-bg-image.density-compact .issue { padding: 11px 16px; }
   flex-shrink: 0;
 }
 /* crit accent */
-.issue.crit { box-shadow: inset 3px 0 0 var(--crit); }
+.issue.crit { background: rgba(168,48,96,0.028); }
+.issue.crit:hover { background: rgba(168,48,96,0.065); }
+.issue.crit.focused { background: rgba(168,48,96,0.065); box-shadow: inset 0 0 0 1.5px var(--accent); }
 .issue.crit .severity::before { animation: pulse-dot 2s ease-in-out infinite; }
 
 /* light theme severity */
@@ -987,6 +992,10 @@ body.has-bg-image.density-compact .issue { padding: 11px 16px; }
   0%, 100% { opacity: 0.88; }
   50%       { opacity: 1; }
 }
+@keyframes pulse-dot {
+  0%, 100% { opacity: 1; transform: scale(1); }
+  50%       { opacity: 0.35; transform: scale(0.55); }
+}
 @keyframes rise {
   from { opacity: 0; transform: translateY(4px); }
   to { opacity: 1; transform: translateY(0); }
@@ -1002,5 +1011,12 @@ body.has-bg-image.density-compact .issue { padding: 11px 16px; }
     animation-iteration-count: 1 !important;
     transition-duration: 0.01ms !important;
     scroll-behavior: auto !important;
+  }
+}
+
+@media (pointer: coarse) {
+  .filter-chip {
+    padding: 10px 8px;
+    margin: 0 -8px;
   }
 }

@@ -219,6 +219,31 @@ const __CUSTOMIZE_STYLE = `
   }
   .twk-src:hover { opacity: 0.75; }
 
+  @media (pointer: coarse) {
+    .twk-toggle {
+      width: 40px;
+      height: 24px;
+    }
+    .twk-toggle::before {
+      content: '';
+      position: absolute;
+      inset: -10px -6px;
+    }
+    .twk-toggle i {
+      width: 18px; height: 18px;
+      top: 3px; left: 3px;
+    }
+    .twk-toggle[data-on="1"] i { transform: translateX(16px); }
+
+    .twk-seg button { min-height: 40px; }
+
+    .twk-bg-pos-grid {
+      grid-template-columns: repeat(3, 36px);
+      gap: 4px;
+    }
+    .twk-bg-pos-dot { width: 36px; height: 36px; }
+  }
+
 `;
 
 const CUSTOMIZE_LS_KEY = 'nightswatch:customize';
