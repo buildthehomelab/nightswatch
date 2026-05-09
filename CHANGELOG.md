@@ -1,5 +1,12 @@
 # Changelog
 
+## [0.10.1](https://github.com/buildthehomelab/nightswatch/compare/v0.10.0...v0.10.1) (2026-05-09)
+
+
+### Bug Fixes
+
+* **ui:** accessibility, motion, and visual audit pass ([#78](https://github.com/buildthehomelab/nightswatch/issues/78)) ([fb87610](https://github.com/buildthehomelab/nightswatch/commit/fb87610285ec6ff4b3750739eb4893fec746ecb9))
+
 ## [0.10.0](https://github.com/buildthehomelab/nightswatch/compare/v0.9.0...v0.10.0) (2026-05-08)
 
 
