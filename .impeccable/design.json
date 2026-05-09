@@ -1,0 +1,220 @@
+{
+  "schemaVersion": 2,
+  "generatedAt": "2026-05-09T00:00:00Z",
+  "title": "Design System: Nightswatch",
+  "extensions": {
+    "colorMeta": {
+      "surface-base": {
+        "role": "neutral",
+        "displayName": "Void Ground",
+        "canonical": "oklch(13% 0.055 295)",
+        "tonalRamp": ["#080415", "#120c24", "#1f1633", "#2a2040", "#3d3058", "#584870", "#7a6898", "#d8d0f0"]
+      },
+      "surface-raised": {
+        "role": "neutral",
+        "displayName": "Night Raised",
+        "canonical": "oklch(18% 0.06 295)",
+        "tonalRamp": ["#0d0820", "#1a1530", "#2a2040", "#3a3055", "#504870", "#6e6090", "#9888b8", "#dcd8f0"]
+      },
+      "surface-deep": {
+        "role": "neutral",
+        "displayName": "Shadow Deep",
+        "canonical": "oklch(9% 0.045 295)",
+        "tonalRamp": ["#050310", "#0d0820", "#150f23", "#1f1633", "#2a2040", "#3d3058", "#584870", "#d0c8e8"]
+      },
+      "severity-crit": {
+        "role": "tertiary",
+        "displayName": "Alarm Crimson",
+        "canonical": "oklch(72% 0.17 0)",
+        "tonalRamp": ["#380015", "#680030", "#982050", "#c84080", "#e86098", "#fa7faa", "#fcaac8", "#fdd8e8"]
+      },
+      "severity-warn": {
+        "role": "tertiary",
+        "displayName": "Ember Warning",
+        "canonical": "oklch(78% 0.12 50)",
+        "tonalRamp": ["#2a0800", "#4a1800", "#703000", "#9a4810", "#c06828", "#e89060", "#ffb287", "#fde8d8"]
+      },
+      "severity-ok": {
+        "role": "tertiary",
+        "displayName": "All-Clear Lime",
+        "canonical": "oklch(88% 0.16 120)",
+        "tonalRamp": ["#102008", "#204010", "#386820", "#527a10", "#78a020", "#a0cc30", "#c2ef4e", "#e8f8c0"]
+      },
+      "accent": {
+        "role": "primary",
+        "displayName": "Signal Violet",
+        "canonical": "oklch(48% 0.18 280)",
+        "tonalRamp": ["#0e0c28", "#201c4a", "#342c70", "#4840a0", "#5a52b8", "#6a5fc1", "#8878d8", "#c8c0f8"]
+      },
+      "action-fill": {
+        "role": "primary",
+        "displayName": "Muted Orchid",
+        "canonical": "oklch(48% 0.08 295)",
+        "tonalRamp": ["#1a1028", "#2a2038", "#3d3050", "#584870", "#79628c", "#9888a8", "#bcb0d0", "#e0d8f0"]
+      }
+    },
+    "typographyMeta": {
+      "display":  { "displayName": "Display",  "purpose": "Masthead phrase and healthy-state hero. One instance per view." },
+      "headline": { "displayName": "Headline", "purpose": "Issue title in the issue row. Primary operator signal." },
+      "body":     { "displayName": "Body",     "purpose": "Issue description in expanded detail. Only long-form prose in the system." },
+      "label":    { "displayName": "Label",    "purpose": "Section headers, badge text, button text, ambient strip keys." },
+      "data":     { "displayName": "Data",     "purpose": "All measured values: metrics, counts, timestamps, log output." }
+    },
+    "shadows": [
+      {
+        "name": "detail-lift-light",
+        "value": "rgba(0,0,0,0.1) 0px 10px 15px -3px",
+        "purpose": "Expanded issue detail inner panel (light mode). Lifts content into view."
+      },
+      {
+        "name": "detail-lift-dark",
+        "value": "rgba(22,15,36,0.9) 0px 4px 4px 9px",
+        "purpose": "Expanded issue detail inner panel (dark mode). Creates a depth well with tinted shadow."
+      },
+      {
+        "name": "popover-halo",
+        "value": "0 2px 8px rgba(0,0,0,.1), 0 8px 32px rgba(0,0,0,.18), 0 1px 0 rgba(255,255,255,.04) inset",
+        "purpose": "Ambient strip popovers. Floats the panel above the strip."
+      },
+      {
+        "name": "btn-rest",
+        "value": "rgba(0,0,0,0.1) 0px 1px 3px 0px inset",
+        "purpose": "Action button at rest. Inset reads as recessed/pressed-in."
+      },
+      {
+        "name": "btn-hover",
+        "value": "rgba(0,0,0,0.18) 0px 0.5rem 1.5rem",
+        "purpose": "Action button on hover. Outward lift signals the button coming forward."
+      }
+    ],
+    "motion": [
+      {
+        "name": "ease-standard",
+        "value": "cubic-bezier(0.4, 0, 0.2, 1)",
+        "purpose": "Default easing for drawer and panel transitions."
+      },
+      {
+        "name": "ease-expand",
+        "value": "cubic-bezier(0.16, 1, 0.3, 1)",
+        "purpose": "Issue detail expand/collapse. Expo-out snappiness for grid-template-rows."
+      },
+      {
+        "name": "ease-pop",
+        "value": "cubic-bezier(.2,.8,.4,1)",
+        "purpose": "Popover entry animation (100ms). Fast, decisive appearance."
+      },
+      {
+        "name": "duration-fast",
+        "value": "100ms",
+        "purpose": "Popover entry, hover state tints."
+      },
+      {
+        "name": "duration-standard",
+        "value": "200-250ms",
+        "purpose": "State transitions, color shifts."
+      },
+      {
+        "name": "duration-expand",
+        "value": "350ms",
+        "purpose": "Issue detail grid expansion."
+      }
+    ],
+    "breakpoints": [
+      { "name": "ambient-wrap", "value": "860px", "purpose": "Ambient strip wraps to two rows." },
+      { "name": "mobile",       "value": "640px", "purpose": "Font scale, grid collapse, ambient strip compression." },
+      { "name": "touch-narrow", "value": "480px", "purpose": "CustomizePanel columns stack vertically." }
+    ]
+  },
+  "components": [
+    {
+      "name": "Issue Row (Critical)",
+      "kind": "custom",
+      "refersTo": "issue-row-crit",
+      "description": "The primary operator surface. Severity tints the entire row; pulse dot signals active threat.",
+      "html": "<div class=\"ds-issue ds-issue--crit\" role=\"button\" tabindex=\"0\" aria-expanded=\"false\">\n  <div class=\"ds-severity\">crit</div>\n  <div class=\"ds-body\">\n    <div class=\"ds-headline\">Internet connection is offline. <span class=\"ds-chev\" aria-hidden=\"true\">›</span></div>\n    <div class=\"ds-meta\"><span class=\"ds-source\">connectivity check · 1.1.1.1</span></div>\n  </div>\n  <time class=\"ds-when\">12m down</time>\n</div>",
+      "css": ".ds-issue { background: rgba(250,127,170,0.045); border-bottom: 1px solid #362d59; padding: 18px 0; display: grid; grid-template-columns: min-content 1fr auto; gap: 16px; align-items: start; font-family: 'Rubik', ui-sans-serif, system-ui, sans-serif; color: #ffffff; cursor: pointer; transition: background-color 0.15s ease; } .ds-issue:hover { background: rgba(250,127,170,0.085); } .ds-issue:focus-visible { outline: none; box-shadow: inset 0 0 0 1.5px #6a5fc1; } .ds-severity { font-size: 10px; font-weight: 600; display: inline-flex; align-items: center; gap: 5px; padding: 3px 9px; border-radius: 9999px; background: rgba(250,127,170,0.15); color: #fa7faa; white-space: nowrap; text-transform: uppercase; letter-spacing: 0.2px; margin-top: 2px; } .ds-severity::before { content: ''; display: inline-block; width: 5px; height: 5px; border-radius: 50%; background: currentColor; flex-shrink: 0; animation: ds-pulse 2s ease-in-out infinite; } @keyframes ds-pulse { 0%, 100% { opacity: 1; transform: scale(1); } 50% { opacity: 0.35; transform: scale(0.55); } } .ds-body { display: flex; flex-direction: column; gap: 3px; } .ds-headline { font-size: 18px; font-weight: 600; line-height: 1.30; color: #ffffff; letter-spacing: -0.15px; } .ds-chev { color: #79628c; font-size: 14px; display: inline-block; margin-left: 5px; } .ds-meta { font-size: 13px; font-weight: 500; color: #79628c; } .ds-source { color: #e5e7eb; } .ds-when { font-size: 13px; font-weight: 500; color: #79628c; white-space: nowrap; margin-top: 4px; font-family: 'JetBrains Mono', ui-monospace, monospace; }"
+    },
+    {
+      "name": "Severity Badges",
+      "kind": "chip",
+      "refersTo": "severity-badge-crit",
+      "description": "Pill-shaped severity labels. Crit dot pulses; warn and info are static.",
+      "html": "<div style=\"display:flex;gap:8px;align-items:center;\">\n  <span class=\"ds-badge ds-badge--crit\">crit</span>\n  <span class=\"ds-badge ds-badge--warn\">warn</span>\n  <span class=\"ds-badge ds-badge--info\">advisory</span>\n</div>",
+      "css": ".ds-badge { font-family: 'Rubik', ui-sans-serif, system-ui, sans-serif; font-size: 10px; font-weight: 600; display: inline-flex; align-items: center; gap: 5px; padding: 3px 9px; border-radius: 9999px; text-transform: uppercase; letter-spacing: 0.2px; } .ds-badge::before { content: ''; display: inline-block; width: 5px; height: 5px; border-radius: 50%; background: currentColor; flex-shrink: 0; } .ds-badge--crit { background: rgba(250,127,170,0.15); color: #fa7faa; } .ds-badge--warn { background: rgba(255,178,135,0.15); color: #ffb287; } .ds-badge--info { background: rgba(255,255,255,0.07); color: #79628c; } .ds-badge--crit::before { animation: ds-pulse 2s ease-in-out infinite; } @keyframes ds-pulse { 0%, 100% { opacity: 1; transform: scale(1); } 50% { opacity: 0.35; transform: scale(0.55); } }"
+    },
+    {
+      "name": "Filter Chips",
+      "kind": "chip",
+      "refersTo": "filter-chip",
+      "description": "Toggle-style severity filters. aria-pressed reflects active state.",
+      "html": "<div style=\"display:flex;gap:4px;\">\n  <button class=\"ds-chip ds-chip--crit ds-chip--active\" type=\"button\" aria-pressed=\"true\">3 critical</button>\n  <span class=\"ds-chip-sep\"> · </span>\n  <button class=\"ds-chip ds-chip--warn\" type=\"button\" aria-pressed=\"false\">2 warnings</button>\n</div>",
+      "css": ".ds-chip { font-family: 'Rubik', ui-sans-serif, system-ui, sans-serif; font-size: 12px; font-weight: 600; background: transparent; border: none; color: #e5e7eb; cursor: pointer; border-radius: 4px; padding: 1px 4px; margin: 0 -4px; transition: color 0.15s, background 0.15s; } .ds-chip:hover { color: #ffffff; background: #2a2040; } .ds-chip:focus-visible { outline: 2px solid #6a5fc1; outline-offset: 2px; } .ds-chip--crit.ds-chip--active { color: #fa7faa; background: rgba(250,127,170,0.12); } .ds-chip--warn.ds-chip--active { color: #ffb287; background: rgba(255,178,135,0.12); } .ds-chip--crit.ds-chip--active:hover { background: rgba(250,127,170,0.22); } .ds-chip--warn.ds-chip--active:hover { background: rgba(255,178,135,0.22); } .ds-chip-sep { color: #79628c; }"
+    },
+    {
+      "name": "Action Button",
+      "kind": "button",
+      "refersTo": "action-button",
+      "description": "Primary action in issue detail. Muted orchid fill; inset shadow at rest, lift on hover.",
+      "html": "<div style=\"display:flex;gap:8px;\">\n  <button class=\"ds-btn-action\">Restart PPPoE</button>\n  <button class=\"ds-btn-action\">Open TrueNAS ›</button>\n</div>",
+      "css": ".ds-btn-action { font-family: 'Rubik', ui-sans-serif, system-ui, sans-serif; font-size: 12px; font-weight: 700; color: #fefeff; background: #79628c; border: 1px solid #584674; padding: 5px 14px; border-radius: 9999px; cursor: pointer; text-transform: uppercase; letter-spacing: 0.2px; box-shadow: rgba(0,0,0,0.1) 0px 1px 3px 0px inset; transition: box-shadow 0.15s ease; } .ds-btn-action:hover { box-shadow: rgba(0,0,0,0.18) 0px 0.5rem 1.5rem; } .ds-btn-action:focus-visible { outline: 2px solid #6a5fc1; outline-offset: 2px; }"
+    },
+    {
+      "name": "Ghost Button",
+      "kind": "button",
+      "refersTo": "ghost-button",
+      "description": "Secondary / ignore action. Transparent fill; visually subordinate to primary actions.",
+      "html": "<button class=\"ds-btn-ghost\">ignore ›</button>",
+      "css": ".ds-btn-ghost { font-family: 'Rubik', ui-sans-serif, system-ui, sans-serif; font-size: 12px; font-weight: 500; color: #79628c; background: transparent; border: 1px solid rgba(54,45,89,0.5); padding: 5px 12px; border-radius: 9999px; cursor: pointer; text-transform: uppercase; letter-spacing: 0.2px; transition: color 0.15s, border-color 0.15s; } .ds-btn-ghost:hover { color: #ffffff; border-color: #79628c; } .ds-btn-ghost:focus-visible { outline: 2px solid #79628c; outline-offset: 2px; }"
+    },
+    {
+      "name": "Ambient Chip",
+      "kind": "custom",
+      "refersTo": "issue-row",
+      "description": "Status chip in the ambient footer strip. Hover/focus expands hit area without layout shift. Opens a detail popover.",
+      "html": "<div style=\"display:flex;gap:20px;align-items:center;background:#1f1633;padding:10px 24px;border-top:1px solid #362d59;\">\n  <span class=\"ds-ambient-chip\" role=\"button\" tabindex=\"0\">\n    <span class=\"ds-ak\">cpu</span>\n    <span class=\"ds-av ds-av--warn\">62°C</span>\n  </span>\n  <span class=\"ds-ambient-chip\" role=\"button\" tabindex=\"0\">\n    <span class=\"ds-dot ds-dot--ok\"></span>\n    <span class=\"ds-ak\">tank</span>\n    <span class=\"ds-av\">48%</span>\n  </span>\n  <span class=\"ds-ambient-chip\" role=\"button\" tabindex=\"0\">\n    <span class=\"ds-ak\">wan</span>\n    <span class=\"ds-dot\"></span>\n    <span class=\"ds-av\">up</span>\n  </span>\n</div>",
+      "css": ".ds-ambient-chip { display: inline-flex; gap: 6px; align-items: center; font-family: 'Rubik', ui-sans-serif, system-ui, sans-serif; font-size: 12px; font-weight: 500; color: #79628c; border-radius: 4px; cursor: default; transition: background 0.15s, padding 0.15s, margin 0.15s; } .ds-ambient-chip:hover, .ds-ambient-chip:focus { background: #2a2040; padding: 2px 5px; margin: -2px -5px; outline: none; } .ds-ambient-chip:focus-visible { outline: 2px solid #6a5fc1; outline-offset: 3px; border-radius: 4px; } .ds-ak { color: #79628c; } .ds-av { color: #e5e7eb; font-variant-numeric: tabular-nums; font-family: 'JetBrains Mono', ui-monospace, monospace; } .ds-av--warn { color: #ffb287; } .ds-av--crit { color: #fa7faa; } .ds-av--ok { color: #c2ef4e; } .ds-dot { display: inline-block; width: 6px; height: 6px; border-radius: 50%; background: #c2ef4e; } .ds-dot--ok { background: #c2ef4e; } .ds-dot--warn { background: #ffb287; } .ds-dot--crit { background: #fa7faa; }"
+    }
+  ],
+  "narrative": {
+    "northStar": "The Order Holds",
+    "overview": "The Nightswatch design system is governed by a single discipline: the interface speaks only when the threat is real. In a healthy state the page shows nothing but a spare hero phrase. In crisis, ranked severity controls every element of hierarchy. No decoration competes with signal.\n\nThe aesthetic is military-quiet: a deep purple foundation used not as a style choice but because a fortified, near-colorless ground lets alarm signals read at maximum contrast. Color is a fire alarm, not a paint job. The three severity roles — crimson, amber, acid lime — function as the only persistent warmth in the system. They earn their saturation by meaning.\n\nThis system explicitly rejects the Grafana widget soup, the modern SaaS cream aesthetic, and the Home Assistant tile grid pattern. The interface is an instrument, calibrated to glance-legibility at 2am.",
+    "keyCharacteristics": [
+      "Silence is signal: the empty healthy state is a first-class design surface",
+      "Severity speaks first: crit / warn / info legible in under one second",
+      "Earned color: color appears only where it carries operational meaning",
+      "Instrument-grade precision: every element sized and placed with intent",
+      "Night-watch legibility: high contrast, information-dense but not cluttered"
+    ],
+    "rules": [
+      { "name": "The Signal Fire Rule", "body": "Severity colors are alarm signals, not design accents. Crimson, amber, and lime are prohibited outside their operational roles.", "section": "colors" },
+      { "name": "The Rarity Corollary", "body": "Signal Violet (accent) appears on 5% or less of any given screen. Its scarcity is what makes focus rings and active states immediately visible.", "section": "colors" },
+      { "name": "The Reversal Rule", "body": "Light mode is not a lighter version of dark mode. It is a structural inversion: --paper and --ink swap entirely.", "section": "colors" },
+      { "name": "The Three-Font Rule", "body": "Barlow Condensed owns display hierarchy. Rubik owns all prose and UI labels. JetBrains Mono owns all data, metrics, and log output. No other fonts enter the system.", "section": "typography" },
+      { "name": "The Data Marker Rule", "body": "Any value that originates from a machine uses JetBrains Mono. The font is the signal that the value is live, not editorial.", "section": "typography" },
+      { "name": "The Flat-By-Default Rule", "body": "Every surface is flat at rest. Shadows are state responses, never decoration.", "section": "elevation" },
+      { "name": "The Tonal Depth Rule", "body": "Depth at rest is surface-color, not lift. --paper to --paper-2 to --paper-deep is the full depth axis. Exhaust these three steps before reaching for any shadow.", "section": "elevation" }
+    ],
+    "dos": [
+      "Use severity colors exclusively for their operational role: crimson = critical, amber = warning, lime = clear.",
+      "Design the healthy empty state with the same care as the critical state.",
+      "Use var(--paper-2) as the depth primitive before reaching for any shadow.",
+      "Use inset 0 0 0 1.5px var(--accent) as the keyboard focus ring (full-perimeter, never a side stripe).",
+      "Apply @media (prefers-reduced-motion: reduce) globally.",
+      "Use <time dateTime='ISO-8601'> for all timestamps.",
+      "Animate show/hide with grid-template-rows: 0fr to 1fr and compositor-only opacity/visibility.",
+      "Mark all data-originated values with JetBrains Mono.",
+      "Give every role=button element explicit onKeyDown handlers for Enter and Space."
+    ],
+    "donts": [
+      "Don't use border-left or border-right greater than 1px as a colored accent stripe. Absolutely prohibited.",
+      "Don't use gradient text (background-clip: text). Single solid color only.",
+      "Don't use glassmorphism decoratively.",
+      "Don't build a hero-metric template (big number + small label + gradient accent). That is the Grafana failure mode.",
+      "Don't use icon-heavy tile grids. That is the Home Assistant failure mode.",
+      "Don't use SaaS-cream backgrounds, rounded card stacks, or marketing softness. That is the Vercel/Notion failure mode.",
+      "Don't add color for decoration. Every color application must have an operational justification.",
+      "Don't show the healthy empty state as an error or empty-state illustration. Calm is correct.",
+      "Don't animate layout properties (max-height, padding, margin) for show/hide transitions."
+    ]
+  }
+}
