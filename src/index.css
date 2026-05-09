@@ -112,7 +112,7 @@ body {
 .ambient .item:not(:has(.ambient-link)) { cursor: default; }
 .ambient .item-pop {
   border-radius: 4px;
-  transition: background .15s, padding .15s, margin .15s;
+  transition: background .15s;
 }
 .ambient .item-pop:hover {
   background: var(--paper-2);
@@ -591,7 +591,6 @@ body.has-bg-image.density-compact .issue { padding: 11px 16px; }
   transition:
     grid-template-rows .35s cubic-bezier(0.16, 1, 0.3, 1),
     opacity .25s ease,
-    margin-top .25s ease,
     visibility 0s linear .35s;
 }
 .issue.open .details {
@@ -602,7 +601,6 @@ body.has-bg-image.density-compact .issue { padding: 11px 16px; }
   transition:
     grid-template-rows .35s cubic-bezier(0.16, 1, 0.3, 1),
     opacity .25s ease,
-    margin-top .25s ease,
     visibility 0s linear 0s;
 }
 .issue.open .details-inner > * { animation: rise .2s ease both; }

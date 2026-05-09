@@ -90,9 +90,9 @@ const __CUSTOMIZE_STYLE = `
     user-select: none;
   }
   .twk-seg-thumb {
-    position: absolute; top: 2px; bottom: 2px; border-radius: 2px;
+    position: absolute; top: 2px; bottom: 2px; left: 2px; border-radius: 2px;
     background: var(--ink);
-    transition: left 0.15s cubic-bezier(.3,.7,.4,1), width 0.15s;
+    transition: transform 0.15s cubic-bezier(.3,.7,.4,1);
   }
   .twk-seg.dragging .twk-seg-thumb { transition: none; }
   .twk-seg button {
@@ -429,8 +429,8 @@ export function CustomizeRadio({ label, value, options, onChange }) {
       <div ref={trackRef} role="radiogroup" onPointerDown={onPointerDown}
            className={dragging ? 'twk-seg dragging' : 'twk-seg'}>
         <div className="twk-seg-thumb"
-             style={{ left: `calc(2px + ${idx} * (100% - 4px) / ${n})`,
-                      width: `calc((100% - 4px) / ${n})` }} />
+             style={{ width: `calc((100% - 4px) / ${n})`,
+                      transform: `translateX(calc(${idx} * 100%))` }} />
         {opts.map((o) => (
           <button key={o.value} type="button" role="radio" aria-checked={o.value === value}>
             {o.label}
@@ -504,8 +504,8 @@ export function BgImagePicker({ image, fit, position, dim, onImageChange, onChan
           <span className="twk-bg-lbl">fit</span>
           <div className="twk-seg">
             <div className="twk-seg-thumb" style={{
-              left: `calc(2px + ${fitIdx} * (100% - 4px) / 3)`,
               width: `calc((100% - 4px) / 3)`,
+              transform: `translateX(calc(${fitIdx} * 100%))`,
             }} />
             {FIT_OPTS.map(o => (
               <button key={o.value} type="button" role="radio" aria-checked={o.value === fit}
@@ -534,8 +534,8 @@ export function BgImagePicker({ image, fit, position, dim, onImageChange, onChan
           <span className="twk-bg-lbl">dim</span>
           <div className="twk-seg">
             <div className="twk-seg-thumb" style={{
-              left: `calc(2px + ${dimIdx} * (100% - 4px) / 3)`,
               width: `calc((100% - 4px) / 3)`,
+              transform: `translateX(calc(${dimIdx} * 100%))`,
             }} />
             {DIM_OPTS.map(o => (
               <button key={o.value} type="button" role="radio" aria-checked={o.value === dim}
