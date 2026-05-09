@@ -199,30 +199,30 @@ function Ambient({ now, wanUp, wanDownSince, uptime, rank, cleanSince, critHisto
               </span>
             )}
             {showNasLoad && load1 && (
-              <span className="item item-pop" tabIndex="0" onMouseEnter={(e) => openPopover('load', e)} onMouseLeave={scheduleClose} onFocus={(e) => openPopover('load', e)} onBlur={scheduleClose}>
+              <span className="item item-pop" role="button" tabIndex="0" onMouseEnter={(e) => openPopover('load', e)} onMouseLeave={scheduleClose} onFocus={(e) => openPopover('load', e)} onBlur={scheduleClose}>
                 <span className="k">load</span><span className="v">{load1}</span>
               </span>
             )}
             {showNasCpuTemp && cpuTemp != null && (
-              <span className="item item-pop" tabIndex="0" onMouseEnter={(e) => openPopover('cpu', e)} onMouseLeave={scheduleClose} onFocus={(e) => openPopover('cpu', e)} onBlur={scheduleClose}>
+              <span className="item item-pop" role="button" tabIndex="0" onMouseEnter={(e) => openPopover('cpu', e)} onMouseLeave={scheduleClose} onFocus={(e) => openPopover('cpu', e)} onBlur={scheduleClose}>
                 <span className="k">cpu</span>
                 <span className={`v${cpuCls}`}>{cpuTemp}°C</span>
               </span>
             )}
             {showNasMemory && memFree != null && (
-              <span className="item item-pop" tabIndex="0" onMouseEnter={(e) => openPopover('mem', e)} onMouseLeave={scheduleClose} onFocus={(e) => openPopover('mem', e)} onBlur={scheduleClose}>
+              <span className="item item-pop" role="button" tabIndex="0" onMouseEnter={(e) => openPopover('mem', e)} onMouseLeave={scheduleClose} onFocus={(e) => openPopover('mem', e)} onBlur={scheduleClose}>
                 <span className="k">mem free</span>
                 <span className="v">{fmtBytes(memFree)}</span>
               </span>
             )}
             {showNasNet && nasData?.netStats && (
-              <span className="item item-pop" tabIndex="0" onMouseEnter={(e) => openPopover('net', e)} onMouseLeave={scheduleClose} onFocus={(e) => openPopover('net', e)} onBlur={scheduleClose}>
+              <span className="item item-pop" role="button" tabIndex="0" onMouseEnter={(e) => openPopover('net', e)} onMouseLeave={scheduleClose} onFocus={(e) => openPopover('net', e)} onBlur={scheduleClose}>
                 <span className="k">net</span>
                 <span className="v">↓{fmtRate(nasData.netStats.rx)} ↑{fmtRate(nasData.netStats.tx)}</span>
               </span>
             )}
             {showNasApps && apps.length > 0 && (
-              <span className="item item-pop" tabIndex="0" onMouseEnter={(e) => openPopover('apps', e)} onMouseLeave={scheduleClose} onFocus={(e) => openPopover('apps', e)} onBlur={scheduleClose}>
+              <span className="item item-pop" role="button" tabIndex="0" onMouseEnter={(e) => openPopover('apps', e)} onMouseLeave={scheduleClose} onFocus={(e) => openPopover('apps', e)} onBlur={scheduleClose}>
                 <span className="k">apps</span>
                 <span className="v">{running}/{apps.length}</span>
               </span>
@@ -233,7 +233,7 @@ function Ambient({ now, wanUp, wanDownSince, uptime, rank, cleanSince, critHisto
               const dotCls = !ok || pct >= POOL_CRIT_PCT ? ' crit' : pct >= POOL_WARN_PCT ? ' warn' : '';
               const valCls = !ok || pct >= POOL_CRIT_PCT ? ' crit' : pct >= POOL_WARN_PCT ? ' warn' : '';
               return (
-                <span key={pool.name} className="item item-pop" tabIndex="0" onMouseEnter={(e) => openPopover(pool.name, e)} onMouseLeave={scheduleClose} onFocus={(e) => openPopover(pool.name, e)} onBlur={scheduleClose}>
+                <span key={pool.name} className="item item-pop" role="button" tabIndex="0" onMouseEnter={(e) => openPopover(pool.name, e)} onMouseLeave={scheduleClose} onFocus={(e) => openPopover(pool.name, e)} onBlur={scheduleClose}>
                   <span className={`dot${dotCls}`} />
                   <span className="k">{pool.name}</span>
                   <span className={`v${valCls}`}>{pct != null ? `${pct}%` : '—'}</span>
@@ -242,7 +242,7 @@ function Ambient({ now, wanUp, wanDownSince, uptime, rank, cleanSince, critHisto
             })}
           </>}
           {showDocker && dockerData && (
-            <span className="item item-pop" tabIndex="0" onMouseEnter={(e) => openPopover('docker', e)} onMouseLeave={scheduleClose} onFocus={(e) => openPopover('docker', e)} onBlur={scheduleClose}>
+            <span className="item item-pop" role="button" tabIndex="0" onMouseEnter={(e) => openPopover('docker', e)} onMouseLeave={scheduleClose} onFocus={(e) => openPopover('docker', e)} onBlur={scheduleClose}>
               <span className={`dot${dockerWorstCls}`} />
               <span className="k">docker</span>
               <span className={`v${dockerWorstCls}`}>{dockerRunning}/{dockerTotal}</span>
@@ -259,26 +259,26 @@ function Ambient({ now, wanUp, wanDownSince, uptime, rank, cleanSince, critHisto
           </span>
         )}
         {showWeather && (
-          <span className="item item-pop" tabIndex="0" onMouseEnter={(e) => openPopover('weather', e)} onMouseLeave={scheduleClose} onFocus={(e) => openPopover('weather', e)} onBlur={scheduleClose}>
+          <span className="item item-pop" role="button" tabIndex="0" onMouseEnter={(e) => openPopover('weather', e)} onMouseLeave={scheduleClose} onFocus={(e) => openPopover('weather', e)} onBlur={scheduleClose}>
             <span className="k">outside</span>
             <span className="v">{weather}</span>
           </span>
         )}
         {showWan && (
-          <span className="item item-pop" tabIndex="0" onMouseEnter={(e) => openPopover('wan', e)} onMouseLeave={scheduleClose} onFocus={(e) => openPopover('wan', e)} onBlur={scheduleClose}>
+          <span className="item item-pop" role="button" tabIndex="0" onMouseEnter={(e) => openPopover('wan', e)} onMouseLeave={scheduleClose} onFocus={(e) => openPopover('wan', e)} onBlur={scheduleClose}>
             <span className="k">wan</span>
             <span className={`dot${wanUp ? "" : " crit"}`}></span>
             <span className={`v${wanUp ? "" : " crit"}`}>{wanUp ? "up" : "down"}</span>
           </span>
         )}
         {showUptime && (
-          <span className="item item-pop" tabIndex="0" onMouseEnter={(e) => openPopover('uptime', e)} onMouseLeave={scheduleClose} onFocus={(e) => openPopover('uptime', e)} onBlur={scheduleClose}>
+          <span className="item item-pop" role="button" tabIndex="0" onMouseEnter={(e) => openPopover('uptime', e)} onMouseLeave={scheduleClose} onFocus={(e) => openPopover('uptime', e)} onBlur={scheduleClose}>
             <span className="k">uptime</span>
             <span className="v">{uptime}</span>
           </span>
         )}
         {showRank && rank && (
-          <span className="item item-pop" tabIndex="0" onMouseEnter={(e) => openPopover('rank', e)} onMouseLeave={scheduleClose} onFocus={(e) => openPopover('rank', e)} onBlur={scheduleClose}>
+          <span className="item item-pop" role="button" tabIndex="0" onMouseEnter={(e) => openPopover('rank', e)} onMouseLeave={scheduleClose} onFocus={(e) => openPopover('rank', e)} onBlur={scheduleClose}>
             <span className="k">rank</span>
             <span className="v rank">{rank}</span>
           </span>
@@ -628,13 +628,14 @@ function IssueList({ issues, onOpenPanel, onIgnore }) {
   return (
     <section className={`issues${filtered.length === 0 ? ' empty' : ''}`}>
       <div className="section-label rise">
-        <span className="count">
+        <span className="count" aria-live="polite" aria-atomic="true">
           {chips.map((c, i) => (
             <span key={c.sev}>
               {i > 0 && <span className="sep"> · </span>}
               <button
                 type="button"
                 className={`filter-chip filter-chip-${c.sev}${filterSev === c.sev ? " active" : ""}`}
+                aria-pressed={filterSev === c.sev}
                 onClick={() => toggle(c.sev)}
               >{c.label}</button>
             </span>
@@ -1042,7 +1043,7 @@ export default function App() {
 
   return (
     <>
-      <div className="page">
+      <main className="page">
 
         {isHealthy ? (
           <Healthy
@@ -1060,7 +1061,7 @@ export default function App() {
           </>
         )}
 
-      </div>
+      </main>
 
       {(t.showWeather || t.showWan || t.showUptime || t.showNas || t.showDate || t.showRank || t.showDocker) && (
         <Ambient
