@@ -211,14 +211,17 @@ async function fetchCpuTemp(hdrs) {
     if (!Array.isArray(json) || !json[0]) return null;
     const agg = json[0].aggregations?.mean;
     if (Array.isArray(agg) && agg.length > 0) {
-      const valid = agg.filter(v => v != null && !isNaN(v));
+      const valid = agg.filter(v => v != null && !isNaN(v) && v > 0);
       if (valid.length > 0) return Math.round(Math.max(...valid));
     }
+    // The trailing reporting bucket is often an incomplete 0 reading; a live
+    // CPU never measures 0°C, so scan backward for the last real sample.
     const rows = json[0].data;
-    if (Array.isArray(rows) && rows.length > 0) {
-      const last = rows[rows.length - 1];
-      if (Array.isArray(last)) {
-        const vals = last.slice(1).filter(v => v != null && !isNaN(v));
+    if (Array.isArray(rows)) {
+      for (let i = rows.length - 1; i >= 0; i--) {
+        const row = rows[i];
+        if (!Array.isArray(row)) continue;
+        const vals = row.slice(1).filter(v => v != null && !isNaN(v) && v > 0);
         if (vals.length > 0) return Math.round(Math.max(...vals));
       }
     }
@@ -267,10 +270,15 @@ function lastVal(json) {
   if (!Array.isArray(json) || !json[0]) return null;
   const { data, aggregations } = json[0];
   const agg = aggregations?.mean;
-  if (Array.isArray(agg) && agg[0] != null) return agg[0];
-  if (Array.isArray(data) && data.length > 0) {
-    const last = data[data.length - 1];
-    if (Array.isArray(last) && last[1] != null) return last[1];
+  if (Array.isArray(agg) && agg[0] != null && !isNaN(agg[0]) && agg[0] > 0) return agg[0];
+  // The trailing reporting bucket is often an incomplete 0/null reading; mem
+  // free, ARC size, and disk temp are never 0 on a live system, so scan
+  // backward for the last real sample.
+  if (Array.isArray(data)) {
+    for (let i = data.length - 1; i >= 0; i--) {
+      const row = data[i];
+      if (Array.isArray(row) && row[1] != null && !isNaN(row[1]) && row[1] > 0) return row[1];
+    }
   }
   return null;
 }
