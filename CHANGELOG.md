@@ -1,5 +1,12 @@
 # Changelog
 
+## [0.10.2](https://github.com/buildthehomelab/nightswatch/compare/v0.10.1...v0.10.2) (2026-05-28)
+
+
+### Bug Fixes
+
+* **truenas:** reject zero CPU temp and mem free readings ([#80](https://github.com/buildthehomelab/nightswatch/issues/80)) ([f0c3361](https://github.com/buildthehomelab/nightswatch/commit/f0c33612340a1c706ea112010962639ee46c85f1))
+
 ## [0.10.1](https://github.com/buildthehomelab/nightswatch/compare/v0.10.0...v0.10.1) (2026-05-09)
 
 
